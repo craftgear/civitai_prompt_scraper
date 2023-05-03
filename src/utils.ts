@@ -1,5 +1,68 @@
-import { ImagesResponse } from "./types";
+import { ImagesResponse, NextData } from "./types";
 import { BlobWriter, BlobReader, TextReader, ZipWriter } from "@zip.js/zip.js";
+import p from "../package.json";
+
+const API_URL = `https://civitai.com/api/v1/images`;
+
+export const log = (...xs: any[]) => {
+  console.log(`${p.name}:`, ...xs);
+};
+
+const getLocale = () => {
+  return window.navigator.language;
+};
+
+export const getButtonLabel = () => {
+  const locale = getLocale();
+  switch (locale) {
+    case "ja": {
+      return "画像＆JSONダウンロード";
+    }
+    case "zh-TW": {
+      return "下載圖像和JSON";
+    }
+    case "zh-CN": {
+      return "下载图像和JSON";
+    }
+    default: {
+      return "Download images with JSON";
+    }
+  }
+};
+
+export const getButtonProgressLabel = () => {
+  const locale = getLocale();
+  switch (locale) {
+    case "ja": {
+      return "ダウンロード中";
+    }
+    case "zh-TW": {
+      return "下載中";
+    }
+    case "zh-CN": {
+      return "下载中";
+    }
+    default: {
+      return "downloading";
+    }
+  }
+};
+
+export const getButtonCompleteLabel = () => {
+  const locale = getLocale();
+  switch (locale) {
+    case "ja": {
+      return "完了";
+    }
+    case "zh-TW":
+    case "zh-CN": {
+      return "完成";
+    }
+    default: {
+      return "done";
+    }
+  }
+};
 
 export const sleep = (ms = 1000) =>
   new Promise((resolve) => setTimeout(() => resolve(true), ms));
@@ -20,12 +83,36 @@ export const waitForElement = async (
   }
 };
 
+export const buildImgUrl = (url: string, width: number, name: string) =>
+  `https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/${url}/width=${width},optimized=true/${
+    name ?? ""
+  }`;
+
+export const parseNextData = () => {
+  const nextData: NextData = (document.querySelector(
+    "#__NEXT_DATA__"
+  ) as HTMLElement) || { innerText: "" };
+  const data = JSON.parse(nextData.innerText);
+  return data;
+};
+
 export const fetchGalleryData = async (modelId: string, postId: string) => {
-  let url = `https://civitai.com/api/v1/images/?postId=${postId}`;
-  if (modelId) {
-    url = `${url}&modelId=${modelId}`;
+  let url = API_URL;
+  let params = [];
+  if (postId) {
+    params.push(`postId=${postId}`);
   }
+  if (modelId) {
+    params.push(`modelId=${modelId}`);
+  }
+  if (params.length > 0) {
+    url = `${url}?${params.join("&")}`;
+  }
+
   const response = await fetch(url);
+  if (response.status >= 400) {
+    throw new Error(` ${response.status} ${response.statusText}`);
+  }
   return (await response.json()) as ImagesResponse;
 };
 
@@ -58,6 +145,7 @@ export const fetchImg = async (
     throw error;
   }
 };
+
 const extractFilebasenameFromImageUrl = (url: string) => {
   const filename = url.split("/").slice(-1)[0];
   return filename.split(".")[0];
@@ -66,9 +154,9 @@ const extractFilebasenameFromImageUrl = (url: string) => {
 export const createZip =
   (button: HTMLElement | null) =>
   async (
-    xs: { url: string; meta: Object }[]
+    xs: { url: string; hash: string; meta: Object }[]
   ): Promise<{ content: Blob; error: Error | null }> => {
-    // create ZIP with all images/model
+    const addedNames = new Set();
     const blobWriter = new BlobWriter(`application/zip`);
     const zipWriter = new ZipWriter(blobWriter);
 
@@ -76,7 +164,9 @@ export const createZip =
     let error = null;
     for (const x of xs) {
       if (button) {
-        button.innerHTML = `${counter + 1} / ${xs.length} ダウンロード中`;
+        button.innerText = `${counter + 1} / ${
+          xs.length
+        } ${getButtonProgressLabel()}`;
       }
 
       try {
@@ -86,12 +176,19 @@ export const createZip =
         }
         const { blob, contentType } = response;
 
-        const name = extractFilebasenameFromImageUrl(x.url);
+        let name =
+          extractFilebasenameFromImageUrl(x.url) ||
+          x.hash.replace(/[\;\:\?\*\.]/g, "_");
+        while (addedNames.has(name)) {
+          name += "_";
+        }
+
         const filename =
           (contentType && `${name}.${contentType.split("/")[1]}`) ||
-          `${x.url}.png`;
+          `${name}.png`;
 
         await zipWriter.add(filename, new BlobReader(blob));
+        addedNames.add(name);
 
         if (!!x.meta) {
           const jsonFilename = name + ".json";
@@ -115,3 +212,25 @@ export const createZip =
 
     return { content: (await zipWriter.close(undefined, {})) as Blob, error };
   };
+
+export const screenShot = async () => {
+  const main = await waitForElement("main");
+
+  if (!main) {
+    return;
+  }
+  main.style.letterSpacing = "0.1rem";
+
+  document.querySelectorAll("canvas").forEach((x) => x.remove());
+  const canvas = await html2canvas(main, {
+    allowTaint: true,
+  });
+
+  const div = document.createElement("div");
+  div.setAttribute("style", "border: 1px solid red;");
+  div.appendChild(canvas);
+
+  document.body.appendChild(div);
+
+  main.style.letterSpacing = "inherit";
+};

@@ -1,6 +1,6 @@
 {
   "name": "civitai_prompt_scraper",
-  "browserslist": "> 0.5%, last 2 versions, not dead",
+  "browserslist": "> 5%, last 1 versions, not dead",
   "version": "1.0.0",
   "description": "",
   "source": "src/prompt_scraper.user.ts",
@@ -22,7 +22,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "format": "prettier --write ."
   },
-  "author": "Rob",
+  "author": "Watanabe, Shunsuke",
   "license": "MIT",
   "devDependencies": {
     "@damoclark/parcel-optimizer-userscript": "^0.0.2",

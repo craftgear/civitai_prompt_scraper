@@ -1,6 +1,14 @@
 import { buttonStyle, disabledButtonStyle } from "./types";
 import { saveAs } from "file-saver";
-import { fetchGalleryData, createZip, waitForElement } from "./utils";
+import {
+  fetchGalleryData,
+  createZip,
+  waitForElement,
+  parseNextData,
+  buildImgUrl,
+  getButtonLabel,
+  getButtonCompleteLabel,
+} from "./utils";
 
 const BUTTON_ID = "download-all-gallery-images-and-prompts";
 
@@ -13,40 +21,89 @@ const downloadGalleryImagesAndPrompts =
       return;
     }
 
-    const { content, error } = await createZip(button)(data.items);
+    const { content, error } = await createZip(button)(
+      data.items.map((x) => ({
+        ...x,
+        url: x.url.replace(
+          `width=${x.width}`,
+          `width=${x.width},optimized=true`
+        ),
+      }))
+    );
 
     if (error) {
       alert(error.message);
       return;
     }
 
-    saveAs(content, `${modelId}_${postId}.zip`);
+    saveAs(content, `modelId_${modelId}-postId_${postId}.zip`);
 
     if (button) {
       button.setAttribute("style", disabledButtonStyle);
-      button.innerHTML = ` ${data.items.length} / ${data.items.length} 完了`;
+      button.innerText = ` ${data.items.length} / ${
+        data.items.length
+      } ${getButtonCompleteLabel()}`;
     }
   };
 
-export const addGalleryDownloadButton = async () => {
-  const matchedModel = window.location.search.match(/modelId=(?<modelId>\d*)/);
-  const matchedPost = window.location.search.match(/postId=(?<postId>\d*)/);
+const downloadSingleImagesAndPrompts = async () => {
+  const data = parseNextData();
+  const model = data.props.pageProps.trpcState.json.queries[0];
+  const { id, url, meta, width, name, hash } = model.state.data;
+  const imgUrl = buildImgUrl(url, width, name);
 
-  const modelId = matchedModel?.groups?.modelId || "";
-  const postId = matchedPost?.groups?.postId || "";
-  document.querySelector(`#${BUTTON_ID}`)?.remove();
-  if (!postId) {
+  const button = await waitForElement(`#${BUTTON_ID}`);
+  if (!button) {
     return;
   }
-  const button = document.createElement("button");
-  button.addEventListener(
-    "click",
-    downloadGalleryImagesAndPrompts(modelId, postId)
+
+  const { content, error } = await createZip(button)([
+    { url: imgUrl, hash, meta },
+  ]);
+
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  saveAs(content, `imageId_${id}.zip`);
+
+  if (button) {
+    button.setAttribute("style", disabledButtonStyle);
+    button.innerText = getButtonCompleteLabel();
+  }
+};
+
+export const addGalleryDownloadButton = async () => {
+  const matchedModel = window.location.href.match(/modelId=(?<modelId>\d*)/);
+  const matchedModelVersion = window.location.href.match(
+    /modelVersionId=(?<modelVersionId>\d*)/
   );
+  const matchedPost = window.location.href.match(/postId=(?<postId>\d*)/);
+
+  const modelId = matchedModel?.groups?.modelId || "";
+  const modelVersionId = matchedModelVersion?.groups?.modelVersionId || "";
+  const postId = matchedPost?.groups?.postId || "";
+
+  document.querySelector(`#${BUTTON_ID}`)?.remove();
+  const button = document.createElement("button");
+
+  if (!postId && !modelId && !modelVersionId) {
+    button.addEventListener("click", downloadSingleImagesAndPrompts);
+  } else {
+    button.addEventListener(
+      "click",
+      downloadGalleryImagesAndPrompts(modelId, postId)
+    );
+  }
+
   button.id = BUTTON_ID;
-  button.innerText = "画像＆jsonダウンロード";
+  button.innerText = getButtonLabel();
   button.setAttribute("style", buttonStyle);
-  document
-    .querySelector("#freezeBlock .mantine-Stack-root")
-    .appendChild(button);
+  const buttonParent = document.querySelector(
+    "#freezeBlock .mantine-Stack-root"
+  );
+  if (buttonParent) {
+    buttonParent.appendChild(button);
+  }
 };

@@ -7,6 +7,7 @@ export const buttonStyle = `
  height: 36px;
  border-radius: 4px;
  font-weight: bold;
+ font-size: small;
  cursor: pointer;
  word-break: keep-all;
 `;
@@ -21,6 +22,7 @@ export const disabledButtonStyle = `
  height: 36px;
  border-radius: 4px;
  font-weight: bold;
+ font-size: small;
  cursor: none;
  word-break: keep-all;
 `;

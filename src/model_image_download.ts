@@ -1,16 +1,16 @@
 import { saveAs } from "file-saver";
-import { buttonStyle, disabledButtonStyle, NextData } from "./types";
-import { waitForElement, createZip } from "./utils";
+import { buttonStyle, disabledButtonStyle } from "./types";
+import {
+  waitForElement,
+  createZip,
+  parseNextData,
+  buildImgUrl,
+  getButtonLabel,
+  getButtonCompleteLabel,
+} from "./utils";
 
 const BUTTON_ID = "download-all-images-and-prompts";
 
-const parseNextData = () => {
-  const nextData: NextData = (document.querySelector(
-    "#__NEXT_DATA__"
-  ) as HTMLElement) || { innerText: "" };
-  const data = JSON.parse(nextData.innerText);
-  return data;
-};
 const getModelInfo = () => {
   const data = parseNextData();
   const model = data.props.pageProps.trpcState.json.queries[1];
@@ -32,15 +32,20 @@ const downloadImagesAndPrompts = async () => {
   const modelVersions = model.modelVersions;
 
   const imageData = getImagesData();
-  const versionName =
+  const modelVersionName =
     modelVersions.find((x: any) => x.id === imageData[0].modelVersionId).name ||
     "";
 
   const urlAndMeta = imageData.map(
-    (x: { url: string; width: number; name: string; meta: object }) => ({
-      url: `https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/${x.url}/width=${
-        x.width
-      },optimized=true/${x.name && ""}`,
+    (x: {
+      url: string;
+      width: number;
+      name: string;
+      hash: string;
+      meta: object;
+    }) => ({
+      url: buildImgUrl(x.url, x.width, x.name),
+      hash: x.hash,
       meta: x.meta,
     })
   );
@@ -52,11 +57,13 @@ const downloadImagesAndPrompts = async () => {
     return;
   }
 
-  saveAs(content, `${modelName}_${versionName}.zip`);
+  saveAs(content, `${modelName}[${model.id}]_${modelVersionName}.zip`);
 
   if (button) {
     button.setAttribute("style", disabledButtonStyle);
-    button.innerHTML = ` ${urlAndMeta.length} / ${urlAndMeta.length} 完了`;
+    button.innerText = ` ${urlAndMeta.length} / ${
+      urlAndMeta.length
+    } ${getButtonCompleteLabel()}`;
   }
 };
 
@@ -66,9 +73,10 @@ export const addDownloadButton = async () => {
   const button = document.createElement("a");
   button.addEventListener("click", downloadImagesAndPrompts);
   button.id = BUTTON_ID;
-  button.innerText = "画像＆jsonダウンロード";
+  button.innerText = getButtonLabel();
   button.setAttribute("style", buttonStyle);
-  document
-    .querySelector(downloadButtonSelector)
-    .parentNode?.appendChild(button);
+  const buttonParent = document.querySelector(downloadButtonSelector);
+  if (buttonParent) {
+    buttonParent.parentNode?.appendChild(button);
+  }
 };
