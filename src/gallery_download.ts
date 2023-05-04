@@ -58,22 +58,41 @@ const downloadSingleImagesAndPrompts = async () => {
 };
 
 export const addGalleryDownloadButton = async () => {
-  const matchedModel = window.location.href.match(/modelId=(?<modelId>\d*)/);
-  const matchedModelVersion = window.location.href.match(
+  const href = window.location.href;
+  const matchedModel = href.match(/modelId=(?<modelId>\d*)/);
+  const matchedModelVersion = href.match(
     /modelVersionId=(?<modelVersionId>\d*)/
   );
-  const matchedPost = window.location.href.match(/postId=(?<postId>\d*)/);
+  const matchedPost = href.match(/postId=(?<postId>\d*)/);
+  const matchedPrioritizedUser = href.match(
+    /prioritizedUserIds=(?<prioritizedUserId>\d*)/
+  );
 
-  const modelId = matchedModel?.groups?.modelId || '';
-  const modelVersionId = matchedModelVersion?.groups?.modelVersionId || '';
-  const postId = matchedPost?.groups?.postId || '';
+  const modelId = matchedModel?.groups?.modelId || null;
+  const modelVersionId = matchedModelVersion?.groups?.modelVersionId || null;
+  const postId = matchedPost?.groups?.postId || null;
+  const prioritizedUserId =
+    matchedPrioritizedUser?.groups?.prioritizedUserId || null;
 
   document.querySelector(`#${BUTTON_ID}`)?.remove();
   const button = document.createElement('button');
 
+  // モデル画面のトップ画像から開いた場合
+  if (modelVersionId && prioritizedUserId) {
+    // TODO: モデルの方のダウンロードボタンを使う
+    // const data = parseNextData();
+    // const model = data.props.pageProps.trpcState.json.queries[1];
+    // button.addEventListener(
+    //   'click',
+    //   downloadGalleryImagesAndPrompts(model.id, postId)
+    // );
+  }
+  // 画像単体で開いた場合
   if (!postId && !modelId && !modelVersionId) {
     button.addEventListener('click', downloadSingleImagesAndPrompts);
-  } else {
+  }
+  // モデルのギャラリーエリアから開いた場合
+  if (modelId && postId) {
     button.addEventListener(
       'click',
       downloadGalleryImagesAndPrompts(modelId, postId)
@@ -83,10 +102,13 @@ export const addGalleryDownloadButton = async () => {
   button.id = BUTTON_ID;
   button.innerText = getButtonLabel();
   button.setAttribute('style', buttonStyle);
-  const buttonParent = document.querySelector(
-    '#freezeBlock .mantine-Stack-root'
-  );
-  if (buttonParent) {
-    buttonParent.appendChild(button);
+  if (document.querySelector('.mantine-Modal-modal')) {
+    document
+      .querySelector('.mantine-Modal-modal .mantine-Card-cardSection')
+      ?.appendChild(button);
+  } else {
+    document
+      .querySelector('#freezeBlock .mantine-Stack-root')
+      ?.appendChild(button);
   }
 };

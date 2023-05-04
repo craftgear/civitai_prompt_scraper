@@ -7,12 +7,26 @@ import { sleep, log } from './utils';
 
 // see https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver
 const observer = new MutationObserver(async (_mutationList) => {
-  if (prevHref !== window.location.href) {
-    if (
-      !window.location.href.includes('/images/') ||
-      !prevHref.includes('/images/')
-    ) {
-      window.location.reload();
+  const href = window.location.href;
+  if (prevHref !== href) {
+    if (href.includes('/models/')) {
+      log('model page changed');
+      // FIXME: adhoc: wait for Nextjs rendering finish
+      setTimeout(() => {
+        addDownloadButton();
+      }, 2000);
+
+      const showMoreButton = Array.from(
+        document.querySelectorAll('button')
+      ).filter((x: HTMLElement) => x.innerHTML === 'Show More')[0];
+      showMoreButton && showMoreButton.click();
+    }
+    if (href.includes('/images/')) {
+      log('images');
+
+      // FIXME: adhoc: wait for Nextjs rendering finish
+      await sleep(2000);
+      await addGalleryDownloadButton();
     }
     prevHref = window.location.href;
   }

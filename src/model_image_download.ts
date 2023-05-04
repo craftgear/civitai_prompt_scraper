@@ -2,11 +2,10 @@ import { buttonStyle, disabledButtonStyle } from './types';
 import {
   waitForElement,
   parseNextData,
-  buildImgUrl,
   getButtonLabel,
   getButtonCompleteLabel,
 } from './utils';
-import { createZip } from './infra';
+import { createZip, fetchModelVersionInfo } from './infra';
 
 const BUTTON_ID = 'download-all-images-and-prompts';
 
@@ -16,48 +15,43 @@ const getModelInfo = () => {
   return model.state.data;
 };
 
-const getImagesData = () => {
-  const data = parseNextData();
-  const images = data.props.pageProps.trpcState.json.queries[0];
-  return images.state.data.pages[0].items;
+const getModeInfoAndImageList = async (href: string) => {
+  let modelVersionId = href.match(/modelVersionId=(?<modelVersionId>\d*)/)
+    ?.groups?.modelVersionId;
+  // バージョンが一つの場合モデルページのurlにmodelVersionIdがない
+  if (!modelVersionId) {
+    const model = await getModelInfo();
+    modelVersionId = model.modelVersions[0].id;
+  }
+
+  const {
+    modelId,
+    model: { name: modelName },
+    images: imageList,
+    name: modelVersionName,
+  } = await fetchModelVersionInfo(modelVersionId);
+
+  return { modelId, modelName, imageList, modelVersionName };
 };
 
 const downloadImagesAndPrompts = async () => {
   const button = await waitForElement(`#${BUTTON_ID}`);
   button?.removeEventListener('click', downloadImagesAndPrompts);
 
-  const model = await getModelInfo();
-  const modelName = model.name;
-  const modelVersions = model.modelVersions;
+  const { modelId, modelName, imageList, modelVersionName } =
+    await getModeInfoAndImageList(window.location.href);
+  console.log('----- modelName:', modelName);
+  console.log('----- imageList:', imageList);
+  console.log('modelVersionName', modelVersionName);
 
-  const imageData = getImagesData();
-  const modelVersionName =
-    modelVersions.find(
-      (x: { id: string; name: string }) => x.id === imageData[0].modelVersionId
-    ).name || '';
-
-  const urlAndMeta = imageData.map(
-    (x: {
-      url: string;
-      width: number;
-      name: string;
-      hash: string;
-      meta: object;
-    }) => ({
-      url: buildImgUrl(x.url, x.width, x.name),
-      hash: x.hash,
-      meta: x.meta,
-    })
-  );
-
-  await createZip(button)(`${modelName}[${model.id}]_${modelVersionName}.zip`)(
-    urlAndMeta
+  await createZip(button)(`${modelName}[${modelId}]_${modelVersionName}.zip`)(
+    imageList
   );
 
   if (button) {
     button.setAttribute('style', disabledButtonStyle);
-    button.innerText = ` ${urlAndMeta.length} / ${
-      urlAndMeta.length
+    button.innerText = ` ${imageList.length} / ${
+      imageList.length
     } ${getButtonCompleteLabel()}`;
   }
 };
@@ -65,6 +59,11 @@ const downloadImagesAndPrompts = async () => {
 export const addDownloadButton = async () => {
   const downloadButtonSelector = "a[href^='/api/download/models/']";
   await waitForElement(downloadButtonSelector);
+
+  if (document.querySelector(`#${BUTTON_ID}`)) {
+    document.querySelector(`#${BUTTON_ID}`)?.remove();
+  }
+
   const button = document.createElement('a');
   button.addEventListener('click', downloadImagesAndPrompts);
   button.id = BUTTON_ID;

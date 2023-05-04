@@ -15,4 +15,4 @@ I recommend turn it on only when you need it.
 
 ## 🌟Special Thanks
 
-This userscript is heavily inspired by [tehrobber/civitai-one-click-dl](https://github.com/tehrobber/civitai-one-click-dl).
+This userscript is inspired by [tehrobber/civitai-one-click-dl](https://github.com/tehrobber/civitai-one-click-dl).

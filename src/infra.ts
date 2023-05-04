@@ -1,17 +1,28 @@
 import { saveAs } from 'file-saver';
 import { BlobWriter, BlobReader, TextReader, ZipWriter } from '@zip.js/zip.js';
 import { sleep, getButtonProgressLabel } from './utils';
-import { ImagesResponse } from './types';
-
-const API_URL = `https://civitai.com/api/v1/images`;
+import { ImagesResponse, ModelVersionResponse } from './types';
 
 const extractFilebasenameFromImageUrl = (url: string) => {
   const filename = url.split('/').slice(-1)[0];
   return filename.split('.')[0];
 };
 
-export const fetchGalleryData = async (modelId: string, postId: string) => {
-  let url = API_URL;
+export const fetchModelVersionInfo = async (modelVersionId: string) => {
+  const response = await fetch(
+    `https://civitai.com/api/v1/model-versions/${modelVersionId}`
+  );
+  if (response.status >= 400) {
+    throw new Error(` ${response.status} ${response.statusText}`);
+  }
+  return (await response.json()) as ModelVersionResponse;
+};
+
+export const fetchGalleryData = async (
+  modelId: string | null,
+  postId: string | null
+) => {
+  let url = 'https://civitai.com/api/v1/images';
   let params = [];
   if (postId) {
     params.push(`postId=${postId}`);

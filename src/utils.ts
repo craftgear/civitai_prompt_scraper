@@ -70,7 +70,7 @@ export const waitForElement = async (
   }
 };
 
-export const buildImgUrl = (url: string, width: number, name: string) =>
+export const buildImgUrl = (url: string, width: number, name?: string) =>
   `https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/${url}/width=${width},optimized=true/${
     name ?? ''
   }`;
@@ -83,24 +83,38 @@ export const parseNextData = () => {
   return data;
 };
 
-export const screenShot = async () => {
-  const main = await waitForElement('main');
+// export const screenShot = async () => {
+//   const main = await waitForElement('main');
+//
+//   if (!main) {
+//     return;
+//   }
+//   main.style.letterSpacing = '0.1rem';
+//
+//   document.querySelectorAll('canvas').forEach((x) => x.remove());
+//   const canvas = await html2canvas(main, {
+//     allowTaint: true,
+//   });
+//
+//   const div = document.createElement('div');
+//   div.setAttribute('style', 'border: 1px solid red;');
+//   div.appendChild(canvas);
+//
+//   document.body.appendChild(div);
+//
+//   main.style.letterSpacing = 'inherit';
+// };
 
-  if (!main) {
-    return;
-  }
-  main.style.letterSpacing = '0.1rem';
-
-  document.querySelectorAll('canvas').forEach((x) => x.remove());
-  const canvas = await html2canvas(main, {
-    allowTaint: true,
-  });
-
-  const div = document.createElement('div');
-  div.setAttribute('style', 'border: 1px solid red;');
-  div.appendChild(canvas);
-
-  document.body.appendChild(div);
-
-  main.style.letterSpacing = 'inherit';
-};
+// export const getImagesDataFromNextData = () => {
+//
+//   const data = parseNextData();
+//   const images = data.props.pageProps.trpcState.json.queries[0];
+//   return images.state.data.pages[0].items;
+// };
+//
+// export const getModelIdFromNextData = () => {
+//   const data = parseNextData();
+//   const model = data.props.pageProps.trpcState.json.queries[1];
+//   return model.state.data.id;
+// };
+//
