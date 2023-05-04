@@ -1,13 +1,12 @@
-// import html2canvas from "html2canvas";
-
 import { addGalleryDownloadButton } from './gallery_download';
 import { addDownloadButton } from './model_image_download';
 
-import { sleep, log } from './utils';
+import { waitForElement, sleep, log } from './utils';
 
 const addModelPreviewDownloadButton = async () => {
   log('model');
 
+  await waitForElement('#gallery a[href^="/images"]');
   // FIXME: adhoc: wait for Nextjs rendering finish
   await sleep(2000);
   await addDownloadButton();
@@ -18,6 +17,7 @@ const addModelPreviewDownloadButton = async () => {
 const addGalleryImageDownloadButton = async () => {
   log('gallery');
 
+  await waitForElement('.mantine-RichTextEditor-root');
   // FIXME: adhoc: wait for Nextjs rendering finish
   await sleep(2000);
   await addGalleryDownloadButton();

@@ -1,10 +1,10 @@
-import { buttonStyle, disabledButtonStyle } from './types';
+import { buttonStyle } from './types';
 import {
   waitForElement,
   parseNextData,
-  getButtonLabel,
-  getButtonCompleteLabel,
+  replaceWithDisabledButton,
 } from './utils';
+import { getButtonLabel, getButtonCompleteLabel } from './lang';
 import { createZip, fetchModelVersionInfo } from './infra';
 
 const BUTTON_ID = 'download-all-images-and-prompts';
@@ -41,27 +41,22 @@ const getModeInfoAndImageList = async (href: string) => {
 export const downloadImagesAndPrompts =
   (buttonIdSelector: string) => async () => {
     const button = await waitForElement(buttonIdSelector);
-    button?.removeEventListener(
-      'click',
-      downloadImagesAndPrompts(buttonIdSelector)
-    );
+
+    if (!button) {
+      return;
+    }
 
     const { modelId, modelName, imageList, modelVersionName } =
       await getModeInfoAndImageList(window.location.href);
-    console.log('----- modelName:', modelName);
-    console.log('----- imageList:', imageList);
-    console.log('modelVersionName', modelVersionName);
 
     await createZip(button)(`${modelName}[${modelId}]_${modelVersionName}.zip`)(
       imageList
     );
 
-    if (button) {
-      button.setAttribute('style', disabledButtonStyle);
-      button.innerText = ` ${imageList.length} / ${
-        imageList.length
-      } ${getButtonCompleteLabel()}`;
-    }
+    replaceWithDisabledButton(
+      button,
+      ` ${imageList.length} / ${imageList.length} ${getButtonCompleteLabel()}`
+    );
   };
 
 export const addDownloadButton = async () => {

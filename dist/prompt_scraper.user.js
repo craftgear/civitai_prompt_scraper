@@ -24,7 +24,6 @@ typeof globalThis !== 'undefined'
   : typeof global !== 'undefined'
   ? global
   : {};
-// import html2canvas from "html2canvas";
 const $a5923d2edfc72bc5$export$fd4d27a26b4854f3 = `
  display: flex;
  width: 100%;
@@ -60,49 +59,9 @@ var $39e7bd012fbaed99$exports = {};
 $39e7bd012fbaed99$exports = JSON.parse('{"name":"civitai_prompt_scraper","browserslist":"> 5%, last 1 versions, not dead","version":"1.0.0","description":"","source":"src/prompt_scraper.user.ts","browser ":"dist/prompt_scraper.user.js","targets":{"default":{"context":"browser","sourceMap":false,"includeNodeModules":true}},"scripts":{"type-check":"tsc --noEmit","lint":"eslint","format":"prettier --write .","watch":"parcel watch","build":"parcel build; zip -v -j ./dist/prompt_scraper.zip ./dist/prompt_scraper.user.js","clean":"rm ./dist/*","test":"echo \\"Error: no test specified\\" && exit 1"},"author":"Watanabe, Shunsuke","license":"MIT","devDependencies":{"@damoclark/parcel-optimizer-userscript":"^0.0.2","@parcel/packager-ts":"^2.8.3","@parcel/transformer-typescript-types":"^2.8.3","@tsconfig/recommended":"^1.0.2","@types/file-saver":"^2.0.5","@types/lodash":"^4.14.191","@typescript-eslint/eslint-plugin":"^5.52.0","@typescript-eslint/parser":"^5.52.0","@violentmonkey/types":"^0.1.5","eslint":"^8.34.0","eslint-config-standard-with-typescript":"^34.0.0","eslint-plugin-import":"^2.27.5","eslint-plugin-n":"^15.6.1","eslint-plugin-promise":"^6.1.1","parcel":"^2.8.3","prettier":"^2.8.4","typescript":"^4.9.5"},"dependencies":{"@violentmonkey/url":"^0.1.0","@zip.js/zip.js":"^2.6.63","file-saver":"^2.0.5","html2canvas":"^1.4.1","lodash":"^4.17.21","wazip":"^0.1.0"}}');
 
 
+
 const $0fccda82d33153ac$export$bef1f36f5486a6a3 = (...xs)=>{
     console.log(`${(0, (/*@__PURE__*/$parcel$interopDefault($39e7bd012fbaed99$exports))).name}:`, ...xs);
-};
-const $0fccda82d33153ac$var$getLocale = ()=>{
-    return window.navigator.language;
-};
-const $0fccda82d33153ac$export$d397f86d22f413e8 = ()=>{
-    const locale = $0fccda82d33153ac$var$getLocale();
-    switch(locale){
-        case "ja":
-            return "画像＆JSONダウンロード";
-        case "zh-TW":
-            return "下載圖像和JSON";
-        case "zh-CN":
-            return "下载图像和JSON";
-        default:
-            return "Download images with JSON";
-    }
-};
-const $0fccda82d33153ac$export$ccac0588af5e2fe6 = ()=>{
-    const locale = $0fccda82d33153ac$var$getLocale();
-    switch(locale){
-        case "ja":
-            return "ダウンロード中";
-        case "zh-TW":
-            return "下載中";
-        case "zh-CN":
-            return "下载中";
-        default:
-            return "downloading";
-    }
-};
-const $0fccda82d33153ac$export$4d9f09007b08c03d = ()=>{
-    const locale = $0fccda82d33153ac$var$getLocale();
-    switch(locale){
-        case "ja":
-            return "完了";
-        case "zh-TW":
-        case "zh-CN":
-            return "完成";
-        default:
-            return "done";
-    }
 };
 const $0fccda82d33153ac$export$e772c8ff12451969 = (ms = 1000)=>new Promise((resolve)=>setTimeout(()=>resolve(true), ms));
 const $0fccda82d33153ac$export$1a1c301579a08d1e = async (selector, retryLimit = 10)=>{
@@ -120,6 +79,13 @@ const $0fccda82d33153ac$export$ce1398d1c23018fa = ()=>{
     };
     const data = JSON.parse(nextData.innerText);
     return data;
+};
+const $0fccda82d33153ac$export$92ecf871022de94d = (button, text)=>{
+    const disabledButton = document.createElement("div");
+    disabledButton.setAttribute("style", (0, $a5923d2edfc72bc5$export$dbe9a8011f5e5b2d));
+    disabledButton.id = button.id;
+    disabledButton.innerText = text;
+    button.parentNode?.replaceChild(disabledButton, button);
 }; // export const screenShot = async () => {
  //   const main = await waitForElement('main');
  //
@@ -154,6 +120,49 @@ const $0fccda82d33153ac$export$ce1398d1c23018fa = ()=>{
  //   return model.state.data.id;
  // };
  //
+
+
+const $966fc19e1e9bc989$var$getLocale = ()=>{
+    return window.navigator.language;
+};
+const $966fc19e1e9bc989$export$d397f86d22f413e8 = ()=>{
+    const locale = $966fc19e1e9bc989$var$getLocale();
+    switch(locale){
+        case "ja":
+            return "画像＆JSONダウンロード";
+        case "zh-TW":
+            return "下載圖像和JSON";
+        case "zh-CN":
+            return "下载图像和JSON";
+        default:
+            return "Download images with JSON";
+    }
+};
+const $966fc19e1e9bc989$export$ccac0588af5e2fe6 = ()=>{
+    const locale = $966fc19e1e9bc989$var$getLocale();
+    switch(locale){
+        case "ja":
+            return "ダウンロード中";
+        case "zh-TW":
+            return "下載中";
+        case "zh-CN":
+            return "下载中";
+        default:
+            return "downloading";
+    }
+};
+const $966fc19e1e9bc989$export$4d9f09007b08c03d = ()=>{
+    const locale = $966fc19e1e9bc989$var$getLocale();
+    switch(locale){
+        case "ja":
+            return "完了";
+        case "zh-TW":
+        case "zh-CN":
+            return "完成";
+        default:
+            return "done";
+    }
+};
 
 
 var $b9a27db92abc3f0f$exports = {};
@@ -12465,6 +12474,7 @@ try {
 
 
 
+
 const $afa9fb8bb7aaf429$var$extractFilebasenameFromImageUrl = (url)=>{
     const filename = url.split("/").slice(-1)[0];
     return filename.split(".")[0];
@@ -12514,7 +12524,7 @@ const $afa9fb8bb7aaf429$export$b6bc24646229cedd = (button)=>(zipFilename)=>async
             let counter = 0;
             let error = null;
             for (const x of imgInfo){
-                if (button) button.innerText = `${counter + 1} / ${imgInfo.length} ${(0, $0fccda82d33153ac$export$ccac0588af5e2fe6)()}`;
+                if (button) button.innerText = `${counter + 1} / ${imgInfo.length} ${(0, $966fc19e1e9bc989$export$ccac0588af5e2fe6)()}`;
                 try {
                     const response = await $afa9fb8bb7aaf429$export$2ab75dd31a3868f2(x.url);
                     if (!response) throw new Error("response is null");
@@ -12547,6 +12557,7 @@ const $afa9fb8bb7aaf429$export$b6bc24646229cedd = (button)=>(zipFilename)=>async
 
 
 
+
 const $8d59c42601ba8f61$var$BUTTON_ID = "download-all-images-and-prompts";
 const $8d59c42601ba8f61$var$getModelInfo = ()=>{
     const data = (0, $0fccda82d33153ac$export$ce1398d1c23018fa)();
@@ -12571,16 +12582,10 @@ const $8d59c42601ba8f61$var$getModeInfoAndImageList = async (href)=>{
 };
 const $8d59c42601ba8f61$export$53039d7a8d9d297e = (buttonIdSelector)=>async ()=>{
         const button = await (0, $0fccda82d33153ac$export$1a1c301579a08d1e)(buttonIdSelector);
-        button?.removeEventListener("click", $8d59c42601ba8f61$export$53039d7a8d9d297e(buttonIdSelector));
+        if (!button) return;
         const { modelId: modelId , modelName: modelName , imageList: imageList , modelVersionName: modelVersionName  } = await $8d59c42601ba8f61$var$getModeInfoAndImageList(window.location.href);
-        console.log("----- modelName:", modelName);
-        console.log("----- imageList:", imageList);
-        console.log("modelVersionName", modelVersionName);
         await (0, $afa9fb8bb7aaf429$export$b6bc24646229cedd)(button)(`${modelName}[${modelId}]_${modelVersionName}.zip`)(imageList);
-        if (button) {
-            button.setAttribute("style", (0, $a5923d2edfc72bc5$export$dbe9a8011f5e5b2d));
-            button.innerText = ` ${imageList.length} / ${imageList.length} ${(0, $0fccda82d33153ac$export$4d9f09007b08c03d)()}`;
-        }
+        (0, $0fccda82d33153ac$export$92ecf871022de94d)(button, ` ${imageList.length} / ${imageList.length} ${(0, $966fc19e1e9bc989$export$4d9f09007b08c03d)()}`);
     };
 const $8d59c42601ba8f61$export$1403061a46292b4 = async ()=>{
     const downloadButtonSelector = "a[href^='/api/download/models/']";
@@ -12590,7 +12595,7 @@ const $8d59c42601ba8f61$export$1403061a46292b4 = async ()=>{
     const button = document.createElement("a");
     button.addEventListener("click", $8d59c42601ba8f61$export$53039d7a8d9d297e(buttonIdSelector));
     button.id = $8d59c42601ba8f61$var$BUTTON_ID;
-    button.innerText = (0, $0fccda82d33153ac$export$d397f86d22f413e8)();
+    button.innerText = (0, $966fc19e1e9bc989$export$d397f86d22f413e8)();
     button.setAttribute("style", (0, $a5923d2edfc72bc5$export$fd4d27a26b4854f3));
     const buttonParent = document.querySelector(downloadButtonSelector);
     if (buttonParent) buttonParent.parentNode?.appendChild(button);
@@ -12606,10 +12611,7 @@ const $9a7e0bde1a099030$var$downloadGalleryImagesAndPrompts = (buttonIdSelector,
                 ...x,
                 url: x.url.replace(`width=${x.width}`, `width=${x.width},optimized=true`)
             })));
-        if (button) {
-            button.setAttribute("style", (0, $a5923d2edfc72bc5$export$dbe9a8011f5e5b2d));
-            button.innerText = ` ${data.items.length} / ${data.items.length} ${(0, $0fccda82d33153ac$export$4d9f09007b08c03d)()}`;
-        }
+        (0, $0fccda82d33153ac$export$92ecf871022de94d)(button, ` ${data.items.length} / ${data.items.length} ${(0, $966fc19e1e9bc989$export$4d9f09007b08c03d)()}`);
     };
 const $9a7e0bde1a099030$var$downloadSingleImagesAndPrompts = (buttonIdSelector)=>async ()=>{
         const data = (0, $0fccda82d33153ac$export$ce1398d1c23018fa)();
@@ -12625,10 +12627,7 @@ const $9a7e0bde1a099030$var$downloadSingleImagesAndPrompts = (buttonIdSelector)=
                 meta: meta
             }
         ]);
-        if (button) {
-            button.setAttribute("style", (0, $a5923d2edfc72bc5$export$dbe9a8011f5e5b2d));
-            button.innerText = (0, $0fccda82d33153ac$export$4d9f09007b08c03d)();
-        }
+        (0, $0fccda82d33153ac$export$92ecf871022de94d)(button, (0, $966fc19e1e9bc989$export$4d9f09007b08c03d)());
     };
 const $9a7e0bde1a099030$export$5fd187c0d03a79e = async ()=>{
     const href = window.location.href;
@@ -12649,9 +12648,9 @@ const $9a7e0bde1a099030$export$5fd187c0d03a79e = async ()=>{
     // 画像単体で開いた場合
     if (!postId && !modelId && !modelVersionId) button.addEventListener("click", $9a7e0bde1a099030$var$downloadSingleImagesAndPrompts(buttonIdSelector));
     // モデルのギャラリーエリアから開いた場合
-    if (modelId && postId) button.addEventListener("click", $9a7e0bde1a099030$var$downloadGalleryImagesAndPrompts(buttonIdSelector, modelId, postId));
+    if (postId) button.addEventListener("click", $9a7e0bde1a099030$var$downloadGalleryImagesAndPrompts(buttonIdSelector, modelId, postId));
     button.id = $9a7e0bde1a099030$var$BUTTON_ID;
-    button.innerText = (0, $0fccda82d33153ac$export$d397f86d22f413e8)();
+    button.innerText = (0, $966fc19e1e9bc989$export$d397f86d22f413e8)();
     button.setAttribute("style", (0, $a5923d2edfc72bc5$export$fd4d27a26b4854f3));
     if (document.querySelector(".mantine-Modal-modal")) document.querySelector(".mantine-Modal-modal .mantine-Card-cardSection")?.appendChild(button);
     else document.querySelector("#freezeBlock .mantine-Stack-root")?.appendChild(button);
@@ -12662,6 +12661,7 @@ const $9a7e0bde1a099030$export$5fd187c0d03a79e = async ()=>{
 
 const $29e4e9967394a818$var$addModelPreviewDownloadButton = async ()=>{
     (0, $0fccda82d33153ac$export$bef1f36f5486a6a3)("model");
+    await (0, $0fccda82d33153ac$export$1a1c301579a08d1e)('#gallery a[href^="/images"]');
     // FIXME: adhoc: wait for Nextjs rendering finish
     await (0, $0fccda82d33153ac$export$e772c8ff12451969)(2000);
     await (0, $8d59c42601ba8f61$export$1403061a46292b4)();
@@ -12669,6 +12669,7 @@ const $29e4e9967394a818$var$addModelPreviewDownloadButton = async ()=>{
 };
 const $29e4e9967394a818$var$addGalleryImageDownloadButton = async ()=>{
     (0, $0fccda82d33153ac$export$bef1f36f5486a6a3)("gallery");
+    await (0, $0fccda82d33153ac$export$1a1c301579a08d1e)(".mantine-RichTextEditor-root");
     // FIXME: adhoc: wait for Nextjs rendering finish
     await (0, $0fccda82d33153ac$export$e772c8ff12451969)(2000);
     await (0, $9a7e0bde1a099030$export$5fd187c0d03a79e)();

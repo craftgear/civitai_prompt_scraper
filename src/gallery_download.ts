@@ -1,18 +1,19 @@
-import { buttonStyle, disabledButtonStyle } from './types';
+import { buttonStyle } from './types';
 import {
   waitForElement,
   parseNextData,
   buildImgUrl,
-  getButtonLabel,
-  getButtonCompleteLabel,
+  replaceWithDisabledButton,
 } from './utils';
+import { getButtonLabel, getButtonCompleteLabel } from './lang';
 import { fetchGalleryData, createZip } from './infra';
 import { downloadImagesAndPrompts } from './model_image_download';
 
 const BUTTON_ID = 'download-all-gallery-images-and-prompts';
 
 const downloadGalleryImagesAndPrompts =
-  (buttonIdSelector: string, modelId: string, postId: string) => async () => {
+  (buttonIdSelector: string, modelId: string | null, postId: string) =>
+  async () => {
     const data = await fetchGalleryData(modelId, postId);
 
     const button = await waitForElement(buttonIdSelector);
@@ -30,12 +31,10 @@ const downloadGalleryImagesAndPrompts =
       }))
     );
 
-    if (button) {
-      button.setAttribute('style', disabledButtonStyle);
-      button.innerText = ` ${data.items.length} / ${
-        data.items.length
-      } ${getButtonCompleteLabel()}`;
-    }
+    replaceWithDisabledButton(
+      button,
+      ` ${data.items.length} / ${data.items.length} ${getButtonCompleteLabel()}`
+    );
   };
 
 const downloadSingleImagesAndPrompts =
@@ -52,10 +51,7 @@ const downloadSingleImagesAndPrompts =
 
     await createZip(button)(`imageId_${id}.zip`)([{ url: imgUrl, hash, meta }]);
 
-    if (button) {
-      button.setAttribute('style', disabledButtonStyle);
-      button.innerText = getButtonCompleteLabel();
-    }
+    replaceWithDisabledButton(button, getButtonCompleteLabel());
   };
 
 export const addGalleryDownloadButton = async () => {
@@ -95,7 +91,7 @@ export const addGalleryDownloadButton = async () => {
     );
   }
   // モデルのギャラリーエリアから開いた場合
-  if (modelId && postId) {
+  if (postId) {
     button.addEventListener(
       'click',
       downloadGalleryImagesAndPrompts(buttonIdSelector, modelId, postId)

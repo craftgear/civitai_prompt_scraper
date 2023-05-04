@@ -1,7 +1,8 @@
 import { saveAs } from 'file-saver';
 import { BlobWriter, BlobReader, TextReader, ZipWriter } from '@zip.js/zip.js';
-import { sleep, getButtonProgressLabel } from './utils';
+import { sleep } from './utils';
 import { ImagesResponse, ModelVersionResponse } from './types';
+import { getButtonProgressLabel } from './lang';
 
 const extractFilebasenameFromImageUrl = (url: string) => {
   const filename = url.split('/').slice(-1)[0];
