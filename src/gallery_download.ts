@@ -1,4 +1,3 @@
-import { saveAs } from 'file-saver';
 import { buttonStyle, disabledButtonStyle } from './types';
 import {
   waitForElement,
@@ -8,14 +7,15 @@ import {
   getButtonCompleteLabel,
 } from './utils';
 import { fetchGalleryData, createZip } from './infra';
+import { downloadImagesAndPrompts } from './model_image_download';
 
 const BUTTON_ID = 'download-all-gallery-images-and-prompts';
 
 const downloadGalleryImagesAndPrompts =
-  (modelId: string, postId: string) => async () => {
+  (buttonIdSelector: string, modelId: string, postId: string) => async () => {
     const data = await fetchGalleryData(modelId, postId);
 
-    const button = await waitForElement(`#${BUTTON_ID}`);
+    const button = await waitForElement(buttonIdSelector);
     if (!button) {
       return;
     }
@@ -38,24 +38,25 @@ const downloadGalleryImagesAndPrompts =
     }
   };
 
-const downloadSingleImagesAndPrompts = async () => {
-  const data = parseNextData();
-  const model = data.props.pageProps.trpcState.json.queries[0];
-  const { id, url, meta, width, name, hash } = model.state.data;
-  const imgUrl = buildImgUrl(url, width, name);
+const downloadSingleImagesAndPrompts =
+  (buttonIdSelector: string) => async () => {
+    const data = parseNextData();
+    const model = data.props.pageProps.trpcState.json.queries[0];
+    const { id, url, meta, width, name, hash } = model.state.data;
+    const imgUrl = buildImgUrl(url, width, name);
 
-  const button = await waitForElement(`#${BUTTON_ID}`);
-  if (!button) {
-    return;
-  }
+    const button = await waitForElement(buttonIdSelector);
+    if (!button) {
+      return;
+    }
 
-  await createZip(button)(`imageId_${id}.zip`)([{ url: imgUrl, hash, meta }]);
+    await createZip(button)(`imageId_${id}.zip`)([{ url: imgUrl, hash, meta }]);
 
-  if (button) {
-    button.setAttribute('style', disabledButtonStyle);
-    button.innerText = getButtonCompleteLabel();
-  }
-};
+    if (button) {
+      button.setAttribute('style', disabledButtonStyle);
+      button.innerText = getButtonCompleteLabel();
+    }
+  };
 
 export const addGalleryDownloadButton = async () => {
   const href = window.location.href;
@@ -74,28 +75,30 @@ export const addGalleryDownloadButton = async () => {
   const prioritizedUserId =
     matchedPrioritizedUser?.groups?.prioritizedUserId || null;
 
-  document.querySelector(`#${BUTTON_ID}`)?.remove();
+  const buttonIdSelector = `#${BUTTON_ID}`;
+  document.querySelector(buttonIdSelector)?.remove();
   const button = document.createElement('button');
 
   // モデル画面のトップ画像から開いた場合
+  // モデルの方のダウンロードボタンを使う
   if (modelVersionId && prioritizedUserId) {
-    // TODO: モデルの方のダウンロードボタンを使う
-    // const data = parseNextData();
-    // const model = data.props.pageProps.trpcState.json.queries[1];
-    // button.addEventListener(
-    //   'click',
-    //   downloadGalleryImagesAndPrompts(model.id, postId)
-    // );
+    button.addEventListener(
+      'click',
+      downloadImagesAndPrompts(buttonIdSelector)
+    );
   }
   // 画像単体で開いた場合
   if (!postId && !modelId && !modelVersionId) {
-    button.addEventListener('click', downloadSingleImagesAndPrompts);
+    button.addEventListener(
+      'click',
+      downloadSingleImagesAndPrompts(buttonIdSelector)
+    );
   }
   // モデルのギャラリーエリアから開いた場合
   if (modelId && postId) {
     button.addEventListener(
       'click',
-      downloadGalleryImagesAndPrompts(modelId, postId)
+      downloadGalleryImagesAndPrompts(buttonIdSelector, modelId, postId)
     );
   }
 
