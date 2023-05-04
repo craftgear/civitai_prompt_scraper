@@ -12660,29 +12660,29 @@ const $9a7e0bde1a099030$export$5fd187c0d03a79e = async ()=>{
 
 
 
+const $29e4e9967394a818$var$addModelPreviewDownloadButton = async ()=>{
+    (0, $0fccda82d33153ac$export$bef1f36f5486a6a3)("model");
+    // FIXME: adhoc: wait for Nextjs rendering finish
+    await (0, $0fccda82d33153ac$export$e772c8ff12451969)(2000);
+    await (0, $8d59c42601ba8f61$export$1403061a46292b4)();
+// TODO: add download all gallery images
+};
+const $29e4e9967394a818$var$addGalleryImageDownloadButton = async ()=>{
+    (0, $0fccda82d33153ac$export$bef1f36f5486a6a3)("gallery");
+    // FIXME: adhoc: wait for Nextjs rendering finish
+    await (0, $0fccda82d33153ac$export$e772c8ff12451969)(2000);
+    await (0, $9a7e0bde1a099030$export$5fd187c0d03a79e)();
+};
+let $29e4e9967394a818$var$prevHref = "";
 // see https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver
 const $29e4e9967394a818$var$observer = new MutationObserver(async (_mutationList)=>{
     const href = window.location.href;
     if ($29e4e9967394a818$var$prevHref !== href) {
-        if (href.includes("/models/")) {
-            (0, $0fccda82d33153ac$export$bef1f36f5486a6a3)("model page changed");
-            // FIXME: adhoc: wait for Nextjs rendering finish
-            setTimeout(()=>{
-                (0, $8d59c42601ba8f61$export$1403061a46292b4)();
-            }, 2000);
-            const showMoreButton = Array.from(document.querySelectorAll("button")).filter((x)=>x.innerHTML === "Show More")[0];
-            showMoreButton && showMoreButton.click();
-        }
-        if (href.includes("/images/")) {
-            (0, $0fccda82d33153ac$export$bef1f36f5486a6a3)("images");
-            // FIXME: adhoc: wait for Nextjs rendering finish
-            await (0, $0fccda82d33153ac$export$e772c8ff12451969)(2000);
-            await (0, $9a7e0bde1a099030$export$5fd187c0d03a79e)();
-        }
+        if (href.includes("/models/")) await $29e4e9967394a818$var$addModelPreviewDownloadButton();
+        if (href.includes("/images/")) await $29e4e9967394a818$var$addGalleryImageDownloadButton();
         $29e4e9967394a818$var$prevHref = window.location.href;
     }
 });
-let $29e4e9967394a818$var$prevHref = "";
 (async function() {
     $29e4e9967394a818$var$prevHref = window.location.href;
     (0, $0fccda82d33153ac$export$bef1f36f5486a6a3)("start");
@@ -12693,20 +12693,11 @@ let $29e4e9967394a818$var$prevHref = "";
         subtree: true
     });
     if (window.location.href.includes("/models/")) {
-        (0, $0fccda82d33153ac$export$bef1f36f5486a6a3)("models");
-        // FIXME: adhoc: wait for Nextjs rendering finish
-        await (0, $0fccda82d33153ac$export$e772c8ff12451969)(2000);
-        await (0, $8d59c42601ba8f61$export$1403061a46292b4)();
+        await $29e4e9967394a818$var$addModelPreviewDownloadButton();
         const showMoreButton = Array.from(document.querySelectorAll("button")).filter((x)=>x.innerHTML === "Show More")[0];
         showMoreButton && showMoreButton.click();
-    // TODO: add download all gallery images
     }
-    if (window.location.href.includes("/images/")) {
-        (0, $0fccda82d33153ac$export$bef1f36f5486a6a3)("images");
-        // FIXME: adhoc: wait for Nextjs rendering finish
-        await (0, $0fccda82d33153ac$export$e772c8ff12451969)(2000);
-        await (0, $9a7e0bde1a099030$export$5fd187c0d03a79e)();
-    }
+    if (window.location.href.includes("/images/")) await $29e4e9967394a818$var$addGalleryImageDownloadButton();
     (0, $0fccda82d33153ac$export$bef1f36f5486a6a3)("done");
 })();
 
