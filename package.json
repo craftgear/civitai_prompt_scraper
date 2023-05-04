@@ -13,14 +13,13 @@
     }
   },
   "scripts": {
-    "clean": "rimraf dist/",
-    "typecheck": "tsc --noEmit",
+    "type-check": "tsc --noEmit",
     "lint": "eslint",
-    "check": "npm-run-all -p typecheck -p lint",
+    "format": "prettier --write .",
     "watch": "parcel watch",
     "build": "parcel build; zip -v -j ./dist/prompt_scraper.zip ./dist/prompt_scraper.user.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "format": "prettier --write ."
+    "clean": "rm ./dist/*",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Watanabe, Shunsuke",
   "license": "MIT",
@@ -39,10 +38,8 @@
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-n": "^15.6.1",
     "eslint-plugin-promise": "^6.1.1",
-    "npm-run-all": "^4.1.5",
     "parcel": "^2.8.3",
     "prettier": "^2.8.4",
-    "rimraf": "^4.1.2",
     "typescript": "^4.9.5"
   },
   "dependencies": {

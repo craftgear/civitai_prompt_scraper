@@ -1,15 +1,14 @@
-import { saveAs } from "file-saver";
-import { buttonStyle, disabledButtonStyle } from "./types";
+import { buttonStyle, disabledButtonStyle } from './types';
 import {
   waitForElement,
-  createZip,
   parseNextData,
   buildImgUrl,
   getButtonLabel,
   getButtonCompleteLabel,
-} from "./utils";
+} from './utils';
+import { createZip } from './infra';
 
-const BUTTON_ID = "download-all-images-and-prompts";
+const BUTTON_ID = 'download-all-images-and-prompts';
 
 const getModelInfo = () => {
   const data = parseNextData();
@@ -25,7 +24,7 @@ const getImagesData = () => {
 
 const downloadImagesAndPrompts = async () => {
   const button = await waitForElement(`#${BUTTON_ID}`);
-  button?.removeEventListener("click", downloadImagesAndPrompts);
+  button?.removeEventListener('click', downloadImagesAndPrompts);
 
   const model = await getModelInfo();
   const modelName = model.name;
@@ -33,8 +32,9 @@ const downloadImagesAndPrompts = async () => {
 
   const imageData = getImagesData();
   const modelVersionName =
-    modelVersions.find((x: any) => x.id === imageData[0].modelVersionId).name ||
-    "";
+    modelVersions.find(
+      (x: { id: string; name: string }) => x.id === imageData[0].modelVersionId
+    ).name || '';
 
   const urlAndMeta = imageData.map(
     (x: {
@@ -50,17 +50,12 @@ const downloadImagesAndPrompts = async () => {
     })
   );
 
-  const { content, error } = await createZip(button)(urlAndMeta);
-
-  if (error) {
-    alert(error.message);
-    return;
-  }
-
-  saveAs(content, `${modelName}[${model.id}]_${modelVersionName}.zip`);
+  await createZip(button)(`${modelName}[${model.id}]_${modelVersionName}.zip`)(
+    urlAndMeta
+  );
 
   if (button) {
-    button.setAttribute("style", disabledButtonStyle);
+    button.setAttribute('style', disabledButtonStyle);
     button.innerText = ` ${urlAndMeta.length} / ${
       urlAndMeta.length
     } ${getButtonCompleteLabel()}`;
@@ -70,11 +65,11 @@ const downloadImagesAndPrompts = async () => {
 export const addDownloadButton = async () => {
   const downloadButtonSelector = "a[href^='/api/download/models/']";
   await waitForElement(downloadButtonSelector);
-  const button = document.createElement("a");
-  button.addEventListener("click", downloadImagesAndPrompts);
+  const button = document.createElement('a');
+  button.addEventListener('click', downloadImagesAndPrompts);
   button.id = BUTTON_ID;
   button.innerText = getButtonLabel();
-  button.setAttribute("style", buttonStyle);
+  button.setAttribute('style', buttonStyle);
   const buttonParent = document.querySelector(downloadButtonSelector);
   if (buttonParent) {
     buttonParent.parentNode?.appendChild(button);
