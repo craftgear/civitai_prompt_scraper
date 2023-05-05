@@ -8,6 +8,13 @@ This is an userscript for ViolentMokey, _[click here](https://github.com/craftge
 
 ![download gallery images](./_screenshots/gallery.png)
 
+## 👎Caveats
+
+- You need to wait a few seconds to see a button.
+- It downloads files one by one.
+- You can't close a tab while downloading.
+- it prioritizes avif/webp.
+
 ## ⚠️Caution
 
 This userscript may slow down civitai.
