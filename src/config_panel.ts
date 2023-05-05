@@ -179,12 +179,16 @@ export function initConfigPanel() {
 
 export const getConfig = (fieldName: string): string | boolean => {
   const localConfigValues = loadConfig();
+  const inputField = fields.find((x) => x.name === fieldName);
   if (localConfigValues.hasOwnProperty(fieldName)) {
-    const inputField = fields.find((x) => x.name === fieldName);
     if (!inputField) {
       throw new Error(`${fieldName} is not found in input fields.`);
     }
     return localConfigValues[fieldName as ConfigKey];
   }
+  if (inputField?.hasOwnProperty(fieldName)) {
+    return inputField?.value;
+  }
+
   throw new Error(`${fieldName} is not found in config`);
 };
