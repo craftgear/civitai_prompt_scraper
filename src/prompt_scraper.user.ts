@@ -1,5 +1,7 @@
 import { addGalleryDownloadButton } from './gallery_download';
-import { addDownloadButton } from './model_image_download';
+import { addModelImagesDownloadButton } from './model_image_download';
+import { initConfigPanel } from './config_panel';
+import { getConfig } from './config_panel';
 
 import { waitForElement, sleep, log } from './utils';
 
@@ -9,9 +11,7 @@ const addModelPreviewDownloadButton = async () => {
   await waitForElement('#gallery a[href^="/images"]');
   // FIXME: adhoc: wait for Nextjs rendering finish
   await sleep(2000);
-  await addDownloadButton();
-
-  // TODO: add download all gallery images
+  await addModelImagesDownloadButton();
 };
 
 const addGalleryImageDownloadButton = async () => {
@@ -19,7 +19,7 @@ const addGalleryImageDownloadButton = async () => {
 
   await waitForElement('.mantine-RichTextEditor-root');
   // FIXME: adhoc: wait for Nextjs rendering finish
-  await sleep(2000);
+  await sleep(3000);
   await addGalleryDownloadButton();
 };
 
@@ -51,15 +51,18 @@ const observer = new MutationObserver(async (_mutationList) => {
       childList: true,
       subtree: true,
     });
+    initConfigPanel();
   }
 
   if (window.location.href.includes('/models/')) {
     await addModelPreviewDownloadButton();
 
-    const showMoreButton = Array.from(
-      document.querySelectorAll('button')
-    ).filter((x: HTMLElement) => x.innerHTML === 'Show More')[0];
-    showMoreButton && showMoreButton.click();
+    if (getConfig('openShowMore')) {
+      const showMoreButton = Array.from(
+        document.querySelectorAll('button')
+      ).filter((x: HTMLElement) => x.innerHTML === 'Show More')[0];
+      showMoreButton && showMoreButton.click();
+    }
   }
 
   if (window.location.href.includes('/images/')) {

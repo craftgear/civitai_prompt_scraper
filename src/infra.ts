@@ -1,15 +1,16 @@
 import { saveAs } from 'file-saver';
 import { BlobWriter, BlobReader, TextReader, ZipWriter } from '@zip.js/zip.js';
 import { sleep } from './utils';
-import { ImagesResponse, ModelVersionResponse } from './types';
+import { ImagesResponse, ModelVersionResponse, Config } from './types';
 import { getButtonProgressLabel } from './lang';
+import { getConfig } from './config_panel';
 
 const extractFilebasenameFromImageUrl = (url: string) => {
   const filename = url.split('/').slice(-1)[0];
   return filename.split('.')[0];
 };
 
-export const fetchModelVersionInfo = async (modelVersionId: string) => {
+export const fetchModelVersionData = async (modelVersionId: string) => {
   const response = await fetch(
     `https://civitai.com/api/v1/model-versions/${modelVersionId}`
   );
@@ -66,7 +67,7 @@ export const fetchImg = async (
     };
   } catch (error) {
     if (url.includes('image.civitai.com')) {
-      return await fetchImg(
+      return fetchImg(
         url.replace('image.civitai.com', 'imagecache.civitai.com')
       );
     }
@@ -75,8 +76,8 @@ export const fetchImg = async (
 };
 
 export const createZip =
-  (button: HTMLElement | null) =>
-  (zipFilename: string) =>
+  (buttnTextUpdateFn: (text: string) => void | null) =>
+  (zipFilename: string, modelMeta?: Object) =>
   async (
     imgInfo: { url: string; hash: string; meta: Object }[]
   ): Promise<void> => {
@@ -84,13 +85,20 @@ export const createZip =
     const blobWriter = new BlobWriter(`application/zip`);
     const zipWriter = new ZipWriter(blobWriter);
 
+    if (modelMeta) {
+      await zipWriter.add(
+        'model.json',
+        new TextReader(JSON.stringify(modelMeta))
+      );
+    }
+
     let counter = 0;
-    let error = null;
+    let errors = [];
     for (const x of imgInfo) {
-      if (button) {
-        button.innerText = `${counter + 1} / ${
-          imgInfo.length
-        } ${getButtonProgressLabel()}`;
+      if (buttnTextUpdateFn) {
+        buttnTextUpdateFn(
+          `${counter + 1} / ${imgInfo.length} ${getButtonProgressLabel()}`
+        );
       }
 
       try {
@@ -121,19 +129,33 @@ export const createZip =
             new TextReader(JSON.stringify(x.meta))
           );
         }
+
         counter += 1;
       } catch (e: unknown) {
         console.log('error: ', (e as Error).message, x.url);
-        error = new Error(`${(e as Error).message}, ${x.url}`);
-        break;
+        errors.push(`${(e as Error).message}, ${x.url}`);
+        if (!getConfig('continueWithFetchError')) {
+          break;
+        }
       }
       await sleep(100);
     }
 
-    if (error) {
-      alert(error.message);
-      return;
+    if (errors.length > 0) {
+      alert(errors.join('\n\r'));
+      if (!getConfig('continueWithFetchError')) {
+        return;
+      }
     }
 
     saveAs(await zipWriter.close(undefined, {}), zipFilename);
   };
+
+export const saveConfig = (config: Config) => {
+  localStorage.setItem('config', JSON.stringify(config));
+};
+
+export const loadConfig = (): Config => {
+  const config = localStorage.getItem('config');
+  return config ? JSON.parse(config) : {};
+};

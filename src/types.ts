@@ -1,34 +1,3 @@
-export const buttonStyle = `
- display: flex;
- width: 100%;
- justify-content: center;
- align-items: center;
- color: white;
- background-color: #228be6;
- height: 36px;
- border-radius: 4px;
- font-weight: bold;
- font-size: small;
- cursor: pointer;
- word-break: keep-all;
-`;
-
-export const disabledButtonStyle = `
- display: flex;
- width: 100%;
- justify-content: center;
- align-items: center;
- color: white;
- background-color: grey;
- disable: true;
- height: 36px;
- border-radius: 4px;
- font-weight: bold;
- font-size: small;
- cursor: none;
- word-break: keep-all;
-`;
-
 type ModelVersionFile = {
   name: string;
   id: number;
@@ -141,3 +110,19 @@ export type ImagesResponse = {
 export type NextData = {
   innerText: string;
 };
+
+export type InputField = {
+  type: string;
+  name: string;
+  label: string;
+  value: boolean | string | number;
+  desc: string;
+  style: string;
+};
+
+export type Config = {
+  [key in 'openShowMore' | 'continueWithFetchError']: boolean;
+} & {
+  [key in 'modelPreviewFilenameFormat' | 'galleryFilenameFormat']: string;
+};
+export type ConfigKey = keyof Config;

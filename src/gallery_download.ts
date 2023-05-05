@@ -1,13 +1,15 @@
-import { buttonStyle } from './types';
+import { buttonStyle } from './styles';
 import {
   waitForElement,
   parseNextData,
   buildImgUrl,
   replaceWithDisabledButton,
+  updateButtonText,
 } from './utils';
 import { getButtonLabel, getButtonCompleteLabel } from './lang';
 import { fetchGalleryData, createZip } from './infra';
 import { downloadImagesAndPrompts } from './model_image_download';
+import { getConfig } from './config_panel';
 
 const BUTTON_ID = 'download-all-gallery-images-and-prompts';
 
@@ -21,13 +23,15 @@ const downloadGalleryImagesAndPrompts =
       return;
     }
 
-    await createZip(button)(`modelId_${modelId}-postId_${postId}.zip`)(
+    const filenameFormat = getConfig('galleryFilenameFormat');
+    const filename = (filenameFormat as string)
+      .replace('{modelId}', modelId ?? '')
+      .replace('{postId}', postId);
+
+    await createZip(updateButtonText(button))(filename)(
       data.items.map((x) => ({
         ...x,
-        url: x.url.replace(
-          `width=${x.width}`,
-          `width=${x.width},optimized=true`
-        ),
+        url: x.url.replace(/width=\d*/, `width=${x.width},optimized=true`),
       }))
     );
 
@@ -49,7 +53,9 @@ const downloadSingleImagesAndPrompts =
       return;
     }
 
-    await createZip(button)(`imageId_${id}.zip`)([{ url: imgUrl, hash, meta }]);
+    await createZip(updateButtonText(button))(`imageId_${id}.zip`)([
+      { url: imgUrl, hash, meta },
+    ]);
 
     replaceWithDisabledButton(button, getButtonCompleteLabel());
   };
@@ -105,7 +111,7 @@ export const addGalleryDownloadButton = async () => {
     document
       .querySelector('.mantine-Modal-modal .mantine-Card-cardSection')
       ?.appendChild(button);
-  } else {
+  } else if (!document.querySelector('#gallery')) {
     document
       .querySelector('#freezeBlock .mantine-Stack-root')
       ?.appendChild(button);

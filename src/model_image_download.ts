@@ -1,11 +1,13 @@
-import { buttonStyle } from './types';
+import { buttonStyle } from './styles';
 import {
   waitForElement,
   parseNextData,
   replaceWithDisabledButton,
+  updateButtonText,
 } from './utils';
 import { getButtonLabel, getButtonCompleteLabel } from './lang';
-import { createZip, fetchModelVersionInfo } from './infra';
+import { createZip, fetchModelVersionData } from './infra';
+import { getConfig } from './config_panel';
 
 const BUTTON_ID = 'download-all-images-and-prompts';
 
@@ -28,14 +30,37 @@ const getModeInfoAndImageList = async (href: string) => {
     throw new Error(`modelVersionId is not found.`);
   }
 
+  const modelInfo = await fetchModelVersionData(modelVersionId);
   const {
     modelId,
-    model: { name: modelName },
+    model,
+    files,
+    baseModel,
+    trainedWords,
+    createdAt,
+    updatedAt,
     images: imageList,
     name: modelVersionName,
-  } = await fetchModelVersionInfo(modelVersionId);
+  } = modelInfo;
 
-  return { modelId, modelName, imageList, modelVersionName };
+  return {
+    modelId,
+    modelName: model.name,
+    modelVersionId,
+    modelVersionName,
+    imageList,
+    modelMeta: {
+      id: modelId,
+      ...model,
+      modelVersionId,
+      modelVersionName,
+      baseModel,
+      trainedWords,
+      files,
+      createdAt,
+      updatedAt,
+    },
+  };
 };
 
 export const downloadImagesAndPrompts =
@@ -46,11 +71,27 @@ export const downloadImagesAndPrompts =
       return;
     }
 
-    const { modelId, modelName, imageList, modelVersionName } =
-      await getModeInfoAndImageList(window.location.href);
+    const {
+      modelId,
+      modelName,
+      imageList,
+      modelVersionId,
+      modelVersionName,
+      modelMeta,
+    } = await getModeInfoAndImageList(window.location.href);
 
-    await createZip(button)(`${modelName}[${modelId}]_${modelVersionName}.zip`)(
-      imageList
+    const filenameFormat = getConfig('modelPreviewFilenameFormat');
+    const filename = (filenameFormat as string)
+      .replace('{modelId}', `${modelId ?? ''}`)
+      .replace('{modelName}', modelName)
+      .replace('{modelVersionId}', modelVersionId)
+      .replace('{modelVersionName}', modelVersionName);
+
+    await createZip(updateButtonText(button))(filename, modelMeta)(
+      imageList.map((x) => ({
+        ...x,
+        url: x.url.replace(/width=\d*/, `width=${x.width},optimized=true`),
+      }))
     );
 
     replaceWithDisabledButton(
@@ -59,7 +100,7 @@ export const downloadImagesAndPrompts =
     );
   };
 
-export const addDownloadButton = async () => {
+export const addModelImagesDownloadButton = async () => {
   const downloadButtonSelector = "a[href^='/api/download/models/']";
   await waitForElement(downloadButtonSelector);
   const buttonIdSelector = `#${BUTTON_ID}`;

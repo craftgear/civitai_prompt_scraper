@@ -1,6 +1,6 @@
 import { NextData } from './types';
 import pkg from '../package.json';
-import { disabledButtonStyle } from './types';
+import { disabledButtonStyle } from './styles';
 
 export const log = (...xs: any[]) => {
   console.log(`${pkg.name}:`, ...xs);
@@ -36,6 +36,10 @@ export const parseNextData = () => {
   ) as HTMLElement) || { innerText: '' };
   const data = JSON.parse(nextData.innerText);
   return data;
+};
+
+export const updateButtonText = (button: HTMLElement) => (text: string) => {
+  button.innerText = text;
 };
 
 export const replaceWithDisabledButton = (

@@ -11,7 +11,7 @@ This is an userscript for ViolentMokey, _[click here](https://github.com/craftge
 ## ⚠️Caution
 
 This userscript may slow down civitai.
-I recommend turn it on only when you need it.
+I recommend you to turn it on only when you need it.
 
 ## 🌟Special Thanks
 

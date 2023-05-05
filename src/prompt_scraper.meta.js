@@ -1,11 +1,13 @@
 // ==UserScript==
 // @name        Prompt Scraper - civitai.com
-// @namespace   Violentmonkey Scripts
-// @match       https://civitai.com/*
-// @run-at      document-end
-//
 // @version     1.0
+// @namespace   https://github.com/craftgear/civitai_prompt_scraper
+// @description download images and prompts as a zip file
+// @license     MIT
+// @supportURL  https://github.com/craftgear/civitai_prompt_scraper/issues
+// @match       https://civitai.com/*
+// @run-at      document-idle
 // @author      Watanabe, Shunsuke
-// @description 2023/4/28 16:00:07
+// @grant       GM_registerMenuCommand
 // ==/UserScript==
 //
