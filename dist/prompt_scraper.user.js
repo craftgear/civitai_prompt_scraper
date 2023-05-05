@@ -26,6 +26,51 @@ typeof globalThis !== 'undefined'
   : typeof global !== 'undefined'
   ? global
   : {};
+const $292fc7f9388c589b$export$2c795915441ef547 = `
+  z-index: 100;
+  position: fixed;
+  top: 2rem;
+  right: 2rem;
+  width: 400px;
+
+  display: none;
+  gap: 0.5rem;
+  flex-direction: column;
+  padding: 1rem;
+
+  border: 1px solid silver;
+  background: white;
+  box-shadow: 2px 2px 5px silver;
+`;
+const $292fc7f9388c589b$export$fd4d27a26b4854f3 = `
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  background-color: #228be6;
+  height: 36px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: small;
+  cursor: pointer;
+  word-break: keep-all;
+`;
+const $292fc7f9388c589b$export$dbe9a8011f5e5b2d = `
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  background-color: grey;
+  disable: true;
+  height: 36px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: small;
+  cursor: none;
+  word-break: keep-all;
+`;
 
 
 var $39e7bd012fbaed99$exports = {};
@@ -58,7 +103,7 @@ const $0fccda82d33153ac$export$bb64a7e3f0f28938 = (button)=>(text)=>{
     };
 const $0fccda82d33153ac$export$92ecf871022de94d = (button, text)=>{
     const disabledButton = document.createElement("div");
-    disabledButton.setAttribute("style", (0, $a5923d2edfc72bc5$exports.disabledButtonStyle));
+    disabledButton.setAttribute("style", (0, $292fc7f9388c589b$export$dbe9a8011f5e5b2d));
     disabledButton.id = button.id;
     disabledButton.innerText = text;
     button.parentNode?.replaceChild(disabledButton, button);
@@ -124,18 +169,6 @@ const $966fc19e1e9bc989$var$i18n = {
         "zh-CN": '显示"Show More"自动打开'
     },
     continueWithFetchError: {
-        en: "",
-        ja: "",
-        "zh-TW": "",
-        "zh-CN": ""
-    },
-    modelPreviewFilenameFormat: {
-        en: "",
-        ja: "",
-        "zh-TW": "",
-        "zh-CN": ""
-    },
-    galleryFilenameFormat: {
         en: "",
         ja: "",
         "zh-TW": "",
@@ -12507,11 +12540,13 @@ try {
 
 
 
+
+
 const $65c0cd2b2ec0988a$var$fields = [
     {
         type: "checkbox",
         name: "openShowMore",
-        label: (0, $966fc19e1e9bc989$export$236350842f3cd9bc)(openShowMore),
+        label: (0, $966fc19e1e9bc989$export$236350842f3cd9bc)("openShowMore"),
         value: true,
         desc: "",
         style: `margin-right: 0.5rem;`
@@ -12541,7 +12576,7 @@ const $65c0cd2b2ec0988a$var$fields = [
         style: ""
     }
 ];
-function $65c0cd2b2ec0988a$var$addInputs(parent, fields) {
+const $65c0cd2b2ec0988a$var$addInputs = (parent, fields)=>{
     fields.forEach(({ type: type , name: name , label: label , value: value , desc: desc , style: style  })=>{
         const div = document.createElement("div");
         const inputEl = document.createElement("input");
@@ -12573,11 +12608,11 @@ function $65c0cd2b2ec0988a$var$addInputs(parent, fields) {
         }
         parent.appendChild(div);
     });
-}
-function $65c0cd2b2ec0988a$var$getValuesOfInputs(fields) {
+};
+const $65c0cd2b2ec0988a$var$getValuesOfInputs = (fields)=>{
     return fields.reduce(function(acc, cur) {
         const el = document.querySelector("#" + cur.name);
-        if (el.type === "checkbox") return {
+        if (cur.type === "checkbox") return {
             ...acc,
             [cur.name]: el.checked
         };
@@ -12586,14 +12621,14 @@ function $65c0cd2b2ec0988a$var$getValuesOfInputs(fields) {
             [cur.name]: el.value
         };
     }, {});
-}
-function $65c0cd2b2ec0988a$var$addButtons(parent) {
+};
+const $65c0cd2b2ec0988a$var$addButtons = (parent)=>{
     var saveButton = document.createElement("button");
     saveButton.textContent = "保存";
     saveButton.setAttribute("style", "color: white; background: #228be6; padding: 0.5rem 2rem;");
     saveButton.addEventListener("click", function() {
         const values = $65c0cd2b2ec0988a$var$getValuesOfInputs($65c0cd2b2ec0988a$var$fields);
-        localStorage.setItem("config", JSON.stringify(values));
+        (0, $afa9fb8bb7aaf429$export$a9dbc6b31fb3d42b)(values);
         parent.style.display = "none";
     });
     var cancelButton = document.createElement("button");
@@ -12607,26 +12642,11 @@ function $65c0cd2b2ec0988a$var$addButtons(parent) {
     buttonGroup.appendChild(saveButton);
     buttonGroup.appendChild(cancelButton);
     parent.appendChild(buttonGroup);
-}
-function $65c0cd2b2ec0988a$var$buildSettingsPanel(localValues) {
+};
+const $65c0cd2b2ec0988a$var$buildSettingsPanel = (localConfigValues)=>{
     // 設定パネルを作成
     var panel = document.createElement("div");
-    panel.setAttribute("style", `
-        z-index: 100;
-        position: fixed;
-        top: 2rem;
-        right: 2rem;
-        width: 400px;
-
-        display: none;
-        gap: 0.5rem;
-        flex-direction: column;
-        padding: 1rem;
-
-        border: 1px solid silver;
-        background: white;
-        box-shadow: 2px 2px 5px silver;
-    `);
+    panel.setAttribute("style", (0, $292fc7f9388c589b$export$2c795915441ef547));
     const title = document.createElement("h6");
     title.textContent = "civitai_prompt_scraper 設定";
     title.setAttribute("style", "margin-top: 0; margin-bottom: 0.5rem; border-bottom: 1px solid silver;");
@@ -12634,27 +12654,30 @@ function $65c0cd2b2ec0988a$var$buildSettingsPanel(localValues) {
     $65c0cd2b2ec0988a$var$addInputs(panel, $65c0cd2b2ec0988a$var$fields.map(function(x) {
         return {
             ...x,
-            value: localValues[x.name] !== undefined ? localValues[x.name] : x.value
+            value: localConfigValues[x.name] !== undefined ? localConfigValues[x.name] : x.value
         };
     }));
     $65c0cd2b2ec0988a$var$addButtons(panel);
     return panel;
-}
+};
 function $65c0cd2b2ec0988a$export$3a5abe5201fb331() {
-    var savedConfig = localStorage.getItem("config");
-    const localValues = savedConfig ? JSON.parse(savedConfig) : {};
-    const panel = $65c0cd2b2ec0988a$var$buildSettingsPanel(localValues);
+    const localConfigValues = (0, $afa9fb8bb7aaf429$export$c1a4367d4847eb06)();
+    const panel = $65c0cd2b2ec0988a$var$buildSettingsPanel(localConfigValues);
     document?.querySelector("body")?.appendChild(panel);
     // メニューコマンドを登録
     GM_registerMenuCommand("設定を編集", function() {
         panel.style.display = "flex";
     });
 }
-const $65c0cd2b2ec0988a$export$44487a86467333c3 = (field)=>{
-    var savedConfig = localStorage.getItem("config");
-    const localValues = savedConfig ? JSON.parse(savedConfig) : {};
-    if (localValues.hasOwnProperty(field)) return localValues[field];
-    throw new Error(`${field} is not found in config`);
+const $65c0cd2b2ec0988a$export$44487a86467333c3 = (fieldName)=>{
+    const localConfigValues = (0, $afa9fb8bb7aaf429$export$c1a4367d4847eb06)();
+    const inputField = $65c0cd2b2ec0988a$var$fields.find((x)=>x.name === fieldName);
+    if (localConfigValues.hasOwnProperty(fieldName)) {
+        if (!inputField) throw new Error(`${fieldName} is not found in input fields.`);
+        return localConfigValues[fieldName];
+    }
+    if (inputField?.hasOwnProperty(fieldName)) return inputField?.value;
+    throw new Error(`${fieldName} is not found in config`);
 };
 
 
@@ -12736,6 +12759,13 @@ const $afa9fb8bb7aaf429$export$b6bc24646229cedd = (buttnTextUpdateFn)=>(zipFilen
             }
             (0, $b9a27db92abc3f0f$exports.saveAs)(await zipWriter.close(undefined, {}), zipFilename);
         };
+const $afa9fb8bb7aaf429$export$a9dbc6b31fb3d42b = (config)=>{
+    localStorage.setItem("config", JSON.stringify(config));
+};
+const $afa9fb8bb7aaf429$export$c1a4367d4847eb06 = ()=>{
+    const config = localStorage.getItem("config");
+    return config ? JSON.parse(config) : {};
+};
 
 
 
@@ -12783,7 +12813,7 @@ const $8d59c42601ba8f61$export$53039d7a8d9d297e = (buttonIdSelector)=>async ()=>
         if (!button) return;
         const { modelId: modelId , modelName: modelName , imageList: imageList , modelVersionId: modelVersionId , modelVersionName: modelVersionName , modelMeta: modelMeta  } = await $8d59c42601ba8f61$var$getModeInfoAndImageList(window.location.href);
         const filenameFormat = (0, $65c0cd2b2ec0988a$export$44487a86467333c3)("modelPreviewFilenameFormat");
-        const filename = filenameFormat.replace("{modelId}", modelId).replace("{modelName}", modelName).replace("{modelVersionId}", modelVersionId).replace("{modelVersionName}", modelVersionName);
+        const filename = filenameFormat.replace("{modelId}", `${modelId ?? ""}`).replace("{modelName}", modelName).replace("{modelVersionId}", modelVersionId).replace("{modelVersionName}", modelVersionName);
         await (0, $afa9fb8bb7aaf429$export$b6bc24646229cedd)((0, $0fccda82d33153ac$export$bb64a7e3f0f28938)(button))(filename, modelMeta)(imageList.map((x)=>({
                 ...x,
                 url: x.url.replace(/width=\d*/, `width=${x.width},optimized=true`)
@@ -12799,7 +12829,7 @@ const $8d59c42601ba8f61$export$8b03a564a450b487 = async ()=>{
     button.addEventListener("click", $8d59c42601ba8f61$export$53039d7a8d9d297e(buttonIdSelector));
     button.id = $8d59c42601ba8f61$var$BUTTON_ID;
     button.innerText = (0, $966fc19e1e9bc989$export$d397f86d22f413e8)();
-    button.setAttribute("style", (0, $a5923d2edfc72bc5$exports.buttonStyle));
+    button.setAttribute("style", (0, $292fc7f9388c589b$export$fd4d27a26b4854f3));
     const buttonParent = document.querySelector(downloadButtonSelector);
     if (buttonParent) buttonParent.parentNode?.appendChild(button);
 };
@@ -12812,7 +12842,7 @@ const $9a7e0bde1a099030$var$downloadGalleryImagesAndPrompts = (buttonIdSelector,
         const button = await (0, $0fccda82d33153ac$export$1a1c301579a08d1e)(buttonIdSelector);
         if (!button) return;
         const filenameFormat = (0, $65c0cd2b2ec0988a$export$44487a86467333c3)("galleryFilenameFormat");
-        const filename = filenameFormat.replace("{modelId}", modelId).replace("{postId}", postId);
+        const filename = filenameFormat.replace("{modelId}", modelId ?? "").replace("{postId}", postId);
         await (0, $afa9fb8bb7aaf429$export$b6bc24646229cedd)((0, $0fccda82d33153ac$export$bb64a7e3f0f28938)(button))(filename)(data.items.map((x)=>({
                 ...x,
                 url: x.url.replace(/width=\d*/, `width=${x.width},optimized=true`)
@@ -12857,7 +12887,7 @@ const $9a7e0bde1a099030$export$5fd187c0d03a79e = async ()=>{
     if (postId) button.addEventListener("click", $9a7e0bde1a099030$var$downloadGalleryImagesAndPrompts(buttonIdSelector, modelId, postId));
     button.id = $9a7e0bde1a099030$var$BUTTON_ID;
     button.innerText = (0, $966fc19e1e9bc989$export$d397f86d22f413e8)();
-    button.setAttribute("style", (0, $a5923d2edfc72bc5$exports.buttonStyle));
+    button.setAttribute("style", (0, $292fc7f9388c589b$export$fd4d27a26b4854f3));
     if (document.querySelector(".mantine-Modal-modal")) document.querySelector(".mantine-Modal-modal .mantine-Card-cardSection")?.appendChild(button);
     else if (!document.querySelector("#gallery")) document.querySelector("#freezeBlock .mantine-Stack-root")?.appendChild(button);
 };
