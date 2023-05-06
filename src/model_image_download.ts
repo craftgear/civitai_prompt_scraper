@@ -14,7 +14,6 @@ const BUTTON_ID = 'download-all-images-and-prompts';
 const getModelInfo = () => {
   const data = parseNextData();
   const model = data.props.pageProps.trpcState.json.queries[1];
-  console.log('----- model:', model);
   return model.state.data;
 };
 

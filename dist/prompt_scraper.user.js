@@ -12783,7 +12783,6 @@ const $8d59c42601ba8f61$var$BUTTON_ID = "download-all-images-and-prompts";
 const $8d59c42601ba8f61$var$getModelInfo = ()=>{
     const data = (0, $0fccda82d33153ac$export$ce1398d1c23018fa)();
     const model = data.props.pageProps.trpcState.json.queries[1];
-    console.log("----- model:", model);
     return model.state.data;
 };
 const $8d59c42601ba8f61$var$getModeInfoAndImageList = async (href)=>{
