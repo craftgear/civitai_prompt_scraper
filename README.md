@@ -2,6 +2,8 @@
 
 <a href='https://ko-fi.com/craftgear' target='_blank'><img height='20' style='border:0px;height:20px;' src='https://az743702.vo.msecnd.net/cdn/kofi3.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' />
 
+<a href="https://ko-fi.com/craftgear" target="_blank"><img src="https://storage.ko-fi.com/cdn/brandasset/kofi_button_red.png" alt="Buy Me a Coffee at ko-fi.com" width="180" ></a>
+
 A userscript to download images and metadata as a zip file.
 
 This works for ViolentMokey in both Chrome and Firefox.
