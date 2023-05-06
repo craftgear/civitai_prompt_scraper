@@ -1,7 +1,7 @@
 import { saveAs } from 'file-saver';
 import { BlobWriter, BlobReader, TextReader, ZipWriter } from '@zip.js/zip.js';
 import { sleep } from './utils';
-import { ImagesResponse, ModelVersionResponse, Config } from './types';
+import { GalleryImagesResponse, ModelVersionResponse, Config } from './types';
 import { getButtonProgressLabel } from './lang';
 import { getConfig } from './config_panel';
 
@@ -21,17 +21,27 @@ export const fetchModelVersionData = async (modelVersionId: string) => {
 };
 
 export const fetchGalleryData = async (
-  modelId: string | null,
-  postId: string | null
+  modelId?: string | null,
+  postId?: string | null,
+  modelVersionId?: string | null,
+  username?: string | null
 ) => {
   let url = 'https://civitai.com/api/v1/images';
   let params = [];
+
   if (postId) {
     params.push(`postId=${postId}`);
   }
   if (modelId) {
     params.push(`modelId=${modelId}`);
   }
+  if (modelVersionId) {
+    params.push(`modelVersionId=${modelVersionId}`);
+  }
+  if (username) {
+    params.push(`username=${username}`);
+  }
+
   if (params.length > 0) {
     url = `${url}?${params.join('&')}`;
   }
@@ -40,7 +50,11 @@ export const fetchGalleryData = async (
   if (response.status >= 400) {
     throw new Error(` ${response.status} ${response.statusText}`);
   }
-  return (await response.json()) as ImagesResponse;
+  const data = (await response.json()) as GalleryImagesResponse;
+  return data.items.map((x) => ({
+    ...x,
+    url: x.url.replace(/width=\d*/, `width=${x.width},optimized=true`),
+  })) as GalleryImagesResponse['items'];
 };
 
 export const fetchImg = async (
@@ -77,79 +91,79 @@ export const fetchImg = async (
 
 export const createZip =
   (buttnTextUpdateFn: (text: string) => void | null) =>
-  (zipFilename: string, modelMeta?: Object) =>
-  async (
-    imgInfo: { url: string; hash: string; meta: Object }[]
-  ): Promise<void> => {
-    const addedNames = new Set();
-    const blobWriter = new BlobWriter(`application/zip`);
-    const zipWriter = new ZipWriter(blobWriter);
+    (zipFilename: string, modelMeta?: Object) =>
+      async (
+        imgInfo: { url: string; hash: string; meta: Object }[]
+      ): Promise<void> => {
+        const addedNames = new Set();
+        const blobWriter = new BlobWriter(`application/zip`);
+        const zipWriter = new ZipWriter(blobWriter);
 
-    if (modelMeta) {
-      await zipWriter.add(
-        'model.json',
-        new TextReader(JSON.stringify(modelMeta))
-      );
-    }
-
-    let counter = 0;
-    let errors = [];
-    for (const x of imgInfo) {
-      if (buttnTextUpdateFn) {
-        buttnTextUpdateFn(
-          `${counter + 1} / ${imgInfo.length} ${getButtonProgressLabel()}`
-        );
-      }
-
-      try {
-        const response = await fetchImg(x.url);
-        if (!response) {
-          throw new Error('response is null');
-        }
-        const { blob, contentType } = response;
-
-        let name =
-          extractFilebasenameFromImageUrl(x.url) ||
-          x.hash.replace(/[\;\:\?\*\.]/g, '_');
-        while (addedNames.has(name)) {
-          name += '_';
-        }
-
-        const filename =
-          (contentType && `${name}.${contentType.split('/')[1]}`) ||
-          `${name}.png`;
-
-        await zipWriter.add(filename, new BlobReader(blob));
-        addedNames.add(name);
-
-        if (!!x.meta) {
-          const jsonFilename = name + '.json';
+        if (modelMeta) {
           await zipWriter.add(
-            jsonFilename,
-            new TextReader(JSON.stringify(x.meta))
+            'model.json',
+            new TextReader(JSON.stringify(modelMeta))
           );
         }
 
-        counter += 1;
-      } catch (e: unknown) {
-        console.log('error: ', (e as Error).message, x.url);
-        errors.push(`${(e as Error).message}, ${x.url}`);
-        if (!getConfig('continueWithFetchError')) {
-          break;
+        let counter = 0;
+        let errors = [];
+        for (const x of imgInfo) {
+          if (buttnTextUpdateFn) {
+            buttnTextUpdateFn(
+              `${counter + 1} / ${imgInfo.length} ${getButtonProgressLabel()}`
+            );
+          }
+
+          try {
+            const response = await fetchImg(x.url);
+            if (!response) {
+              throw new Error('response is null');
+            }
+            const { blob, contentType } = response;
+
+            let name =
+              extractFilebasenameFromImageUrl(x.url) ||
+              x.hash.replace(/[\;\:\?\*\.]/g, '_');
+            while (addedNames.has(name)) {
+              name += '_';
+            }
+
+            const filename =
+              (contentType && `${name}.${contentType.split('/')[1]}`) ||
+              `${name}.png`;
+
+            await zipWriter.add(filename, new BlobReader(blob));
+            addedNames.add(name);
+
+            if (!!x.meta) {
+              const jsonFilename = name + '.json';
+              await zipWriter.add(
+                jsonFilename,
+                new TextReader(JSON.stringify(x.meta))
+              );
+            }
+
+            counter += 1;
+          } catch (e: unknown) {
+            console.log('error: ', (e as Error).message, x.url);
+            errors.push(`${(e as Error).message}, ${x.url}`);
+            if (!getConfig('continueWithFetchError')) {
+              break;
+            }
+          }
+          await sleep(100);
         }
-      }
-      await sleep(100);
-    }
 
-    if (errors.length > 0) {
-      alert(errors.join('\n\r'));
-      if (!getConfig('continueWithFetchError')) {
-        return;
-      }
-    }
+        if (errors.length > 0) {
+          alert(errors.join('\n\r'));
+          if (!getConfig('continueWithFetchError')) {
+            return;
+          }
+        }
 
-    saveAs(await zipWriter.close(undefined, {}), zipFilename);
-  };
+        saveAs(await zipWriter.close(undefined, {}), zipFilename);
+      };
 
 export const saveConfig = (config: Config) => {
   localStorage.setItem('config', JSON.stringify(config));

@@ -6,7 +6,7 @@ import {
   updateButtonText,
 } from './utils';
 import { getButtonLabel, getButtonCompleteLabel } from './lang';
-import { createZip, fetchModelVersionData } from './infra';
+import { createZip, fetchGalleryData, fetchModelVersionData } from './infra';
 import { getConfig } from './config_panel';
 
 const BUTTON_ID = 'download-all-images-and-prompts';
@@ -14,52 +14,52 @@ const BUTTON_ID = 'download-all-images-and-prompts';
 const getModelInfo = () => {
   const data = parseNextData();
   const model = data.props.pageProps.trpcState.json.queries[1];
+  console.log('----- model:', model);
   return model.state.data;
 };
 
 const getModeInfoAndImageList = async (href: string) => {
-  let modelVersionId = href.match(/modelVersionId=(?<modelVersionId>\d*)/)
-    ?.groups?.modelVersionId;
-  // バージョンが一つの場合モデルページのurlにmodelVersionIdがない
-  if (!modelVersionId) {
-    const model = await getModelInfo();
-    modelVersionId = model.modelVersions[0].id;
+  const modelInfo = getModelInfo();
+
+  const {
+    id: modelId,
+    name: modelName,
+    user: { username: username },
+  } = modelInfo;
+
+  if (!modelId) {
+    throw new Error(`modelId is not found.`);
   }
+
+  const hrefModelVersionId = href.match(/modelVersionId=(?<modelVersionId>\d*)/)
+    ?.groups?.modelVersionId;
+  const modelVersionId = hrefModelVersionId
+    ? hrefModelVersionId
+    : modelInfo.modelVersions[0].id;
 
   if (!modelVersionId) {
     throw new Error(`modelVersionId is not found.`);
   }
 
-  const modelInfo = await fetchModelVersionData(modelVersionId);
-  const {
+  const modelVersionName =
+    modelInfo.modelVersions.find((x: { id: number }) => {
+      return `${x.id}` === `${modelVersionId}`;
+    }).name || 'no_version_name';
+
+  const imageList = await fetchGalleryData(
     modelId,
-    model,
-    files,
-    baseModel,
-    trainedWords,
-    createdAt,
-    updatedAt,
-    images: imageList,
-    name: modelVersionName,
-  } = modelInfo;
+    null,
+    modelVersionId,
+    username
+  );
 
   return {
     modelId,
-    modelName: model.name,
+    modelName,
     modelVersionId,
     modelVersionName,
     imageList,
-    modelMeta: {
-      id: modelId,
-      ...model,
-      modelVersionId,
-      modelVersionName,
-      baseModel,
-      trainedWords,
-      files,
-      createdAt,
-      updatedAt,
-    },
+    modelMeta: modelInfo,
   };
 };
 

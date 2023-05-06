@@ -147,74 +147,74 @@ const $966fc19e1e9bc989$var$i18n = {
     buttonLabel: {
         en: "Download images with JSON",
         ja: "画像＆JSONダウンロード",
-        "zh-TW": "下載圖像和JSON",
-        "zh-CN": "下载图像和JSON"
+        "zh-CN": "下载图像和JSON",
+        "zh-TW": "下載圖像和JSON"
     },
     buttonProgressLabel: {
         en: "downloading",
         ja: "ダウンロード中",
-        "zh-TW": "下載中",
-        "zh-CN": "下载中"
+        "zh-CN": "下载中",
+        "zh-TW": "下載中"
     },
     buttonCompleteLabel: {
         en: "done",
         ja: "完了",
-        "zh-TW": "完成",
-        "zh-CN": "完成"
+        "zh-CN": "完成",
+        "zh-TW": "完成"
     },
     openShowMore: {
         en: 'Automatically open "Show More"',
         ja: "Show Moreを自動で開く",
-        "zh-TW": '顯示"Show More"自動打開',
-        "zh-CN": '显示"Show More"自动打开'
+        "zh-CN": '显示"Show More"自动打开',
+        "zh-TW": '顯示"Show More"自動打開'
     },
     continueWithFetchError: {
-        en: "",
-        ja: "",
-        "zh-TW": "",
-        "zh-CN": ""
-    },
-    configPanelTitle: {
-        en: "",
-        ja: "",
-        "zh-TW": "",
-        "zh-CN": ""
-    },
-    configPanelMenu: {
-        en: "",
-        ja: "",
-        "zh-TW": "",
-        "zh-CN": ""
+        en: "Ignore image fetching errors and save a zip",
+        ja: "画像取得エラーを無視してzipを保存する",
+        "zh-CN": "忽略圖像採集錯誤，保存壓縮文件",
+        "zh-TW": "忽略图像采集错误，保存压缩文件"
     },
     modelPreviewFilenameFormat: {
-        en: "",
-        ja: "",
-        "zh-TW": "",
-        "zh-CN": ""
+        en: "Zip file name format: model",
+        ja: "zipファイル名書式: モデル",
+        "zh-CN": "Zip文件名格式：模型",
+        "zh-TW": "Zip文件名格式：模型"
     },
     galleryFilenameFormat: {
-        en: "",
-        ja: "",
-        "zh-TW": "",
-        "zh-CN": ""
+        en: "Zip file name format: gallery",
+        ja: "zipファイル名書式: ギャラリー",
+        "zh-CN": "Zip文件名格式：画廊",
+        "zh-TW": "Zip文件名格式：畫廊"
+    },
+    configPanelTitle: {
+        en: "civitai_prompt_scraper settings",
+        ja: "civitai_prompt_scraper 設定",
+        "zh-CN": "civitai_prompt_scraper 設置",
+        "zh-TW": "civitai_prompt_scraper 设置"
+    },
+    configPanelMenu: {
+        en: "Edit Settings",
+        ja: "設定を編集",
+        "zh-CN": "编辑设置",
+        "zh-TW": "編輯設置"
     },
     availableVariables: {
-        en: "",
-        ja: "",
-        "zh-TW": "",
-        "zh-CN": ""
+        en: "Available identifiers:",
+        ja: "利用可能な識別子:",
+        "zh-CN": "可用的标识符:",
+        "zh-TW": "可用的標識符:"
     },
     saveConfig: {
-        en: "",
-        ja: "",
-        "zh-TW": "",
-        "zh-CN": ""
+        en: "Save",
+        ja: "保存",
+        "zh-CN": "保存",
+        "zh-TW": "保存"
     },
     cancelConfig: {
-        en: "",
-        ja: "",
-        "zh-TW": "",
-        "zh-CN": ""
+        en: "Cancel",
+        ja: "キャンセル",
+        "zh-CN": "取消",
+        "zh-TW": "取消"
     }
 };
 const $966fc19e1e9bc989$var$getLocale = ()=>{
@@ -12548,13 +12548,13 @@ const $65c0cd2b2ec0988a$var$fields = [
         name: "openShowMore",
         label: (0, $966fc19e1e9bc989$export$236350842f3cd9bc)("openShowMore"),
         value: true,
-        desc: "",
+        desc: (0, $966fc19e1e9bc989$export$236350842f3cd9bc)("openShowMore"),
         style: `margin-right: 0.5rem;`
     },
     {
         type: "checkbox",
         name: "continueWithFetchError",
-        label: "画像取得エラーを無視する",
+        label: (0, $966fc19e1e9bc989$export$236350842f3cd9bc)("continueWithFetchError"),
         value: false,
         desc: "",
         style: "margin-right: 0.5rem;"
@@ -12562,17 +12562,17 @@ const $65c0cd2b2ec0988a$var$fields = [
     {
         type: "text",
         name: "modelPreviewFilenameFormat",
-        label: "zipファイル名書式: モデル",
+        label: (0, $966fc19e1e9bc989$export$236350842f3cd9bc)("modelPreviewFilenameFormat"),
         value: "{modelName}[{modelId}]_{modelVersionId}.zip",
-        desc: "利用可能な識別子: {modelId}, {modelName}, {modelVersionName}, {modelVersionId}",
+        desc: `${(0, $966fc19e1e9bc989$export$236350842f3cd9bc)("availableVariables")} {modelId}, {modelName}, {modelVersionName}, {modelVersionId}`,
         style: ""
     },
     {
         type: "text",
         name: "galleryFilenameFormat",
-        label: "zipファイル名書式: ギャラリー",
+        label: (0, $966fc19e1e9bc989$export$236350842f3cd9bc)("galleryFilenameFormat"),
         value: "modelId_{modelId}-postId_{postId}.zip",
-        desc: "利用可能な識別子: {modelId}, {postId}",
+        desc: `${(0, $966fc19e1e9bc989$export$236350842f3cd9bc)("availableVariables")}  {modelId}, {postId}`,
         style: ""
     }
 ];
@@ -12624,7 +12624,7 @@ const $65c0cd2b2ec0988a$var$getValuesOfInputs = (fields)=>{
 };
 const $65c0cd2b2ec0988a$var$addButtons = (parent)=>{
     var saveButton = document.createElement("button");
-    saveButton.textContent = "保存";
+    saveButton.textContent = (0, $966fc19e1e9bc989$export$236350842f3cd9bc)("saveConfig");
     saveButton.setAttribute("style", "color: white; background: #228be6; padding: 0.5rem 2rem;");
     saveButton.addEventListener("click", function() {
         const values = $65c0cd2b2ec0988a$var$getValuesOfInputs($65c0cd2b2ec0988a$var$fields);
@@ -12632,7 +12632,7 @@ const $65c0cd2b2ec0988a$var$addButtons = (parent)=>{
         parent.style.display = "none";
     });
     var cancelButton = document.createElement("button");
-    cancelButton.textContent = "キャンセル";
+    cancelButton.textContent = (0, $966fc19e1e9bc989$export$236350842f3cd9bc)("cancelConfig");
     cancelButton.setAttribute("style", "padding: 0.5rem 0.5rem;");
     cancelButton.addEventListener("click", function() {
         parent.style.display = "none";
@@ -12648,7 +12648,7 @@ const $65c0cd2b2ec0988a$var$buildSettingsPanel = (localConfigValues)=>{
     var panel = document.createElement("div");
     panel.setAttribute("style", (0, $292fc7f9388c589b$export$2c795915441ef547));
     const title = document.createElement("h6");
-    title.textContent = "civitai_prompt_scraper 設定";
+    title.textContent = (0, $966fc19e1e9bc989$export$236350842f3cd9bc)("configPanelTitle");
     title.setAttribute("style", "margin-top: 0; margin-bottom: 0.5rem; border-bottom: 1px solid silver;");
     panel.appendChild(title);
     $65c0cd2b2ec0988a$var$addInputs(panel, $65c0cd2b2ec0988a$var$fields.map(function(x) {
@@ -12665,7 +12665,7 @@ function $65c0cd2b2ec0988a$export$3a5abe5201fb331() {
     const panel = $65c0cd2b2ec0988a$var$buildSettingsPanel(localConfigValues);
     document?.querySelector("body")?.appendChild(panel);
     // メニューコマンドを登録
-    GM_registerMenuCommand("設定を編集", function() {
+    GM_registerMenuCommand((0, $966fc19e1e9bc989$export$236350842f3cd9bc)("configPanelMenu"), function() {
         panel.style.display = "flex";
     });
 }
@@ -12690,15 +12690,21 @@ const $afa9fb8bb7aaf429$export$426617fe0a326605 = async (modelVersionId)=>{
     if (response.status >= 400) throw new Error(` ${response.status} ${response.statusText}`);
     return await response.json();
 };
-const $afa9fb8bb7aaf429$export$c6ace8a485846f08 = async (modelId, postId)=>{
+const $afa9fb8bb7aaf429$export$c6ace8a485846f08 = async (modelId, postId, modelVersionId, username)=>{
     let url = "https://civitai.com/api/v1/images";
     let params = [];
     if (postId) params.push(`postId=${postId}`);
     if (modelId) params.push(`modelId=${modelId}`);
+    if (modelVersionId) params.push(`modelVersionId=${modelVersionId}`);
+    if (username) params.push(`username=${username}`);
     if (params.length > 0) url = `${url}?${params.join("&")}`;
     const response = await fetch(url);
     if (response.status >= 400) throw new Error(` ${response.status} ${response.statusText}`);
-    return await response.json();
+    const data = await response.json();
+    return data.items.map((x)=>({
+            ...x,
+            url: x.url.replace(/width=\d*/, `width=${x.width},optimized=true`)
+        }));
 };
 const $afa9fb8bb7aaf429$export$2ab75dd31a3868f2 = async (url)=>{
     try {
@@ -12777,35 +12783,27 @@ const $8d59c42601ba8f61$var$BUTTON_ID = "download-all-images-and-prompts";
 const $8d59c42601ba8f61$var$getModelInfo = ()=>{
     const data = (0, $0fccda82d33153ac$export$ce1398d1c23018fa)();
     const model = data.props.pageProps.trpcState.json.queries[1];
+    console.log("----- model:", model);
     return model.state.data;
 };
 const $8d59c42601ba8f61$var$getModeInfoAndImageList = async (href)=>{
-    let modelVersionId = href.match(/modelVersionId=(?<modelVersionId>\d*)/)?.groups?.modelVersionId;
-    // バージョンが一つの場合モデルページのurlにmodelVersionIdがない
-    if (!modelVersionId) {
-        const model = await $8d59c42601ba8f61$var$getModelInfo();
-        modelVersionId = model.modelVersions[0].id;
-    }
+    const modelInfo = $8d59c42601ba8f61$var$getModelInfo();
+    const { id: modelId , name: modelName , user: { username: username  }  } = modelInfo;
+    if (!modelId) throw new Error(`modelId is not found.`);
+    const hrefModelVersionId = href.match(/modelVersionId=(?<modelVersionId>\d*)/)?.groups?.modelVersionId;
+    const modelVersionId = hrefModelVersionId ? hrefModelVersionId : modelInfo.modelVersions[0].id;
     if (!modelVersionId) throw new Error(`modelVersionId is not found.`);
-    const modelInfo = await (0, $afa9fb8bb7aaf429$export$426617fe0a326605)(modelVersionId);
-    const { modelId: modelId , model: model , files: files , baseModel: baseModel , trainedWords: trainedWords , createdAt: createdAt , updatedAt: updatedAt , images: imageList , name: modelVersionName  } = modelInfo;
+    const modelVersionName = modelInfo.modelVersions.find((x)=>{
+        return `${x.id}` === `${modelVersionId}`;
+    }).name || "no_version_name";
+    const imageList = await (0, $afa9fb8bb7aaf429$export$c6ace8a485846f08)(modelId, null, modelVersionId, username);
     return {
         modelId: modelId,
-        modelName: model.name,
+        modelName: modelName,
         modelVersionId: modelVersionId,
         modelVersionName: modelVersionName,
         imageList: imageList,
-        modelMeta: {
-            id: modelId,
-            ...model,
-            modelVersionId: modelVersionId,
-            modelVersionName: modelVersionName,
-            baseModel: baseModel,
-            trainedWords: trainedWords,
-            files: files,
-            createdAt: createdAt,
-            updatedAt: updatedAt
-        }
+        modelMeta: modelInfo
     };
 };
 const $8d59c42601ba8f61$export$53039d7a8d9d297e = (buttonIdSelector)=>async ()=>{
@@ -12838,16 +12836,13 @@ const $8d59c42601ba8f61$export$8b03a564a450b487 = async ()=>{
 
 const $9a7e0bde1a099030$var$BUTTON_ID = "download-all-gallery-images-and-prompts";
 const $9a7e0bde1a099030$var$downloadGalleryImagesAndPrompts = (buttonIdSelector, modelId, postId)=>async ()=>{
-        const data = await (0, $afa9fb8bb7aaf429$export$c6ace8a485846f08)(modelId, postId);
+        const imgList = await (0, $afa9fb8bb7aaf429$export$c6ace8a485846f08)(modelId, postId);
         const button = await (0, $0fccda82d33153ac$export$1a1c301579a08d1e)(buttonIdSelector);
         if (!button) return;
         const filenameFormat = (0, $65c0cd2b2ec0988a$export$44487a86467333c3)("galleryFilenameFormat");
         const filename = filenameFormat.replace("{modelId}", modelId ?? "").replace("{postId}", postId);
-        await (0, $afa9fb8bb7aaf429$export$b6bc24646229cedd)((0, $0fccda82d33153ac$export$bb64a7e3f0f28938)(button))(filename)(data.items.map((x)=>({
-                ...x,
-                url: x.url.replace(/width=\d*/, `width=${x.width},optimized=true`)
-            })));
-        (0, $0fccda82d33153ac$export$92ecf871022de94d)(button, ` ${data.items.length} / ${data.items.length} ${(0, $966fc19e1e9bc989$export$4d9f09007b08c03d)()}`);
+        await (0, $afa9fb8bb7aaf429$export$b6bc24646229cedd)((0, $0fccda82d33153ac$export$bb64a7e3f0f28938)(button))(filename)(imgList);
+        (0, $0fccda82d33153ac$export$92ecf871022de94d)(button, ` ${imgList.length} / ${imgList.length} ${(0, $966fc19e1e9bc989$export$4d9f09007b08c03d)()}`);
     };
 const $9a7e0bde1a099030$var$downloadSingleImagesAndPrompts = (buttonIdSelector)=>async ()=>{
         const data = (0, $0fccda82d33153ac$export$ce1398d1c23018fa)();

@@ -84,7 +84,7 @@ type ImageStats = {
   heartCount: number;
   commentCount: number;
 };
-export type ImagesResponse = {
+export type GalleryImagesResponse = {
   items: {
     id: number;
     url: string;
@@ -123,6 +123,6 @@ export type InputField = {
 export type Config = {
   [key in 'openShowMore' | 'continueWithFetchError']: boolean;
 } & {
-  [key in 'modelPreviewFilenameFormat' | 'galleryFilenameFormat']: string;
-};
+    [key in 'modelPreviewFilenameFormat' | 'galleryFilenameFormat']: string;
+  };
 export type ConfigKey = keyof Config;

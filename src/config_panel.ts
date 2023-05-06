@@ -106,7 +106,7 @@ const getValuesOfInputs = (fields: InputField[]) => {
 
 const addButtons = (parent: HTMLDivElement) => {
   var saveButton = document.createElement('button');
-  saveButton.textContent = '保存';
+  saveButton.textContent = getLabel('saveConfig');
   saveButton.setAttribute(
     'style',
     'color: white; background: #228be6; padding: 0.5rem 2rem;'
@@ -118,7 +118,7 @@ const addButtons = (parent: HTMLDivElement) => {
   });
 
   var cancelButton = document.createElement('button');
-  cancelButton.textContent = 'キャンセル';
+  cancelButton.textContent = getLabel('cancelConfig');
   cancelButton.setAttribute('style', 'padding: 0.5rem 0.5rem;');
   cancelButton.addEventListener('click', function() {
     parent.style.display = 'none';
