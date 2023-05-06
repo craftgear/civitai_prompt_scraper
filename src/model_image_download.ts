@@ -45,6 +45,8 @@ const getModeInfoAndImageList = async (href: string) => {
       return `${x.id}` === `${modelVersionId}`;
     }).name || 'no_version_name';
 
+  // use fetchGalleryData instead of fetchModelVersionData,
+  // due to modelVersion api returns first 10 images of preview.
   const imageList = await fetchGalleryData(
     modelId,
     null,

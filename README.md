@@ -16,7 +16,6 @@ This works for ViolentMokey in both Chrome and Firefox.
 - It is slow as it downloads files one by one.
 - You can't close a tab while downloading.
 - It prioritizes downloading avif/webp.
-- On model pages, you can get only 10 preview images due to API restriction.
 
 ## 🌟Special Thanks
 

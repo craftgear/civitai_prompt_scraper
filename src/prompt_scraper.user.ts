@@ -25,7 +25,6 @@ const addGalleryImageDownloadButton = async () => {
 
 let prevHref = '';
 
-// see https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver
 const observer = new MutationObserver(async (_mutationList) => {
   const href = window.location.href;
   if (prevHref !== href) {

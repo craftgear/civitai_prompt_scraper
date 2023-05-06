@@ -173,7 +173,7 @@ export function initConfigPanel() {
   const panel = buildSettingsPanel(localConfigValues);
   document?.querySelector('body')?.appendChild(panel);
 
-  // メニューコマンドを登録
+  // register a menu command
   GM_registerMenuCommand(getLabel('configPanelMenu'), function () {
     panel.style.display = 'flex';
   });

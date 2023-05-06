@@ -76,22 +76,21 @@ export const addGalleryDownloadButton = async () => {
   document.querySelector(buttonIdSelector)?.remove();
   const button = document.createElement('button');
 
-  // モデル画面のトップ画像から開いた場合
-  // モデルの方のダウンロードボタンを使う
+  // open gallery from model preview images
   if (modelVersionId && prioritizedUserId) {
     button.addEventListener(
       'click',
       downloadImagesAndPrompts(buttonIdSelector)
     );
   }
-  // 画像単体で開いた場合
+  // open gallery from a single image
   if (!postId && !modelId && !modelVersionId) {
     button.addEventListener(
       'click',
       downloadSingleImagesAndPrompts(buttonIdSelector)
     );
   }
-  // モデルのギャラリーエリアから開いた場合
+  // open gallery from model gallery areas
   if (postId) {
     button.addEventListener(
       'click',
