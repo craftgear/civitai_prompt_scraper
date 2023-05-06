@@ -1,10 +1,12 @@
 # 🤖civitai_prompt_scraper
 
+<a href='https://ko-fi.com/craftgear' target='_blank'><img height='35' style='border:0px;height:46px;' src='https://az743702.vo.msecnd.net/cdn/kofi3.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' />
+
 A userscript to download images and metadata as a zip file.
 
 This works for ViolentMokey in both Chrome and Firefox.
 
-**[Click here to install](https://github.com/craftgear/civitai_prompt_scraper/raw/main/dist/prompt_scraper.user.js)**.
+### **[Click here to install](https://github.com/craftgear/civitai_prompt_scraper/raw/main/dist/prompt_scraper.user.js)**.
 
 ![download model previews](./_screenshots/model.jpeg)
 
