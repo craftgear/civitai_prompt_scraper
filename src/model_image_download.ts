@@ -115,10 +115,7 @@ export const addModelImagesDownloadButton = async () => {
   const downloadButtonSelector = "a[href^='/api/download/models/']";
   await waitForElement(downloadButtonSelector);
   const buttonIdSelector = `#${BUTTON_ID}`;
-
-  if (document.querySelector(buttonIdSelector)) {
-    document.querySelector(buttonIdSelector)?.remove();
-  }
+  document.querySelector(buttonIdSelector)?.remove();
 
   const button = document.createElement('a');
   button.addEventListener('click', downloadImagesAndPrompts(buttonIdSelector));
