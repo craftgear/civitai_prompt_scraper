@@ -49,9 +49,11 @@ const observer = new MutationObserver(async (_mutationList) => {
 
     if (href.match(/\/models\/\d*/)) {
       await addModelPreviewDownloadButton();
+      return;
     }
     if (href.match(/\/images\/\d*/)) {
       await addGalleryImageDownloadButton();
+      return;
     }
   }
 });
@@ -77,9 +79,7 @@ const observer = new MutationObserver(async (_mutationList) => {
     if (getConfig('openShowMore')) {
       openShowMore();
     }
-  }
-
-  if (window.location.href.match(/\/images\/\d*/)) {
+  } else if (window.location.href.match(/\/images\/\d*/)) {
     await addGalleryImageDownloadButton();
   }
 

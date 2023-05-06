@@ -12961,8 +12961,16 @@ const $29e4e9967394a818$var$observer = new MutationObserver(async (_mutationList
     const href = window.location.href;
     if ($29e4e9967394a818$var$prevHref !== href) {
         $29e4e9967394a818$var$prevHref = href;
-        if (href.match(/\/models\/\d*/)) await $29e4e9967394a818$var$addModelPreviewDownloadButton();
-        if (href.match(/\/images\/\d*/)) await $29e4e9967394a818$var$addGalleryImageDownloadButton();
+        if (href.match(/\/models\/\d*/)) {
+            console.log("----- href.match(//models/d*/):", href.match(/\/models\/\d*/));
+            await $29e4e9967394a818$var$addModelPreviewDownloadButton();
+            return;
+        }
+        if (href.match(/\/images\/\d*/)) {
+            console.log("-----  href.match(//images/d*/):", href.match(/\/images\/\d*/));
+            await $29e4e9967394a818$var$addGalleryImageDownloadButton();
+            return;
+        }
     }
 });
 (async function() {
@@ -12978,12 +12986,10 @@ const $29e4e9967394a818$var$observer = new MutationObserver(async (_mutationList
         (0, $65c0cd2b2ec0988a$export$3a5abe5201fb331)();
     }
     if (window.location.href.match(/\/models\/\d*/)) {
-        // if (window.location.href.includes('/models/')) {
         await $29e4e9967394a818$var$addModelPreviewDownloadButton();
         if ((0, $65c0cd2b2ec0988a$export$44487a86467333c3)("openShowMore")) $29e4e9967394a818$var$openShowMore();
     }
-    if (window.location.href.match(/\/images\/\d*/)) // if (window.location.href.includes('/images/')) {
-    await $29e4e9967394a818$var$addGalleryImageDownloadButton();
+    if (window.location.href.match(/\/images\/\d*/)) await $29e4e9967394a818$var$addGalleryImageDownloadButton();
     (0, $0fccda82d33153ac$export$bef1f36f5486a6a3)("done");
 })();
 
