@@ -27,21 +27,6 @@ const addGalleryImageDownloadButton = async () => {
   }
 };
 
-let prevHref = '';
-
-const observer = new MutationObserver(async (_mutationList) => {
-  const href = window.location.href;
-  if (prevHref !== href) {
-    if (href.includes('/models/')) {
-      await addModelPreviewDownloadButton();
-    }
-    if (href.includes('/images/')) {
-      await addGalleryImageDownloadButton();
-    }
-    prevHref = window.location.href;
-  }
-});
-
 const openShowMore = () => {
   const showMoreButton = Array.from(document.querySelectorAll('button')).filter(
     (x: HTMLElement) => x.innerHTML === 'Show More'
@@ -54,6 +39,22 @@ const openShowMore = () => {
     openShowMore();
   }, 1000);
 };
+
+let prevHref = '';
+
+const observer = new MutationObserver(async (_mutationList) => {
+  const href = window.location.href;
+  if (prevHref !== href) {
+    prevHref = href;
+
+    if (href.match(/\/models\/\d*/)) {
+      await addModelPreviewDownloadButton();
+    }
+    if (href.match(/\/images\/\d*/)) {
+      await addGalleryImageDownloadButton();
+    }
+  }
+});
 
 (async function () {
   prevHref = window.location.href;
@@ -70,7 +71,7 @@ const openShowMore = () => {
     initConfigPanel();
   }
 
-  if (window.location.href.includes('/models/')) {
+  if (window.location.href.match(/\/models\/\d*/)) {
     await addModelPreviewDownloadButton();
 
     if (getConfig('openShowMore')) {
@@ -78,7 +79,7 @@ const openShowMore = () => {
     }
   }
 
-  if (window.location.href.includes('/images/')) {
+  if (window.location.href.match(/\/images\/\d*/)) {
     await addGalleryImageDownloadButton();
   }
 
