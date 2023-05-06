@@ -15,26 +15,26 @@ const BUTTON_ID = 'download-all-gallery-images-and-prompts';
 
 const downloadGalleryImagesAndPrompts =
   (buttonIdSelector: string, modelId: string | null, postId: string) =>
-    async () => {
-      const imgList = await fetchGalleryData(modelId, postId);
+  async () => {
+    const imgList = await fetchGalleryData(modelId, postId);
 
-      const button = await waitForElement(buttonIdSelector);
-      if (!button) {
-        return;
-      }
+    const button = await waitForElement(buttonIdSelector);
+    if (!button) {
+      return;
+    }
 
-      const filenameFormat = getConfig('galleryFilenameFormat');
-      const filename = (filenameFormat as string)
-        .replace('{modelId}', modelId ?? '')
-        .replace('{postId}', postId);
+    const filenameFormat = getConfig('galleryFilenameFormat');
+    const filename = (filenameFormat as string)
+      .replace('{modelId}', modelId ?? '')
+      .replace('{postId}', postId);
 
-      await createZip(updateButtonText(button))(filename)(imgList);
+    await createZip(updateButtonText(button))(filename)(imgList);
 
-      replaceWithDisabledButton(
-        button,
-        ` ${imgList.length} / ${imgList.length} ${getButtonCompleteLabel()}`
-      );
-    };
+    replaceWithDisabledButton(
+      button,
+      ` ${imgList.length} / ${imgList.length} ${getButtonCompleteLabel()}`
+    );
+  };
 
 const downloadSingleImagesAndPrompts =
   (buttonIdSelector: string) => async () => {

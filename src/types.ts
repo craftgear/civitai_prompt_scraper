@@ -123,6 +123,6 @@ export type InputField = {
 export type Config = {
   [key in 'openShowMore' | 'continueWithFetchError']: boolean;
 } & {
-    [key in 'modelPreviewFilenameFormat' | 'galleryFilenameFormat']: string;
-  };
+  [key in 'modelPreviewFilenameFormat' | 'galleryFilenameFormat']: string;
+};
 export type ConfigKey = keyof Config;

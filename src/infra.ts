@@ -91,79 +91,79 @@ export const fetchImg = async (
 
 export const createZip =
   (buttnTextUpdateFn: (text: string) => void | null) =>
-    (zipFilename: string, modelMeta?: Object) =>
-      async (
-        imgInfo: { url: string; hash: string; meta: Object }[]
-      ): Promise<void> => {
-        const addedNames = new Set();
-        const blobWriter = new BlobWriter(`application/zip`);
-        const zipWriter = new ZipWriter(blobWriter);
+  (zipFilename: string, modelMeta?: Object) =>
+  async (
+    imgInfo: { url: string; hash: string; meta: Object }[]
+  ): Promise<void> => {
+    const addedNames = new Set();
+    const blobWriter = new BlobWriter(`application/zip`);
+    const zipWriter = new ZipWriter(blobWriter);
 
-        if (modelMeta) {
+    if (modelMeta) {
+      await zipWriter.add(
+        'model.json',
+        new TextReader(JSON.stringify(modelMeta))
+      );
+    }
+
+    let counter = 0;
+    let errors = [];
+    for (const x of imgInfo) {
+      if (buttnTextUpdateFn) {
+        buttnTextUpdateFn(
+          `${counter + 1} / ${imgInfo.length} ${getButtonProgressLabel()}`
+        );
+      }
+
+      try {
+        const response = await fetchImg(x.url);
+        if (!response) {
+          throw new Error('response is null');
+        }
+        const { blob, contentType } = response;
+
+        let name =
+          extractFilebasenameFromImageUrl(x.url) ||
+          x.hash.replace(/[\;\:\?\*\.]/g, '_');
+        while (addedNames.has(name)) {
+          name += '_';
+        }
+
+        const filename =
+          (contentType && `${name}.${contentType.split('/')[1]}`) ||
+          `${name}.png`;
+
+        await zipWriter.add(filename, new BlobReader(blob));
+        addedNames.add(name);
+
+        if (!!x.meta) {
+          const jsonFilename = name + '.json';
           await zipWriter.add(
-            'model.json',
-            new TextReader(JSON.stringify(modelMeta))
+            jsonFilename,
+            new TextReader(JSON.stringify(x.meta))
           );
         }
 
-        let counter = 0;
-        let errors = [];
-        for (const x of imgInfo) {
-          if (buttnTextUpdateFn) {
-            buttnTextUpdateFn(
-              `${counter + 1} / ${imgInfo.length} ${getButtonProgressLabel()}`
-            );
-          }
-
-          try {
-            const response = await fetchImg(x.url);
-            if (!response) {
-              throw new Error('response is null');
-            }
-            const { blob, contentType } = response;
-
-            let name =
-              extractFilebasenameFromImageUrl(x.url) ||
-              x.hash.replace(/[\;\:\?\*\.]/g, '_');
-            while (addedNames.has(name)) {
-              name += '_';
-            }
-
-            const filename =
-              (contentType && `${name}.${contentType.split('/')[1]}`) ||
-              `${name}.png`;
-
-            await zipWriter.add(filename, new BlobReader(blob));
-            addedNames.add(name);
-
-            if (!!x.meta) {
-              const jsonFilename = name + '.json';
-              await zipWriter.add(
-                jsonFilename,
-                new TextReader(JSON.stringify(x.meta))
-              );
-            }
-
-            counter += 1;
-          } catch (e: unknown) {
-            console.log('error: ', (e as Error).message, x.url);
-            errors.push(`${(e as Error).message}, ${x.url}`);
-            if (!getConfig('continueWithFetchError')) {
-              break;
-            }
-          }
-          await sleep(100);
+        counter += 1;
+      } catch (e: unknown) {
+        console.log('error: ', (e as Error).message, x.url);
+        errors.push(`${(e as Error).message}, ${x.url}`);
+        if (!getConfig('continueWithFetchError')) {
+          break;
         }
+      }
+      await sleep(100);
+    }
 
-        if (errors.length > 0) {
-          alert(errors.join('\n\r'));
-          if (!getConfig('continueWithFetchError')) {
-            return;
-          }
-        }
+    if (errors.length > 0) {
+      alert(errors.join('\n\r'));
+      if (!getConfig('continueWithFetchError')) {
+        return;
+      }
+    }
 
-        saveAs(await zipWriter.close(undefined, {}), zipFilename);
-      };
+    saveAs(await zipWriter.close(undefined, {}), zipFilename);
+  };
 
 export const saveConfig = (config: Config) => {
   localStorage.setItem('config', JSON.stringify(config));
