@@ -2,7 +2,7 @@
 
 <a href='https://ko-fi.com/craftgear' target='_blank'><img style='border:0px;height:32px;' src='https://az743702.vo.msecnd.net/cdn/kofi3.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' />
 
-A userscript to download images and metadata as a zip file.
+Thi is an userscript to download images and metadata as a zip file.
 
 This works for ViolentMokey in both Chrome and Firefox.
 
