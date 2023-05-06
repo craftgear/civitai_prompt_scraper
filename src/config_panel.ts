@@ -10,7 +10,7 @@ const fields = [
     name: 'openShowMore',
     label: getLabel('openShowMore'),
     value: true,
-    desc: getLabel('openShowMore'),
+    desc: '',
     style: `margin-right: 0.5rem;`,
   },
   {
@@ -181,15 +181,13 @@ export function initConfigPanel() {
 
 export const getConfig = (fieldName: string): string | boolean => {
   const localConfigValues = loadConfig();
-  const inputField = fields.find((x) => x.name === fieldName);
-  if (localConfigValues.hasOwnProperty(fieldName)) {
-    if (!inputField) {
-      throw new Error(`${fieldName} is not found in input fields.`);
-    }
+  if (localConfigValues) {
     return localConfigValues[fieldName as ConfigKey];
   }
-  if (inputField?.hasOwnProperty(fieldName)) {
-    return inputField?.value;
+
+  const inputField = fields.find((x) => x.name === fieldName);
+  if (inputField) {
+    return inputField.value;
   }
 
   throw new Error(`${fieldName} is not found in config`);
