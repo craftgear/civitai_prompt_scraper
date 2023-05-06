@@ -1,3 +1,4 @@
+// import html2canvas from 'html2canvas';
 import { NextData } from './types';
 import pkg from '../package.json';
 import { disabledButtonStyle } from './styles';
@@ -74,9 +75,8 @@ export const replaceWithDisabledButton = (
 //
 //   main.style.letterSpacing = 'inherit';
 // };
-
-// export const getImagesDataFromNextData = () => {
 //
+// export const getImagesDataFromNextData = () => {
 //   const data = parseNextData();
 //   const images = data.props.pageProps.trpcState.json.queries[0];
 //   return images.state.data.pages[0].items;
@@ -87,4 +87,3 @@ export const replaceWithDisabledButton = (
 //   const model = data.props.pageProps.trpcState.json.queries[1];
 //   return model.state.data.id;
 // };
-//

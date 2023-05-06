@@ -19,7 +19,7 @@ const addGalleryImageDownloadButton = async () => {
 
   await waitForElement('.mantine-RichTextEditor-root');
   // FIXME: adhoc: wait for Nextjs rendering finish
-  await sleep(3000);
+  await sleep(2000);
   await addGalleryDownloadButton();
 };
 

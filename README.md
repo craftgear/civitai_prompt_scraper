@@ -2,23 +2,21 @@
 
 A userscript to download images and metadata as a zip file.
 
-This is an userscript for ViolentMokey, _[click here](https://github.com/craftgear/civitai_prompt_scraper/raw/main/dist/prompt_scraper.user.js) to install_.
+This works for ViolentMokey in both Chrome and Firefox.
 
-![download model previews](./_screenshots/model.png)
+**[Click here to install](https://github.com/craftgear/civitai_prompt_scraper/raw/main/dist/prompt_scraper.user.js)**.
 
-![download gallery images](./_screenshots/gallery.png)
+![download model previews](./_screenshots/model.jpeg)
 
-## 👎Caveats
+![download gallery images](./_screenshots/gallery.jpeg)
 
-- You need to wait a few seconds to see a button.
-- It downloads files one by one.
+## ⚠️Caveats
+
+- You need to wait for a few seconds to see a button.
+- It is slow as it downloads files one by one.
 - You can't close a tab while downloading.
-- it prioritizes avif/webp.
-
-## ⚠️Caution
-
-This userscript may slow down civitai.
-I recommend you to turn it on only when you need it.
+- It prioritizes downloading avif/webp.
+- On model pages, you can get only 10 preview images due to API restriction.
 
 ## 🌟Special Thanks
 

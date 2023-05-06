@@ -10,13 +10,13 @@ const fields = [
     name: 'openShowMore',
     label: getLabel('openShowMore'),
     value: true,
-    desc: '',
+    desc: getLabel('openShowMore'),
     style: `margin-right: 0.5rem;`,
   },
   {
     type: 'checkbox',
     name: 'continueWithFetchError',
-    label: '画像取得エラーを無視する',
+    label: getLabel('continueWithFetchError'),
     value: false,
     desc: '',
     style: 'margin-right: 0.5rem;',
@@ -24,18 +24,20 @@ const fields = [
   {
     type: 'text',
     name: 'modelPreviewFilenameFormat',
-    label: 'zipファイル名書式: モデル',
+    label: getLabel('modelPreviewFilenameFormat'),
     value: '{modelName}[{modelId}]_{modelVersionId}.zip',
-    desc: '利用可能な識別子: {modelId}, {modelName}, {modelVersionName}, {modelVersionId}',
+    desc: `${getLabel(
+      'availableVariables'
+    )} {modelId}, {modelName}, {modelVersionName}, {modelVersionId}`,
 
     style: '',
   },
   {
     type: 'text',
     name: 'galleryFilenameFormat',
-    label: 'zipファイル名書式: ギャラリー',
+    label: getLabel('galleryFilenameFormat'),
     value: 'modelId_{modelId}-postId_{postId}.zip',
-    desc: '利用可能な識別子: {modelId}, {postId}',
+    desc: `${getLabel('availableVariables')}  {modelId}, {postId}`,
     style: '',
   },
 ];
@@ -93,7 +95,7 @@ const addInputs = (parent: HTMLElement, fields: InputField[]) => {
 };
 
 const getValuesOfInputs = (fields: InputField[]) => {
-  return fields.reduce(function (acc, cur) {
+  return fields.reduce(function(acc, cur) {
     const el = document.querySelector('#' + cur.name);
     if (cur.type === 'checkbox') {
       return { ...acc, [cur.name]: (el as HTMLInputElement).checked };
@@ -109,7 +111,7 @@ const addButtons = (parent: HTMLDivElement) => {
     'style',
     'color: white; background: #228be6; padding: 0.5rem 2rem;'
   );
-  saveButton.addEventListener('click', function () {
+  saveButton.addEventListener('click', function() {
     const values = getValuesOfInputs(fields) as Config;
     saveConfig(values);
     parent.style.display = 'none';
@@ -118,7 +120,7 @@ const addButtons = (parent: HTMLDivElement) => {
   var cancelButton = document.createElement('button');
   cancelButton.textContent = 'キャンセル';
   cancelButton.setAttribute('style', 'padding: 0.5rem 0.5rem;');
-  cancelButton.addEventListener('click', function () {
+  cancelButton.addEventListener('click', function() {
     parent.style.display = 'none';
   });
 
@@ -140,7 +142,7 @@ const buildSettingsPanel = (localConfigValues: Config) => {
   panel.setAttribute('style', configPanelStyle);
 
   const title = document.createElement('h6');
-  title.textContent = 'civitai_prompt_scraper 設定';
+  title.textContent = getLabel('configPanelTitle');
   title.setAttribute(
     'style',
     'margin-top: 0; margin-bottom: 0.5rem; border-bottom: 1px solid silver;'
@@ -149,7 +151,7 @@ const buildSettingsPanel = (localConfigValues: Config) => {
 
   addInputs(
     panel,
-    fields.map(function (x) {
+    fields.map(function(x) {
       return {
         ...x,
         value:
@@ -172,7 +174,7 @@ export function initConfigPanel() {
   document?.querySelector('body')?.appendChild(panel);
 
   // メニューコマンドを登録
-  GM_registerMenuCommand('設定を編集', function () {
+  GM_registerMenuCommand(getLabel('configPanelMenu'), function() {
     panel.style.display = 'flex';
   });
 }
