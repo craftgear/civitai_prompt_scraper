@@ -73,19 +73,43 @@ const i18n: {
     'zh-CN': '取消',
     'zh-TW': '取消',
   },
+  parsingNextDataError: {
+    en: 'Parsing __NEXT_DATA__ failed. Reloading the page might solve it.',
+    ja: '__NEXT_DATA__の読み込みに失敗しました。ページをリロードすると解消する場合があります。',
+    'zh-CN': '解析__NEXT_DATA__失败。重新加载页面可能会解决这个问题。',
+    'zh-TW': '解析__NEXT_DATA__失败。重新加载页面可能会解决这个问题。',
+  },
+  modelIdNotFoundError: {
+    en: 'modelId is not found.',
+    ja: 'modelIdが見つかりません',
+    'zh-CN': '没有找到modelId',
+    'zh-TW': '沒有找到modelId',
+  },
+  modelVersionIdNotFoundError: {
+    en: 'modelVersionId is not found.',
+    ja: 'modelVersionIdが見つかりません',
+    'zh-CN': '没有找到modelVersionId',
+    'zh-TW': '沒有找到modelVersionId',
+  },
+  configValueNotFoundError: {
+    en: 'config value is not found.',
+    ja: '設定値が見つかりません',
+    'zh-CN': '未找到设定值',
+    'zh-TW': '未找到設定值',
+  },
 };
 
 const getLocale = () => {
   return window.navigator.language;
 };
 
-export const getLabel = (labelName: string) => {
+export const getI18nLabel = (labelName: string) => {
   const locale = getLocale();
   return i18n[labelName][locale] ?? i18n[labelName]['en'];
 };
 
-export const getButtonLabel = () => getLabel('buttonLabel');
+export const getButtonLabel = () => getI18nLabel('buttonLabel');
 
-export const getButtonProgressLabel = () => getLabel('buttonProgressLabel');
+export const getButtonProgressLabel = () => getI18nLabel('buttonProgressLabel');
 
-export const getButtonCompleteLabel = () => getLabel('buttonCompleteLabel');
+export const getButtonCompleteLabel = () => getI18nLabel('buttonCompleteLabel');

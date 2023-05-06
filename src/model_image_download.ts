@@ -5,16 +5,22 @@ import {
   replaceWithDisabledButton,
   updateButtonText,
 } from './utils';
-import { getButtonLabel, getButtonCompleteLabel } from './lang';
-import { createZip, fetchGalleryData, fetchModelVersionData } from './infra';
+import { getI18nLabel, getButtonLabel, getButtonCompleteLabel } from './lang';
+import { createZip, fetchGalleryData } from './infra';
 import { getConfig } from './config_panel';
 
 const BUTTON_ID = 'download-all-images-and-prompts';
 
 const getModelInfo = () => {
-  const data = parseNextData();
-  const model = data.props.pageProps.trpcState.json.queries[1];
-  return model.state.data;
+  try {
+    const data = parseNextData();
+    const model = data.props.pageProps.trpcState.json.queries[1];
+    return model.state.data;
+  } catch (error: unknown) {
+    throw new Error(
+      `${getI18nLabel('parsingNextDataError')} ${(error as Error).message}`
+    );
+  }
 };
 
 const getModeInfoAndImageList = async (href: string) => {
@@ -27,7 +33,7 @@ const getModeInfoAndImageList = async (href: string) => {
   } = modelInfo;
 
   if (!modelId) {
-    throw new Error(`modelId is not found.`);
+    throw new Error(getI18nLabel('modelIdNotFoundError'));
   }
 
   const hrefModelVersionId = href.match(/modelVersionId=(?<modelVersionId>\d*)/)
@@ -37,7 +43,7 @@ const getModeInfoAndImageList = async (href: string) => {
     : modelInfo.modelVersions[0].id;
 
   if (!modelVersionId) {
-    throw new Error(`modelVersionId is not found.`);
+    throw new Error(getI18nLabel('modeVersionlIdNotFoundError'));
   }
 
   const modelVersionName =
@@ -60,45 +66,49 @@ const getModeInfoAndImageList = async (href: string) => {
     modelVersionId,
     modelVersionName,
     imageList,
-    modelMeta: modelInfo,
+    modelInfo,
   };
 };
 
 export const downloadImagesAndPrompts =
   (buttonIdSelector: string) => async () => {
-    const button = await waitForElement(buttonIdSelector);
+    try {
+      const button = await waitForElement(buttonIdSelector);
 
-    if (!button) {
-      return;
+      if (!button) {
+        return;
+      }
+
+      const {
+        modelId,
+        modelName,
+        imageList,
+        modelVersionId,
+        modelVersionName,
+        modelInfo,
+      } = await getModeInfoAndImageList(window.location.href);
+
+      const filenameFormat = getConfig('modelPreviewFilenameFormat');
+      const filename = (filenameFormat as string)
+        .replace('{modelId}', `${modelId ?? ''}`)
+        .replace('{modelName}', modelName)
+        .replace('{modelVersionId}', modelVersionId)
+        .replace('{modelVersionName}', modelVersionName);
+
+      await createZip(updateButtonText(button))(filename, modelInfo)(
+        imageList.map((x) => ({
+          ...x,
+          url: x.url.replace(/width=\d*/, `width=${x.width},optimized=true`),
+        }))
+      );
+
+      replaceWithDisabledButton(
+        button,
+        ` ${imageList.length} / ${imageList.length} ${getButtonCompleteLabel()}`
+      );
+    } catch (error: unknown) {
+      alert((error as Error).message);
     }
-
-    const {
-      modelId,
-      modelName,
-      imageList,
-      modelVersionId,
-      modelVersionName,
-      modelMeta,
-    } = await getModeInfoAndImageList(window.location.href);
-
-    const filenameFormat = getConfig('modelPreviewFilenameFormat');
-    const filename = (filenameFormat as string)
-      .replace('{modelId}', `${modelId ?? ''}`)
-      .replace('{modelName}', modelName)
-      .replace('{modelVersionId}', modelVersionId)
-      .replace('{modelVersionName}', modelVersionName);
-
-    await createZip(updateButtonText(button))(filename, modelMeta)(
-      imageList.map((x) => ({
-        ...x,
-        url: x.url.replace(/width=\d*/, `width=${x.width},optimized=true`),
-      }))
-    );
-
-    replaceWithDisabledButton(
-      button,
-      ` ${imageList.length} / ${imageList.length} ${getButtonCompleteLabel()}`
-    );
   };
 
 export const addModelImagesDownloadButton = async () => {

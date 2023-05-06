@@ -91,7 +91,7 @@ export const fetchImg = async (
 
 export const createZip =
   (buttnTextUpdateFn: (text: string) => void | null) =>
-  (zipFilename: string, modelMeta?: Object) =>
+  (zipFilename: string, modelInfo?: Object) =>
   async (
     imgInfo: { url: string; hash: string; meta: Object }[]
   ): Promise<void> => {
@@ -99,10 +99,10 @@ export const createZip =
     const blobWriter = new BlobWriter(`application/zip`);
     const zipWriter = new ZipWriter(blobWriter);
 
-    if (modelMeta) {
+    if (modelInfo) {
       await zipWriter.add(
-        'model.json',
-        new TextReader(JSON.stringify(modelMeta))
+        'model_info.json',
+        new TextReader(JSON.stringify(modelInfo))
       );
     }
 
@@ -156,9 +156,8 @@ export const createZip =
     }
 
     if (errors.length > 0) {
-      alert(errors.join('\n\r'));
       if (!getConfig('continueWithFetchError')) {
-        return;
+        throw new Error(errors.join('\n\r'));
       }
     }
 

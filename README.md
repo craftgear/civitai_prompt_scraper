@@ -14,7 +14,7 @@ This works for ViolentMokey in both Chrome and Firefox.
 
 - You need to wait for a few seconds to see a button.
 - It is slow as it downloads files one by one.
-- You can't close a tab while downloading.
+- A tab downloading in progress should remain open, or downloading fails.
 - It prioritizes downloading avif/webp.
 
 ## 🌟Special Thanks

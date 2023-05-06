@@ -17,10 +17,14 @@ const addModelPreviewDownloadButton = async () => {
 const addGalleryImageDownloadButton = async () => {
   log('gallery');
 
-  await waitForElement('.mantine-RichTextEditor-root');
-  // FIXME: adhoc: wait for Nextjs rendering finish
-  await sleep(2000);
-  await addGalleryDownloadButton();
+  try {
+    await waitForElement('.mantine-RichTextEditor-root');
+    // FIXME: adhoc: wait for Nextjs rendering finish
+    await sleep(2000);
+    await addGalleryDownloadButton();
+  } catch (error: unknown) {
+    alert((error as Error).message);
+  }
 };
 
 let prevHref = '';
@@ -37,6 +41,19 @@ const observer = new MutationObserver(async (_mutationList) => {
     prevHref = window.location.href;
   }
 });
+
+const openShowMore = () => {
+  const showMoreButton = Array.from(document.querySelectorAll('button')).filter(
+    (x: HTMLElement) => x.innerHTML === 'Show More'
+  )[0];
+  if (showMoreButton) {
+    showMoreButton.click();
+    return;
+  }
+  setTimeout(() => {
+    openShowMore();
+  }, 1000);
+};
 
 (async function () {
   prevHref = window.location.href;
@@ -57,10 +74,7 @@ const observer = new MutationObserver(async (_mutationList) => {
     await addModelPreviewDownloadButton();
 
     if (getConfig('openShowMore')) {
-      const showMoreButton = Array.from(
-        document.querySelectorAll('button')
-      ).filter((x: HTMLElement) => x.innerHTML === 'Show More')[0];
-      showMoreButton && showMoreButton.click();
+      openShowMore();
     }
   }
 

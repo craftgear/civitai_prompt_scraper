@@ -1,6 +1,6 @@
 declare var GM_registerMenuCommand: any;
 import { saveConfig, loadConfig } from './infra';
-import { getLabel } from './lang';
+import { getI18nLabel } from './lang';
 import { configPanelStyle } from './styles';
 import { InputField, Config, ConfigKey } from './types';
 
@@ -8,7 +8,7 @@ const fields = [
   {
     type: 'checkbox',
     name: 'openShowMore',
-    label: getLabel('openShowMore'),
+    label: getI18nLabel('openShowMore'),
     value: true,
     desc: '',
     style: `margin-right: 0.5rem;`,
@@ -16,7 +16,7 @@ const fields = [
   {
     type: 'checkbox',
     name: 'continueWithFetchError',
-    label: getLabel('continueWithFetchError'),
+    label: getI18nLabel('continueWithFetchError'),
     value: false,
     desc: '',
     style: 'margin-right: 0.5rem;',
@@ -24,9 +24,9 @@ const fields = [
   {
     type: 'text',
     name: 'modelPreviewFilenameFormat',
-    label: getLabel('modelPreviewFilenameFormat'),
+    label: getI18nLabel('modelPreviewFilenameFormat'),
     value: '{modelName}[{modelId}]_{modelVersionId}.zip',
-    desc: `${getLabel(
+    desc: `${getI18nLabel(
       'availableVariables'
     )} {modelId}, {modelName}, {modelVersionName}, {modelVersionId}`,
 
@@ -35,9 +35,9 @@ const fields = [
   {
     type: 'text',
     name: 'galleryFilenameFormat',
-    label: getLabel('galleryFilenameFormat'),
+    label: getI18nLabel('galleryFilenameFormat'),
     value: 'modelId_{modelId}-postId_{postId}.zip',
-    desc: `${getLabel('availableVariables')}  {modelId}, {postId}`,
+    desc: `${getI18nLabel('availableVariables')}  {modelId}, {postId}`,
     style: '',
   },
 ];
@@ -106,7 +106,7 @@ const getValuesOfInputs = (fields: InputField[]) => {
 
 const addButtons = (parent: HTMLDivElement) => {
   var saveButton = document.createElement('button');
-  saveButton.textContent = getLabel('saveConfig');
+  saveButton.textContent = getI18nLabel('saveConfig');
   saveButton.setAttribute(
     'style',
     'color: white; background: #228be6; padding: 0.5rem 2rem;'
@@ -118,7 +118,7 @@ const addButtons = (parent: HTMLDivElement) => {
   });
 
   var cancelButton = document.createElement('button');
-  cancelButton.textContent = getLabel('cancelConfig');
+  cancelButton.textContent = getI18nLabel('cancelConfig');
   cancelButton.setAttribute('style', 'padding: 0.5rem 0.5rem;');
   cancelButton.addEventListener('click', function () {
     parent.style.display = 'none';
@@ -142,7 +142,7 @@ const buildSettingsPanel = (localConfigValues: Config) => {
   panel.setAttribute('style', configPanelStyle);
 
   const title = document.createElement('h6');
-  title.textContent = getLabel('configPanelTitle');
+  title.textContent = getI18nLabel('configPanelTitle');
   title.setAttribute(
     'style',
     'margin-top: 0; margin-bottom: 0.5rem; border-bottom: 1px solid silver;'
@@ -174,7 +174,7 @@ export function initConfigPanel() {
   document?.querySelector('body')?.appendChild(panel);
 
   // register a menu command
-  GM_registerMenuCommand(getLabel('configPanelMenu'), function () {
+  GM_registerMenuCommand(getI18nLabel('configPanelMenu'), function () {
     panel.style.display = 'flex';
   });
 }
@@ -190,5 +190,5 @@ export const getConfig = (fieldName: string): string | boolean => {
     return inputField.value;
   }
 
-  throw new Error(`${fieldName} is not found in config`);
+  throw new Error(`${getI18nLabel} : ${fieldName}`);
 };

@@ -16,43 +16,51 @@ const BUTTON_ID = 'download-all-gallery-images-and-prompts';
 const downloadGalleryImagesAndPrompts =
   (buttonIdSelector: string, modelId: string | null, postId: string) =>
   async () => {
-    const imgList = await fetchGalleryData(modelId, postId);
+    try {
+      const imgList = await fetchGalleryData(modelId, postId);
 
-    const button = await waitForElement(buttonIdSelector);
-    if (!button) {
-      return;
+      const button = await waitForElement(buttonIdSelector);
+      if (!button) {
+        return;
+      }
+
+      const filenameFormat = getConfig('galleryFilenameFormat');
+      const filename = (filenameFormat as string)
+        .replace('{modelId}', modelId ?? '')
+        .replace('{postId}', postId);
+
+      await createZip(updateButtonText(button))(filename)(imgList);
+
+      replaceWithDisabledButton(
+        button,
+        ` ${imgList.length} / ${imgList.length} ${getButtonCompleteLabel()}`
+      );
+    } catch (error: unknown) {
+      alert((error as Error).message);
     }
-
-    const filenameFormat = getConfig('galleryFilenameFormat');
-    const filename = (filenameFormat as string)
-      .replace('{modelId}', modelId ?? '')
-      .replace('{postId}', postId);
-
-    await createZip(updateButtonText(button))(filename)(imgList);
-
-    replaceWithDisabledButton(
-      button,
-      ` ${imgList.length} / ${imgList.length} ${getButtonCompleteLabel()}`
-    );
   };
 
 const downloadSingleImagesAndPrompts =
   (buttonIdSelector: string) => async () => {
-    const data = parseNextData();
-    const model = data.props.pageProps.trpcState.json.queries[0];
-    const { id, url, meta, width, name, hash } = model.state.data;
-    const imgUrl = buildImgUrl(url, width, name);
+    try {
+      const data = parseNextData();
+      const model = data.props.pageProps.trpcState.json.queries[0];
+      const { id, url, meta, width, name, hash } = model.state.data;
+      const imgUrl = buildImgUrl(url, width, name);
 
-    const button = await waitForElement(buttonIdSelector);
-    if (!button) {
-      return;
+      const button = await waitForElement(buttonIdSelector);
+      if (!button) {
+        return;
+      }
+
+      await createZip(updateButtonText(button))(`imageId_${id}.zip`)([
+        { url: imgUrl, hash, meta },
+      ]);
+
+      replaceWithDisabledButton(button, getButtonCompleteLabel());
+    } catch (error: unknown) {
+      alert((error as Error).message);
     }
-
-    await createZip(updateButtonText(button))(`imageId_${id}.zip`)([
-      { url: imgUrl, hash, meta },
-    ]);
-
-    replaceWithDisabledButton(button, getButtonCompleteLabel());
   };
 
 export const addGalleryDownloadButton = async () => {
