@@ -59,7 +59,6 @@ const getModeInfoAndImageList = async (href: string) => {
     modelVersionId,
     username
   );
-
   return {
     modelId,
     modelName,

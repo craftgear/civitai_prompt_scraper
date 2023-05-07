@@ -51,10 +51,12 @@ export const fetchGalleryData = async (
     throw new Error(` ${response.status} ${response.statusText}`);
   }
   const data = (await response.json()) as GalleryImagesResponse;
-  return data.items.map((x) => ({
-    ...x,
-    url: x.url.replace(/width=\d*/, `width=${x.width},optimized=true`),
-  })) as GalleryImagesResponse['items'];
+  return data.items.map((x) => {
+    return {
+      ...x,
+      url: x.url.replace(/width=\d*/, `width=${x.width},optimized=true`),
+    };
+  }) as GalleryImagesResponse['items'];
 };
 
 export const fetchImg = async (

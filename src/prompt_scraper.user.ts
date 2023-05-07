@@ -59,8 +59,7 @@ const observer = new MutationObserver(async (_mutationList) => {
   const href = window.location.href;
   if (prevHref !== href) {
     prevHref = href;
-    console.log('### mutated');
-    shouldAbort = true;
+    shouldAbortAddDownloadButton = true;
 
     if (href.match(/\/models\/\d*/)) {
       await addModelPreviewDownloadButton();

@@ -12695,7 +12695,7 @@ function $65c0cd2b2ec0988a$export$3a5abe5201fb331() {
 }
 const $65c0cd2b2ec0988a$export$44487a86467333c3 = (fieldName)=>{
     const localConfigValues = (0, $afa9fb8bb7aaf429$export$c1a4367d4847eb06)();
-    if (localConfigValues) return localConfigValues[fieldName];
+    if (localConfigValues && localConfigValues[fieldName]) return localConfigValues[fieldName];
     const inputField = $65c0cd2b2ec0988a$var$fields.find((x)=>x.name === fieldName);
     if (inputField) return inputField.value;
     throw new Error(`${(0, $966fc19e1e9bc989$export$731a191155ffa90a)} : ${fieldName}`);
@@ -12722,10 +12722,12 @@ const $afa9fb8bb7aaf429$export$c6ace8a485846f08 = async (modelId, postId, modelV
     const response = await fetch(url);
     if (response.status >= 400) throw new Error(` ${response.status} ${response.statusText}`);
     const data = await response.json();
-    return data.items.map((x)=>({
+    return data.items.map((x)=>{
+        return {
             ...x,
             url: x.url.replace(/width=\d*/, `width=${x.width},optimized=true`)
-        }));
+        };
+    });
 };
 const $afa9fb8bb7aaf429$export$2ab75dd31a3868f2 = async (url)=>{
     try {
@@ -12974,8 +12976,7 @@ const $29e4e9967394a818$var$observer = new MutationObserver(async (_mutationList
     const href = window.location.href;
     if ($29e4e9967394a818$var$prevHref !== href) {
         $29e4e9967394a818$var$prevHref = href;
-        console.log("### mutated");
-        shouldAbort = true;
+        $29e4e9967394a818$var$shouldAbortAddDownloadButton = true;
         if (href.match(/\/models\/\d*/)) {
             await $29e4e9967394a818$var$addModelPreviewDownloadButton();
             return;
