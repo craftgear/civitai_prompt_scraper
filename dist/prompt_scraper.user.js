@@ -12713,7 +12713,9 @@ const $afa9fb8bb7aaf429$export$426617fe0a326605 = async (modelVersionId)=>{
 };
 const $afa9fb8bb7aaf429$export$c6ace8a485846f08 = async (modelId, postId, modelVersionId, username)=>{
     let url = "https://civitai.com/api/v1/images";
-    let params = [];
+    let params = [
+        "limit=20"
+    ];
     if (postId) params.push(`postId=${postId}`);
     if (modelId) params.push(`modelId=${modelId}`);
     if (modelVersionId) params.push(`modelVersionId=${modelVersionId}`);
@@ -12934,7 +12936,7 @@ let $29e4e9967394a818$var$shouldAbortAddDownloadButton = false;
 const $29e4e9967394a818$var$addModelPreviewDownloadButton = async ()=>{
     (0, $0fccda82d33153ac$export$bef1f36f5486a6a3)("model");
     try {
-        await (0, $0fccda82d33153ac$export$1a1c301579a08d1e)('#gallery a[href^="/images"]');
+        // await waitForElement('#gallery a[href^="/images"]');
         // FIXME: adhoc: wait for Nextjs rendering finish
         await (0, $0fccda82d33153ac$export$e772c8ff12451969)(2000);
         if ($29e4e9967394a818$var$shouldAbortAddDownloadButton) {
@@ -12949,7 +12951,7 @@ const $29e4e9967394a818$var$addModelPreviewDownloadButton = async ()=>{
 const $29e4e9967394a818$var$addGalleryImageDownloadButton = async ()=>{
     (0, $0fccda82d33153ac$export$bef1f36f5486a6a3)("gallery");
     try {
-        await (0, $0fccda82d33153ac$export$1a1c301579a08d1e)(".mantine-RichTextEditor-root");
+        // await waitForElement('.mantine-RichTextEditor-root');
         // FIXME: adhoc: wait for Nextjs rendering finish
         await (0, $0fccda82d33153ac$export$e772c8ff12451969)(2000);
         if ($29e4e9967394a818$var$shouldAbortAddDownloadButton) {

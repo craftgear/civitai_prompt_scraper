@@ -10,7 +10,7 @@ const addModelPreviewDownloadButton = async () => {
   log('model');
 
   try {
-    await waitForElement('#gallery a[href^="/images"]');
+    // await waitForElement('#gallery a[href^="/images"]');
     // FIXME: adhoc: wait for Nextjs rendering finish
     await sleep(2000);
     if (shouldAbortAddDownloadButton) {

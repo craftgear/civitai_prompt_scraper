@@ -27,7 +27,7 @@ export const fetchGalleryData = async (
   username?: string | null
 ) => {
   let url = 'https://civitai.com/api/v1/images';
-  let params = [];
+  let params = ['limit=20'];
 
   if (postId) {
     params.push(`postId=${postId}`);
