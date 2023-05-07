@@ -12,6 +12,10 @@ const addModelPreviewDownloadButton = async () => {
     // await waitForElement('#gallery a[href^="/images"]');
     // FIXME: adhoc: wait for Nextjs rendering finish
     await sleep(2000);
+    if (!window.location.href.match(/\/models\/\d*/)) {
+      return;
+    }
+
     await addModelImagesDownloadButton();
   } catch (error: unknown) {
     alert((error as Error).message);
@@ -25,6 +29,9 @@ const addGalleryImageDownloadButton = async () => {
     // await waitForElement('.mantine-RichTextEditor-root');
     // FIXME: adhoc: wait for Nextjs rendering finish
     await sleep(2000);
+    if (!window.location.href.match(/\/images\/\d*/)) {
+      return;
+    }
     await addGalleryDownloadButton();
   } catch (error: unknown) {
     alert((error as Error).message);
@@ -51,14 +58,8 @@ const observer = new MutationObserver(async (_mutationList) => {
   if (prevHref !== href) {
     prevHref = href;
 
-    if (href.match(/\/models\/\d*/)) {
-      await addModelPreviewDownloadButton();
-      return;
-    }
-    if (href.match(/\/images\/\d*/)) {
-      await addGalleryImageDownloadButton();
-      return;
-    }
+    await addModelPreviewDownloadButton();
+    await addGalleryImageDownloadButton();
   }
 });
 

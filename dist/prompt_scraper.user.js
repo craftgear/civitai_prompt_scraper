@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        Prompt Scraper - civitai.com
-// @version     1.0
+// @version     1.1
 // @namespace   https://github.com/craftgear/civitai_prompt_scraper
 // @description download images and prompts as a zip file
 // @license     MIT
@@ -12938,6 +12938,7 @@ const $29e4e9967394a818$var$addModelPreviewDownloadButton = async ()=>{
         // await waitForElement('#gallery a[href^="/images"]');
         // FIXME: adhoc: wait for Nextjs rendering finish
         await (0, $0fccda82d33153ac$export$e772c8ff12451969)(2000);
+        if (!window.location.href.match(/\/models\/\d*/)) return;
         await (0, $8d59c42601ba8f61$export$8b03a564a450b487)();
     } catch (error) {
         alert(error.message);
@@ -12949,6 +12950,7 @@ const $29e4e9967394a818$var$addGalleryImageDownloadButton = async ()=>{
         // await waitForElement('.mantine-RichTextEditor-root');
         // FIXME: adhoc: wait for Nextjs rendering finish
         await (0, $0fccda82d33153ac$export$e772c8ff12451969)(2000);
+        if (!window.location.href.match(/\/images\/\d*/)) return;
         await (0, $9a7e0bde1a099030$export$5fd187c0d03a79e)();
     } catch (error) {
         alert(error.message);
@@ -12969,14 +12971,8 @@ const $29e4e9967394a818$var$observer = new MutationObserver(async (_mutationList
     const href = window.location.href;
     if ($29e4e9967394a818$var$prevHref !== href) {
         $29e4e9967394a818$var$prevHref = href;
-        if (href.match(/\/models\/\d*/)) {
-            await $29e4e9967394a818$var$addModelPreviewDownloadButton();
-            return;
-        }
-        if (href.match(/\/images\/\d*/)) {
-            await $29e4e9967394a818$var$addGalleryImageDownloadButton();
-            return;
-        }
+        await $29e4e9967394a818$var$addModelPreviewDownloadButton();
+        await $29e4e9967394a818$var$addGalleryImageDownloadButton();
     }
 });
 (async function() {
