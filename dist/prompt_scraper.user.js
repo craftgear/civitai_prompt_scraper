@@ -12708,7 +12708,6 @@ const $afa9fb8bb7aaf429$var$extractFilebasenameFromImageUrl = (url)=>{
 };
 const $afa9fb8bb7aaf429$var$API_URL = "https://civitai.com/api/v1";
 const $afa9fb8bb7aaf429$var$HEADERS = {
-    Accept: "image/webp,image/jpeg,image/avif;q=0.9,image/apng;q=0.8,image/*;q=0.7",
     "Accept-Encoding": "gzip, deflate, br",
     Origin: "https://civitai.com",
     Referer: "https://civitai.com/",
@@ -12757,7 +12756,10 @@ const $afa9fb8bb7aaf429$export$2ab75dd31a3868f2 = async (url)=>{
     try {
         const response = await fetch(url, {
             method: "GET",
-            headers: $afa9fb8bb7aaf429$var$HEADERS
+            headers: {
+                Accept: "image/webp,image/jpeg,image/avif;q=0.9,image/apng;q=0.8,image/*;q=0.7",
+                ...$afa9fb8bb7aaf429$var$HEADERS
+            }
         });
         const contentType = response.headers.get("content-type") || "";
         const blob = await response.blob();
