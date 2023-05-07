@@ -27,27 +27,67 @@ type ImageMetaData = {
   seed: number;
   Model: string;
   steps: number;
-  hashes: { model: string };
   prompt: string;
   sampler: string;
   cfgScale: number;
-  'Clip skip': string;
-  resources: { name: string; type: string; weight: number }[];
-  'Model hash': string;
-  'Hires steps': string;
-  'Hires upscale': string;
-  'Hires upscaler': string;
   negativePrompt: string;
-  'Denoising strength': string;
+  'Denoising strength'?: string;
+  'Model hash': string;
+  'Hires steps'?: string;
+  'Hires upscale'?: string;
+  'Hires upscaler'?: string;
+  'Clip skip'?: string;
+  resources?: { name: string; type: string; weight: number }[];
+  hashes?: { model: string };
 };
 
-type ModelVersionImage = {
+type ModelImage = {
   url: string;
   nsfw: string;
   width: number;
   height: number;
   hash: string;
   meta: ImageMetaData;
+};
+
+export type ModelResponse = {
+  id: number;
+  name: string;
+  description: string | null;
+  type: string;
+  poi: boolean;
+  nsfw: boolean;
+  allowNoCredit: boolean;
+  allowCommercialUse: string;
+  allowDerivatives: boolean;
+  allowDifferentLicense: boolean;
+  stats: {
+    downloadCount: number;
+    favoriteCount: number;
+    commentCount: number;
+    ratingCount: number;
+    rating: number;
+  };
+  creator: {
+    username: string;
+    image: string;
+  };
+  tags: { name: string }[];
+  modelVersions: {
+    id: number;
+    modelId: number;
+    name: string;
+    createdAt: string;
+    updatedAt: string;
+    trainedWords: string[];
+    baseModel: string;
+    earlyAccessTimeFrame: number;
+    description: string;
+    stats: { downloadCount: number; ratingCount: number; rating: number };
+    files: ModelVersionFile[];
+    images: ModelImage[];
+    downloadUrl: string;
+  }[];
 };
 
 export type ModelVersionResponse = {
@@ -72,7 +112,7 @@ export type ModelVersionResponse = {
     poi: boolean;
   };
   files: ModelVersionFile[];
-  images: ModelVersionImage[];
+  images: ModelImage[];
   downloadUrl: string;
 };
 

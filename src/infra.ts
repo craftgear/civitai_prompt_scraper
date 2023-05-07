@@ -1,7 +1,12 @@
 import { saveAs } from 'file-saver';
 import { BlobWriter, BlobReader, TextReader, ZipWriter } from '@zip.js/zip.js';
 import { sleep } from './utils';
-import { GalleryImagesResponse, ModelVersionResponse, Config } from './types';
+import {
+  GalleryImagesResponse,
+  ModelResponse,
+  ModelVersionResponse,
+  Config,
+} from './types';
 import { getButtonProgressLabel } from './lang';
 import { getConfig } from './config_panel';
 
@@ -10,10 +15,18 @@ const extractFilebasenameFromImageUrl = (url: string) => {
   return filename.split('.')[0];
 };
 
+const API_URL = 'https://civitai.com/api/v1';
+
+export const fetchModelData = async (modelId: string) => {
+  const response = await fetch(`${API_URL}/models/${modelId}`);
+  if (response.status >= 400) {
+    throw new Error(` ${response.status} ${response.statusText}`);
+  }
+  return (await response.json()) as ModelResponse;
+};
+
 export const fetchModelVersionData = async (modelVersionId: string) => {
-  const response = await fetch(
-    `https://civitai.com/api/v1/model-versions/${modelVersionId}`
-  );
+  const response = await fetch(`${API_URL}/model-versions/${modelVersionId}`);
   if (response.status >= 400) {
     throw new Error(` ${response.status} ${response.statusText}`);
   }
@@ -26,7 +39,7 @@ export const fetchGalleryData = async (
   modelVersionId?: string | null,
   username?: string | null
 ) => {
-  let url = 'https://civitai.com/api/v1/images';
+  let url = `${API_URL}/images`;
   let params = ['limit=20'];
 
   if (postId) {

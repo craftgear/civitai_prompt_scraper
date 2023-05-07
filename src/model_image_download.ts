@@ -1,30 +1,18 @@
 import { buttonStyle } from './styles';
 import {
   waitForElement,
-  parseNextData,
   replaceWithDisabledButton,
   updateButtonText,
 } from './utils';
 import { getI18nLabel, getButtonLabel, getButtonCompleteLabel } from './lang';
-import { createZip, fetchGalleryData } from './infra';
+import { createZip, fetchModelData, fetchGalleryData } from './infra';
 import { getConfig } from './config_panel';
 
 const BUTTON_ID = 'download-all-images-and-prompts';
 
-const getModelInfo = (hrefModelId: string) => {
-  try {
-    const data = parseNextData();
-    const model = data.props.pageProps.trpcState.json.queries[1];
-    const modelInfo = model.state.data;
-    if (`${modelInfo.id}` !== hrefModelId) {
-      throw new Error('__NEXT_DATA__ is not updated');
-    }
-    return modelInfo;
-  } catch (error: unknown) {
-    throw new Error(
-      `${getI18nLabel('parsingNextDataError')} ${(error as Error).message}`
-    );
-  }
+const getModelInfo = async (modelId: string) => {
+  const modelInfo = await fetchModelData(modelId);
+  return modelInfo;
 };
 
 const getModeInfoAndImageList = async (href: string) => {
@@ -33,17 +21,17 @@ const getModeInfoAndImageList = async (href: string) => {
   const hrefModelVersionId = href.match(/modelVersionId=(?<modelVersionId>\d*)/)
     ?.groups?.modelVersionId;
 
-  const modelInfo = getModelInfo(hrefModelId ?? '');
+  if (!hrefModelId) {
+    throw new Error(getI18nLabel('modelIdNotFoundError'));
+  }
+
+  const modelInfo = await getModelInfo(hrefModelId);
 
   const {
     id: modelId,
     name: modelName,
-    user: { username: username },
+    creator: { username: username },
   } = modelInfo;
-
-  if (!modelId) {
-    throw new Error(getI18nLabel('modelIdNotFoundError'));
-  }
 
   const modelVersionId = hrefModelVersionId
     ? hrefModelVersionId
@@ -56,14 +44,14 @@ const getModeInfoAndImageList = async (href: string) => {
   const modelVersionName =
     modelInfo.modelVersions.find((x: { id: number }) => {
       return `${x.id}` === `${modelVersionId}`;
-    }).name || 'no_version_name';
+    })?.name || 'no_version_name';
 
   // use fetchGalleryData instead of fetchModelVersionData,
   // due to modelVersion api returns first 10 images of preview.
   const imageList = await fetchGalleryData(
-    modelId,
+    `${modelId}`,
     null,
-    modelVersionId,
+    `${modelVersionId}`,
     username
   );
   return {
@@ -108,7 +96,7 @@ export const downloadImagesAndPrompts =
       const filename = (filenameFormat as string)
         .replace('{modelId}', `${modelId ?? ''}`)
         .replace('{modelName}', modelName)
-        .replace('{modelVersionId}', modelVersionId)
+        .replace('{modelVersionId}', `${modelVersionId}`)
         .replace('{modelVersionName}', modelVersionName);
 
       await createZip(updateButtonText(button))(filename, modelInfo)(

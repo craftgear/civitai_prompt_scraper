@@ -12706,13 +12706,19 @@ const $afa9fb8bb7aaf429$var$extractFilebasenameFromImageUrl = (url)=>{
     const filename = url.split("/").slice(-1)[0];
     return filename.split(".")[0];
 };
+const $afa9fb8bb7aaf429$var$API_URL = "https://civitai.com/api/v1";
+const $afa9fb8bb7aaf429$export$998f418383804028 = async (modelId)=>{
+    const response = await fetch(`${$afa9fb8bb7aaf429$var$API_URL}/models/${modelId}`);
+    if (response.status >= 400) throw new Error(` ${response.status} ${response.statusText}`);
+    return await response.json();
+};
 const $afa9fb8bb7aaf429$export$426617fe0a326605 = async (modelVersionId)=>{
-    const response = await fetch(`https://civitai.com/api/v1/model-versions/${modelVersionId}`);
+    const response = await fetch(`${$afa9fb8bb7aaf429$var$API_URL}/model-versions/${modelVersionId}`);
     if (response.status >= 400) throw new Error(` ${response.status} ${response.statusText}`);
     return await response.json();
 };
 const $afa9fb8bb7aaf429$export$c6ace8a485846f08 = async (modelId, postId, modelVersionId, username)=>{
-    let url = "https://civitai.com/api/v1/images";
+    let url = `${$afa9fb8bb7aaf429$var$API_URL}/images`;
     let params = [
         "limit=20"
     ];
@@ -12804,31 +12810,24 @@ const $afa9fb8bb7aaf429$export$c1a4367d4847eb06 = ()=>{
 
 
 const $8d59c42601ba8f61$var$BUTTON_ID = "download-all-images-and-prompts";
-const $8d59c42601ba8f61$var$getModelInfo = (hrefModelId)=>{
-    try {
-        const data = (0, $0fccda82d33153ac$export$ce1398d1c23018fa)();
-        const model = data.props.pageProps.trpcState.json.queries[1];
-        const modelInfo = model.state.data;
-        if (`${modelInfo.id}` !== hrefModelId) throw new Error("__NEXT_DATA__ is not updated");
-        return modelInfo;
-    } catch (error) {
-        throw new Error(`${(0, $966fc19e1e9bc989$export$731a191155ffa90a)("parsingNextDataError")} ${error.message}`);
-    }
+const $8d59c42601ba8f61$var$getModelInfo = async (modelId)=>{
+    const modelInfo = await (0, $afa9fb8bb7aaf429$export$998f418383804028)(modelId);
+    return modelInfo;
 };
 const $8d59c42601ba8f61$var$getModeInfoAndImageList = async (href)=>{
     const hrefModelId = href.match(/\/models\/(?<modelId>\d*)\//)?.groups?.modelId;
     const hrefModelVersionId = href.match(/modelVersionId=(?<modelVersionId>\d*)/)?.groups?.modelVersionId;
-    const modelInfo = $8d59c42601ba8f61$var$getModelInfo(hrefModelId ?? "");
-    const { id: modelId , name: modelName , user: { username: username  }  } = modelInfo;
-    if (!modelId) throw new Error((0, $966fc19e1e9bc989$export$731a191155ffa90a)("modelIdNotFoundError"));
+    if (!hrefModelId) throw new Error((0, $966fc19e1e9bc989$export$731a191155ffa90a)("modelIdNotFoundError"));
+    const modelInfo = await $8d59c42601ba8f61$var$getModelInfo(hrefModelId);
+    const { id: modelId , name: modelName , creator: { username: username  }  } = modelInfo;
     const modelVersionId = hrefModelVersionId ? hrefModelVersionId : modelInfo.modelVersions[0].id;
     if (!modelVersionId) throw new Error((0, $966fc19e1e9bc989$export$731a191155ffa90a)("modeVersionlIdNotFoundError"));
     const modelVersionName = modelInfo.modelVersions.find((x)=>{
         return `${x.id}` === `${modelVersionId}`;
-    }).name || "no_version_name";
+    })?.name || "no_version_name";
     // use fetchGalleryData instead of fetchModelVersionData,
     // due to modelVersion api returns first 10 images of preview.
-    const imageList = await (0, $afa9fb8bb7aaf429$export$c6ace8a485846f08)(modelId, null, modelVersionId, username);
+    const imageList = await (0, $afa9fb8bb7aaf429$export$c6ace8a485846f08)(`${modelId}`, null, `${modelVersionId}`, username);
     return {
         modelId: modelId,
         modelName: modelName,
@@ -12846,7 +12845,7 @@ const $8d59c42601ba8f61$export$53039d7a8d9d297e = (buttonIdSelector)=>async ()=>
             const { modelId: modelId , modelName: modelName , imageList: imageList , modelVersionId: modelVersionId , modelVersionName: modelVersionName , modelInfo: modelInfo  } = await $8d59c42601ba8f61$var$getModeInfoAndImageList(window.location.href);
             console.log("----- getModeInfoAndImageList:", modelId, modelName, imageList, modelVersionId, modelVersionName, modelInfo);
             const filenameFormat = (0, $65c0cd2b2ec0988a$export$44487a86467333c3)("modelPreviewFilenameFormat");
-            const filename = filenameFormat.replace("{modelId}", `${modelId ?? ""}`).replace("{modelName}", modelName).replace("{modelVersionId}", modelVersionId).replace("{modelVersionName}", modelVersionName);
+            const filename = filenameFormat.replace("{modelId}", `${modelId ?? ""}`).replace("{modelName}", modelName).replace("{modelVersionId}", `${modelVersionId}`).replace("{modelVersionName}", modelVersionName);
             await (0, $afa9fb8bb7aaf429$export$b6bc24646229cedd)((0, $0fccda82d33153ac$export$bb64a7e3f0f28938)(button))(filename, modelInfo)(imageList.map((x)=>({
                     ...x,
                     url: x.url.replace(/width=\d*/, `width=${x.width},optimized=true`)
