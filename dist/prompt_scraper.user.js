@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        Prompt Scraper - civitai.com
-// @version     1.1
+// @version     1.2
 // @namespace   https://github.com/craftgear/civitai_prompt_scraper
 // @description download images and prompts as a zip file
 // @license     MIT
@@ -12707,13 +12707,26 @@ const $afa9fb8bb7aaf429$var$extractFilebasenameFromImageUrl = (url)=>{
     return filename.split(".")[0];
 };
 const $afa9fb8bb7aaf429$var$API_URL = "https://civitai.com/api/v1";
+const $afa9fb8bb7aaf429$var$HEADERS = {
+    Accept: "image/webp,image/jpeg,image/avif;q=0.9,image/apng;q=0.8,image/*;q=0.7",
+    "Accept-Encoding": "gzip, deflate, br",
+    Origin: "https://civitai.com",
+    Referer: "https://civitai.com/",
+    Cookie: document.cookie
+};
 const $afa9fb8bb7aaf429$export$998f418383804028 = async (modelId)=>{
-    const response = await fetch(`${$afa9fb8bb7aaf429$var$API_URL}/models/${modelId}`);
+    const response = await fetch(`${$afa9fb8bb7aaf429$var$API_URL}/models/${modelId}`, {
+        method: "GET",
+        headers: $afa9fb8bb7aaf429$var$HEADERS
+    });
     if (response.status >= 400) throw new Error(` ${response.status} ${response.statusText}`);
     return await response.json();
 };
 const $afa9fb8bb7aaf429$export$426617fe0a326605 = async (modelVersionId)=>{
-    const response = await fetch(`${$afa9fb8bb7aaf429$var$API_URL}/model-versions/${modelVersionId}`);
+    const response = await fetch(`${$afa9fb8bb7aaf429$var$API_URL}/model-versions/${modelVersionId}`, {
+        method: "GET",
+        headers: $afa9fb8bb7aaf429$var$HEADERS
+    });
     if (response.status >= 400) throw new Error(` ${response.status} ${response.statusText}`);
     return await response.json();
 };
@@ -12727,7 +12740,10 @@ const $afa9fb8bb7aaf429$export$c6ace8a485846f08 = async (modelId, postId, modelV
     if (modelVersionId) params.push(`modelVersionId=${modelVersionId}`);
     if (username) params.push(`username=${username}`);
     if (params.length > 0) url = `${url}?${params.join("&")}`;
-    const response = await fetch(url);
+    const response = await fetch(url, {
+        method: "GET",
+        headers: $afa9fb8bb7aaf429$var$HEADERS
+    });
     if (response.status >= 400) throw new Error(` ${response.status} ${response.statusText}`);
     const data = await response.json();
     return data.items.map((x)=>{
@@ -12741,13 +12757,7 @@ const $afa9fb8bb7aaf429$export$2ab75dd31a3868f2 = async (url)=>{
     try {
         const response = await fetch(url, {
             method: "GET",
-            headers: {
-                Accept: "image/webp,image/jpeg,image/avif;q=0.9,image/apng;q=0.8,image/*;q=0.7",
-                "Accept-Encoding": "gzip, deflate, br",
-                Origin: "https://civitai.com",
-                Referer: "https://civitai.com/",
-                Cookie: document.cookie
-            }
+            headers: $afa9fb8bb7aaf429$var$HEADERS
         });
         const contentType = response.headers.get("content-type") || "";
         const blob = await response.blob();
@@ -12841,9 +12851,7 @@ const $8d59c42601ba8f61$export$53039d7a8d9d297e = (buttonIdSelector)=>async ()=>
         try {
             const button = await (0, $0fccda82d33153ac$export$1a1c301579a08d1e)(buttonIdSelector);
             if (!button) return;
-            console.log("----- window.location.href:", window.location.href);
             const { modelId: modelId , modelName: modelName , imageList: imageList , modelVersionId: modelVersionId , modelVersionName: modelVersionName , modelInfo: modelInfo  } = await $8d59c42601ba8f61$var$getModeInfoAndImageList(window.location.href);
-            console.log("----- getModeInfoAndImageList:", modelId, modelName, imageList, modelVersionId, modelVersionName, modelInfo);
             const filenameFormat = (0, $65c0cd2b2ec0988a$export$44487a86467333c3)("modelPreviewFilenameFormat");
             const filename = filenameFormat.replace("{modelId}", `${modelId ?? ""}`).replace("{modelName}", modelName).replace("{modelVersionId}", `${modelVersionId}`).replace("{modelVersionName}", modelVersionName);
             await (0, $afa9fb8bb7aaf429$export$b6bc24646229cedd)((0, $0fccda82d33153ac$export$bb64a7e3f0f28938)(button))(filename, modelInfo)(imageList.map((x)=>({

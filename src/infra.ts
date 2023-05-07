@@ -17,8 +17,18 @@ const extractFilebasenameFromImageUrl = (url: string) => {
 
 const API_URL = 'https://civitai.com/api/v1';
 
+const HEADERS = {
+  'Accept-Encoding': 'gzip, deflate, br',
+  Origin: 'https://civitai.com',
+  Referer: 'https://civitai.com/',
+  Cookie: document.cookie,
+};
+
 export const fetchModelData = async (modelId: string) => {
-  const response = await fetch(`${API_URL}/models/${modelId}`);
+  const response = await fetch(`${API_URL}/models/${modelId}`, {
+    method: 'GET',
+    headers: HEADERS,
+  });
   if (response.status >= 400) {
     throw new Error(` ${response.status} ${response.statusText}`);
   }
@@ -26,7 +36,10 @@ export const fetchModelData = async (modelId: string) => {
 };
 
 export const fetchModelVersionData = async (modelVersionId: string) => {
-  const response = await fetch(`${API_URL}/model-versions/${modelVersionId}`);
+  const response = await fetch(`${API_URL}/model-versions/${modelVersionId}`, {
+    method: 'GET',
+    headers: HEADERS,
+  });
   if (response.status >= 400) {
     throw new Error(` ${response.status} ${response.statusText}`);
   }
@@ -59,7 +72,10 @@ export const fetchGalleryData = async (
     url = `${url}?${params.join('&')}`;
   }
 
-  const response = await fetch(url);
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: HEADERS,
+  });
   if (response.status >= 400) {
     throw new Error(` ${response.status} ${response.statusText}`);
   }
@@ -81,10 +97,7 @@ export const fetchImg = async (
       headers: {
         Accept:
           'image/webp,image/jpeg,image/avif;q=0.9,image/apng;q=0.8,image/*;q=0.7',
-        'Accept-Encoding': 'gzip, deflate, br',
-        Origin: 'https://civitai.com',
-        Referer: 'https://civitai.com/',
-        Cookie: document.cookie,
+        ...HEADERS,
       },
     });
     const contentType = response.headers.get('content-type') || '';

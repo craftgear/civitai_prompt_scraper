@@ -73,7 +73,6 @@ export const downloadImagesAndPrompts =
         return;
       }
 
-      console.log('----- window.location.href:', window.location.href);
       const {
         modelId,
         modelName,
@@ -82,15 +81,6 @@ export const downloadImagesAndPrompts =
         modelVersionName,
         modelInfo,
       } = await getModeInfoAndImageList(window.location.href);
-      console.log(
-        '----- getModeInfoAndImageList:',
-        modelId,
-        modelName,
-        imageList,
-        modelVersionId,
-        modelVersionName,
-        modelInfo
-      );
 
       const filenameFormat = getConfig('modelPreviewFilenameFormat');
       const filename = (filenameFormat as string)
