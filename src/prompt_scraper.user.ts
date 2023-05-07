@@ -3,9 +3,8 @@ import { addModelImagesDownloadButton } from './model_image_download';
 import { initConfigPanel } from './config_panel';
 import { getConfig } from './config_panel';
 
-import { waitForElement, sleep, log } from './utils';
+import { sleep, log } from './utils';
 
-let shouldAbortAddDownloadButton = false;
 const addModelPreviewDownloadButton = async () => {
   log('model');
 
@@ -13,10 +12,6 @@ const addModelPreviewDownloadButton = async () => {
     // await waitForElement('#gallery a[href^="/images"]');
     // FIXME: adhoc: wait for Nextjs rendering finish
     await sleep(2000);
-    if (shouldAbortAddDownloadButton) {
-      shouldAbortAddDownloadButton = false;
-      return;
-    }
     await addModelImagesDownloadButton();
   } catch (error: unknown) {
     alert((error as Error).message);
@@ -30,10 +25,6 @@ const addGalleryImageDownloadButton = async () => {
     // await waitForElement('.mantine-RichTextEditor-root');
     // FIXME: adhoc: wait for Nextjs rendering finish
     await sleep(2000);
-    if (shouldAbortAddDownloadButton) {
-      shouldAbortAddDownloadButton = false;
-      return;
-    }
     await addGalleryDownloadButton();
   } catch (error: unknown) {
     alert((error as Error).message);
@@ -59,7 +50,6 @@ const observer = new MutationObserver(async (_mutationList) => {
   const href = window.location.href;
   if (prevHref !== href) {
     prevHref = href;
-    shouldAbortAddDownloadButton = true;
 
     if (href.match(/\/models\/\d*/)) {
       await addModelPreviewDownloadButton();

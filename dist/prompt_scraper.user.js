@@ -12932,17 +12932,12 @@ const $9a7e0bde1a099030$export$5fd187c0d03a79e = async ()=>{
 
 
 
-let $29e4e9967394a818$var$shouldAbortAddDownloadButton = false;
 const $29e4e9967394a818$var$addModelPreviewDownloadButton = async ()=>{
     (0, $0fccda82d33153ac$export$bef1f36f5486a6a3)("model");
     try {
         // await waitForElement('#gallery a[href^="/images"]');
         // FIXME: adhoc: wait for Nextjs rendering finish
         await (0, $0fccda82d33153ac$export$e772c8ff12451969)(2000);
-        if ($29e4e9967394a818$var$shouldAbortAddDownloadButton) {
-            $29e4e9967394a818$var$shouldAbortAddDownloadButton = false;
-            return;
-        }
         await (0, $8d59c42601ba8f61$export$8b03a564a450b487)();
     } catch (error) {
         alert(error.message);
@@ -12954,10 +12949,6 @@ const $29e4e9967394a818$var$addGalleryImageDownloadButton = async ()=>{
         // await waitForElement('.mantine-RichTextEditor-root');
         // FIXME: adhoc: wait for Nextjs rendering finish
         await (0, $0fccda82d33153ac$export$e772c8ff12451969)(2000);
-        if ($29e4e9967394a818$var$shouldAbortAddDownloadButton) {
-            $29e4e9967394a818$var$shouldAbortAddDownloadButton = false;
-            return;
-        }
         await (0, $9a7e0bde1a099030$export$5fd187c0d03a79e)();
     } catch (error) {
         alert(error.message);
@@ -12978,7 +12969,6 @@ const $29e4e9967394a818$var$observer = new MutationObserver(async (_mutationList
     const href = window.location.href;
     if ($29e4e9967394a818$var$prevHref !== href) {
         $29e4e9967394a818$var$prevHref = href;
-        $29e4e9967394a818$var$shouldAbortAddDownloadButton = true;
         if (href.match(/\/models\/\d*/)) {
             await $29e4e9967394a818$var$addModelPreviewDownloadButton();
             return;
