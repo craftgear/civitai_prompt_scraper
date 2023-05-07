@@ -11,11 +11,15 @@ import { getConfig } from './config_panel';
 
 const BUTTON_ID = 'download-all-images-and-prompts';
 
-const getModelInfo = () => {
+const getModelInfo = (hrefModelId: string) => {
   try {
     const data = parseNextData();
     const model = data.props.pageProps.trpcState.json.queries[1];
-    return model.state.data;
+    const modelInfo = model.state.data;
+    if (`${modelInfo.id}` !== hrefModelId) {
+      throw new Error('__NEXT_DATA__ is not updated');
+    }
+    return modelInfo;
   } catch (error: unknown) {
     throw new Error(
       `${getI18nLabel('parsingNextDataError')} ${(error as Error).message}`
@@ -24,7 +28,12 @@ const getModelInfo = () => {
 };
 
 const getModeInfoAndImageList = async (href: string) => {
-  const modelInfo = getModelInfo();
+  const hrefModelId = href.match(/\/models\/(?<modelId>\d*)\//)?.groups
+    ?.modelId;
+  const hrefModelVersionId = href.match(/modelVersionId=(?<modelVersionId>\d*)/)
+    ?.groups?.modelVersionId;
+
+  const modelInfo = getModelInfo(hrefModelId ?? '');
 
   const {
     id: modelId,
@@ -36,8 +45,6 @@ const getModeInfoAndImageList = async (href: string) => {
     throw new Error(getI18nLabel('modelIdNotFoundError'));
   }
 
-  const hrefModelVersionId = href.match(/modelVersionId=(?<modelVersionId>\d*)/)
-    ?.groups?.modelVersionId;
   const modelVersionId = hrefModelVersionId
     ? hrefModelVersionId
     : modelInfo.modelVersions[0].id;
@@ -78,6 +85,7 @@ export const downloadImagesAndPrompts =
         return;
       }
 
+      console.log('----- window.location.href:', window.location.href);
       const {
         modelId,
         modelName,
@@ -86,6 +94,15 @@ export const downloadImagesAndPrompts =
         modelVersionName,
         modelInfo,
       } = await getModeInfoAndImageList(window.location.href);
+      console.log(
+        '----- getModeInfoAndImageList:',
+        modelId,
+        modelName,
+        imageList,
+        modelVersionId,
+        modelVersionName,
+        modelInfo
+      );
 
       const filenameFormat = getConfig('modelPreviewFilenameFormat');
       const filename = (filenameFormat as string)

@@ -12804,20 +12804,23 @@ const $afa9fb8bb7aaf429$export$c1a4367d4847eb06 = ()=>{
 
 
 const $8d59c42601ba8f61$var$BUTTON_ID = "download-all-images-and-prompts";
-const $8d59c42601ba8f61$var$getModelInfo = ()=>{
+const $8d59c42601ba8f61$var$getModelInfo = (hrefModelId)=>{
     try {
         const data = (0, $0fccda82d33153ac$export$ce1398d1c23018fa)();
         const model = data.props.pageProps.trpcState.json.queries[1];
-        return model.state.data;
+        const modelInfo = model.state.data;
+        if (`${modelInfo.id}` !== hrefModelId) throw new Error("__NEXT_DATA__ is not updated");
+        return modelInfo;
     } catch (error) {
         throw new Error(`${(0, $966fc19e1e9bc989$export$731a191155ffa90a)("parsingNextDataError")} ${error.message}`);
     }
 };
 const $8d59c42601ba8f61$var$getModeInfoAndImageList = async (href)=>{
-    const modelInfo = $8d59c42601ba8f61$var$getModelInfo();
+    const hrefModelId = href.match(/\/models\/(?<modelId>\d*)\//)?.groups?.modelId;
+    const hrefModelVersionId = href.match(/modelVersionId=(?<modelVersionId>\d*)/)?.groups?.modelVersionId;
+    const modelInfo = $8d59c42601ba8f61$var$getModelInfo(hrefModelId ?? "");
     const { id: modelId , name: modelName , user: { username: username  }  } = modelInfo;
     if (!modelId) throw new Error((0, $966fc19e1e9bc989$export$731a191155ffa90a)("modelIdNotFoundError"));
-    const hrefModelVersionId = href.match(/modelVersionId=(?<modelVersionId>\d*)/)?.groups?.modelVersionId;
     const modelVersionId = hrefModelVersionId ? hrefModelVersionId : modelInfo.modelVersions[0].id;
     if (!modelVersionId) throw new Error((0, $966fc19e1e9bc989$export$731a191155ffa90a)("modeVersionlIdNotFoundError"));
     const modelVersionName = modelInfo.modelVersions.find((x)=>{
@@ -12839,7 +12842,9 @@ const $8d59c42601ba8f61$export$53039d7a8d9d297e = (buttonIdSelector)=>async ()=>
         try {
             const button = await (0, $0fccda82d33153ac$export$1a1c301579a08d1e)(buttonIdSelector);
             if (!button) return;
+            console.log("----- window.location.href:", window.location.href);
             const { modelId: modelId , modelName: modelName , imageList: imageList , modelVersionId: modelVersionId , modelVersionName: modelVersionName , modelInfo: modelInfo  } = await $8d59c42601ba8f61$var$getModeInfoAndImageList(window.location.href);
+            console.log("----- getModeInfoAndImageList:", modelId, modelName, imageList, modelVersionId, modelVersionName, modelInfo);
             const filenameFormat = (0, $65c0cd2b2ec0988a$export$44487a86467333c3)("modelPreviewFilenameFormat");
             const filename = filenameFormat.replace("{modelId}", `${modelId ?? ""}`).replace("{modelName}", modelName).replace("{modelVersionId}", modelVersionId).replace("{modelVersionName}", modelVersionName);
             await (0, $afa9fb8bb7aaf429$export$b6bc24646229cedd)((0, $0fccda82d33153ac$export$bb64a7e3f0f28938)(button))(filename, modelInfo)(imageList.map((x)=>({
@@ -12933,24 +12938,24 @@ const $9a7e0bde1a099030$export$5fd187c0d03a79e = async ()=>{
 
 
 const $29e4e9967394a818$var$addModelPreviewDownloadButton = async ()=>{
-    (0, $0fccda82d33153ac$export$bef1f36f5486a6a3)("model");
     try {
         // await waitForElement('#gallery a[href^="/images"]');
         // FIXME: adhoc: wait for Nextjs rendering finish
         await (0, $0fccda82d33153ac$export$e772c8ff12451969)(2000);
         if (!window.location.href.match(/\/models\/\d*/)) return;
+        (0, $0fccda82d33153ac$export$bef1f36f5486a6a3)("model");
         await (0, $8d59c42601ba8f61$export$8b03a564a450b487)();
     } catch (error) {
         alert(error.message);
     }
 };
 const $29e4e9967394a818$var$addGalleryImageDownloadButton = async ()=>{
-    (0, $0fccda82d33153ac$export$bef1f36f5486a6a3)("gallery");
     try {
         // await waitForElement('.mantine-RichTextEditor-root');
         // FIXME: adhoc: wait for Nextjs rendering finish
         await (0, $0fccda82d33153ac$export$e772c8ff12451969)(2000);
         if (!window.location.href.match(/\/images\/\d*/)) return;
+        (0, $0fccda82d33153ac$export$bef1f36f5486a6a3)("gallery");
         await (0, $9a7e0bde1a099030$export$5fd187c0d03a79e)();
     } catch (error) {
         alert(error.message);

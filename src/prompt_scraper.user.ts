@@ -6,8 +6,6 @@ import { getConfig } from './config_panel';
 import { sleep, log } from './utils';
 
 const addModelPreviewDownloadButton = async () => {
-  log('model');
-
   try {
     // await waitForElement('#gallery a[href^="/images"]');
     // FIXME: adhoc: wait for Nextjs rendering finish
@@ -15,6 +13,7 @@ const addModelPreviewDownloadButton = async () => {
     if (!window.location.href.match(/\/models\/\d*/)) {
       return;
     }
+    log('model');
 
     await addModelImagesDownloadButton();
   } catch (error: unknown) {
@@ -23,8 +22,6 @@ const addModelPreviewDownloadButton = async () => {
 };
 
 const addGalleryImageDownloadButton = async () => {
-  log('gallery');
-
   try {
     // await waitForElement('.mantine-RichTextEditor-root');
     // FIXME: adhoc: wait for Nextjs rendering finish
@@ -32,6 +29,7 @@ const addGalleryImageDownloadButton = async () => {
     if (!window.location.href.match(/\/images\/\d*/)) {
       return;
     }
+    log('gallery');
     await addGalleryDownloadButton();
   } catch (error: unknown) {
     alert((error as Error).message);
