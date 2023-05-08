@@ -12827,7 +12827,7 @@ const $8d59c42601ba8f61$var$getModelInfo = async (modelId)=>{
     return modelInfo;
 };
 const $8d59c42601ba8f61$var$getModeInfoAndImageList = async (href)=>{
-    const hrefModelId = href.match(/\/models\/(?<modelId>\d*)\//)?.groups?.modelId;
+    const hrefModelId = href.match(/\/models\/(?<modelId>\d*)/)?.groups?.modelId;
     const hrefModelVersionId = href.match(/modelVersionId=(?<modelVersionId>\d*)/)?.groups?.modelVersionId;
     if (!hrefModelId) throw new Error((0, $966fc19e1e9bc989$export$731a191155ffa90a)("modelIdNotFoundError"));
     const modelInfo = await $8d59c42601ba8f61$var$getModelInfo(hrefModelId);

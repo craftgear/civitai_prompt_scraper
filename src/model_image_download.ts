@@ -16,8 +16,7 @@ const getModelInfo = async (modelId: string) => {
 };
 
 const getModeInfoAndImageList = async (href: string) => {
-  const hrefModelId = href.match(/\/models\/(?<modelId>\d*)\//)?.groups
-    ?.modelId;
+  const hrefModelId = href.match(/\/models\/(?<modelId>\d*)/)?.groups?.modelId;
   const hrefModelVersionId = href.match(/modelVersionId=(?<modelVersionId>\d*)/)
     ?.groups?.modelVersionId;
 
