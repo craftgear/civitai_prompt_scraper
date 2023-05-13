@@ -130,12 +130,13 @@ export const createZip =
     if (modelInfo) {
       await zipWriter.add(
         'model_info.json',
-        new TextReader(JSON.stringify(modelInfo))
+        new TextReader(JSON.stringify(modelInfo, null, '\t'))
       );
     }
 
     let counter = 0;
     let errors = [];
+
     for (const x of imgInfo) {
       if (buttnTextUpdateFn) {
         buttnTextUpdateFn(
@@ -168,7 +169,7 @@ export const createZip =
           const jsonFilename = name + '.json';
           await zipWriter.add(
             jsonFilename,
-            new TextReader(JSON.stringify(x.meta))
+            new TextReader(JSON.stringify(x.meta, null, '\t'))
           );
         }
 

@@ -12776,7 +12776,7 @@ const $afa9fb8bb7aaf429$export$b6bc24646229cedd = (buttnTextUpdateFn)=>(zipFilen
             const addedNames = new Set();
             const blobWriter = new (0, $53e25169918aa98b$export$b1948fceba813858)(`application/zip`);
             const zipWriter = new (0, $183a0115a003f583$export$50f5658480930b4c)(blobWriter);
-            if (modelInfo) await zipWriter.add("model_info.json", new (0, $53e25169918aa98b$export$43d3fd7deddee00)(JSON.stringify(modelInfo)));
+            if (modelInfo) await zipWriter.add("model_info.json", new (0, $53e25169918aa98b$export$43d3fd7deddee00)(JSON.stringify(modelInfo, null, "	")));
             let counter = 0;
             let errors = [];
             for (const x of imgInfo){
@@ -12792,7 +12792,7 @@ const $afa9fb8bb7aaf429$export$b6bc24646229cedd = (buttnTextUpdateFn)=>(zipFilen
                     addedNames.add(name);
                     if (!!x.meta) {
                         const jsonFilename = name + ".json";
-                        await zipWriter.add(jsonFilename, new (0, $53e25169918aa98b$export$43d3fd7deddee00)(JSON.stringify(x.meta)));
+                        await zipWriter.add(jsonFilename, new (0, $53e25169918aa98b$export$43d3fd7deddee00)(JSON.stringify(x.meta, null, "	")));
                     }
                     counter += 1;
                 } catch (e) {
@@ -12827,7 +12827,7 @@ const $8d59c42601ba8f61$var$getModelInfo = async (modelId)=>{
     return modelInfo;
 };
 const $8d59c42601ba8f61$var$getModeInfoAndImageList = async (href)=>{
-    const hrefModelId = href.match(/\/models\/(?<modelId>\d*)/)?.groups?.modelId;
+    const hrefModelId = href.match(/\/models\/(?<modelId>\d*)/)?.groups?.modelId ?? href.match(/modelId=(?<modelId>\d*)/)?.groups?.modelId;
     const hrefModelVersionId = href.match(/modelVersionId=(?<modelVersionId>\d*)/)?.groups?.modelVersionId;
     if (!hrefModelId) throw new Error((0, $966fc19e1e9bc989$export$731a191155ffa90a)("modelIdNotFoundError"));
     const modelInfo = await $8d59c42601ba8f61$var$getModelInfo(hrefModelId);
