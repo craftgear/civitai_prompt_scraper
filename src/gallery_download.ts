@@ -13,8 +13,13 @@ import { getConfig } from './config_panel';
 
 const BUTTON_ID = 'download-all-gallery-images-and-prompts';
 
-const downloadGalleryImagesAndPrompts =
-  (buttonIdSelector: string, modelId: string | null, postId: string) =>
+export const downloadGalleryImagesAndPrompts =
+  (
+    buttonIdSelector: string,
+    modelId: string | null,
+    postId: string,
+    onFinishFn?: Function
+  ) =>
   async () => {
     try {
       const imgList = await fetchGalleryData(modelId, postId);
@@ -31,10 +36,14 @@ const downloadGalleryImagesAndPrompts =
 
       await createZip(updateButtonText(button))(filename)(imgList);
 
-      replaceWithDisabledButton(
-        button,
-        ` ${imgList.length} / ${imgList.length} ${getButtonCompleteLabel()}`
-      );
+      if (onFinishFn) {
+        onFinishFn();
+      } else {
+        replaceWithDisabledButton(
+          button,
+          ` ${imgList.length} / ${imgList.length} ${getButtonCompleteLabel()}`
+        );
+      }
     } catch (error: unknown) {
       alert((error as Error).message);
     }

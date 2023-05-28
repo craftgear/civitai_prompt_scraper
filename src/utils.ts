@@ -2,6 +2,7 @@
 import { NextData } from './types';
 import pkg from '../package.json';
 import { disabledButtonStyle } from './styles';
+// import { saveAs } from 'file-saver';
 
 export const log = (...xs: any[]) => {
   console.log(`${pkg.name}:`, ...xs);
@@ -27,8 +28,7 @@ export const waitForElement = async (
 };
 
 export const buildImgUrl = (url: string, width: number, name?: string) =>
-  `https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/${url}/width=${width},optimized=true/${
-    name ?? ''
+  `https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/${url}/width=${width},optimized=true/${name ?? ''
   }`;
 
 export const parseNextData = () => {
@@ -45,45 +45,49 @@ export const updateButtonText = (button: HTMLElement) => (text: string) => {
 
 export const replaceWithDisabledButton = (
   button: HTMLElement,
-  text: string
+  text: string,
+  style?: string
 ) => {
   const disabledButton = document.createElement('div');
-  disabledButton.setAttribute('style', disabledButtonStyle);
+  disabledButton.setAttribute('style', style ?? disabledButtonStyle);
   disabledButton.id = button.id;
   disabledButton.innerText = text;
   button.parentNode?.replaceChild(disabledButton, button);
 };
 
+export const getImagesDataFromNextData = () => {
+  const data = parseNextData();
+  const images = data.props.pageProps.trpcState.json.queries[0];
+  return images.state.data.pages[0].items;
+};
+
+export const getModelIdFromNextData = () => {
+  const data = parseNextData();
+  const model = data.props.pageProps.trpcState.json.queries[1];
+  return model.state.data.id;
+};
+
 // export const screenShot = async () => {
-//   const main = await waitForElement('main');
+//    const main = await waitForElement('body');
 //
-//   if (!main) {
-//     return;
-//   }
-//   main.style.letterSpacing = '0.1rem';
+//    if (!main) {
+//      return;
+//    }
+//    main.style.letterSpacing = '0.1rem';
 //
-//   document.querySelectorAll('canvas').forEach((x) => x.remove());
-//   const canvas = await html2canvas(main, {
-//     allowTaint: true,
-//   });
+//    document.querySelectorAll('canvas').forEach((x) => x.remove());
+//    const canvas = await html2canvas(main, {
+//      allowTaint: true,
+//      useCORS: true,
+//    });
 //
-//   const div = document.createElement('div');
-//   div.setAttribute('style', 'border: 1px solid red;');
-//   div.appendChild(canvas);
+//    // saveAs(canvas.toDataURL(), 'test.png');
+//    const div = document.createElement('div');
+//    div.setAttribute('style', 'border: 1px solid red;');
+//    div.appendChild(canvas);
 //
-//   document.body.appendChild(div);
+//    document.body.appendChild(div);
 //
-//   main.style.letterSpacing = 'inherit';
-// };
+//    main.style.letterSpacing = 'none';
+//  };
 //
-// export const getImagesDataFromNextData = () => {
-//   const data = parseNextData();
-//   const images = data.props.pageProps.trpcState.json.queries[0];
-//   return images.state.data.pages[0].items;
-// };
-//
-// export const getModelIdFromNextData = () => {
-//   const data = parseNextData();
-//   const model = data.props.pageProps.trpcState.json.queries[1];
-//   return model.state.data.id;
-// };

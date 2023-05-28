@@ -2,6 +2,7 @@ import { addGalleryDownloadButton } from './gallery_download';
 import { addModelImagesDownloadButton } from './model_image_download';
 import { initConfigPanel } from './config_panel';
 import { getConfig } from './config_panel';
+import { addDownloadAllButton } from './model_download_all';
 
 import { sleep, log } from './utils';
 
@@ -19,6 +20,8 @@ const addModelPreviewDownloadButton = async () => {
   } catch (error: unknown) {
     alert((error as Error).message);
   }
+
+  await addDownloadAllButton();
 };
 
 const addGalleryImageDownloadButton = async () => {
@@ -36,7 +39,7 @@ const addGalleryImageDownloadButton = async () => {
   }
 };
 
-const openShowMore = () => {
+const openShowMore = (retryCount = 1) => {
   const showMoreButton = Array.from(document.querySelectorAll('button')).filter(
     (x: HTMLElement) => x.innerHTML === 'Show More'
   )[0];
@@ -44,9 +47,12 @@ const openShowMore = () => {
     showMoreButton.click();
     return;
   }
-  setTimeout(() => {
-    openShowMore();
-  }, 1000);
+
+  if (retryCount > 0) {
+    setTimeout(() => {
+      openShowMore(retryCount - 1);
+    }, 300);
+  }
 };
 
 let prevHref = '';
@@ -80,7 +86,7 @@ const observer = new MutationObserver(async (_mutationList) => {
     await addModelPreviewDownloadButton();
 
     if (getConfig('openShowMore')) {
-      openShowMore();
+      openShowMore(30);
     }
   } else if (window.location.href.match(/\/images\/\d*/)) {
     await addGalleryImageDownloadButton();

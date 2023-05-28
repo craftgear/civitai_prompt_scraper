@@ -71,6 +71,48 @@ const $292fc7f9388c589b$export$dbe9a8011f5e5b2d = `
   cursor: none;
   word-break: keep-all;
 `;
+const $292fc7f9388c589b$export$7ec3146dae3421e3 = `
+  display: flex;
+  width: 300px;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  background-color: #228be6;
+  height: 36px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: small;
+  cursor: pointer;
+  word-break: keep-all;
+`;
+const $292fc7f9388c589b$export$68ed69dc3dc4c2e4 = `
+  display: flex;
+  width: 150px;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  background-color: #228be6;
+  height: 36px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: small;
+  cursor: pointer;
+  word-break: keep-all;
+`;
+const $292fc7f9388c589b$export$7bbe620df89998a9 = `
+  display: flex;
+  width: 150px;
+  justify-content: center;
+  align-items: center;
+  color: gray;
+  background-color: lightgray;
+  height: 36px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: small;
+  cursor: pointer;
+  word-break: keep-all;
+`;
 
 
 // import html2canvas from 'html2canvas';
@@ -102,45 +144,46 @@ const $0fccda82d33153ac$export$ce1398d1c23018fa = ()=>{
 const $0fccda82d33153ac$export$bb64a7e3f0f28938 = (button)=>(text)=>{
         button.innerText = text;
     };
-const $0fccda82d33153ac$export$92ecf871022de94d = (button, text)=>{
+const $0fccda82d33153ac$export$92ecf871022de94d = (button, text, style)=>{
     const disabledButton = document.createElement("div");
-    disabledButton.setAttribute("style", (0, $292fc7f9388c589b$export$dbe9a8011f5e5b2d));
+    disabledButton.setAttribute("style", style ?? (0, $292fc7f9388c589b$export$dbe9a8011f5e5b2d));
     disabledButton.id = button.id;
     disabledButton.innerText = text;
     button.parentNode?.replaceChild(disabledButton, button);
+};
+const $0fccda82d33153ac$export$df511617a3ec46cd = ()=>{
+    const data = $0fccda82d33153ac$export$ce1398d1c23018fa();
+    const images = data.props.pageProps.trpcState.json.queries[0];
+    return images.state.data.pages[0].items;
+};
+const $0fccda82d33153ac$export$5abe6706d40a9183 = ()=>{
+    const data = $0fccda82d33153ac$export$ce1398d1c23018fa();
+    const model = data.props.pageProps.trpcState.json.queries[1];
+    return model.state.data.id;
 }; // export const screenShot = async () => {
- //   const main = await waitForElement('main');
+ //    const main = await waitForElement('body');
  //
- //   if (!main) {
- //     return;
- //   }
- //   main.style.letterSpacing = '0.1rem';
+ //    if (!main) {
+ //      return;
+ //    }
+ //    main.style.letterSpacing = '0.1rem';
  //
- //   document.querySelectorAll('canvas').forEach((x) => x.remove());
- //   const canvas = await html2canvas(main, {
- //     allowTaint: true,
- //   });
+ //    document.querySelectorAll('canvas').forEach((x) => x.remove());
+ //    const canvas = await html2canvas(main, {
+ //      allowTaint: true,
+ //      useCORS: true,
+ //    });
  //
- //   const div = document.createElement('div');
- //   div.setAttribute('style', 'border: 1px solid red;');
- //   div.appendChild(canvas);
+ //    // saveAs(canvas.toDataURL(), 'test.png');
+ //    const div = document.createElement('div');
+ //    div.setAttribute('style', 'border: 1px solid red;');
+ //    div.appendChild(canvas);
  //
- //   document.body.appendChild(div);
+ //    document.body.appendChild(div);
  //
- //   main.style.letterSpacing = 'inherit';
- // };
+ //    main.style.letterSpacing = 'none';
+ //  };
  //
- // export const getImagesDataFromNextData = () => {
- //   const data = parseNextData();
- //   const images = data.props.pageProps.trpcState.json.queries[0];
- //   return images.state.data.pages[0].items;
- // };
- //
- // export const getModelIdFromNextData = () => {
- //   const data = parseNextData();
- //   const model = data.props.pageProps.trpcState.json.queries[1];
- //   return model.state.data.id;
- // };
 
 
 const $966fc19e1e9bc989$var$i18n = {
@@ -12882,7 +12925,7 @@ const $8d59c42601ba8f61$export$8b03a564a450b487 = async ()=>{
 
 
 const $9a7e0bde1a099030$var$BUTTON_ID = "download-all-gallery-images-and-prompts";
-const $9a7e0bde1a099030$var$downloadGalleryImagesAndPrompts = (buttonIdSelector, modelId, postId)=>async ()=>{
+const $9a7e0bde1a099030$export$9473b35530fb3701 = (buttonIdSelector, modelId, postId, onFinishFn)=>async ()=>{
         try {
             const imgList = await (0, $afa9fb8bb7aaf429$export$c6ace8a485846f08)(modelId, postId);
             const button = await (0, $0fccda82d33153ac$export$1a1c301579a08d1e)(buttonIdSelector);
@@ -12890,7 +12933,8 @@ const $9a7e0bde1a099030$var$downloadGalleryImagesAndPrompts = (buttonIdSelector,
             const filenameFormat = (0, $65c0cd2b2ec0988a$export$44487a86467333c3)("galleryFilenameFormat");
             const filename = filenameFormat.replace("{modelId}", modelId ?? "").replace("{postId}", postId);
             await (0, $afa9fb8bb7aaf429$export$b6bc24646229cedd)((0, $0fccda82d33153ac$export$bb64a7e3f0f28938)(button))(filename)(imgList);
-            (0, $0fccda82d33153ac$export$92ecf871022de94d)(button, ` ${imgList.length} / ${imgList.length} ${(0, $966fc19e1e9bc989$export$4d9f09007b08c03d)()}`);
+            if (onFinishFn) onFinishFn();
+            else (0, $0fccda82d33153ac$export$92ecf871022de94d)(button, ` ${imgList.length} / ${imgList.length} ${(0, $966fc19e1e9bc989$export$4d9f09007b08c03d)()}`);
         } catch (error) {
             alert(error.message);
         }
@@ -12933,7 +12977,7 @@ const $9a7e0bde1a099030$export$5fd187c0d03a79e = async ()=>{
     // open gallery from a single image
     if (!postId && !modelId && !modelVersionId) button.addEventListener("click", $9a7e0bde1a099030$var$downloadSingleImagesAndPrompts(buttonIdSelector));
     // open gallery from model gallery areas
-    if (postId) button.addEventListener("click", $9a7e0bde1a099030$var$downloadGalleryImagesAndPrompts(buttonIdSelector, modelId, postId));
+    if (postId) button.addEventListener("click", $9a7e0bde1a099030$export$9473b35530fb3701(buttonIdSelector, modelId, postId));
     button.id = $9a7e0bde1a099030$var$BUTTON_ID;
     button.innerText = (0, $966fc19e1e9bc989$export$d397f86d22f413e8)();
     button.setAttribute("style", (0, $292fc7f9388c589b$export$fd4d27a26b4854f3));
@@ -12943,6 +12987,76 @@ const $9a7e0bde1a099030$export$5fd187c0d03a79e = async ()=>{
 
 
 
+
+
+
+
+
+
+
+// import { getConfig } from './config_panel';
+const $2da5569f102e177a$var$BUTTON_ID = "download-all-model-related-files";
+const $2da5569f102e177a$var$downloadButtonSelector = "a[href^='/api/download/models/']";
+const $2da5569f102e177a$var$getGalleryModelIdAndPostId = (href)=>{
+    const hrefModelId = href.match(/modelId=(?<modelId>\d*)/)?.groups?.modelId;
+    const hrefPostId = href.match(/postId=(?<postId>\d*)/)?.groups?.postId;
+    if (!hrefModelId || !hrefPostId) throw new Error((0, $966fc19e1e9bc989$export$731a191155ffa90a)("modelIdNotFoundError"));
+    return {
+        modelId: hrefModelId,
+        postId: hrefPostId
+    };
+};
+const $2da5569f102e177a$var$downloadAllModelRelatedFiles = (buttonIdSelector)=>async ()=>{
+        // start downloading a model
+        await (0, $0fccda82d33153ac$export$1a1c301579a08d1e)($2da5569f102e177a$var$downloadButtonSelector);
+        const modelUrl = document.querySelector($2da5569f102e177a$var$downloadButtonSelector)?.getAttribute("href");
+        if (modelUrl) window.open(modelUrl, "_blank");
+        // save galleries as zip files
+        const clientHeight = document.querySelector("body")?.clientHeight;
+        if (clientHeight) window.scrollTo(0, clientHeight);
+        else document.querySelector("#gallery")?.scrollIntoView();
+        const galleryElementSelector = '#gallery a[href^="/images/"]';
+        await (0, $0fccda82d33153ac$export$1a1c301579a08d1e)(galleryElementSelector);
+        await (0, $0fccda82d33153ac$export$e772c8ff12451969)(1000);
+        const galleryLinks = document.querySelectorAll(galleryElementSelector);
+        const postIdSet = new Set();
+        await Promise.all([
+            // save previews as a zip file
+            (0, $8d59c42601ba8f61$export$53039d7a8d9d297e)(buttonIdSelector)(),
+            // download gallery
+            ...Array.from(galleryLinks).map(async (x, i)=>{
+                const href = x.getAttribute("href");
+                if (!href) return;
+                const { modelId: modelId , postId: postId  } = $2da5569f102e177a$var$getGalleryModelIdAndPostId(href);
+                if (postIdSet.has(postId)) return;
+                const button = document.createElement("div");
+                button.id = `${$2da5569f102e177a$var$BUTTON_ID}_${i}`;
+                button.innerText = `${modelId}_${postId}`;
+                button.setAttribute("style", (0, $292fc7f9388c589b$export$68ed69dc3dc4c2e4));
+                document.querySelector("#gallery h2")?.parentNode?.appendChild(button);
+                postIdSet.add(postId);
+                const onFinishFn = ()=>{
+                    (0, $0fccda82d33153ac$export$92ecf871022de94d)(button, `${postId} done`, (0, $292fc7f9388c589b$export$7bbe620df89998a9));
+                };
+                return (0, $9a7e0bde1a099030$export$9473b35530fb3701)(`#${$2da5569f102e177a$var$BUTTON_ID}_${i}`, modelId, postId, onFinishFn)();
+            })
+        ]).then(()=>{
+            alert("done");
+        });
+        console.warn("##### done #####");
+    };
+const $2da5569f102e177a$export$3b6a8e903180e269 = async ()=>{
+    await (0, $0fccda82d33153ac$export$1a1c301579a08d1e)($2da5569f102e177a$var$downloadButtonSelector);
+    const buttonIdSelector = `#${$2da5569f102e177a$var$BUTTON_ID}`;
+    document.querySelector(buttonIdSelector)?.remove();
+    const button = document.createElement("a");
+    button.addEventListener("click", $2da5569f102e177a$var$downloadAllModelRelatedFiles(buttonIdSelector));
+    button.id = $2da5569f102e177a$var$BUTTON_ID;
+    button.innerText = "dowload all"; //getButtonLabel();
+    button.setAttribute("style", (0, $292fc7f9388c589b$export$7ec3146dae3421e3));
+    const buttonParent = document.querySelector($2da5569f102e177a$var$downloadButtonSelector);
+    if (buttonParent) buttonParent.parentNode?.appendChild(button);
+};
 
 
 
@@ -12957,6 +13071,7 @@ const $29e4e9967394a818$var$addModelPreviewDownloadButton = async ()=>{
     } catch (error) {
         alert(error.message);
     }
+    await (0, $2da5569f102e177a$export$3b6a8e903180e269)();
 };
 const $29e4e9967394a818$var$addGalleryImageDownloadButton = async ()=>{
     try {
@@ -12970,15 +13085,15 @@ const $29e4e9967394a818$var$addGalleryImageDownloadButton = async ()=>{
         alert(error.message);
     }
 };
-const $29e4e9967394a818$var$openShowMore = ()=>{
+const $29e4e9967394a818$var$openShowMore = (retryCount = 1)=>{
     const showMoreButton = Array.from(document.querySelectorAll("button")).filter((x)=>x.innerHTML === "Show More")[0];
     if (showMoreButton) {
         showMoreButton.click();
         return;
     }
-    setTimeout(()=>{
-        $29e4e9967394a818$var$openShowMore();
-    }, 1000);
+    if (retryCount > 0) setTimeout(()=>{
+        $29e4e9967394a818$var$openShowMore(retryCount - 1);
+    }, 300);
 };
 let $29e4e9967394a818$var$prevHref = "";
 const $29e4e9967394a818$var$observer = new MutationObserver(async (_mutationList)=>{
@@ -13003,7 +13118,7 @@ const $29e4e9967394a818$var$observer = new MutationObserver(async (_mutationList
     }
     if (window.location.href.match(/\/models\/\d*/)) {
         await $29e4e9967394a818$var$addModelPreviewDownloadButton();
-        if ((0, $65c0cd2b2ec0988a$export$44487a86467333c3)("openShowMore")) $29e4e9967394a818$var$openShowMore();
+        if ((0, $65c0cd2b2ec0988a$export$44487a86467333c3)("openShowMore")) $29e4e9967394a818$var$openShowMore(30);
     } else if (window.location.href.match(/\/images\/\d*/)) await $29e4e9967394a818$var$addGalleryImageDownloadButton();
     (0, $0fccda82d33153ac$export$bef1f36f5486a6a3)("done");
 })();

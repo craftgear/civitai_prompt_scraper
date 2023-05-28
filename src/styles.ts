@@ -45,3 +45,48 @@ export const disabledButtonStyle = `
   cursor: none;
   word-break: keep-all;
 `;
+
+export const downloadAllButtonStyle = `
+  display: flex;
+  width: 300px;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  background-color: #228be6;
+  height: 36px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: small;
+  cursor: pointer;
+  word-break: keep-all;
+`;
+
+export const downloadAllGalleryStyle = `
+  display: flex;
+  width: 150px;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  background-color: #228be6;
+  height: 36px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: small;
+  cursor: pointer;
+  word-break: keep-all;
+`;
+
+export const downloadAllGalleryDoneStyle = `
+  display: flex;
+  width: 100px;
+  justify-content: center;
+  align-items: center;
+  color: gray;
+  background-color: lightgray;
+  height: 36px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: small;
+  cursor: pointer;
+  word-break: keep-all;
+`;
