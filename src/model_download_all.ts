@@ -93,9 +93,8 @@ const downloadAllModelRelatedFiles = (buttonIdSelector: string) => async () => {
         onFinishFn
       )();
     }),
-  ]).then(() => {
-    alert('done');
-  });
+  ]);
+  alert('done');
   console.warn('##### done #####');
 };
 

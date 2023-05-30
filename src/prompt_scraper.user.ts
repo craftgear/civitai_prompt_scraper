@@ -15,6 +15,9 @@ const addModelPreviewDownloadButton = async () => {
       return;
     }
     log('model');
+    if (getConfig('openShowMore')) {
+      openShowMore(10);
+    }
 
     await addModelImagesDownloadButton();
   } catch (error: unknown) {
@@ -51,7 +54,7 @@ const openShowMore = (retryCount = 1) => {
   if (retryCount > 0) {
     setTimeout(() => {
       openShowMore(retryCount - 1);
-    }, 300);
+    }, 1000);
   }
 };
 
@@ -84,10 +87,6 @@ const observer = new MutationObserver(async (_mutationList) => {
 
   if (window.location.href.match(/\/models\/\d*/)) {
     await addModelPreviewDownloadButton();
-
-    if (getConfig('openShowMore')) {
-      openShowMore(30);
-    }
   } else if (window.location.href.match(/\/images\/\d*/)) {
     await addGalleryImageDownloadButton();
   }

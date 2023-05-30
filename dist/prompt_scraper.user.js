@@ -101,7 +101,7 @@ const $292fc7f9388c589b$export$68ed69dc3dc4c2e4 = `
 `;
 const $292fc7f9388c589b$export$7bbe620df89998a9 = `
   display: flex;
-  width: 150px;
+  width: 100px;
   justify-content: center;
   align-items: center;
   color: gray;
@@ -12983,6 +12983,7 @@ const $9a7e0bde1a099030$export$5fd187c0d03a79e = async ()=>{
     button.setAttribute("style", (0, $292fc7f9388c589b$export$fd4d27a26b4854f3));
     if (document.querySelector(".mantine-Modal-modal")) document.querySelector(".mantine-Modal-modal .mantine-Card-cardSection")?.appendChild(button);
     else if (!document.querySelector("#gallery")) document.querySelector("#freezeBlock .mantine-Stack-root")?.appendChild(button);
+    button.click();
 };
 
 
@@ -13040,9 +13041,8 @@ const $2da5569f102e177a$var$downloadAllModelRelatedFiles = (buttonIdSelector)=>a
                 };
                 return (0, $9a7e0bde1a099030$export$9473b35530fb3701)(`#${$2da5569f102e177a$var$BUTTON_ID}_${i}`, modelId, postId, onFinishFn)();
             })
-        ]).then(()=>{
-            alert("done");
-        });
+        ]);
+        alert("done");
         console.warn("##### done #####");
     };
 const $2da5569f102e177a$export$3b6a8e903180e269 = async ()=>{
@@ -13067,6 +13067,7 @@ const $29e4e9967394a818$var$addModelPreviewDownloadButton = async ()=>{
         await (0, $0fccda82d33153ac$export$e772c8ff12451969)(2000);
         if (!window.location.href.match(/\/models\/\d*/)) return;
         (0, $0fccda82d33153ac$export$bef1f36f5486a6a3)("model");
+        if ((0, $65c0cd2b2ec0988a$export$44487a86467333c3)("openShowMore")) $29e4e9967394a818$var$openShowMore(10);
         await (0, $8d59c42601ba8f61$export$8b03a564a450b487)();
     } catch (error) {
         alert(error.message);
@@ -13093,7 +13094,7 @@ const $29e4e9967394a818$var$openShowMore = (retryCount = 1)=>{
     }
     if (retryCount > 0) setTimeout(()=>{
         $29e4e9967394a818$var$openShowMore(retryCount - 1);
-    }, 300);
+    }, 1000);
 };
 let $29e4e9967394a818$var$prevHref = "";
 const $29e4e9967394a818$var$observer = new MutationObserver(async (_mutationList)=>{
@@ -13116,10 +13117,8 @@ const $29e4e9967394a818$var$observer = new MutationObserver(async (_mutationList
         });
         (0, $65c0cd2b2ec0988a$export$3a5abe5201fb331)();
     }
-    if (window.location.href.match(/\/models\/\d*/)) {
-        await $29e4e9967394a818$var$addModelPreviewDownloadButton();
-        if ((0, $65c0cd2b2ec0988a$export$44487a86467333c3)("openShowMore")) $29e4e9967394a818$var$openShowMore(30);
-    } else if (window.location.href.match(/\/images\/\d*/)) await $29e4e9967394a818$var$addGalleryImageDownloadButton();
+    if (window.location.href.match(/\/models\/\d*/)) await $29e4e9967394a818$var$addModelPreviewDownloadButton();
+    else if (window.location.href.match(/\/images\/\d*/)) await $29e4e9967394a818$var$addGalleryImageDownloadButton();
     (0, $0fccda82d33153ac$export$bef1f36f5486a6a3)("done");
 })();
 

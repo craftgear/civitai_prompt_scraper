@@ -127,4 +127,9 @@ export const addGalleryDownloadButton = async () => {
       .querySelector('#freezeBlock .mantine-Stack-root')
       ?.appendChild(button);
   }
+
+  // TODO: 自動ダウンロード開始設定を付ける
+  if (true) {
+    button.click();
+  }
 };
