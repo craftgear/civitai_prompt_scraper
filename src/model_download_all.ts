@@ -34,12 +34,12 @@ const getGalleryModelIdAndPostId = (href: string) => {
 
 const downloadAllModelRelatedFiles = (buttonIdSelector: string) => async () => {
   // save galleries as zip files
-  // const clientHeight = document.querySelector('body')?.clientHeight;
-  // if (clientHeight) {
-  //   window.scrollTo(0, clientHeight);
-  // } else {
-  //   document.querySelector('#gallery')?.scrollIntoView();
-  // }
+  const clientHeight = document.querySelector('body')?.clientHeight;
+  if (clientHeight) {
+    window.scrollTo(0, clientHeight);
+  } else {
+    document.querySelector('#gallery')?.scrollIntoView();
+  }
 
   const galleryElementSelector = '#gallery a[href^="/images/"]';
   await waitForElement(galleryElementSelector);

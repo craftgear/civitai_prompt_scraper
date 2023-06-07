@@ -32,9 +32,6 @@ const getModeInfoAndImageList = async (href: string) => {
     creator: { username: username },
   } = modelInfo;
 
-  if (!modelId) {
-  }
-
   const modelVersionId = hrefModelVersionId
     ? hrefModelVersionId
     : modelInfo.modelVersions[0].id;
