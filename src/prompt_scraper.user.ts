@@ -16,15 +16,14 @@ const addModelPreviewDownloadButton = async () => {
     }
     log('model');
     if (getConfig('openShowMore')) {
-      openShowMore(10);
+      openShowMore(20);
     }
 
     await addModelImagesDownloadButton();
+    await addDownloadAllButton();
   } catch (error: unknown) {
     alert((error as Error).message);
   }
-
-  await addDownloadAllButton();
 };
 
 const addGalleryImageDownloadButton = async () => {

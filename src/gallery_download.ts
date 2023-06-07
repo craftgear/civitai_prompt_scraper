@@ -13,6 +13,37 @@ import { getConfig } from './config_panel';
 
 const BUTTON_ID = 'download-all-gallery-images-and-prompts';
 
+const downloadPreviewsAndPrompts =
+  (buttonIdSelector: string, modelVersionId: string, onFinishFn?: Function) =>
+  async () => {
+    try {
+      const imgList = await fetchGalleryData(modelId, postId);
+
+      const button = await waitForElement(buttonIdSelector);
+      if (!button) {
+        return;
+      }
+
+      const filenameFormat = getConfig('galleryFilenameFormat');
+      const filename = (filenameFormat as string)
+        .replace('{modelId}', modelId ?? '')
+        .replace('{postId}', postId);
+
+      await createZip(updateButtonText(button))(filename)(imgList);
+
+      if (onFinishFn) {
+        onFinishFn();
+      } else {
+        replaceWithDisabledButton(
+          button,
+          ` ${imgList.length} / ${imgList.length} ${getButtonCompleteLabel()}`
+        );
+      }
+    } catch (error: unknown) {
+      alert((error as Error).message);
+    }
+  };
+
 export const downloadGalleryImagesAndPrompts =
   (
     buttonIdSelector: string,
@@ -94,26 +125,31 @@ export const addGalleryDownloadButton = async () => {
   const button = document.createElement('button');
 
   // open gallery from model preview images
+  //  FIXME: プレビューから開いたギャラリーのURLにmodelIdがなくなったので
+  // ダウンロードボタンをクリックするとエラーになる
   if (modelVersionId && prioritizedUserId) {
     button.addEventListener(
       'click',
       downloadImagesAndPrompts(buttonIdSelector)
     );
   }
-  // open gallery from a single image
-  if (!postId && !modelId && !modelVersionId) {
-    button.addEventListener(
-      'click',
-      downloadSingleImagesAndPrompts(buttonIdSelector)
-    );
-  }
   // open gallery from model gallery areas
-  if (postId) {
+  if (modelId && postId) {
     button.addEventListener(
       'click',
       downloadGalleryImagesAndPrompts(buttonIdSelector, modelId, postId)
     );
   }
+  // single image gallery
+  if (!modelId && !modelVersionId) {
+    button.addEventListener(
+      'click',
+      downloadSingleImagesAndPrompts(buttonIdSelector)
+    );
+  }
+
+  // TODO: postIdしかないパターンもあった…
+  // https://civitai.com/images/978750?postId=257979
 
   button.id = BUTTON_ID;
   button.innerText = getButtonLabel();
@@ -130,6 +166,8 @@ export const addGalleryDownloadButton = async () => {
 
   // TODO: 自動ダウンロード開始設定を付ける
   if (true) {
-    button.click();
+    setTimeout(() => {
+      button.click();
+    }, 500);
   }
 };

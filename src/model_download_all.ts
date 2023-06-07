@@ -33,26 +33,34 @@ const getGalleryModelIdAndPostId = (href: string) => {
 };
 
 const downloadAllModelRelatedFiles = (buttonIdSelector: string) => async () => {
+  // save galleries as zip files
+  // const clientHeight = document.querySelector('body')?.clientHeight;
+  // if (clientHeight) {
+  //   window.scrollTo(0, clientHeight);
+  // } else {
+  //   document.querySelector('#gallery')?.scrollIntoView();
+  // }
+
+  const galleryElementSelector = '#gallery a[href^="/images/"]';
+  await waitForElement(galleryElementSelector);
+  await sleep(1000);
+
   // start downloading a model
   await waitForElement(downloadButtonSelector);
   const modelUrl = document
     .querySelector(downloadButtonSelector)
     ?.getAttribute('href');
-  if (modelUrl) {
-    window.open(modelUrl, '_blank');
+  const fileSizeText =
+    document.querySelector(downloadButtonSelector)?.innerHTML ?? '';
+  if (
+    modelUrl &&
+    // モデルの場合はダウンロードしない
+    !fileSizeText.includes(' GB)')
+  ) {
+    setTimeout(() => {
+      window.open(modelUrl, '_blank');
+    }, 0);
   }
-
-  // save galleries as zip files
-  const clientHeight = document.querySelector('body')?.clientHeight;
-  if (clientHeight) {
-    window.scrollTo(0, clientHeight);
-  } else {
-    document.querySelector('#gallery')?.scrollIntoView();
-  }
-
-  const galleryElementSelector = '#gallery a[href^="/images/"]';
-  await waitForElement(galleryElementSelector);
-  await sleep(1000);
 
   const galleryLinks = document.querySelectorAll(galleryElementSelector);
   const postIdSet = new Set();
@@ -94,6 +102,7 @@ const downloadAllModelRelatedFiles = (buttonIdSelector: string) => async () => {
       )();
     }),
   ]);
+
   alert('done');
   console.warn('##### done #####');
 };

@@ -12925,13 +12925,27 @@ const $8d59c42601ba8f61$export$8b03a564a450b487 = async ()=>{
 
 
 const $9a7e0bde1a099030$var$BUTTON_ID = "download-all-gallery-images-and-prompts";
-const $9a7e0bde1a099030$export$9473b35530fb3701 = (buttonIdSelector, modelId, postId, onFinishFn)=>async ()=>{
+const $9a7e0bde1a099030$var$downloadPreviewsAndPrompts = (buttonIdSelector, modelVersionId, onFinishFn)=>async ()=>{
         try {
             const imgList = await (0, $afa9fb8bb7aaf429$export$c6ace8a485846f08)(modelId, postId);
             const button = await (0, $0fccda82d33153ac$export$1a1c301579a08d1e)(buttonIdSelector);
             if (!button) return;
             const filenameFormat = (0, $65c0cd2b2ec0988a$export$44487a86467333c3)("galleryFilenameFormat");
             const filename = filenameFormat.replace("{modelId}", modelId ?? "").replace("{postId}", postId);
+            await (0, $afa9fb8bb7aaf429$export$b6bc24646229cedd)((0, $0fccda82d33153ac$export$bb64a7e3f0f28938)(button))(filename)(imgList);
+            if (onFinishFn) onFinishFn();
+            else (0, $0fccda82d33153ac$export$92ecf871022de94d)(button, ` ${imgList.length} / ${imgList.length} ${(0, $966fc19e1e9bc989$export$4d9f09007b08c03d)()}`);
+        } catch (error) {
+            alert(error.message);
+        }
+    };
+const $9a7e0bde1a099030$export$9473b35530fb3701 = (buttonIdSelector, modelId1, postId1, onFinishFn)=>async ()=>{
+        try {
+            const imgList = await (0, $afa9fb8bb7aaf429$export$c6ace8a485846f08)(modelId1, postId1);
+            const button = await (0, $0fccda82d33153ac$export$1a1c301579a08d1e)(buttonIdSelector);
+            if (!button) return;
+            const filenameFormat = (0, $65c0cd2b2ec0988a$export$44487a86467333c3)("galleryFilenameFormat");
+            const filename = filenameFormat.replace("{modelId}", modelId1 ?? "").replace("{postId}", postId1);
             await (0, $afa9fb8bb7aaf429$export$b6bc24646229cedd)((0, $0fccda82d33153ac$export$bb64a7e3f0f28938)(button))(filename)(imgList);
             if (onFinishFn) onFinishFn();
             else (0, $0fccda82d33153ac$export$92ecf871022de94d)(button, ` ${imgList.length} / ${imgList.length} ${(0, $966fc19e1e9bc989$export$4d9f09007b08c03d)()}`);
@@ -12965,25 +12979,31 @@ const $9a7e0bde1a099030$export$5fd187c0d03a79e = async ()=>{
     const matchedModelVersion = href.match(/modelVersionId=(?<modelVersionId>\d*)/);
     const matchedPost = href.match(/postId=(?<postId>\d*)/);
     const matchedPrioritizedUser = href.match(/prioritizedUserIds=(?<prioritizedUserId>\d*)/);
-    const modelId = matchedModel?.groups?.modelId || null;
+    const modelId1 = matchedModel?.groups?.modelId || null;
     const modelVersionId = matchedModelVersion?.groups?.modelVersionId || null;
-    const postId = matchedPost?.groups?.postId || null;
+    const postId1 = matchedPost?.groups?.postId || null;
     const prioritizedUserId = matchedPrioritizedUser?.groups?.prioritizedUserId || null;
     const buttonIdSelector = `#${$9a7e0bde1a099030$var$BUTTON_ID}`;
     document.querySelector(buttonIdSelector)?.remove();
     const button = document.createElement("button");
     // open gallery from model preview images
+    //  FIXME: プレビューから開いたギャラリーのURLにmodelIdがなくなったので
+    // ダウンロードボタンをクリックするとエラーになる
     if (modelVersionId && prioritizedUserId) button.addEventListener("click", (0, $8d59c42601ba8f61$export$53039d7a8d9d297e)(buttonIdSelector));
-    // open gallery from a single image
-    if (!postId && !modelId && !modelVersionId) button.addEventListener("click", $9a7e0bde1a099030$var$downloadSingleImagesAndPrompts(buttonIdSelector));
     // open gallery from model gallery areas
-    if (postId) button.addEventListener("click", $9a7e0bde1a099030$export$9473b35530fb3701(buttonIdSelector, modelId, postId));
+    if (modelId1 && postId1) button.addEventListener("click", $9a7e0bde1a099030$export$9473b35530fb3701(buttonIdSelector, modelId1, postId1));
+    // single image gallery
+    if (!modelId1 && !modelVersionId) button.addEventListener("click", $9a7e0bde1a099030$var$downloadSingleImagesAndPrompts(buttonIdSelector));
+    // TODO: postIdしかないパターンもあった…
+    // https://civitai.com/images/978750?postId=257979
     button.id = $9a7e0bde1a099030$var$BUTTON_ID;
     button.innerText = (0, $966fc19e1e9bc989$export$d397f86d22f413e8)();
     button.setAttribute("style", (0, $292fc7f9388c589b$export$fd4d27a26b4854f3));
     if (document.querySelector(".mantine-Modal-modal")) document.querySelector(".mantine-Modal-modal .mantine-Card-cardSection")?.appendChild(button);
     else if (!document.querySelector("#gallery")) document.querySelector("#freezeBlock .mantine-Stack-root")?.appendChild(button);
-    button.click();
+    setTimeout(()=>{
+        button.click();
+    }, 500);
 };
 
 
@@ -13008,17 +13028,24 @@ const $2da5569f102e177a$var$getGalleryModelIdAndPostId = (href)=>{
     };
 };
 const $2da5569f102e177a$var$downloadAllModelRelatedFiles = (buttonIdSelector)=>async ()=>{
-        // start downloading a model
-        await (0, $0fccda82d33153ac$export$1a1c301579a08d1e)($2da5569f102e177a$var$downloadButtonSelector);
-        const modelUrl = document.querySelector($2da5569f102e177a$var$downloadButtonSelector)?.getAttribute("href");
-        if (modelUrl) window.open(modelUrl, "_blank");
         // save galleries as zip files
-        const clientHeight = document.querySelector("body")?.clientHeight;
-        if (clientHeight) window.scrollTo(0, clientHeight);
-        else document.querySelector("#gallery")?.scrollIntoView();
+        // const clientHeight = document.querySelector('body')?.clientHeight;
+        // if (clientHeight) {
+        //   window.scrollTo(0, clientHeight);
+        // } else {
+        //   document.querySelector('#gallery')?.scrollIntoView();
+        // }
         const galleryElementSelector = '#gallery a[href^="/images/"]';
         await (0, $0fccda82d33153ac$export$1a1c301579a08d1e)(galleryElementSelector);
         await (0, $0fccda82d33153ac$export$e772c8ff12451969)(1000);
+        // start downloading a model
+        await (0, $0fccda82d33153ac$export$1a1c301579a08d1e)($2da5569f102e177a$var$downloadButtonSelector);
+        const modelUrl = document.querySelector($2da5569f102e177a$var$downloadButtonSelector)?.getAttribute("href");
+        const fileSizeText = document.querySelector($2da5569f102e177a$var$downloadButtonSelector)?.innerHTML ?? "";
+        if (modelUrl && // モデルの場合はダウンロードしない
+        !fileSizeText.includes(" GB)")) setTimeout(()=>{
+            window.open(modelUrl, "_blank");
+        }, 0);
         const galleryLinks = document.querySelectorAll(galleryElementSelector);
         const postIdSet = new Set();
         await Promise.all([
@@ -13067,12 +13094,12 @@ const $29e4e9967394a818$var$addModelPreviewDownloadButton = async ()=>{
         await (0, $0fccda82d33153ac$export$e772c8ff12451969)(2000);
         if (!window.location.href.match(/\/models\/\d*/)) return;
         (0, $0fccda82d33153ac$export$bef1f36f5486a6a3)("model");
-        if ((0, $65c0cd2b2ec0988a$export$44487a86467333c3)("openShowMore")) $29e4e9967394a818$var$openShowMore(10);
+        if ((0, $65c0cd2b2ec0988a$export$44487a86467333c3)("openShowMore")) $29e4e9967394a818$var$openShowMore(20);
         await (0, $8d59c42601ba8f61$export$8b03a564a450b487)();
+        await (0, $2da5569f102e177a$export$3b6a8e903180e269)();
     } catch (error) {
         alert(error.message);
     }
-    await (0, $2da5569f102e177a$export$3b6a8e903180e269)();
 };
 const $29e4e9967394a818$var$addGalleryImageDownloadButton = async ()=>{
     try {
