@@ -10,6 +10,10 @@ This works for ViolentMokey in both Chrome and Firefox.
 
 ![download gallery images](./_screenshots/gallery.jpeg)
 
+![config](./_screenshots/config_panel.jpeg)
+
+![open config via ViolentMokey](./_screenshots/config_menu.png)
+
 ## ⚠️Caveats
 
 - You need to wait for a few seconds to see a button.

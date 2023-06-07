@@ -5,15 +5,14 @@ import {
   updateButtonText,
 } from './utils';
 import { getI18nLabel, getButtonLabel, getButtonCompleteLabel } from './lang';
-import { createZip, fetchModelData, fetchGalleryData } from './infra';
+import {
+  createZip,
+  fetchModelInfoByModleIdOrModelVersionId,
+  fetchGalleryData,
+} from './infra';
 import { getConfig } from './config_panel';
 
 const BUTTON_ID = 'download-all-images-and-prompts';
-
-const getModelInfo = async (modelId: string) => {
-  const modelInfo = await fetchModelData(modelId);
-  return modelInfo;
-};
 
 const getModeInfoAndImageList = async (href: string) => {
   const hrefModelId =
@@ -22,17 +21,19 @@ const getModeInfoAndImageList = async (href: string) => {
   const hrefModelVersionId = href.match(/modelVersionId=(?<modelVersionId>\d*)/)
     ?.groups?.modelVersionId;
 
-  if (!hrefModelId) {
-    throw new Error(getI18nLabel('modelIdNotFoundError'));
-  }
-
-  const modelInfo = await getModelInfo(hrefModelId);
+  const modelInfo = await fetchModelInfoByModleIdOrModelVersionId(
+    hrefModelId,
+    hrefModelVersionId
+  );
 
   const {
     id: modelId,
     name: modelName,
     creator: { username: username },
   } = modelInfo;
+
+  if (!modelId) {
+  }
 
   const modelVersionId = hrefModelVersionId
     ? hrefModelVersionId
