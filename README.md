@@ -12,7 +12,7 @@ This works for ViolentMokey in both Chrome and Firefox.
 
 ![config](./_screenshots/config_panel.jpeg)
 
-![open config via ViolentMokey](./_screenshots/config_menu.png)
+![open config via ViolentMokey](./_screenshots/config_menu.jpeg)
 
 ## ⚠️Caveats
 
