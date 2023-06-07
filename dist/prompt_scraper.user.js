@@ -102,45 +102,46 @@ const $0fccda82d33153ac$export$ce1398d1c23018fa = ()=>{
 const $0fccda82d33153ac$export$bb64a7e3f0f28938 = (button)=>(text)=>{
         button.innerText = text;
     };
-const $0fccda82d33153ac$export$92ecf871022de94d = (button, text)=>{
+const $0fccda82d33153ac$export$92ecf871022de94d = (button, text, style)=>{
     const disabledButton = document.createElement("div");
-    disabledButton.setAttribute("style", (0, $292fc7f9388c589b$export$dbe9a8011f5e5b2d));
+    disabledButton.setAttribute("style", style ?? (0, $292fc7f9388c589b$export$dbe9a8011f5e5b2d));
     disabledButton.id = button.id;
     disabledButton.innerText = text;
     button.parentNode?.replaceChild(disabledButton, button);
+};
+const $0fccda82d33153ac$export$df511617a3ec46cd = ()=>{
+    const data = $0fccda82d33153ac$export$ce1398d1c23018fa();
+    const images = data.props.pageProps.trpcState.json.queries[0];
+    return images.state.data.pages[0].items;
+};
+const $0fccda82d33153ac$export$5abe6706d40a9183 = ()=>{
+    const data = $0fccda82d33153ac$export$ce1398d1c23018fa();
+    const model = data.props.pageProps.trpcState.json.queries[1];
+    return model.state.data.id;
 }; // export const screenShot = async () => {
- //   const main = await waitForElement('main');
+ //    const main = await waitForElement('body');
  //
- //   if (!main) {
- //     return;
- //   }
- //   main.style.letterSpacing = '0.1rem';
+ //    if (!main) {
+ //      return;
+ //    }
+ //    main.style.letterSpacing = '0.1rem';
  //
- //   document.querySelectorAll('canvas').forEach((x) => x.remove());
- //   const canvas = await html2canvas(main, {
- //     allowTaint: true,
- //   });
+ //    document.querySelectorAll('canvas').forEach((x) => x.remove());
+ //    const canvas = await html2canvas(main, {
+ //      allowTaint: true,
+ //      useCORS: true,
+ //    });
  //
- //   const div = document.createElement('div');
- //   div.setAttribute('style', 'border: 1px solid red;');
- //   div.appendChild(canvas);
+ //    // saveAs(canvas.toDataURL(), 'test.png');
+ //    const div = document.createElement('div');
+ //    div.setAttribute('style', 'border: 1px solid red;');
+ //    div.appendChild(canvas);
  //
- //   document.body.appendChild(div);
+ //    document.body.appendChild(div);
  //
- //   main.style.letterSpacing = 'inherit';
- // };
+ //    main.style.letterSpacing = 'none';
+ //  };
  //
- // export const getImagesDataFromNextData = () => {
- //   const data = parseNextData();
- //   const images = data.props.pageProps.trpcState.json.queries[0];
- //   return images.state.data.pages[0].items;
- // };
- //
- // export const getModelIdFromNextData = () => {
- //   const data = parseNextData();
- //   const model = data.props.pageProps.trpcState.json.queries[1];
- //   return model.state.data.id;
- // };
 
 
 const $966fc19e1e9bc989$var$i18n = {
@@ -12729,6 +12730,12 @@ const $afa9fb8bb7aaf429$export$426617fe0a326605 = async (modelVersionId)=>{
     if (response.status >= 400) throw new Error(` ${response.status} ${response.statusText}`);
     return await response.json();
 };
+const $afa9fb8bb7aaf429$export$769102d94f147e19 = async (modelId, modelVersionId)=>{
+    const id = modelId ? modelId : modelVersionId ? (await $afa9fb8bb7aaf429$export$426617fe0a326605(modelVersionId)).modelId.toString() : "";
+    if (!id) throw new Error((0, $966fc19e1e9bc989$export$731a191155ffa90a)("modelIdNotFoundError"));
+    const modelInfo = await $afa9fb8bb7aaf429$export$998f418383804028(id);
+    return modelInfo;
+};
 const $afa9fb8bb7aaf429$export$c6ace8a485846f08 = async (modelId, postId, modelVersionId, username)=>{
     let url = `${$afa9fb8bb7aaf429$var$API_URL}/images`;
     let params = [
@@ -12822,16 +12829,12 @@ const $afa9fb8bb7aaf429$export$c1a4367d4847eb06 = ()=>{
 
 
 const $8d59c42601ba8f61$var$BUTTON_ID = "download-all-images-and-prompts";
-const $8d59c42601ba8f61$var$getModelInfo = async (modelId)=>{
-    const modelInfo = await (0, $afa9fb8bb7aaf429$export$998f418383804028)(modelId);
-    return modelInfo;
-};
 const $8d59c42601ba8f61$var$getModeInfoAndImageList = async (href)=>{
     const hrefModelId = href.match(/\/models\/(?<modelId>\d*)/)?.groups?.modelId ?? href.match(/modelId=(?<modelId>\d*)/)?.groups?.modelId;
     const hrefModelVersionId = href.match(/modelVersionId=(?<modelVersionId>\d*)/)?.groups?.modelVersionId;
-    if (!hrefModelId) throw new Error((0, $966fc19e1e9bc989$export$731a191155ffa90a)("modelIdNotFoundError"));
-    const modelInfo = await $8d59c42601ba8f61$var$getModelInfo(hrefModelId);
+    const modelInfo = await (0, $afa9fb8bb7aaf429$export$769102d94f147e19)(hrefModelId, hrefModelVersionId);
     const { id: modelId , name: modelName , creator: { username: username  }  } = modelInfo;
+    modelId;
     const modelVersionId = hrefModelVersionId ? hrefModelVersionId : modelInfo.modelVersions[0].id;
     if (!modelVersionId) throw new Error((0, $966fc19e1e9bc989$export$731a191155ffa90a)("modeVersionlIdNotFoundError"));
     const modelVersionName = modelInfo.modelVersions.find((x)=>{

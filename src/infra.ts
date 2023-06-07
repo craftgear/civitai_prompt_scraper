@@ -7,7 +7,7 @@ import {
   ModelVersionResponse,
   Config,
 } from './types';
-import { getButtonProgressLabel } from './lang';
+import { getButtonProgressLabel, getI18nLabel } from './lang';
 import { getConfig } from './config_panel';
 
 const extractFilebasenameFromImageUrl = (url: string) => {
@@ -44,6 +44,24 @@ export const fetchModelVersionData = async (modelVersionId: string) => {
     throw new Error(` ${response.status} ${response.statusText}`);
   }
   return (await response.json()) as ModelVersionResponse;
+};
+
+export const fetchModelInfoByModleIdOrModelVersionId = async (
+  modelId: string | undefined,
+  modelVersionId: string | undefined
+) => {
+  const id = modelId
+    ? modelId
+    : modelVersionId
+    ? (await fetchModelVersionData(modelVersionId)).modelId.toString()
+    : '';
+
+  if (!id) {
+    throw new Error(getI18nLabel('modelIdNotFoundError'));
+  }
+
+  const modelInfo = await fetchModelData(id);
+  return modelInfo;
 };
 
 export const fetchGalleryData = async (
