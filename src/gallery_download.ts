@@ -91,20 +91,23 @@ export const addGalleryDownloadButton = async () => {
       downloadImagesAndPrompts(buttonIdSelector)
     );
   }
-  // open gallery from a single image
-  if (!postId && !modelId && !modelVersionId) {
-    button.addEventListener(
-      'click',
-      downloadSingleImagesAndPrompts(buttonIdSelector)
-    );
-  }
   // open gallery from model gallery areas
-  if (postId) {
+  if (modelId && postId) {
     button.addEventListener(
       'click',
       downloadGalleryImagesAndPrompts(buttonIdSelector, modelId, postId)
     );
   }
+  // single image gallery
+  if (!modelId && !modelVersionId) {
+    button.addEventListener(
+      'click',
+      downloadSingleImagesAndPrompts(buttonIdSelector)
+    );
+  }
+
+  // TODO: there is also only "postId" urls like following:
+  // https://civitai.com/images/xxxxxx?postId=yyyyyyy
 
   button.id = BUTTON_ID;
   button.innerText = getButtonLabel();
