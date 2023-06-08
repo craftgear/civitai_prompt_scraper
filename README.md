@@ -13,19 +13,27 @@ This works for ViolentMokey in both Chrome and Firefox.
 
 Download button on a model page to dowlonad preview images, preview images' metadata and model metadata.
 
-![download model previews](./_screenshots/model.jpeg)
+<img src="./_screenshots/model.jpeg" width="50%" />
+
+  <br/>
 
 Download button on a gallery page to download images and images' metadata.
 
-![download gallery images](./_screenshots/gallery.jpeg)
+<img src="./_screenshots/gallery.jpeg" width="50%" />
+
+  <br/>
 
 Config panel.
 
-![config](./_screenshots/config_panel.jpeg)
+<img src="./_screenshots/config_panel.jpeg" width="50%" />
+
+  <br/>
 
 Access config panel from Violentmonkey.
 
-![open config via ViolentMokey](./_screenshots/config_menu.jpeg)
+<img src="./_screenshots/config_menu.jpeg" width="50%" />
+
+  <br/>
 
 ## ⚠️Caveats
 
