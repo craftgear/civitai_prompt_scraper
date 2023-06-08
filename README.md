@@ -5,7 +5,6 @@ Thi is an userscript to download images and metadata as a zip file.
 This works for ViolentMokey in both Chrome and Firefox.
 
   <br/>
-  <br/>
 
 ### **[Click here to install](https://github.com/craftgear/civitai_prompt_scraper/raw/main/dist/prompt_scraper.user.js)**.
 
