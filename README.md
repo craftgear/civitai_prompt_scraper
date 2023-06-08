@@ -6,7 +6,9 @@ This works for ViolentMokey in both Chrome and Firefox.
 
   <br/>
   <br/>
-### **[Click here to install](https://github.com/craftgear/civitai_prompt_scraper/raw/main/dist/prompt_scraper.user.js)**.  
+
+### **[Click here to install](https://github.com/craftgear/civitai_prompt_scraper/raw/main/dist/prompt_scraper.user.js)**.
+
   <br/>
   <br/>
 
