@@ -4,15 +4,36 @@ Thi is an userscript to download images and metadata as a zip file.
 
 This works for ViolentMokey in both Chrome and Firefox.
 
+  <br/>
+
 ### **[Click here to install](https://github.com/craftgear/civitai_prompt_scraper/raw/main/dist/prompt_scraper.user.js)**.
 
-![download model previews](./_screenshots/model.jpeg)
+  <br/>
+  <br/>
 
-![download gallery images](./_screenshots/gallery.jpeg)
+Download button on a model page to dowlonad preview images, preview images' metadata and model metadata.
 
-![config](./_screenshots/config_panel.jpeg)
+<img src="./_screenshots/model.jpeg" width="50%" />
 
-![open config via ViolentMokey](./_screenshots/config_menu.png)
+  <br/>
+
+Download button on a gallery page to download images and images' metadata.
+
+<img src="./_screenshots/gallery.jpeg" width="50%" />
+
+  <br/>
+
+Config panel.
+
+<img src="./_screenshots/config_panel.jpeg" width="50%" />
+
+  <br/>
+
+Access config panel from Violentmonkey.
+
+<img src="./_screenshots/config_menu.jpeg" width="50%" />
+
+  <br/>
 
 ## ⚠️Caveats
 
