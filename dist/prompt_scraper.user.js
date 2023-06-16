@@ -44,7 +44,7 @@ const $292fc7f9388c589b$export$2c795915441ef547 = `
 `;
 const $292fc7f9388c589b$export$fd4d27a26b4854f3 = `
   display: flex;
-  width: 100%;
+  width: auto;
   justify-content: center;
   align-items: center;
   color: white;
@@ -58,7 +58,7 @@ const $292fc7f9388c589b$export$fd4d27a26b4854f3 = `
 `;
 const $292fc7f9388c589b$export$dbe9a8011f5e5b2d = `
   display: flex;
-  width: 100%;
+  width: auto;
   justify-content: center;
   align-items: center;
   color: white;
@@ -102,45 +102,47 @@ const $0fccda82d33153ac$export$ce1398d1c23018fa = ()=>{
 const $0fccda82d33153ac$export$bb64a7e3f0f28938 = (button)=>(text)=>{
         button.innerText = text;
     };
-const $0fccda82d33153ac$export$92ecf871022de94d = (button, text)=>{
+const $0fccda82d33153ac$export$92ecf871022de94d = (button, text, style)=>{
     const disabledButton = document.createElement("div");
-    disabledButton.setAttribute("style", (0, $292fc7f9388c589b$export$dbe9a8011f5e5b2d));
+    disabledButton.setAttribute("style", style ?? (0, $292fc7f9388c589b$export$dbe9a8011f5e5b2d));
     disabledButton.id = button.id;
+    disabledButton.className = "disabled";
     disabledButton.innerText = text;
     button.parentNode?.replaceChild(disabledButton, button);
+};
+const $0fccda82d33153ac$export$df511617a3ec46cd = ()=>{
+    const data = $0fccda82d33153ac$export$ce1398d1c23018fa();
+    const images = data.props.pageProps.trpcState.json.queries[0];
+    return images.state.data.pages[0].items;
+};
+const $0fccda82d33153ac$export$5abe6706d40a9183 = ()=>{
+    const data = $0fccda82d33153ac$export$ce1398d1c23018fa();
+    const model = data.props.pageProps.trpcState.json.queries[1];
+    return model.state.data.id;
 }; // export const screenShot = async () => {
- //   const main = await waitForElement('main');
+ //    const main = await waitForElement('body');
  //
- //   if (!main) {
- //     return;
- //   }
- //   main.style.letterSpacing = '0.1rem';
+ //    if (!main) {
+ //      return;
+ //    }
+ //    main.style.letterSpacing = '0.1rem';
  //
- //   document.querySelectorAll('canvas').forEach((x) => x.remove());
- //   const canvas = await html2canvas(main, {
- //     allowTaint: true,
- //   });
+ //    document.querySelectorAll('canvas').forEach((x) => x.remove());
+ //    const canvas = await html2canvas(main, {
+ //      allowTaint: true,
+ //      useCORS: true,
+ //    });
  //
- //   const div = document.createElement('div');
- //   div.setAttribute('style', 'border: 1px solid red;');
- //   div.appendChild(canvas);
+ //    // saveAs(canvas.toDataURL(), 'test.png');
+ //    const div = document.createElement('div');
+ //    div.setAttribute('style', 'border: 1px solid red;');
+ //    div.appendChild(canvas);
  //
- //   document.body.appendChild(div);
+ //    document.body.appendChild(div);
  //
- //   main.style.letterSpacing = 'inherit';
- // };
+ //    main.style.letterSpacing = 'none';
+ //  };
  //
- // export const getImagesDataFromNextData = () => {
- //   const data = parseNextData();
- //   const images = data.props.pageProps.trpcState.json.queries[0];
- //   return images.state.data.pages[0].items;
- // };
- //
- // export const getModelIdFromNextData = () => {
- //   const data = parseNextData();
- //   const model = data.props.pageProps.trpcState.json.queries[1];
- //   return model.state.data.id;
- // };
 
 
 const $966fc19e1e9bc989$var$i18n = {
@@ -239,6 +241,12 @@ const $966fc19e1e9bc989$var$i18n = {
         ja: "設定値が見つかりません",
         "zh-CN": "未找到设定值",
         "zh-TW": "未找到設定值"
+    },
+    galleryAutoDownload: {
+        en: "automatically start downloading gallery images",
+        ja: "ギャラリーを自動でダウンロードする",
+        "zh-CN": "自动下载画廊",
+        "zh-TW": "自動下載畫廊"
     }
 };
 const $966fc19e1e9bc989$var$getLocale = ()=>{
@@ -12833,7 +12841,6 @@ const $8d59c42601ba8f61$var$getModeInfoAndImageList = async (href)=>{
     const hrefModelVersionId = href.match(/modelVersionId=(?<modelVersionId>\d*)/)?.groups?.modelVersionId;
     const modelInfo = await (0, $afa9fb8bb7aaf429$export$769102d94f147e19)(hrefModelId, hrefModelVersionId);
     const { id: modelId , name: modelName , creator: { username: username  }  } = modelInfo;
-    modelId;
     const modelVersionId = hrefModelVersionId ? hrefModelVersionId : modelInfo.modelVersions[0].id;
     if (!modelVersionId) throw new Error((0, $966fc19e1e9bc989$export$731a191155ffa90a)("modeVersionlIdNotFoundError"));
     const modelVersionName = modelInfo.modelVersions.find((x)=>{
@@ -12863,6 +12870,7 @@ const $8d59c42601ba8f61$export$53039d7a8d9d297e = (buttonIdSelector)=>async ()=>
                     url: x.url.replace(/width=\d*/, `width=${x.width},optimized=true`)
                 })));
             (0, $0fccda82d33153ac$export$92ecf871022de94d)(button, ` ${imageList.length} / ${imageList.length} ${(0, $966fc19e1e9bc989$export$4d9f09007b08c03d)()}`);
+            return imageList;
         } catch (error) {
             alert(error.message);
         }
@@ -12884,20 +12892,29 @@ const $8d59c42601ba8f61$export$8b03a564a450b487 = async ()=>{
 
 
 const $9a7e0bde1a099030$var$BUTTON_ID = "download-all-gallery-images-and-prompts";
-const $9a7e0bde1a099030$var$downloadGalleryImagesAndPrompts = (buttonIdSelector, modelId, postId)=>async ()=>{
+const $9a7e0bde1a099030$export$9473b35530fb3701 = (buttonIdSelector, modelId, postId, onFinishFn, downLoadedImgList)=>async ()=>{
         try {
-            const imgList = await (0, $afa9fb8bb7aaf429$export$c6ace8a485846f08)(modelId, postId);
+            const _imgList = await (0, $afa9fb8bb7aaf429$export$c6ace8a485846f08)(modelId, postId);
+            // ここでダウンロード済みの画像を弾く
+            const downloadedImgIds = downLoadedImgList?.map(({ id: id  })=>id) ?? [];
+            const imgList = _imgList.filter(({ id: id  })=>!downloadedImgIds.includes(id));
             const button = await (0, $0fccda82d33153ac$export$1a1c301579a08d1e)(buttonIdSelector);
             if (!button) return;
             const filenameFormat = (0, $65c0cd2b2ec0988a$export$44487a86467333c3)("galleryFilenameFormat");
             const filename = filenameFormat.replace("{modelId}", modelId ?? "").replace("{postId}", postId);
             await (0, $afa9fb8bb7aaf429$export$b6bc24646229cedd)((0, $0fccda82d33153ac$export$bb64a7e3f0f28938)(button))(filename)(imgList);
-            (0, $0fccda82d33153ac$export$92ecf871022de94d)(button, ` ${imgList.length} / ${imgList.length} ${(0, $966fc19e1e9bc989$export$4d9f09007b08c03d)()}`);
+            if (onFinishFn) onFinishFn();
+            else (0, $0fccda82d33153ac$export$92ecf871022de94d)(button, ` ${imgList.length} / ${imgList.length} ${(0, $966fc19e1e9bc989$export$4d9f09007b08c03d)()}`);
         } catch (error) {
             alert(error.message);
         }
     };
 const $9a7e0bde1a099030$export$5fd187c0d03a79e = async ()=>{
+    const buttonIdSelector = `#${$9a7e0bde1a099030$var$BUTTON_ID}`;
+    const existButton = document.querySelector(buttonIdSelector);
+    if ((0, $65c0cd2b2ec0988a$export$44487a86467333c3)("galleryAutoDownload") && existButton && existButton.className === "disabled") // オートダウンロード有効ですでにダウンロード済みの場合は何もしない
+    return;
+    else existButton?.remove();
     const href = window.location.href;
     const matchedModel = href.match(/modelId=(?<modelId>\d*)/);
     const matchedModelVersion = href.match(/modelVersionId=(?<modelVersionId>\d*)/);
@@ -12907,16 +12924,14 @@ const $9a7e0bde1a099030$export$5fd187c0d03a79e = async ()=>{
     const modelVersionId = matchedModelVersion?.groups?.modelVersionId || null;
     const postId = matchedPost?.groups?.postId || null;
     const prioritizedUserId = matchedPrioritizedUser?.groups?.prioritizedUserId || null;
-    const buttonIdSelector = `#${$9a7e0bde1a099030$var$BUTTON_ID}`;
-    document.querySelector(buttonIdSelector)?.remove();
     const button = document.createElement("button");
     const eventListener = (()=>{
         // open gallery from model preview images
         if (modelVersionId && prioritizedUserId) return (0, $8d59c42601ba8f61$export$53039d7a8d9d297e)(buttonIdSelector);
         // open gallery from model gallery areas
-        if (modelId && postId) return $9a7e0bde1a099030$var$downloadGalleryImagesAndPrompts(buttonIdSelector, modelId, postId);
+        if (modelId && postId) return $9a7e0bde1a099030$export$9473b35530fb3701(buttonIdSelector, modelId, postId);
         // open gallery from post pages
-        if (postId) return $9a7e0bde1a099030$var$downloadGalleryImagesAndPrompts(buttonIdSelector, null, postId);
+        if (postId) return $9a7e0bde1a099030$export$9473b35530fb3701(buttonIdSelector, null, postId);
         return null;
     })();
     if (!eventListener) throw new Error("No parameters found");
@@ -12926,6 +12941,9 @@ const $9a7e0bde1a099030$export$5fd187c0d03a79e = async ()=>{
     button.setAttribute("style", (0, $292fc7f9388c589b$export$fd4d27a26b4854f3));
     if (document.querySelector(".mantine-Modal-modal")) document.querySelector(".mantine-Modal-modal .mantine-Card-cardSection")?.appendChild(button);
     else if (!document.querySelector("#gallery")) document.querySelector("#freezeBlock .mantine-Stack-root")?.appendChild(button);
+    if ((0, $65c0cd2b2ec0988a$export$44487a86467333c3)("galleryAutoDownload")) setTimeout(()=>{
+        button.click();
+    }, 100);
 };
 
 
