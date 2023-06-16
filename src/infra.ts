@@ -199,7 +199,7 @@ export const createZip =
           break;
         }
       }
-      await sleep(100);
+      await sleep(10);
     }
 
     if (errors.length > 0) {
@@ -208,7 +208,10 @@ export const createZip =
       }
     }
 
-    saveAs(await zipWriter.close(undefined, {}), zipFilename);
+    const zipData = await zipWriter.close(undefined, {});
+    if (counter > 0) {
+      saveAs(zipData, zipFilename);
+    }
   };
 
 export const saveConfig = (config: Config) => {

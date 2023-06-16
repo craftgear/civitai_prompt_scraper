@@ -99,6 +99,8 @@ export const downloadImagesAndPrompts =
         button,
         ` ${imageList.length} / ${imageList.length} ${getButtonCompleteLabel()}`
       );
+
+      return imageList;
     } catch (error: unknown) {
       alert((error as Error).message);
     }

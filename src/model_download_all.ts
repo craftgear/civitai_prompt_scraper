@@ -1,16 +1,10 @@
 import {
   downloadAllButtonStyle,
-  downloadAllGalleryStyle,
-  downloadAllGalleryDoneStyle,
+  buttonStyle,
+  disabledButtonStyle,
 } from './styles';
-import {
-  // screenShot,
-  sleep,
-  waitForElement,
-  replaceWithDisabledButton,
-} from './utils';
-import { getI18nLabel, getButtonLabel, getButtonCompleteLabel } from './lang';
-// import { getConfig } from './config_panel';
+import { sleep, waitForElement, replaceWithDisabledButton } from './utils';
+import { /** getI18nLabel **/ getButtonCompleteLabel } from './lang';
 
 const BUTTON_ID = 'download-all-model-related-files';
 const downloadButtonSelector = "a[href^='/api/download/models/']";
@@ -21,9 +15,8 @@ import { downloadGalleryImagesAndPrompts } from './gallery_download';
 const getGalleryModelIdAndPostId = (href: string) => {
   const hrefModelId = href.match(/modelId=(?<modelId>\d*)/)?.groups?.modelId;
   const hrefPostId = href.match(/postId=(?<postId>\d*)/)?.groups?.postId;
-
   if (!hrefModelId || !hrefPostId) {
-    throw new Error(getI18nLabel('modelIdNotFoundError'));
+    throw new Error('Either modelId or postId found');
   }
 
   return {
@@ -33,6 +26,27 @@ const getGalleryModelIdAndPostId = (href: string) => {
 };
 
 const downloadAllModelRelatedFiles = (buttonIdSelector: string) => async () => {
+  // start downloading a model
+  await waitForElement(downloadButtonSelector);
+  const modelDownloadUrl = document
+    .querySelector(downloadButtonSelector)
+    ?.getAttribute('href');
+
+  const fileSizeText =
+    document.querySelector(downloadButtonSelector)?.innerHTML ?? '';
+  if (
+    modelDownloadUrl &&
+    // モデルの場合はダウンロードしない
+    !fileSizeText.includes(' GB)')
+  ) {
+    setTimeout(() => {
+      window.open(modelDownloadUrl, '_blank');
+    }, 0);
+  }
+
+  // save previews as a zip file
+  const previewImageList = await downloadImagesAndPrompts(buttonIdSelector)();
+
   // save galleries as zip files
   const clientHeight = document.querySelector('body')?.clientHeight;
   if (clientHeight) {
@@ -40,68 +54,59 @@ const downloadAllModelRelatedFiles = (buttonIdSelector: string) => async () => {
   } else {
     document.querySelector('#gallery')?.scrollIntoView();
   }
-
   const galleryElementSelector = '#gallery a[href^="/images/"]';
   await waitForElement(galleryElementSelector);
   await sleep(1000);
 
-  // start downloading a model
-  await waitForElement(downloadButtonSelector);
-  const modelUrl = document
-    .querySelector(downloadButtonSelector)
-    ?.getAttribute('href');
-  const fileSizeText =
-    document.querySelector(downloadButtonSelector)?.innerHTML ?? '';
-  if (
-    modelUrl &&
-    // モデルの場合はダウンロードしない
-    !fileSizeText.includes(' GB)')
-  ) {
-    setTimeout(() => {
-      window.open(modelUrl, '_blank');
-    }, 0);
-  }
-
   const galleryLinks = document.querySelectorAll(galleryElementSelector);
-  const postIdSet = new Set();
+  const postIds = (() => {
+    const postIdSet = new Set();
+    return Array.from(galleryLinks).reduce(
+      (acc: { modelId: string; postId: string; x: Element }[], x: Element) => {
+        const href = x.getAttribute('href');
+        if (!href) {
+          return acc;
+        }
+        const { modelId, postId } = getGalleryModelIdAndPostId(href);
+        if (!postId) {
+          return acc;
+        }
+        if (postIdSet.has(postId)) {
+          return acc;
+        }
+        postIdSet.add(postId);
+        return [...acc, { modelId, postId, x }];
+      },
+      []
+    );
+  })();
 
-  await Promise.all([
-    // save previews as a zip file
-    downloadImagesAndPrompts(buttonIdSelector)(),
-    // download gallery
-    ...Array.from(galleryLinks).map(async (x: Element, i: number) => {
-      const href = x.getAttribute('href');
-      if (!href) {
-        return;
-      }
-      const { modelId, postId } = getGalleryModelIdAndPostId(href);
-      if (postIdSet.has(postId)) {
-        return;
-      }
+  await Promise.all(
+    postIds.length === 1
+      ? []
+      : postIds.map(async ({ modelId, postId, x }, i: number) => {
+          const button = document.createElement('div');
+          button.id = `${BUTTON_ID}_${i}`;
+          button.innerText = `${modelId}_${postId}`;
+          button.setAttribute('style', buttonStyle);
+          x.parentNode?.parentNode?.appendChild(button);
 
-      const button = document.createElement('div');
-      button.id = `${BUTTON_ID}_${i}`;
-      button.innerText = `${modelId}_${postId}`;
-      button.setAttribute('style', downloadAllGalleryStyle);
-      document.querySelector('#gallery h2')?.parentNode?.appendChild(button);
-
-      postIdSet.add(postId);
-
-      const onFinishFn = () => {
-        replaceWithDisabledButton(
-          button,
-          `${postId} done`,
-          downloadAllGalleryDoneStyle
-        );
-      };
-      return downloadGalleryImagesAndPrompts(
-        `#${BUTTON_ID}_${i}`,
-        modelId,
-        postId,
-        onFinishFn
-      )();
-    }),
-  ]);
+          const onFinishFn = () => {
+            replaceWithDisabledButton(
+              button,
+              `${postId} ${getButtonCompleteLabel()}`,
+              disabledButtonStyle
+            );
+          };
+          return downloadGalleryImagesAndPrompts(
+            `#${BUTTON_ID}_${i}`,
+            modelId,
+            postId,
+            onFinishFn,
+            previewImageList
+          )();
+        })
+  );
 
   alert('done');
   console.warn('##### done #####');

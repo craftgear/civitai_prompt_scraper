@@ -124,21 +124,24 @@ type ImageStats = {
   heartCount: number;
   commentCount: number;
 };
+
+export type GalleryImage = {
+  id: number;
+  url: string;
+  hash: string;
+  width: number;
+  height: number;
+  nsfwLevel: string;
+  nsfw: boolean;
+  createdAt: string;
+  postId: number;
+  stats: ImageStats;
+  meta: ImageMetaData;
+  username: string;
+};
+
 export type GalleryImagesResponse = {
-  items: {
-    id: number;
-    url: string;
-    hash: string;
-    width: number;
-    height: number;
-    nsfwLevel: string;
-    nsfw: boolean;
-    createdAt: string;
-    postId: number;
-    stats: ImageStats;
-    meta: ImageMetaData;
-    username: string;
-  }[];
+  items: GalleryImage[];
   metadata: {
     totalItems: number;
     currentPage: number;

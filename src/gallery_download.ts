@@ -11,6 +11,8 @@ import { fetchGalleryData, createZip } from './infra';
 import { downloadImagesAndPrompts } from './model_image_download';
 import { getConfig } from './config_panel';
 
+import { GalleryImage } from './types';
+
 const BUTTON_ID = 'download-all-gallery-images-and-prompts';
 
 const downloadPreviewsAndPrompts =
@@ -49,11 +51,18 @@ export const downloadGalleryImagesAndPrompts =
     buttonIdSelector: string,
     modelId: string | null,
     postId: string,
-    onFinishFn?: Function
+    onFinishFn?: Function,
+    downLoadedImgList?: GalleryImage[]
   ) =>
   async () => {
     try {
-      const imgList = await fetchGalleryData(modelId, postId);
+      const _imgList = await fetchGalleryData(modelId, postId);
+
+      // ここでダウンロード済みの画像を弾く
+      const downloadedImgIds = downLoadedImgList?.map(({ id }) => id) ?? [];
+      const imgList = _imgList.filter(
+        ({ id }) => !downloadedImgIds.includes(id)
+      );
 
       const button = await waitForElement(buttonIdSelector);
       if (!button) {
