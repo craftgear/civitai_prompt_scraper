@@ -12897,26 +12897,6 @@ const $9a7e0bde1a099030$var$downloadGalleryImagesAndPrompts = (buttonIdSelector,
             alert(error.message);
         }
     };
-const $9a7e0bde1a099030$var$downloadSingleImagesAndPrompts = (buttonIdSelector)=>async ()=>{
-        try {
-            const data = (0, $0fccda82d33153ac$export$ce1398d1c23018fa)();
-            const model = data.props.pageProps.trpcState.json.queries[0];
-            const { id: id , url: url , meta: meta , width: width , name: name , hash: hash  } = model.state.data;
-            const imgUrl = (0, $0fccda82d33153ac$export$b56cc0ee0a85f41e)(url, width, name);
-            const button = await (0, $0fccda82d33153ac$export$1a1c301579a08d1e)(buttonIdSelector);
-            if (!button) return;
-            await (0, $afa9fb8bb7aaf429$export$b6bc24646229cedd)((0, $0fccda82d33153ac$export$bb64a7e3f0f28938)(button))(`imageId_${id}.zip`)([
-                {
-                    url: imgUrl,
-                    hash: hash,
-                    meta: meta
-                }
-            ]);
-            (0, $0fccda82d33153ac$export$92ecf871022de94d)(button, (0, $966fc19e1e9bc989$export$4d9f09007b08c03d)());
-        } catch (error) {
-            alert(error.message);
-        }
-    };
 const $9a7e0bde1a099030$export$5fd187c0d03a79e = async ()=>{
     const href = window.location.href;
     const matchedModel = href.match(/modelId=(?<modelId>\d*)/);
@@ -12930,14 +12910,17 @@ const $9a7e0bde1a099030$export$5fd187c0d03a79e = async ()=>{
     const buttonIdSelector = `#${$9a7e0bde1a099030$var$BUTTON_ID}`;
     document.querySelector(buttonIdSelector)?.remove();
     const button = document.createElement("button");
-    // open gallery from model preview images
-    if (modelVersionId && prioritizedUserId) button.addEventListener("click", (0, $8d59c42601ba8f61$export$53039d7a8d9d297e)(buttonIdSelector));
-    // open gallery from model gallery areas
-    if (modelId && postId) button.addEventListener("click", $9a7e0bde1a099030$var$downloadGalleryImagesAndPrompts(buttonIdSelector, modelId, postId));
-    // single image gallery
-    if (!modelId && !modelVersionId) button.addEventListener("click", $9a7e0bde1a099030$var$downloadSingleImagesAndPrompts(buttonIdSelector));
-    // TODO: there is also only "postId" urls like following:
-    // https://civitai.com/images/xxxxxx?postId=yyyyyyy
+    const eventListener = (()=>{
+        // open gallery from model preview images
+        if (modelVersionId && prioritizedUserId) return (0, $8d59c42601ba8f61$export$53039d7a8d9d297e)(buttonIdSelector);
+        // open gallery from model gallery areas
+        if (modelId && postId) return $9a7e0bde1a099030$var$downloadGalleryImagesAndPrompts(buttonIdSelector, modelId, postId);
+        // open gallery from post pages
+        if (postId) return $9a7e0bde1a099030$var$downloadGalleryImagesAndPrompts(buttonIdSelector, null, postId);
+        return null;
+    })();
+    if (!eventListener) throw new Error("No parameters found");
+    button.addEventListener("click", eventListener);
     button.id = $9a7e0bde1a099030$var$BUTTON_ID;
     button.innerText = (0, $966fc19e1e9bc989$export$d397f86d22f413e8)();
     button.setAttribute("style", (0, $292fc7f9388c589b$export$fd4d27a26b4854f3));

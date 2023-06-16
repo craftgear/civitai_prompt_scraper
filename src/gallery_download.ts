@@ -40,28 +40,33 @@ const downloadGalleryImagesAndPrompts =
     }
   };
 
-const downloadSingleImagesAndPrompts =
-  (buttonIdSelector: string) => async () => {
-    try {
-      const data = parseNextData();
-      const model = data.props.pageProps.trpcState.json.queries[0];
-      const { id, url, meta, width, name, hash } = model.state.data;
-      const imgUrl = buildImgUrl(url, width, name);
-
-      const button = await waitForElement(buttonIdSelector);
-      if (!button) {
-        return;
-      }
-
-      await createZip(updateButtonText(button))(`imageId_${id}.zip`)([
-        { url: imgUrl, hash, meta },
-      ]);
-
-      replaceWithDisabledButton(button, getButtonCompleteLabel());
-    } catch (error: unknown) {
-      alert((error as Error).message);
-    }
-  };
+// const downloadSingleImagesAndPrompts =
+//   (buttonIdSelector: string) => async () => {
+//     try {
+//       const data = parseNextData();
+//       const model = data.props.pageProps.trpcState.json.queries[0];
+//       const { id, url, meta, width, name, hash } = model.state.data;
+//       if (!url || !width || !name) {
+//         throw new Error(
+//           `image properties not found: url ${url}, width ${width}, name ${name}`
+//         );
+//       }
+//       const imgUrl = buildImgUrl(url, width, name);
+//
+//       const button = await waitForElement(buttonIdSelector);
+//       if (!button) {
+//         return;
+//       }
+//
+//       await createZip(updateButtonText(button))(`imageId_${id}.zip`)([
+//         { url: imgUrl, hash, meta },
+//       ]);
+//
+//       replaceWithDisabledButton(button, getButtonCompleteLabel());
+//     } catch (error: unknown) {
+//       alert((error as Error).message);
+//     }
+//   };
 
 export const addGalleryDownloadButton = async () => {
   const href = window.location.href;
@@ -84,30 +89,27 @@ export const addGalleryDownloadButton = async () => {
   document.querySelector(buttonIdSelector)?.remove();
   const button = document.createElement('button');
 
-  // open gallery from model preview images
-  if (modelVersionId && prioritizedUserId) {
-    button.addEventListener(
-      'click',
-      downloadImagesAndPrompts(buttonIdSelector)
-    );
-  }
-  // open gallery from model gallery areas
-  if (modelId && postId) {
-    button.addEventListener(
-      'click',
-      downloadGalleryImagesAndPrompts(buttonIdSelector, modelId, postId)
-    );
-  }
-  // single image gallery
-  if (!modelId && !modelVersionId) {
-    button.addEventListener(
-      'click',
-      downloadSingleImagesAndPrompts(buttonIdSelector)
-    );
+  const eventListener = (() => {
+    // open gallery from model preview images
+    if (modelVersionId && prioritizedUserId) {
+      return downloadImagesAndPrompts(buttonIdSelector);
+    }
+    // open gallery from model gallery areas
+    if (modelId && postId) {
+      return downloadGalleryImagesAndPrompts(buttonIdSelector, modelId, postId);
+    }
+    // open gallery from post pages
+    if (postId) {
+      return downloadGalleryImagesAndPrompts(buttonIdSelector, null, postId);
+    }
+    return null;
+  })();
+
+  if (!eventListener) {
+    throw new Error('No parameters found');
   }
 
-  // TODO: there is also only "postId" urls like following:
-  // https://civitai.com/images/xxxxxx?postId=yyyyyyy
+  button.addEventListener('click', eventListener);
 
   button.id = BUTTON_ID;
   button.innerText = getButtonLabel();
