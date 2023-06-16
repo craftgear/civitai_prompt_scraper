@@ -22,6 +22,14 @@ const fields = [
     style: 'margin-right: 0.5rem;',
   },
   {
+    type: 'checkbox',
+    name: 'galleryAutoDownload',
+    label: getI18nLabel('galleryAutoDownload'),
+    value: true,
+    desc: '',
+    style: 'margin-right: 0.5rem;',
+  },
+  {
     type: 'text',
     name: 'modelPreviewFilenameFormat',
     label: getI18nLabel('modelPreviewFilenameFormat'),

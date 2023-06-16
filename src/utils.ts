@@ -28,7 +28,8 @@ export const waitForElement = async (
 };
 
 export const buildImgUrl = (url: string, width: number, name?: string) =>
-  `https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/${url}/width=${width},optimized=true/${name ?? ''
+  `https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/${url}/width=${width},optimized=true/${
+    name ?? ''
   }`;
 
 export const parseNextData = () => {
@@ -51,6 +52,7 @@ export const replaceWithDisabledButton = (
   const disabledButton = document.createElement('div');
   disabledButton.setAttribute('style', style ?? disabledButtonStyle);
   disabledButton.id = button.id;
+  disabledButton.className = 'disabled';
   disabledButton.innerText = text;
   button.parentNode?.replaceChild(disabledButton, button);
 };
