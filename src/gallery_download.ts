@@ -125,10 +125,9 @@ export const addGalleryDownloadButton = async () => {
       ?.appendChild(button);
   }
 
-  // TODO: 自動ダウンロード開始設定を付ける
   if (getConfig('galleryAutoDownload')) {
     setTimeout(() => {
       button.click();
-    }, 500);
+    }, 100);
   }
 };
