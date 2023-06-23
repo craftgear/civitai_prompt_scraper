@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        Prompt Scraper - civitai.com
-// @version     1.2.2
+// @version     1.2.3
 // @namespace   https://github.com/craftgear/civitai_prompt_scraper
 // @description download images and prompts as a zip file
 // @license     MIT
@@ -47,6 +47,7 @@ const $292fc7f9388c589b$export$2c795915441ef547 = `
   flex-direction: column;
   padding: 1rem;
 
+  color: black;
   border: 1px solid silver;
   background: white;
   box-shadow: 2px 2px 5px silver;
@@ -84,7 +85,7 @@ const $292fc7f9388c589b$export$dbe9a8011f5e5b2d = `
 
 
 var $39e7bd012fbaed99$exports = {};
-$39e7bd012fbaed99$exports = JSON.parse('{"name":"civitai_prompt_scraper","browserslist":"> 5%, last 1 versions, not dead","version":"1.2.2","description":"","source":"src/prompt_scraper.user.ts","browser ":"dist/prompt_scraper.user.js","targets":{"default":{"context":"browser","sourceMap":false,"includeNodeModules":true,"optimize":true}},"scripts":{"type-check":"tsc --noEmit","lint":"eslint","format":"prettier --write .","watch":"parcel watch","build":"parcel build; zip -v -j ./dist/prompt_scraper.zip ./dist/prompt_scraper.user.js","clean":"rm ./dist/*","test":"echo \\"Error: no test specified\\" && exit 1"},"author":"Watanabe, Shunsuke","license":"MIT","devDependencies":{"@damoclark/parcel-optimizer-userscript":"^0.0.2","@parcel/packager-ts":"^2.8.3","@parcel/transformer-typescript-types":"^2.8.3","@tsconfig/recommended":"^1.0.2","@types/file-saver":"^2.0.5","@types/lodash":"^4.14.191","@typescript-eslint/eslint-plugin":"^5.52.0","@typescript-eslint/parser":"^5.52.0","@violentmonkey/types":"^0.1.5","eslint":"^8.34.0","eslint-config-standard-with-typescript":"^34.0.0","eslint-plugin-import":"^2.27.5","eslint-plugin-n":"^15.6.1","eslint-plugin-promise":"^6.1.1","parcel":"^2.8.3","prettier":"^2.8.4","rollup-plugin-cleanup":"^3.2.1","typescript":"^4.9.5"},"dependencies":{"@violentmonkey/url":"^0.1.0","@zip.js/zip.js":"^2.6.63","file-saver":"^2.0.5","html2canvas":"^1.4.1","lodash":"^4.17.21","wazip":"^0.1.0"}}');
+$39e7bd012fbaed99$exports = JSON.parse('{"name":"civitai_prompt_scraper","browserslist":"> 5%, last 1 versions, not dead","version":"1.2.3","description":"","source":"src/prompt_scraper.user.ts","browser ":"dist/prompt_scraper.user.js","targets":{"default":{"context":"browser","sourceMap":false,"includeNodeModules":true,"optimize":true}},"scripts":{"type-check":"tsc --noEmit","lint":"eslint","format":"prettier --write .","watch":"parcel watch","build":"parcel build; zip -v -j ./dist/prompt_scraper.zip ./dist/prompt_scraper.user.js","clean":"rm ./dist/*","test":"echo \\"Error: no test specified\\" && exit 1"},"author":"Watanabe, Shunsuke","license":"MIT","devDependencies":{"@damoclark/parcel-optimizer-userscript":"^0.0.2","@parcel/packager-ts":"^2.8.3","@parcel/transformer-typescript-types":"^2.8.3","@tsconfig/recommended":"^1.0.2","@types/file-saver":"^2.0.5","@types/lodash":"^4.14.191","@typescript-eslint/eslint-plugin":"^5.52.0","@typescript-eslint/parser":"^5.52.0","@violentmonkey/types":"^0.1.5","eslint":"^8.34.0","eslint-config-standard-with-typescript":"^34.0.0","eslint-plugin-import":"^2.27.5","eslint-plugin-n":"^15.6.1","eslint-plugin-promise":"^6.1.1","parcel":"^2.8.3","prettier":"^2.8.4","rollup-plugin-cleanup":"^3.2.1","typescript":"^4.9.5"},"dependencies":{"@violentmonkey/url":"^0.1.0","@zip.js/zip.js":"^2.6.63","file-saver":"^2.0.5","html2canvas":"^1.4.1","lodash":"^4.17.21","wazip":"^0.1.0"}}');
 
 
 
@@ -255,6 +256,12 @@ const $966fc19e1e9bc989$var$i18n = {
         ja: "ギャラリーを自動でダウンロードする",
         "zh-CN": "自动下载画廊",
         "zh-TW": "自動下載畫廊"
+    },
+    startingDownload: {
+        en: "download starting...",
+        ja: "ダウンロードを開始",
+        "zh-CN": "开始下载",
+        "zh-TW": "開始下載"
     }
 };
 const $966fc19e1e9bc989$var$getLocale = ()=>{
@@ -12857,9 +12864,9 @@ const $8d59c42601ba8f61$var$getModeInfoAndImageList = async (href)=>{
     const hrefModelVersionId = href.match(/modelVersionId=(?<modelVersionId>\d*)/)?.groups?.modelVersionId;
     const modelInfo = await (0, $afa9fb8bb7aaf429$export$769102d94f147e19)(hrefModelId, hrefModelVersionId);
     const { id: modelId , name: modelName , creator: { username: username  }  } = modelInfo;
-    modelId;
+    if (!modelId) throw new Error((0, $966fc19e1e9bc989$export$731a191155ffa90a)("modelIdNotFoundError"));
     const modelVersionId = hrefModelVersionId ? hrefModelVersionId : modelInfo.modelVersions[0].id;
-    if (!modelVersionId) throw new Error((0, $966fc19e1e9bc989$export$731a191155ffa90a)("modeVersionlIdNotFoundError"));
+    if (!modelVersionId) throw new Error((0, $966fc19e1e9bc989$export$731a191155ffa90a)("modelVersionIdNotFoundError"));
     const modelVersionName = modelInfo.modelVersions.find((x)=>{
         return `${x.id}` === `${modelVersionId}`;
     })?.name || "no_version_name";
@@ -12879,6 +12886,7 @@ const $8d59c42601ba8f61$export$53039d7a8d9d297e = (buttonIdSelector)=>async ()=>
         try {
             const button = await (0, $0fccda82d33153ac$export$1a1c301579a08d1e)(buttonIdSelector);
             if (!button) return;
+            button.innerText = (0, $966fc19e1e9bc989$export$731a191155ffa90a)("startingDownload");
             const { modelId: modelId , modelName: modelName , imageList: imageList , modelVersionId: modelVersionId , modelVersionName: modelVersionName , modelInfo: modelInfo  } = await $8d59c42601ba8f61$var$getModeInfoAndImageList(window.location.href);
             const filenameFormat = (0, $65c0cd2b2ec0988a$export$44487a86467333c3)("modelPreviewFilenameFormat");
             const filename = filenameFormat.replace("{modelId}", `${modelId ?? ""}`).replace("{modelName}", modelName).replace("{modelVersionId}", `${modelVersionId}`).replace("{modelVersionName}", modelVersionName);
@@ -12960,8 +12968,13 @@ const $9a7e0bde1a099030$export$5fd187c0d03a79e = async ()=>{
     button.innerText = (0, $966fc19e1e9bc989$export$d397f86d22f413e8)();
     button.setAttribute("style", (0, $292fc7f9388c589b$export$fd4d27a26b4854f3));
     button.setAttribute("data-state", (0, $a5923d2edfc72bc5$export$5d7ba7f5550f99d1).ready);
-    if (document.querySelector(".mantine-Modal-modal")) document.querySelector(".mantine-Modal-modal .mantine-Card-cardSection")?.appendChild(button);
-    else if (!document.querySelector("#gallery")) document.querySelector("#freezeBlock .mantine-Stack-root")?.appendChild(button);
+    if (document.querySelector(".mantine-Modal-modal")) {
+        const parentNode = await (0, $0fccda82d33153ac$export$1a1c301579a08d1e)(".mantine-Modal-modal .mantine-Card-cardSection");
+        parentNode?.appendChild(button);
+    } else if (!document.querySelector("#gallery")) {
+        const parentNode = await (0, $0fccda82d33153ac$export$1a1c301579a08d1e)("#freezeBlock .mantine-Stack-root");
+        parentNode?.appendChild(button);
+    }
     if ((0, $65c0cd2b2ec0988a$export$44487a86467333c3)("galleryAutoDownload") && button.getAttribute("data-state") === (0, $a5923d2edfc72bc5$export$5d7ba7f5550f99d1).ready) setTimeout(()=>{
         button.click();
     }, 0);
