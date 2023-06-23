@@ -83,7 +83,9 @@ export const addGalleryDownloadButton = async () => {
   if (_button && _button.getAttribute('data-state') !== ButtonState.ready) {
     return;
   }
-  _button?.remove();
+  if (_button) {
+    _button?.remove();
+  }
 
   const { modelVersionId, prioritizedUserId, modelId, postId } =
     extractIdsFromUrl(window.location.href);
@@ -117,13 +119,13 @@ export const addGalleryDownloadButton = async () => {
   button.setAttribute('style', buttonStyle);
   button.setAttribute('data-state', ButtonState.ready);
   if (document.querySelector('.mantine-Modal-modal')) {
-    document
-      .querySelector('.mantine-Modal-modal .mantine-Card-cardSection')
-      ?.appendChild(button);
+    const parentNode = await waitForElement(
+      '.mantine-Modal-modal .mantine-Card-cardSection'
+    );
+    parentNode?.appendChild(button);
   } else if (!document.querySelector('#gallery')) {
-    document
-      .querySelector('#freezeBlock .mantine-Stack-root')
-      ?.appendChild(button);
+    const parentNode = await waitForElement('#freezeBlock .mantine-Stack-root');
+    parentNode?.appendChild(button);
   }
 
   if (
