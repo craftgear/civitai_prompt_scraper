@@ -128,6 +128,6 @@ export const addGalleryDownloadButton = async () => {
   if (getConfig('galleryAutoDownload')) {
     setTimeout(() => {
       button.click();
-    }, 100);
+    }, 0);
   }
 };
