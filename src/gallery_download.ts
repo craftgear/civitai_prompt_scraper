@@ -5,7 +5,7 @@ import {
   replaceWithDisabledButton,
   updateButtonText,
 } from './utils';
-import { getButtonLabel, getButtonCompleteLabel } from './lang';
+import { getI18nLabel, getButtonLabel, getButtonCompleteLabel } from './lang';
 import { fetchGalleryData, createZip } from './infra';
 import { downloadImagesAndPrompts } from './model_image_download';
 import { getConfig } from './config_panel';
@@ -37,6 +37,7 @@ export const downloadGalleryImagesAndPrompts =
         return;
       }
       button.setAttribute('data-state', 'in-progress');
+      button.innerText = getI18nLabel('startingDownload');
 
       const filenameFormat = getConfig('galleryFilenameFormat');
       const filename = (filenameFormat as string)

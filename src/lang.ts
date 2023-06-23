@@ -103,6 +103,12 @@ const i18n: {
     'zh-CN': '自动下载画廊',
     'zh-TW': '自動下載畫廊',
   },
+  startingDownload: {
+    en: 'download starting...',
+    ja: 'ダウンロードを開始',
+    'zh-CN': '开始下载',
+    'zh-TW': '開始下載',
+  },
 };
 
 const getLocale = () => {

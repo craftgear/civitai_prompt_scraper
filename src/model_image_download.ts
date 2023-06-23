@@ -32,12 +32,16 @@ const getModeInfoAndImageList = async (href: string) => {
     creator: { username: username },
   } = modelInfo;
 
+  if (!modelId) {
+    throw new Error(getI18nLabel('modelIdNotFoundError'));
+  }
+
   const modelVersionId = hrefModelVersionId
     ? hrefModelVersionId
     : modelInfo.modelVersions[0].id;
 
   if (!modelVersionId) {
-    throw new Error(getI18nLabel('modeVersionlIdNotFoundError'));
+    throw new Error(getI18nLabel('modelVersionIdNotFoundError'));
   }
 
   const modelVersionName =
@@ -71,6 +75,8 @@ export const downloadImagesAndPrompts =
       if (!button) {
         return;
       }
+
+      button.innerText = getI18nLabel('startingDownload');
 
       const {
         modelId,
