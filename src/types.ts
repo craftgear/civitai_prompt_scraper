@@ -169,3 +169,9 @@ export type Config = {
   [key in 'modelPreviewFilenameFormat' | 'galleryFilenameFormat']: string;
 };
 export type ConfigKey = keyof Config;
+
+export enum ButtonState {
+  ready = 'ready',
+  inProgress = 'in-progress',
+  done = 'done',
+}

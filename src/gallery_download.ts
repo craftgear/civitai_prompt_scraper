@@ -1,8 +1,7 @@
+import { ButtonState } from './types';
 import { buttonStyle } from './styles';
 import {
   waitForElement,
-  // parseNextData,
-  // buildImgUrl,
   replaceWithDisabledButton,
   updateButtonText,
 } from './utils';
@@ -37,6 +36,7 @@ export const downloadGalleryImagesAndPrompts =
       if (!button) {
         return;
       }
+      button.setAttribute('data-state', 'in-progress');
 
       const filenameFormat = getConfig('galleryFilenameFormat');
       const filename = (filenameFormat as string)
@@ -58,21 +58,7 @@ export const downloadGalleryImagesAndPrompts =
     }
   };
 
-export const addGalleryDownloadButton = async () => {
-  const buttonIdSelector = `#${BUTTON_ID}`;
-  const existButton = document.querySelector(buttonIdSelector);
-  if (
-    getConfig('galleryAutoDownload') &&
-    existButton &&
-    existButton.className === 'disabled'
-  ) {
-    // オートダウンロード有効ですでにダウンロード済みの場合は何もしない
-    return;
-  } else {
-    existButton?.remove();
-  }
-
-  const href = window.location.href;
+const extractIdsFromUrl = (href: string) => {
   const matchedModel = href.match(/modelId=(?<modelId>\d*)/);
   const matchedModelVersion = href.match(
     /modelVersionId=(?<modelVersionId>\d*)/
@@ -87,6 +73,20 @@ export const addGalleryDownloadButton = async () => {
   const postId = matchedPost?.groups?.postId || null;
   const prioritizedUserId =
     matchedPrioritizedUser?.groups?.prioritizedUserId || null;
+
+  return { modelVersionId, prioritizedUserId, modelId, postId };
+};
+
+export const addGalleryDownloadButton = async () => {
+  const buttonIdSelector = `#${BUTTON_ID}`;
+  const _button = document.querySelector(buttonIdSelector);
+  if (_button && _button.getAttribute('data-state') !== ButtonState.ready) {
+    return;
+  }
+  _button?.remove();
+
+  const { modelVersionId, prioritizedUserId, modelId, postId } =
+    extractIdsFromUrl(window.location.href);
 
   const button = document.createElement('button');
 
@@ -107,7 +107,7 @@ export const addGalleryDownloadButton = async () => {
   })();
 
   if (!eventListener) {
-    throw new Error('No parameters found');
+    throw new Error('No necessary parameters found');
   }
 
   button.addEventListener('click', eventListener);
@@ -115,6 +115,7 @@ export const addGalleryDownloadButton = async () => {
   button.id = BUTTON_ID;
   button.innerText = getButtonLabel();
   button.setAttribute('style', buttonStyle);
+  button.setAttribute('data-state', ButtonState.ready);
   if (document.querySelector('.mantine-Modal-modal')) {
     document
       .querySelector('.mantine-Modal-modal .mantine-Card-cardSection')
@@ -125,7 +126,10 @@ export const addGalleryDownloadButton = async () => {
       ?.appendChild(button);
   }
 
-  if (getConfig('galleryAutoDownload')) {
+  if (
+    getConfig('galleryAutoDownload') &&
+    button.getAttribute('data-state') === ButtonState.ready
+  ) {
     setTimeout(() => {
       button.click();
     }, 0);
