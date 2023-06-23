@@ -1,3 +1,4 @@
+import { ButtonState } from './types';
 // import html2canvas from 'html2canvas';
 import { NextData } from './types';
 import pkg from '../package.json';
@@ -51,6 +52,7 @@ export const replaceWithDisabledButton = (
   disabledButton.setAttribute('style', disabledButtonStyle);
   disabledButton.id = button.id;
   disabledButton.innerText = text;
+  disabledButton.setAttribute('data-state', ButtonState.done);
   button.parentNode?.replaceChild(disabledButton, button);
 };
 

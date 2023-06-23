@@ -1,9 +1,10 @@
 // ==UserScript==
 // @name        Prompt Scraper - civitai.com
-// @version     1.2
+// @version     1.2.1
 // @namespace   https://github.com/craftgear/civitai_prompt_scraper
 // @description download images and prompts as a zip file
 // @license     MIT
+// @downloadURL https://github.com/craftgear/civitai_prompt_scraper/raw/main/dist/prompt_scraper.user.js
 // @supportURL  https://github.com/craftgear/civitai_prompt_scraper/issues
 // @match       https://civitai.com/*
 // @run-at      document-idle
@@ -26,6 +27,14 @@ typeof globalThis !== 'undefined'
   : typeof global !== 'undefined'
   ? global
   : {};
+let $a5923d2edfc72bc5$export$5d7ba7f5550f99d1;
+(function(ButtonState) {
+    ButtonState["ready"] = "ready";
+    ButtonState["inProgress"] = "in-progress";
+    ButtonState["done"] = "done";
+})($a5923d2edfc72bc5$export$5d7ba7f5550f99d1 || ($a5923d2edfc72bc5$export$5d7ba7f5550f99d1 = {}));
+
+
 const $292fc7f9388c589b$export$2c795915441ef547 = `
   z-index: 100;
   position: fixed;
@@ -44,7 +53,7 @@ const $292fc7f9388c589b$export$2c795915441ef547 = `
 `;
 const $292fc7f9388c589b$export$fd4d27a26b4854f3 = `
   display: flex;
-  width: auto;
+  width: 100%;
   justify-content: center;
   align-items: center;
   color: white;
@@ -58,7 +67,7 @@ const $292fc7f9388c589b$export$fd4d27a26b4854f3 = `
 `;
 const $292fc7f9388c589b$export$dbe9a8011f5e5b2d = `
   display: flex;
-  width: auto;
+  width: 100%;
   justify-content: center;
   align-items: center;
   color: white;
@@ -73,9 +82,9 @@ const $292fc7f9388c589b$export$dbe9a8011f5e5b2d = `
 `;
 
 
-// import html2canvas from 'html2canvas';
+
 var $39e7bd012fbaed99$exports = {};
-$39e7bd012fbaed99$exports = JSON.parse('{"name":"civitai_prompt_scraper","browserslist":"> 5%, last 1 versions, not dead","version":"1.0.1","description":"","source":"src/prompt_scraper.user.ts","browser ":"dist/prompt_scraper.user.js","targets":{"default":{"context":"browser","sourceMap":false,"includeNodeModules":true,"optimize":true}},"scripts":{"type-check":"tsc --noEmit","lint":"eslint","format":"prettier --write .","watch":"parcel watch","build":"parcel build; zip -v -j ./dist/prompt_scraper.zip ./dist/prompt_scraper.user.js","clean":"rm ./dist/*","test":"echo \\"Error: no test specified\\" && exit 1"},"author":"Watanabe, Shunsuke","license":"MIT","devDependencies":{"@damoclark/parcel-optimizer-userscript":"^0.0.2","@parcel/packager-ts":"^2.8.3","@parcel/transformer-typescript-types":"^2.8.3","@tsconfig/recommended":"^1.0.2","@types/file-saver":"^2.0.5","@types/lodash":"^4.14.191","@typescript-eslint/eslint-plugin":"^5.52.0","@typescript-eslint/parser":"^5.52.0","@violentmonkey/types":"^0.1.5","eslint":"^8.34.0","eslint-config-standard-with-typescript":"^34.0.0","eslint-plugin-import":"^2.27.5","eslint-plugin-n":"^15.6.1","eslint-plugin-promise":"^6.1.1","parcel":"^2.8.3","prettier":"^2.8.4","rollup-plugin-cleanup":"^3.2.1","typescript":"^4.9.5"},"dependencies":{"@violentmonkey/url":"^0.1.0","@zip.js/zip.js":"^2.6.63","file-saver":"^2.0.5","html2canvas":"^1.4.1","lodash":"^4.17.21","wazip":"^0.1.0"}}');
+$39e7bd012fbaed99$exports = JSON.parse('{"name":"civitai_prompt_scraper","browserslist":"> 5%, last 1 versions, not dead","version":"1.2.1","description":"","source":"src/prompt_scraper.user.ts","browser ":"dist/prompt_scraper.user.js","targets":{"default":{"context":"browser","sourceMap":false,"includeNodeModules":true,"optimize":true}},"scripts":{"type-check":"tsc --noEmit","lint":"eslint","format":"prettier --write .","watch":"parcel watch","build":"parcel build; zip -v -j ./dist/prompt_scraper.zip ./dist/prompt_scraper.user.js","clean":"rm ./dist/*","test":"echo \\"Error: no test specified\\" && exit 1"},"author":"Watanabe, Shunsuke","license":"MIT","devDependencies":{"@damoclark/parcel-optimizer-userscript":"^0.0.2","@parcel/packager-ts":"^2.8.3","@parcel/transformer-typescript-types":"^2.8.3","@tsconfig/recommended":"^1.0.2","@types/file-saver":"^2.0.5","@types/lodash":"^4.14.191","@typescript-eslint/eslint-plugin":"^5.52.0","@typescript-eslint/parser":"^5.52.0","@violentmonkey/types":"^0.1.5","eslint":"^8.34.0","eslint-config-standard-with-typescript":"^34.0.0","eslint-plugin-import":"^2.27.5","eslint-plugin-n":"^15.6.1","eslint-plugin-promise":"^6.1.1","parcel":"^2.8.3","prettier":"^2.8.4","rollup-plugin-cleanup":"^3.2.1","typescript":"^4.9.5"},"dependencies":{"@violentmonkey/url":"^0.1.0","@zip.js/zip.js":"^2.6.63","file-saver":"^2.0.5","html2canvas":"^1.4.1","lodash":"^4.17.21","wazip":"^0.1.0"}}');
 
 
 
@@ -102,47 +111,46 @@ const $0fccda82d33153ac$export$ce1398d1c23018fa = ()=>{
 const $0fccda82d33153ac$export$bb64a7e3f0f28938 = (button)=>(text)=>{
         button.innerText = text;
     };
-const $0fccda82d33153ac$export$92ecf871022de94d = (button, text, style)=>{
+const $0fccda82d33153ac$export$92ecf871022de94d = (button, text)=>{
     const disabledButton = document.createElement("div");
-    disabledButton.setAttribute("style", style ?? (0, $292fc7f9388c589b$export$dbe9a8011f5e5b2d));
+    disabledButton.setAttribute("style", (0, $292fc7f9388c589b$export$dbe9a8011f5e5b2d));
     disabledButton.id = button.id;
-    disabledButton.className = "disabled";
     disabledButton.innerText = text;
+    disabledButton.setAttribute("data-state", (0, $a5923d2edfc72bc5$export$5d7ba7f5550f99d1).done);
     button.parentNode?.replaceChild(disabledButton, button);
-};
-const $0fccda82d33153ac$export$df511617a3ec46cd = ()=>{
-    const data = $0fccda82d33153ac$export$ce1398d1c23018fa();
-    const images = data.props.pageProps.trpcState.json.queries[0];
-    return images.state.data.pages[0].items;
-};
-const $0fccda82d33153ac$export$5abe6706d40a9183 = ()=>{
-    const data = $0fccda82d33153ac$export$ce1398d1c23018fa();
-    const model = data.props.pageProps.trpcState.json.queries[1];
-    return model.state.data.id;
 }; // export const screenShot = async () => {
- //    const main = await waitForElement('body');
+ //   const main = await waitForElement('main');
  //
- //    if (!main) {
- //      return;
- //    }
- //    main.style.letterSpacing = '0.1rem';
+ //   if (!main) {
+ //     return;
+ //   }
+ //   main.style.letterSpacing = '0.1rem';
  //
- //    document.querySelectorAll('canvas').forEach((x) => x.remove());
- //    const canvas = await html2canvas(main, {
- //      allowTaint: true,
- //      useCORS: true,
- //    });
+ //   document.querySelectorAll('canvas').forEach((x) => x.remove());
+ //   const canvas = await html2canvas(main, {
+ //     allowTaint: true,
+ //   });
  //
- //    // saveAs(canvas.toDataURL(), 'test.png');
- //    const div = document.createElement('div');
- //    div.setAttribute('style', 'border: 1px solid red;');
- //    div.appendChild(canvas);
+ //   const div = document.createElement('div');
+ //   div.setAttribute('style', 'border: 1px solid red;');
+ //   div.appendChild(canvas);
  //
- //    document.body.appendChild(div);
+ //   document.body.appendChild(div);
  //
- //    main.style.letterSpacing = 'none';
- //  };
+ //   main.style.letterSpacing = 'inherit';
+ // };
  //
+ // export const getImagesDataFromNextData = () => {
+ //   const data = parseNextData();
+ //   const images = data.props.pageProps.trpcState.json.queries[0];
+ //   return images.state.data.pages[0].items;
+ // };
+ //
+ // export const getModelIdFromNextData = () => {
+ //   const data = parseNextData();
+ //   const model = data.props.pageProps.trpcState.json.queries[1];
+ //   return model.state.data.id;
+ // };
 
 
 const $966fc19e1e9bc989$var$i18n = {
@@ -12592,6 +12600,14 @@ const $65c0cd2b2ec0988a$var$fields = [
         style: "margin-right: 0.5rem;"
     },
     {
+        type: "checkbox",
+        name: "galleryAutoDownload",
+        label: (0, $966fc19e1e9bc989$export$731a191155ffa90a)("galleryAutoDownload"),
+        value: true,
+        desc: "",
+        style: "margin-right: 0.5rem;"
+    },
+    {
         type: "text",
         name: "modelPreviewFilenameFormat",
         label: (0, $966fc19e1e9bc989$export$731a191155ffa90a)("modelPreviewFilenameFormat"),
@@ -12841,6 +12857,7 @@ const $8d59c42601ba8f61$var$getModeInfoAndImageList = async (href)=>{
     const hrefModelVersionId = href.match(/modelVersionId=(?<modelVersionId>\d*)/)?.groups?.modelVersionId;
     const modelInfo = await (0, $afa9fb8bb7aaf429$export$769102d94f147e19)(hrefModelId, hrefModelVersionId);
     const { id: modelId , name: modelName , creator: { username: username  }  } = modelInfo;
+    modelId;
     const modelVersionId = hrefModelVersionId ? hrefModelVersionId : modelInfo.modelVersions[0].id;
     if (!modelVersionId) throw new Error((0, $966fc19e1e9bc989$export$731a191155ffa90a)("modeVersionlIdNotFoundError"));
     const modelVersionName = modelInfo.modelVersions.find((x)=>{
@@ -12870,7 +12887,6 @@ const $8d59c42601ba8f61$export$53039d7a8d9d297e = (buttonIdSelector)=>async ()=>
                     url: x.url.replace(/width=\d*/, `width=${x.width},optimized=true`)
                 })));
             (0, $0fccda82d33153ac$export$92ecf871022de94d)(button, ` ${imageList.length} / ${imageList.length} ${(0, $966fc19e1e9bc989$export$4d9f09007b08c03d)()}`);
-            return imageList;
         } catch (error) {
             alert(error.message);
         }
@@ -12892,30 +12908,21 @@ const $8d59c42601ba8f61$export$8b03a564a450b487 = async ()=>{
 
 
 const $9a7e0bde1a099030$var$BUTTON_ID = "download-all-gallery-images-and-prompts";
-const $9a7e0bde1a099030$export$9473b35530fb3701 = (buttonIdSelector, modelId, postId, onFinishFn, downLoadedImgList)=>async ()=>{
+const $9a7e0bde1a099030$var$downloadGalleryImagesAndPrompts = (buttonIdSelector, modelId, postId)=>async ()=>{
         try {
-            const _imgList = await (0, $afa9fb8bb7aaf429$export$c6ace8a485846f08)(modelId, postId);
-            // ここでダウンロード済みの画像を弾く
-            const downloadedImgIds = downLoadedImgList?.map(({ id: id  })=>id) ?? [];
-            const imgList = _imgList.filter(({ id: id  })=>!downloadedImgIds.includes(id));
+            const imgList = await (0, $afa9fb8bb7aaf429$export$c6ace8a485846f08)(modelId, postId);
             const button = await (0, $0fccda82d33153ac$export$1a1c301579a08d1e)(buttonIdSelector);
             if (!button) return;
+            button.setAttribute("data-state", "in-progress");
             const filenameFormat = (0, $65c0cd2b2ec0988a$export$44487a86467333c3)("galleryFilenameFormat");
             const filename = filenameFormat.replace("{modelId}", modelId ?? "").replace("{postId}", postId);
             await (0, $afa9fb8bb7aaf429$export$b6bc24646229cedd)((0, $0fccda82d33153ac$export$bb64a7e3f0f28938)(button))(filename)(imgList);
-            if (onFinishFn) onFinishFn();
-            else (0, $0fccda82d33153ac$export$92ecf871022de94d)(button, ` ${imgList.length} / ${imgList.length} ${(0, $966fc19e1e9bc989$export$4d9f09007b08c03d)()}`);
+            (0, $0fccda82d33153ac$export$92ecf871022de94d)(button, ` ${imgList.length} / ${imgList.length} ${(0, $966fc19e1e9bc989$export$4d9f09007b08c03d)()}`);
         } catch (error) {
             alert(error.message);
         }
     };
-const $9a7e0bde1a099030$export$5fd187c0d03a79e = async ()=>{
-    const buttonIdSelector = `#${$9a7e0bde1a099030$var$BUTTON_ID}`;
-    const existButton = document.querySelector(buttonIdSelector);
-    if ((0, $65c0cd2b2ec0988a$export$44487a86467333c3)("galleryAutoDownload") && existButton && existButton.className === "disabled") // オートダウンロード有効ですでにダウンロード済みの場合は何もしない
-    return;
-    else existButton?.remove();
-    const href = window.location.href;
+const $9a7e0bde1a099030$var$extractIdsFromUrl = (href)=>{
     const matchedModel = href.match(/modelId=(?<modelId>\d*)/);
     const matchedModelVersion = href.match(/modelVersionId=(?<modelVersionId>\d*)/);
     const matchedPost = href.match(/postId=(?<postId>\d*)/);
@@ -12924,26 +12931,40 @@ const $9a7e0bde1a099030$export$5fd187c0d03a79e = async ()=>{
     const modelVersionId = matchedModelVersion?.groups?.modelVersionId || null;
     const postId = matchedPost?.groups?.postId || null;
     const prioritizedUserId = matchedPrioritizedUser?.groups?.prioritizedUserId || null;
+    return {
+        modelVersionId: modelVersionId,
+        prioritizedUserId: prioritizedUserId,
+        modelId: modelId,
+        postId: postId
+    };
+};
+const $9a7e0bde1a099030$export$5fd187c0d03a79e = async ()=>{
+    const buttonIdSelector = `#${$9a7e0bde1a099030$var$BUTTON_ID}`;
+    const _button = document.querySelector(buttonIdSelector);
+    if (_button && _button.getAttribute("data-state") !== (0, $a5923d2edfc72bc5$export$5d7ba7f5550f99d1).ready) return;
+    _button?.remove();
+    const { modelVersionId: modelVersionId , prioritizedUserId: prioritizedUserId , modelId: modelId , postId: postId  } = $9a7e0bde1a099030$var$extractIdsFromUrl(window.location.href);
     const button = document.createElement("button");
     const eventListener = (()=>{
         // open gallery from model preview images
         if (modelVersionId && prioritizedUserId) return (0, $8d59c42601ba8f61$export$53039d7a8d9d297e)(buttonIdSelector);
         // open gallery from model gallery areas
-        if (modelId && postId) return $9a7e0bde1a099030$export$9473b35530fb3701(buttonIdSelector, modelId, postId);
+        if (modelId && postId) return $9a7e0bde1a099030$var$downloadGalleryImagesAndPrompts(buttonIdSelector, modelId, postId);
         // open gallery from post pages
-        if (postId) return $9a7e0bde1a099030$export$9473b35530fb3701(buttonIdSelector, null, postId);
+        if (postId) return $9a7e0bde1a099030$var$downloadGalleryImagesAndPrompts(buttonIdSelector, null, postId);
         return null;
     })();
-    if (!eventListener) throw new Error("No parameters found");
+    if (!eventListener) throw new Error("No necessary parameters found");
     button.addEventListener("click", eventListener);
     button.id = $9a7e0bde1a099030$var$BUTTON_ID;
     button.innerText = (0, $966fc19e1e9bc989$export$d397f86d22f413e8)();
     button.setAttribute("style", (0, $292fc7f9388c589b$export$fd4d27a26b4854f3));
+    button.setAttribute("data-state", (0, $a5923d2edfc72bc5$export$5d7ba7f5550f99d1).ready);
     if (document.querySelector(".mantine-Modal-modal")) document.querySelector(".mantine-Modal-modal .mantine-Card-cardSection")?.appendChild(button);
     else if (!document.querySelector("#gallery")) document.querySelector("#freezeBlock .mantine-Stack-root")?.appendChild(button);
-    if ((0, $65c0cd2b2ec0988a$export$44487a86467333c3)("galleryAutoDownload")) setTimeout(()=>{
+    if ((0, $65c0cd2b2ec0988a$export$44487a86467333c3)("galleryAutoDownload") && button.getAttribute("data-state") === (0, $a5923d2edfc72bc5$export$5d7ba7f5550f99d1).ready) setTimeout(()=>{
         button.click();
-    }, 100);
+    }, 0);
 };
 
 

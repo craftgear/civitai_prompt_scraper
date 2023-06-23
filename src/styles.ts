@@ -17,7 +17,7 @@ export const configPanelStyle = `
 
 export const buttonStyle = `
   display: flex;
-  width: auto;
+  width: 100%;
   justify-content: center;
   align-items: center;
   color: white;
@@ -32,7 +32,7 @@ export const buttonStyle = `
 
 export const disabledButtonStyle = `
   display: flex;
-  width: auto;
+  width: 100%;
   justify-content: center;
   align-items: center;
   color: white;

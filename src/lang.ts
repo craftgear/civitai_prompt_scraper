@@ -97,6 +97,12 @@ const i18n: {
     'zh-CN': '未找到设定值',
     'zh-TW': '未找到設定值',
   },
+  galleryAutoDownload: {
+    en: 'automatically start downloading gallery images',
+    ja: 'ギャラリーを自動でダウンロードする',
+    'zh-CN': '自动下载画廊',
+    'zh-TW': '自動下載畫廊',
+  },
 };
 
 const getLocale = () => {

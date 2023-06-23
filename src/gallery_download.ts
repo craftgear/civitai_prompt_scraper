@@ -1,8 +1,7 @@
+import { ButtonState } from './types';
 import { buttonStyle } from './styles';
 import {
   waitForElement,
-  parseNextData,
-  buildImgUrl,
   replaceWithDisabledButton,
   updateButtonText,
 } from './utils';
@@ -23,6 +22,7 @@ const downloadGalleryImagesAndPrompts =
       if (!button) {
         return;
       }
+      button.setAttribute('data-state', 'in-progress');
 
       const filenameFormat = getConfig('galleryFilenameFormat');
       const filename = (filenameFormat as string)
@@ -40,36 +40,7 @@ const downloadGalleryImagesAndPrompts =
     }
   };
 
-// const downloadSingleImagesAndPrompts =
-//   (buttonIdSelector: string) => async () => {
-//     try {
-//       const data = parseNextData();
-//       const model = data.props.pageProps.trpcState.json.queries[0];
-//       const { id, url, meta, width, name, hash } = model.state.data;
-//       if (!url || !width || !name) {
-//         throw new Error(
-//           `image properties not found: url ${url}, width ${width}, name ${name}`
-//         );
-//       }
-//       const imgUrl = buildImgUrl(url, width, name);
-//
-//       const button = await waitForElement(buttonIdSelector);
-//       if (!button) {
-//         return;
-//       }
-//
-//       await createZip(updateButtonText(button))(`imageId_${id}.zip`)([
-//         { url: imgUrl, hash, meta },
-//       ]);
-//
-//       replaceWithDisabledButton(button, getButtonCompleteLabel());
-//     } catch (error: unknown) {
-//       alert((error as Error).message);
-//     }
-//   };
-
-export const addGalleryDownloadButton = async () => {
-  const href = window.location.href;
+const extractIdsFromUrl = (href: string) => {
   const matchedModel = href.match(/modelId=(?<modelId>\d*)/);
   const matchedModelVersion = href.match(
     /modelVersionId=(?<modelVersionId>\d*)/
@@ -85,8 +56,20 @@ export const addGalleryDownloadButton = async () => {
   const prioritizedUserId =
     matchedPrioritizedUser?.groups?.prioritizedUserId || null;
 
+  return { modelVersionId, prioritizedUserId, modelId, postId };
+};
+
+export const addGalleryDownloadButton = async () => {
   const buttonIdSelector = `#${BUTTON_ID}`;
-  document.querySelector(buttonIdSelector)?.remove();
+  const _button = document.querySelector(buttonIdSelector);
+  if (_button && _button.getAttribute('data-state') !== ButtonState.ready) {
+    return;
+  }
+  _button?.remove();
+
+  const { modelVersionId, prioritizedUserId, modelId, postId } =
+    extractIdsFromUrl(window.location.href);
+
   const button = document.createElement('button');
 
   const eventListener = (() => {
@@ -106,7 +89,7 @@ export const addGalleryDownloadButton = async () => {
   })();
 
   if (!eventListener) {
-    throw new Error('No parameters found');
+    throw new Error('No necessary parameters found');
   }
 
   button.addEventListener('click', eventListener);
@@ -114,6 +97,7 @@ export const addGalleryDownloadButton = async () => {
   button.id = BUTTON_ID;
   button.innerText = getButtonLabel();
   button.setAttribute('style', buttonStyle);
+  button.setAttribute('data-state', ButtonState.ready);
   if (document.querySelector('.mantine-Modal-modal')) {
     document
       .querySelector('.mantine-Modal-modal .mantine-Card-cardSection')
@@ -122,5 +106,14 @@ export const addGalleryDownloadButton = async () => {
     document
       .querySelector('#freezeBlock .mantine-Stack-root')
       ?.appendChild(button);
+  }
+
+  if (
+    getConfig('galleryAutoDownload') &&
+    button.getAttribute('data-state') === ButtonState.ready
+  ) {
+    setTimeout(() => {
+      button.click();
+    }, 0);
   }
 };
