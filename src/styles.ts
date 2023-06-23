@@ -10,6 +10,7 @@ export const configPanelStyle = `
   flex-direction: column;
   padding: 1rem;
 
+  color: black;
   border: 1px solid silver;
   background: white;
   box-shadow: 2px 2px 5px silver;
