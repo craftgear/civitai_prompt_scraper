@@ -26,7 +26,7 @@ export const downloadGalleryImagesAndPrompts =
     try {
       const _imgList = await fetchGalleryData(modelId, postId);
 
-      // ここでダウンロード済みの画像を弾く
+      // exclude downloaded images
       const downloadedImgIds = downLoadedImgList?.map(({ id }) => id) ?? [];
       const imgList = _imgList.filter(
         ({ id }) => !downloadedImgIds.includes(id)
@@ -48,12 +48,11 @@ export const downloadGalleryImagesAndPrompts =
 
       if (onFinishFn) {
         onFinishFn();
-      } else {
-        replaceWithDisabledButton(
-          button,
-          ` ${imgList.length} / ${imgList.length} ${getButtonCompleteLabel()}`
-        );
       }
+      replaceWithDisabledButton(
+        button,
+        ` ${imgList.length} / ${imgList.length} ${getButtonCompleteLabel()}`
+      );
     } catch (error: unknown) {
       alert((error as Error).message);
     }
@@ -93,6 +92,11 @@ export const addGalleryDownloadButton = async () => {
 
   const button = document.createElement('button');
 
+  const onFinishFn = () => {
+    if (getConfig('galleryAutoDownload')) {
+      document.title = '✅ ' + document.title;
+    }
+  };
   const eventListener = (() => {
     // open gallery from model preview images
     if (modelVersionId && prioritizedUserId) {
@@ -100,11 +104,21 @@ export const addGalleryDownloadButton = async () => {
     }
     // open gallery from model gallery areas
     if (modelId && postId) {
-      return downloadGalleryImagesAndPrompts(buttonIdSelector, modelId, postId);
+      return downloadGalleryImagesAndPrompts(
+        buttonIdSelector,
+        modelId,
+        postId,
+        onFinishFn
+      );
     }
     // open gallery from post pages
     if (postId) {
-      return downloadGalleryImagesAndPrompts(buttonIdSelector, null, postId);
+      return downloadGalleryImagesAndPrompts(
+        buttonIdSelector,
+        null,
+        postId,
+        onFinishFn
+      );
     }
     return null;
   })();
