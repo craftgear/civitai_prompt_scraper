@@ -12916,7 +12916,7 @@ const $8d59c42601ba8f61$export$8b03a564a450b487 = async ()=>{
 
 
 const $9a7e0bde1a099030$var$BUTTON_ID = "download-all-gallery-images-and-prompts";
-const $9a7e0bde1a099030$var$downloadGalleryImagesAndPrompts = (buttonIdSelector, modelId, postId)=>async ()=>{
+const $9a7e0bde1a099030$var$downloadGalleryImagesAndPrompts = (buttonIdSelector, modelId, postId, onFinishFn)=>async ()=>{
         try {
             const imgList = await (0, $afa9fb8bb7aaf429$export$c6ace8a485846f08)(modelId, postId);
             const button = await (0, $0fccda82d33153ac$export$1a1c301579a08d1e)(buttonIdSelector);
@@ -12926,6 +12926,7 @@ const $9a7e0bde1a099030$var$downloadGalleryImagesAndPrompts = (buttonIdSelector,
             const filenameFormat = (0, $65c0cd2b2ec0988a$export$44487a86467333c3)("galleryFilenameFormat");
             const filename = filenameFormat.replace("{modelId}", modelId ?? "").replace("{postId}", postId);
             await (0, $afa9fb8bb7aaf429$export$b6bc24646229cedd)((0, $0fccda82d33153ac$export$bb64a7e3f0f28938)(button))(filename)(imgList);
+            if (onFinishFn) onFinishFn();
             (0, $0fccda82d33153ac$export$92ecf871022de94d)(button, ` ${imgList.length} / ${imgList.length} ${(0, $966fc19e1e9bc989$export$4d9f09007b08c03d)()}`);
         } catch (error) {
             alert(error.message);
@@ -12954,13 +12955,16 @@ const $9a7e0bde1a099030$export$5fd187c0d03a79e = async ()=>{
     _button?.remove();
     const { modelVersionId: modelVersionId , prioritizedUserId: prioritizedUserId , modelId: modelId , postId: postId  } = $9a7e0bde1a099030$var$extractIdsFromUrl(window.location.href);
     const button = document.createElement("button");
+    const onFinishFn = ()=>{
+        if ((0, $65c0cd2b2ec0988a$export$44487a86467333c3)("galleryAutoDownload")) document.title = "✅ " + document.title;
+    };
     const eventListener = (()=>{
         // open gallery from model preview images
         if (modelVersionId && prioritizedUserId) return (0, $8d59c42601ba8f61$export$53039d7a8d9d297e)(buttonIdSelector);
         // open gallery from model gallery areas
-        if (modelId && postId) return $9a7e0bde1a099030$var$downloadGalleryImagesAndPrompts(buttonIdSelector, modelId, postId);
+        if (modelId && postId) return $9a7e0bde1a099030$var$downloadGalleryImagesAndPrompts(buttonIdSelector, modelId, postId, onFinishFn);
         // open gallery from post pages
-        if (postId) return $9a7e0bde1a099030$var$downloadGalleryImagesAndPrompts(buttonIdSelector, null, postId);
+        if (postId) return $9a7e0bde1a099030$var$downloadGalleryImagesAndPrompts(buttonIdSelector, null, postId, onFinishFn);
         return null;
     })();
     if (!eventListener) throw new Error("No necessary parameters found");

@@ -37,6 +37,9 @@ const downloadGalleryImagesAndPrompts =
 
       await createZip(updateButtonText(button))(filename)(imgList);
 
+      if (onFinishFn) {
+        onFinishFn();
+      }
       replaceWithDisabledButton(
         button,
         ` ${imgList.length} / ${imgList.length} ${getButtonCompleteLabel()}`
