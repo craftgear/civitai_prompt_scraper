@@ -13,7 +13,12 @@ import { getConfig } from './config_panel';
 const BUTTON_ID = 'download-all-gallery-images-and-prompts';
 
 const downloadGalleryImagesAndPrompts =
-  (buttonIdSelector: string, modelId: string | null, postId: string) =>
+  (
+    buttonIdSelector: string,
+    modelId: string | null,
+    postId: string,
+    onFinishFn?: Function
+  ) =>
   async () => {
     try {
       const imgList = await fetchGalleryData(modelId, postId);
@@ -73,6 +78,11 @@ export const addGalleryDownloadButton = async () => {
 
   const button = document.createElement('button');
 
+  const onFinishFn = () => {
+    if (getConfig('galleryAutoDownload')) {
+      document.title = '✅ ' + document.title;
+    }
+  };
   const eventListener = (() => {
     // open gallery from model preview images
     if (modelVersionId && prioritizedUserId) {
@@ -80,11 +90,21 @@ export const addGalleryDownloadButton = async () => {
     }
     // open gallery from model gallery areas
     if (modelId && postId) {
-      return downloadGalleryImagesAndPrompts(buttonIdSelector, modelId, postId);
+      return downloadGalleryImagesAndPrompts(
+        buttonIdSelector,
+        modelId,
+        postId,
+        onFinishFn
+      );
     }
     // open gallery from post pages
     if (postId) {
-      return downloadGalleryImagesAndPrompts(buttonIdSelector, null, postId);
+      return downloadGalleryImagesAndPrompts(
+        buttonIdSelector,
+        null,
+        postId,
+        onFinishFn
+      );
     }
     return null;
   })();
