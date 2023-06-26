@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        Prompt Scraper - civitai.com
-// @version     1.2.3
+// @version     1.2.4
 // @namespace   https://github.com/craftgear/civitai_prompt_scraper
 // @description download images and prompts as a zip file
 // @license     MIT
@@ -85,7 +85,7 @@ const $292fc7f9388c589b$export$dbe9a8011f5e5b2d = `
 
 
 var $39e7bd012fbaed99$exports = {};
-$39e7bd012fbaed99$exports = JSON.parse('{"name":"civitai_prompt_scraper","browserslist":"> 5%, last 1 versions, not dead","version":"1.2.3","description":"","source":"src/prompt_scraper.user.ts","browser ":"dist/prompt_scraper.user.js","targets":{"default":{"context":"browser","sourceMap":false,"includeNodeModules":true,"optimize":true}},"scripts":{"type-check":"tsc --noEmit","lint":"eslint","format":"prettier --write .","watch":"parcel watch","build":"parcel build; zip -v -j ./dist/prompt_scraper.zip ./dist/prompt_scraper.user.js","clean":"rm ./dist/*","test":"echo \\"Error: no test specified\\" && exit 1"},"author":"Watanabe, Shunsuke","license":"MIT","devDependencies":{"@damoclark/parcel-optimizer-userscript":"^0.0.2","@parcel/packager-ts":"^2.8.3","@parcel/transformer-typescript-types":"^2.8.3","@tsconfig/recommended":"^1.0.2","@types/file-saver":"^2.0.5","@types/lodash":"^4.14.191","@typescript-eslint/eslint-plugin":"^5.52.0","@typescript-eslint/parser":"^5.52.0","@violentmonkey/types":"^0.1.5","eslint":"^8.34.0","eslint-config-standard-with-typescript":"^34.0.0","eslint-plugin-import":"^2.27.5","eslint-plugin-n":"^15.6.1","eslint-plugin-promise":"^6.1.1","parcel":"^2.8.3","prettier":"^2.8.4","rollup-plugin-cleanup":"^3.2.1","typescript":"^4.9.5"},"dependencies":{"@violentmonkey/url":"^0.1.0","@zip.js/zip.js":"^2.6.63","file-saver":"^2.0.5","html2canvas":"^1.4.1","lodash":"^4.17.21","wazip":"^0.1.0"}}');
+$39e7bd012fbaed99$exports = JSON.parse('{"name":"civitai_prompt_scraper","browserslist":"> 5%, last 1 versions, not dead","version":"1.2.4","description":"","source":"src/prompt_scraper.user.ts","browser ":"dist/prompt_scraper.user.js","targets":{"default":{"context":"browser","sourceMap":false,"includeNodeModules":true,"optimize":true}},"scripts":{"type-check":"tsc --noEmit","lint":"eslint","format":"prettier --write .","watch":"parcel watch","build":"parcel build; zip -v -j ./dist/prompt_scraper.zip ./dist/prompt_scraper.user.js","clean":"rm ./dist/*","test":"echo \\"Error: no test specified\\" && exit 1"},"author":"Watanabe, Shunsuke","license":"MIT","devDependencies":{"@damoclark/parcel-optimizer-userscript":"^0.0.2","@parcel/packager-ts":"^2.8.3","@parcel/transformer-typescript-types":"^2.8.3","@tsconfig/recommended":"^1.0.2","@types/file-saver":"^2.0.5","@types/lodash":"^4.14.191","@typescript-eslint/eslint-plugin":"^5.52.0","@typescript-eslint/parser":"^5.52.0","@violentmonkey/types":"^0.1.5","eslint":"^8.34.0","eslint-config-standard-with-typescript":"^34.0.0","eslint-plugin-import":"^2.27.5","eslint-plugin-n":"^15.6.1","eslint-plugin-promise":"^6.1.1","parcel":"^2.8.3","prettier":"^2.8.4","rollup-plugin-cleanup":"^3.2.1","typescript":"^4.9.5"},"dependencies":{"@violentmonkey/url":"^0.1.0","@zip.js/zip.js":"^2.6.63","file-saver":"^2.0.5","html2canvas":"^1.4.1","lodash":"^4.17.21","wazip":"^0.1.0"}}');
 
 
 
@@ -12626,7 +12626,7 @@ const $65c0cd2b2ec0988a$var$fields = [
         type: "text",
         name: "galleryFilenameFormat",
         label: (0, $966fc19e1e9bc989$export$731a191155ffa90a)("galleryFilenameFormat"),
-        value: "{modelName}[{modelId}]-postId_{postId}.zip",
+        value: "{modelName}-modelId_{modelId}-postId_{postId}.zip",
         desc: `${(0, $966fc19e1e9bc989$export$731a191155ffa90a)("availableVariables")} {modelName}, {modelId}, {postId}`,
         style: ""
     }
@@ -12782,7 +12782,6 @@ const $afa9fb8bb7aaf429$export$c6ace8a485846f08 = async (modelId, postId, modelV
     });
     if (response.status >= 400) throw new Error(` ${response.status} ${response.statusText}`);
     const data = await response.json();
-    console.log("----- data:", data);
     return data.items.map((x)=>{
         return {
             ...x,
@@ -12963,7 +12962,6 @@ const $9a7e0bde1a099030$export$5fd187c0d03a79e = async ()=>{
     _button?.remove();
     const { modelVersionId: modelVersionId , prioritizedUserId: prioritizedUserId , modelId: modelId , postId: postId  } = $9a7e0bde1a099030$var$extractIdsFromUrl(window.location.href);
     const modelName = $9a7e0bde1a099030$var$extractModelNameFromNextData();
-    console.log("----- modelName:", modelName);
     const button = document.createElement("button");
     const onFinishFn = ()=>{
         if ((0, $65c0cd2b2ec0988a$export$44487a86467333c3)("galleryAutoDownload")) document.title = "✅ " + document.title;
