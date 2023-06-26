@@ -4,6 +4,7 @@ import {
   waitForElement,
   replaceWithDisabledButton,
   updateButtonText,
+  parseNextData,
 } from './utils';
 import { getI18nLabel, getButtonLabel, getButtonCompleteLabel } from './lang';
 import { fetchGalleryData, createZip } from './infra';
@@ -17,6 +18,7 @@ const downloadGalleryImagesAndPrompts =
     buttonIdSelector: string,
     modelId: string | null,
     postId: string,
+    modelName: string | null,
     onFinishFn?: Function
   ) =>
   async () => {
@@ -33,6 +35,7 @@ const downloadGalleryImagesAndPrompts =
       const filenameFormat = getConfig('galleryFilenameFormat');
       const filename = (filenameFormat as string)
         .replace('{modelId}', modelId ?? '')
+        .replace('{modelName}', modelName ?? '')
         .replace('{postId}', postId);
 
       await createZip(updateButtonText(button))(filename)(imgList);
@@ -68,6 +71,24 @@ const extractIdsFromUrl = (href: string) => {
   return { modelVersionId, prioritizedUserId, modelId, postId };
 };
 
+const extractModelNameFromNextData = () => {
+  const nextData = parseNextData();
+
+  // Apparently a key starts with double quotation(") is a LoRA name. starts with double quotation
+  const keys = Object.keys(
+    nextData.props.pageProps?.trpcState?.json?.queries[0]?.state?.data?.meta ??
+      {}
+  ).filter((x) => x.startsWith('"'));
+  if (keys.length > 0) {
+    return keys[0].replace('"', '');
+  }
+
+  return (
+    nextData.props.pageProps?.trpcState?.json?.queries[0]?.state?.data?.meta
+      ?.Model ?? ''
+  );
+};
+
 export const addGalleryDownloadButton = async () => {
   const buttonIdSelector = `#${BUTTON_ID}`;
   const _button = document.querySelector(buttonIdSelector);
@@ -78,6 +99,8 @@ export const addGalleryDownloadButton = async () => {
 
   const { modelVersionId, prioritizedUserId, modelId, postId } =
     extractIdsFromUrl(window.location.href);
+
+  const modelName = extractModelNameFromNextData();
 
   const button = document.createElement('button');
 
@@ -97,6 +120,7 @@ export const addGalleryDownloadButton = async () => {
         buttonIdSelector,
         modelId,
         postId,
+        modelName,
         onFinishFn
       );
     }
@@ -106,6 +130,7 @@ export const addGalleryDownloadButton = async () => {
         buttonIdSelector,
         null,
         postId,
+        modelName,
         onFinishFn
       );
     }

@@ -44,8 +44,10 @@ const fields = [
     type: 'text',
     name: 'galleryFilenameFormat',
     label: getI18nLabel('galleryFilenameFormat'),
-    value: 'modelId_{modelId}-postId_{postId}.zip',
-    desc: `${getI18nLabel('availableVariables')}  {modelId}, {postId}`,
+    value: '{modelName}-modelId_{modelId}-postId_{postId}.zip',
+    desc: `${getI18nLabel(
+      'availableVariables'
+    )} {modelName}, {modelId}, {postId}`,
     style: '',
   },
 ];

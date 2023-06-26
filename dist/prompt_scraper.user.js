@@ -12626,8 +12626,8 @@ const $65c0cd2b2ec0988a$var$fields = [
         type: "text",
         name: "galleryFilenameFormat",
         label: (0, $966fc19e1e9bc989$export$731a191155ffa90a)("galleryFilenameFormat"),
-        value: "modelId_{modelId}-postId_{postId}.zip",
-        desc: `${(0, $966fc19e1e9bc989$export$731a191155ffa90a)("availableVariables")}  {modelId}, {postId}`,
+        value: "{modelName}[{modelId}]-postId_{postId}.zip",
+        desc: `${(0, $966fc19e1e9bc989$export$731a191155ffa90a)("availableVariables")} {modelName}, {modelId}, {postId}`,
         style: ""
     }
 ];
@@ -12782,6 +12782,7 @@ const $afa9fb8bb7aaf429$export$c6ace8a485846f08 = async (modelId, postId, modelV
     });
     if (response.status >= 400) throw new Error(` ${response.status} ${response.statusText}`);
     const data = await response.json();
+    console.log("----- data:", data);
     return data.items.map((x)=>{
         return {
             ...x,
@@ -12916,7 +12917,7 @@ const $8d59c42601ba8f61$export$8b03a564a450b487 = async ()=>{
 
 
 const $9a7e0bde1a099030$var$BUTTON_ID = "download-all-gallery-images-and-prompts";
-const $9a7e0bde1a099030$var$downloadGalleryImagesAndPrompts = (buttonIdSelector, modelId, postId, onFinishFn)=>async ()=>{
+const $9a7e0bde1a099030$var$downloadGalleryImagesAndPrompts = (buttonIdSelector, modelId, postId, modelName, onFinishFn)=>async ()=>{
         try {
             const imgList = await (0, $afa9fb8bb7aaf429$export$c6ace8a485846f08)(modelId, postId);
             const button = await (0, $0fccda82d33153ac$export$1a1c301579a08d1e)(buttonIdSelector);
@@ -12924,7 +12925,7 @@ const $9a7e0bde1a099030$var$downloadGalleryImagesAndPrompts = (buttonIdSelector,
             button.setAttribute("data-state", "in-progress");
             button.innerText = (0, $966fc19e1e9bc989$export$731a191155ffa90a)("startingDownload");
             const filenameFormat = (0, $65c0cd2b2ec0988a$export$44487a86467333c3)("galleryFilenameFormat");
-            const filename = filenameFormat.replace("{modelId}", modelId ?? "").replace("{postId}", postId);
+            const filename = filenameFormat.replace("{modelId}", modelId ?? "").replace("{modelName}", modelName ?? "").replace("{postId}", postId);
             await (0, $afa9fb8bb7aaf429$export$b6bc24646229cedd)((0, $0fccda82d33153ac$export$bb64a7e3f0f28938)(button))(filename)(imgList);
             if (onFinishFn) onFinishFn();
             (0, $0fccda82d33153ac$export$92ecf871022de94d)(button, ` ${imgList.length} / ${imgList.length} ${(0, $966fc19e1e9bc989$export$4d9f09007b08c03d)()}`);
@@ -12948,12 +12949,21 @@ const $9a7e0bde1a099030$var$extractIdsFromUrl = (href)=>{
         postId: postId
     };
 };
+const $9a7e0bde1a099030$var$extractModelNameFromNextData = ()=>{
+    const nextData = (0, $0fccda82d33153ac$export$ce1398d1c23018fa)();
+    // Apparently a key starts with double quotation(") is a LoRA name. starts with double quotation
+    const keys = Object.keys(nextData.props.pageProps?.trpcState?.json?.queries[0]?.state?.data?.meta ?? {}).filter((x)=>x.startsWith('"'));
+    if (keys.length > 0) return keys[0].replace('"', "");
+    return nextData.props.pageProps?.trpcState?.json?.queries[0]?.state?.data?.meta?.Model ?? "";
+};
 const $9a7e0bde1a099030$export$5fd187c0d03a79e = async ()=>{
     const buttonIdSelector = `#${$9a7e0bde1a099030$var$BUTTON_ID}`;
     const _button = document.querySelector(buttonIdSelector);
     if (_button && _button.getAttribute("data-state") !== (0, $a5923d2edfc72bc5$export$5d7ba7f5550f99d1).ready) return;
     _button?.remove();
     const { modelVersionId: modelVersionId , prioritizedUserId: prioritizedUserId , modelId: modelId , postId: postId  } = $9a7e0bde1a099030$var$extractIdsFromUrl(window.location.href);
+    const modelName = $9a7e0bde1a099030$var$extractModelNameFromNextData();
+    console.log("----- modelName:", modelName);
     const button = document.createElement("button");
     const onFinishFn = ()=>{
         if ((0, $65c0cd2b2ec0988a$export$44487a86467333c3)("galleryAutoDownload")) document.title = "✅ " + document.title;
@@ -12962,9 +12972,9 @@ const $9a7e0bde1a099030$export$5fd187c0d03a79e = async ()=>{
         // open gallery from model preview images
         if (modelVersionId && prioritizedUserId) return (0, $8d59c42601ba8f61$export$53039d7a8d9d297e)(buttonIdSelector);
         // open gallery from model gallery areas
-        if (modelId && postId) return $9a7e0bde1a099030$var$downloadGalleryImagesAndPrompts(buttonIdSelector, modelId, postId, onFinishFn);
+        if (modelId && postId) return $9a7e0bde1a099030$var$downloadGalleryImagesAndPrompts(buttonIdSelector, modelId, postId, modelName, onFinishFn);
         // open gallery from post pages
-        if (postId) return $9a7e0bde1a099030$var$downloadGalleryImagesAndPrompts(buttonIdSelector, null, postId, onFinishFn);
+        if (postId) return $9a7e0bde1a099030$var$downloadGalleryImagesAndPrompts(buttonIdSelector, null, postId, modelName, onFinishFn);
         return null;
     })();
     if (!eventListener) throw new Error("No necessary parameters found");
