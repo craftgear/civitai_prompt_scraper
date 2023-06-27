@@ -55,6 +55,7 @@ const $292fc7f9388c589b$export$2c795915441ef547 = `
 const $292fc7f9388c589b$export$fd4d27a26b4854f3 = `
   display: flex;
   width: 100%;
+  max-width: 240px;
   justify-content: center;
   align-items: center;
   color: white;
@@ -12948,9 +12949,23 @@ const $8d59c42601ba8f61$export$53039d7a8d9d297e = (buttonIdSelector)=>async ()=>
             return [];
         }
     };
-const $8d59c42601ba8f61$export$8b03a564a450b487 = async ()=>{
+const $8d59c42601ba8f61$var$PARENT_NODE_ID = "civitai_prompt_scraper";
+const $8d59c42601ba8f61$export$7f599fe3aa5c2a62 = async ()=>{
     const downloadButtonSelector = "a[href^='/api/download/models/']";
     await (0, $0fccda82d33153ac$export$1a1c301579a08d1e)(downloadButtonSelector);
+    const downloadButton = document.querySelector(downloadButtonSelector);
+    const buttonContainer = document.createElement("div");
+    buttonContainer.id = $8d59c42601ba8f61$var$PARENT_NODE_ID;
+    buttonContainer.setAttribute("style", `display: flex; justify-content: space-between; gap: 1rem;`);
+    downloadButton?.parentNode?.parentNode?.appendChild(buttonContainer);
+};
+const $8d59c42601ba8f61$export$4a2d37b006372286 = async ()=>{
+    const id = `#${$8d59c42601ba8f61$var$PARENT_NODE_ID}`;
+    return await (0, $0fccda82d33153ac$export$1a1c301579a08d1e)(id);
+};
+const $8d59c42601ba8f61$export$8b03a564a450b487 = async ()=>{
+    const parentNode = await $8d59c42601ba8f61$export$4a2d37b006372286();
+    console.log("----- parentNode:", parentNode);
     const buttonIdSelector = `#${$8d59c42601ba8f61$var$BUTTON_ID}`;
     document.querySelector(buttonIdSelector)?.remove();
     const button = document.createElement("a");
@@ -12958,8 +12973,7 @@ const $8d59c42601ba8f61$export$8b03a564a450b487 = async ()=>{
     button.id = $8d59c42601ba8f61$var$BUTTON_ID;
     button.innerText = (0, $966fc19e1e9bc989$export$d397f86d22f413e8)();
     button.setAttribute("style", (0, $292fc7f9388c589b$export$fd4d27a26b4854f3));
-    const buttonParent = document.querySelector(downloadButtonSelector);
-    if (buttonParent) buttonParent.parentNode?.parentNode?.appendChild(button);
+    if (parentNode) parentNode.appendChild(button);
 };
 
 
@@ -13120,7 +13134,7 @@ const $2da5569f102e177a$var$downloadAllModelRelatedFiles = (buttonIdSelector)=>a
         console.warn("##### done #####");
     };
 const $2da5569f102e177a$export$3b6a8e903180e269 = async ()=>{
-    await (0, $0fccda82d33153ac$export$1a1c301579a08d1e)($2da5569f102e177a$var$downloadButtonSelector);
+    const parentNode = await (0, $8d59c42601ba8f61$export$4a2d37b006372286)();
     const buttonIdSelector = `#${$2da5569f102e177a$var$BUTTON_ID}`;
     document.querySelector(buttonIdSelector)?.remove();
     const button = document.createElement("a");
@@ -13128,8 +13142,7 @@ const $2da5569f102e177a$export$3b6a8e903180e269 = async ()=>{
     button.id = $2da5569f102e177a$var$BUTTON_ID;
     button.innerText = "dowload all"; //getButtonLabel();
     button.setAttribute("style", (0, $292fc7f9388c589b$export$7ec3146dae3421e3));
-    const buttonParent = document.querySelector($2da5569f102e177a$var$downloadButtonSelector);
-    if (buttonParent) buttonParent.parentNode?.appendChild(button);
+    if (parentNode) parentNode.appendChild(button);
 };
 
 
@@ -13142,6 +13155,7 @@ const $29e4e9967394a818$var$addModelPreviewDownloadButton = async ()=>{
         if (!window.location.href.match(/\/models\/\d*/)) return;
         (0, $0fccda82d33153ac$export$bef1f36f5486a6a3)("model");
         if ((0, $65c0cd2b2ec0988a$export$44487a86467333c3)("openShowMore")) $29e4e9967394a818$var$openShowMore(20);
+        await (0, $8d59c42601ba8f61$export$7f599fe3aa5c2a62)();
         await (0, $8d59c42601ba8f61$export$8b03a564a450b487)();
         await (0, $2da5569f102e177a$export$3b6a8e903180e269)();
     } catch (error) {

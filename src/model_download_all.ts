@@ -9,7 +9,10 @@ import { /** getI18nLabel **/ getButtonCompleteLabel } from './lang';
 const BUTTON_ID = 'download-all-model-related-files';
 const downloadButtonSelector = "a[href^='/api/download/models/']";
 
-import { downloadImagesAndPrompts } from './model_image_download';
+import {
+  downloadImagesAndPrompts,
+  getButtonContainerNode,
+} from './model_image_download';
 import { downloadGalleryImagesAndPrompts } from './gallery_download';
 
 const getGalleryModelIdAndPostId = (href: string) => {
@@ -116,7 +119,7 @@ const downloadAllModelRelatedFiles = (buttonIdSelector: string) => async () => {
 };
 
 export const addDownloadAllButton = async () => {
-  await waitForElement(downloadButtonSelector);
+  const parentNode = await getButtonContainerNode();
 
   const buttonIdSelector = `#${BUTTON_ID}`;
   document.querySelector(buttonIdSelector)?.remove();
@@ -129,8 +132,8 @@ export const addDownloadAllButton = async () => {
   button.id = BUTTON_ID;
   button.innerText = 'dowload all'; //getButtonLabel();
   button.setAttribute('style', downloadAllButtonStyle);
-  const buttonParent = document.querySelector(downloadButtonSelector);
-  if (buttonParent) {
-    buttonParent.parentNode?.parentNode?.appendChild(button);
+
+  if (parentNode) {
+    parentNode.appendChild(button);
   }
 };
