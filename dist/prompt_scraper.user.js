@@ -12881,13 +12881,12 @@ const $afa9fb8bb7aaf429$export$b6bc24646229cedd = (buttnTextUpdateFn)=>(zipFilen
                     errors.push(`${e.message}, ${x.url}`);
                     if (!(0, $65c0cd2b2ec0988a$export$44487a86467333c3)("continueWithFetchError")) break;
                 }
-                await (0, $0fccda82d33153ac$export$e772c8ff12451969)(10);
+                await (0, $0fccda82d33153ac$export$e772c8ff12451969)(100);
             }
             if (errors.length > 0) {
                 if (!(0, $65c0cd2b2ec0988a$export$44487a86467333c3)("continueWithFetchError")) throw new Error(errors.join("\n\r"));
             }
-            const zipData = await zipWriter.close(undefined, {});
-            if (counter > 0) (0, $b9a27db92abc3f0f$exports.saveAs)(zipData, zipFilename);
+            (0, $b9a27db92abc3f0f$exports.saveAs)(await zipWriter.close(undefined, {}), zipFilename);
         };
 const $afa9fb8bb7aaf429$export$a9dbc6b31fb3d42b = (config)=>{
     localStorage.setItem("config", JSON.stringify(config));
@@ -12930,7 +12929,7 @@ const $8d59c42601ba8f61$var$getModeInfoAndImageList = async (href)=>{
 const $8d59c42601ba8f61$export$53039d7a8d9d297e = (buttonIdSelector)=>async ()=>{
         try {
             const button = await (0, $0fccda82d33153ac$export$1a1c301579a08d1e)(buttonIdSelector);
-            if (!button) return;
+            if (!button) return [];
             button.innerText = (0, $966fc19e1e9bc989$export$731a191155ffa90a)("startingDownload");
             const { modelId: modelId , modelName: modelName , imageList: imageList , modelVersionId: modelVersionId , modelVersionName: modelVersionName , modelInfo: modelInfo  } = await $8d59c42601ba8f61$var$getModeInfoAndImageList(window.location.href);
             const filenameFormat = (0, $65c0cd2b2ec0988a$export$44487a86467333c3)("modelPreviewFilenameFormat");
@@ -12940,9 +12939,13 @@ const $8d59c42601ba8f61$export$53039d7a8d9d297e = (buttonIdSelector)=>async ()=>
                     url: x.url.replace(/width=\d*/, `width=${x.width},optimized=true`)
                 })));
             (0, $0fccda82d33153ac$export$92ecf871022de94d)(button, ` ${imageList.length} / ${imageList.length} ${(0, $966fc19e1e9bc989$export$4d9f09007b08c03d)()}`);
-            return imageList;
+            return [
+                imageList,
+                modelName
+            ];
         } catch (error) {
             alert(error.message);
+            return [];
         }
     };
 const $8d59c42601ba8f61$export$8b03a564a450b487 = async ()=>{
@@ -12963,6 +12966,8 @@ const $8d59c42601ba8f61$export$8b03a564a450b487 = async ()=>{
 
 const $9a7e0bde1a099030$var$BUTTON_ID = "download-all-gallery-images-and-prompts";
 const $9a7e0bde1a099030$export$9473b35530fb3701 = (buttonIdSelector, modelId, postId, modelName, onFinishFn, downLoadedImgList)=>async ()=>{
+        console.log("----- modelName:", modelName);
+        console.log("----- onFinishFn:", onFinishFn);
         try {
             const _imgList = await (0, $afa9fb8bb7aaf429$export$c6ace8a485846f08)(modelId, postId);
             // exclude downloaded images
@@ -13072,7 +13077,7 @@ const $2da5569f102e177a$var$downloadAllModelRelatedFiles = (buttonIdSelector)=>a
             window.open(modelDownloadUrl, "_blank");
         }, 0);
         // save previews as a zip file
-        const previewImageList = await (0, $8d59c42601ba8f61$export$53039d7a8d9d297e)(buttonIdSelector)();
+        const [previewImageList, modelName] = await (0, $8d59c42601ba8f61$export$53039d7a8d9d297e)(buttonIdSelector)();
         // save galleries as zip files
         const clientHeight = document.querySelector("body")?.clientHeight;
         if (clientHeight) window.scrollTo(0, clientHeight);
@@ -13109,7 +13114,7 @@ const $2da5569f102e177a$var$downloadAllModelRelatedFiles = (buttonIdSelector)=>a
             const onFinishFn = ()=>{
                 (0, $0fccda82d33153ac$export$92ecf871022de94d)(button, `${postId} ${(0, $966fc19e1e9bc989$export$4d9f09007b08c03d)()}`, (0, $292fc7f9388c589b$export$dbe9a8011f5e5b2d));
             };
-            return (0, $9a7e0bde1a099030$export$9473b35530fb3701)(`#${$2da5569f102e177a$var$BUTTON_ID}_${i}`, modelId, postId, onFinishFn, previewImageList)();
+            return (0, $9a7e0bde1a099030$export$9473b35530fb3701)(`#${$2da5569f102e177a$var$BUTTON_ID}_${i}`, modelId, postId, modelName, onFinishFn, previewImageList)();
         }));
         alert("done");
         console.warn("##### done #####");

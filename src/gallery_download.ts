@@ -25,6 +25,8 @@ export const downloadGalleryImagesAndPrompts =
     downLoadedImgList?: GalleryImage[]
   ) =>
   async () => {
+    console.log('----- modelName:', modelName);
+    console.log('----- onFinishFn:', onFinishFn);
     try {
       const _imgList = await fetchGalleryData(modelId, postId);
 

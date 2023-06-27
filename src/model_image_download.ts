@@ -73,7 +73,7 @@ export const downloadImagesAndPrompts =
       const button = await waitForElement(buttonIdSelector);
 
       if (!button) {
-        return;
+        return [];
       }
 
       button.innerText = getI18nLabel('startingDownload');
@@ -106,9 +106,10 @@ export const downloadImagesAndPrompts =
         ` ${imageList.length} / ${imageList.length} ${getButtonCompleteLabel()}`
       );
 
-      return imageList;
+      return [imageList, modelName];
     } catch (error: unknown) {
       alert((error as Error).message);
+      return [];
     }
   };
 
