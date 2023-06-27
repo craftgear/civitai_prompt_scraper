@@ -13126,6 +13126,7 @@ const $29e4e9967394a818$var$openShowMore = (retryCount = 1)=>{
     const showMoreButton = Array.from(document.querySelectorAll("button")).filter((x)=>x.innerHTML.includes("Show More"))[0];
     if (showMoreButton) {
         showMoreButton.click();
+        showMoreButton.remove();
         return;
     }
     if (retryCount > 0) setTimeout(()=>{
