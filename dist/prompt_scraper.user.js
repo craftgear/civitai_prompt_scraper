@@ -54,7 +54,7 @@ const $292fc7f9388c589b$export$2c795915441ef547 = `
 `;
 const $292fc7f9388c589b$export$fd4d27a26b4854f3 = `
   display: flex;
-  width: 100%;
+  flex: fit-content;
   justify-content: center;
   align-items: center;
   color: white;
@@ -65,22 +65,16 @@ const $292fc7f9388c589b$export$fd4d27a26b4854f3 = `
   font-size: small;
   cursor: pointer;
   word-break: keep-all;
+  padding: 0 2rem;
+  white-space: nowrap;
+  overflow: hidden;
 `;
 const $292fc7f9388c589b$export$dbe9a8011f5e5b2d = `
-  display: flex;
-  width: 100%;
-  justify-content: center;
-  align-items: center;
-  color: white;
+  ${$292fc7f9388c589b$export$fd4d27a26b4854f3}
   background-color: grey;
   disable: true;
-  height: 36px;
-  border-radius: 4px;
-  font-weight: bold;
-  font-size: small;
-  cursor: none;
-  word-break: keep-all;
 `;
+const $292fc7f9388c589b$export$7ec3146dae3421e3 = $292fc7f9388c589b$export$fd4d27a26b4854f3;
 
 
 
@@ -13026,6 +13020,7 @@ const $29e4e9967394a818$var$openShowMore = ()=>{
     const showMoreButton = Array.from(document.querySelectorAll("button")).filter((x)=>x.innerHTML.includes("Show More"))[0];
     if (showMoreButton) {
         showMoreButton.click();
+        showMoreButton.remove();
         return;
     }
     setTimeout(()=>{

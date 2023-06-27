@@ -42,7 +42,7 @@ const openShowMore = () => {
   )[0];
   if (showMoreButton) {
     showMoreButton.click();
-    showMoreButton.remove();
+    showMoreButton.innerHTML = 'Hide';
     return;
   }
   setTimeout(() => {
