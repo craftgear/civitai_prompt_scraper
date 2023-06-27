@@ -123,6 +123,6 @@ export const addModelImagesDownloadButton = async () => {
   button.setAttribute('style', buttonStyle);
   const buttonParent = document.querySelector(downloadButtonSelector);
   if (buttonParent) {
-    buttonParent.parentNode?.appendChild(button);
+    buttonParent.parentNode?.parentNode?.appendChild(button);
   }
 };
