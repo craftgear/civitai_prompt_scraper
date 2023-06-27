@@ -3,7 +3,7 @@ const i18n: {
 } = {
   buttonLabel: {
     en: 'Download images with JSON',
-    ja: '画像＆JSONダウンロード',
+    ja: '画像&JSONダウンロード',
     'zh-CN': '下载图像和JSON',
     'zh-TW': '下載圖像和JSON',
   },

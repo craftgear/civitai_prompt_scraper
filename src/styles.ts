@@ -18,7 +18,7 @@ export const configPanelStyle = `
 
 export const buttonStyle = `
   display: flex;
-  width: 100%;
+  flex: fit-content;
   justify-content: center;
   align-items: center;
   color: white;
@@ -29,65 +29,15 @@ export const buttonStyle = `
   font-size: small;
   cursor: pointer;
   word-break: keep-all;
+  padding: 0 2rem;
+  white-space: nowrap;
+  overflow: hidden;
 `;
 
 export const disabledButtonStyle = `
-  display: flex;
-  width: 100%;
-  justify-content: center;
-  align-items: center;
-  color: white;
+  ${buttonStyle}
   background-color: grey;
   disable: true;
-  height: 36px;
-  border-radius: 4px;
-  font-weight: bold;
-  font-size: small;
-  cursor: none;
-  word-break: keep-all;
 `;
 
-export const downloadAllButtonStyle = `
-  display: flex;
-  width: 100%;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  background-color: #228be6;
-  height: 36px;
-  border-radius: 4px;
-  font-weight: bold;
-  font-size: small;
-  cursor: pointer;
-  word-break: keep-all;
-`;
-
-// export const downloadAllGalleryStyle = `
-//   display: flex;
-//   width: 150px;
-//   justify-content: center;
-//   align-items: center;
-//   color: white;
-//   background-color: #228be6;
-//   height: 36px;
-//   border-radius: 4px;
-//   font-weight: bold;
-//   font-size: small;
-//   cursor: pointer;
-//   word-break: keep-all;
-// `;
-//
-// export const downloadAllGalleryDoneStyle = `
-//   display: flex;
-//   width: 100px;
-//   justify-content: center;
-//   align-items: center;
-//   color: gray;
-//   background-color: lightgray;
-//   height: 36px;
-//   border-radius: 4px;
-//   font-weight: bold;
-//   font-size: small;
-//   cursor: pointer;
-//   word-break: keep-all;
-// `;
+export const downloadAllButtonStyle = buttonStyle;

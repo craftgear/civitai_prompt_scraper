@@ -1,5 +1,8 @@
 import { addGalleryDownloadButton } from './gallery_download';
-import { addModelImagesDownloadButton } from './model_image_download';
+import {
+  addModelImagesDownloadButton,
+  addButtonContainer,
+} from './model_image_download';
 import { initConfigPanel } from './config_panel';
 import { getConfig } from './config_panel';
 import { addDownloadAllButton } from './model_download_all';
@@ -19,6 +22,7 @@ const addModelPreviewDownloadButton = async () => {
       openShowMore(20);
     }
 
+    await addButtonContainer();
     await addModelImagesDownloadButton();
     await addDownloadAllButton();
   } catch (error: unknown) {
