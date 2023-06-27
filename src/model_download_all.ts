@@ -131,6 +131,6 @@ export const addDownloadAllButton = async () => {
   button.setAttribute('style', downloadAllButtonStyle);
   const buttonParent = document.querySelector(downloadButtonSelector);
   if (buttonParent) {
-    buttonParent.parentNode?.appendChild(button);
+    buttonParent.parentNode?.parentNode?.appendChild(button);
   }
 };
