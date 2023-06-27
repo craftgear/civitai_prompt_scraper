@@ -1,7 +1,7 @@
 {
   "name": "civitai_prompt_scraper",
   "browserslist": "> 5%, last 1 versions, not dead",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description": "",
   "source": "src/prompt_scraper.user.ts",
   "browser ": "dist/prompt_scraper.user.js",
