@@ -43,7 +43,7 @@ const addGalleryImageDownloadButton = async () => {
 
 const openShowMore = (retryCount = 1) => {
   const showMoreButton = Array.from(document.querySelectorAll('button')).filter(
-    (x: HTMLElement) => x.innerHTML === 'Show More'
+    (x: HTMLElement) => x.innerHTML.includes('Show More')
   )[0];
   if (showMoreButton) {
     showMoreButton.click();
