@@ -141,6 +141,9 @@ export const createZip =
   async (
     imgInfo: { url: string; hash: string; meta: Object }[]
   ): Promise<void> => {
+    if (!modelInfo && imgInfo.length === 0) {
+      return;
+    }
     const addedNames = new Set();
     const blobWriter = new BlobWriter(`application/zip`);
     const zipWriter = new ZipWriter(blobWriter);
