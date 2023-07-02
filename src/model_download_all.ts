@@ -1,7 +1,7 @@
 import {
   downloadAllButtonStyle,
-  buttonStyle,
-  disabledButtonStyle,
+  downloadAllGalleryButtonStyle,
+  downloadAllGalleryDisabledButtonStyle,
 } from './styles';
 import { sleep, waitForElement, replaceWithDisabledButton } from './utils';
 import { /** getI18nLabel **/ getButtonCompleteLabel } from './lang';
@@ -93,14 +93,14 @@ const downloadAllModelRelatedFiles = (buttonIdSelector: string) => async () => {
           const button = document.createElement('div');
           button.id = `${BUTTON_ID}_${i}`;
           button.innerText = `${modelId}_${postId}`;
-          button.setAttribute('style', buttonStyle);
+          button.setAttribute('style', downloadAllGalleryButtonStyle);
           x.parentNode?.parentNode?.appendChild(button);
 
           const onFinishFn = () => {
             replaceWithDisabledButton(
               button,
               `${postId} ${getButtonCompleteLabel()}`,
-              disabledButtonStyle
+              downloadAllGalleryDisabledButtonStyle
             );
           };
           return downloadGalleryImagesAndPrompts(

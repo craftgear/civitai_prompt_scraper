@@ -40,4 +40,22 @@ export const disabledButtonStyle = `
   disable: true;
 `;
 
+export const downloadAllGalleryButtonStyle = `
+  ${buttonStyle}
+  height: 36px;
+  flex: none;
+`;
+
+export const downloadAllGalleryDisabledButtonStyle = `
+  ${disabledButtonStyle}
+  height: 36px;
+  flex: none;
+`;
+
 export const downloadAllButtonStyle = buttonStyle;
+
+export const buttonContainerStyle = `
+  display: flex;
+  flex-direction: row;
+  gap: 0.7rem
+`;

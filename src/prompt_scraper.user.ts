@@ -9,11 +9,49 @@ import { addDownloadAllButton } from './model_download_all';
 
 import { sleep, log } from './utils';
 
+const darkenTextColor = () => {
+  Array.from(document.querySelectorAll('.mantine-Spoiler-root span')).forEach(
+    (x) => {
+      const style = x.getAttribute('style');
+      const colorValue = (style?.match(/color:\s*(.*);?/) ?? [])[1];
+      if (!colorValue) {
+        return;
+      }
+      if (colorValue.startsWith('rgb')) {
+        x.setAttribute('style', `${x.getAttribute('style')} color: black;`);
+        return;
+      }
+      const colorNumber = new Number(`0x${colorValue.slice(1)}`);
+      if (colorNumber > 10000000) {
+        x.setAttribute('style', `${x.getAttribute('style')} color: black;`);
+      }
+    }
+  );
+};
+
+const deleteCreateButton = () => {
+  const createButton = Array.from(document.querySelectorAll('button')).filter(
+    (x: HTMLElement) => x.innerHTML.includes('Create')
+  )[0];
+  if (createButton) {
+    createButton?.remove();
+  }
+};
+
+const deleteSuggestedResources = () => {
+  const el = Array.from(
+    document.querySelectorAll('.mantine-Container-root h2')
+  ).filter((x: Element) => x.innerHTML.includes('Suggested Resources'))[0];
+  if (el?.parentElement?.parentElement?.parentElement?.parentElement) {
+    el?.parentElement?.parentElement?.parentElement?.parentElement?.remove();
+  }
+};
+
 const addModelPreviewDownloadButton = async () => {
   try {
     // await waitForElement('#gallery a[href^="/images"]');
     // FIXME: adhoc: wait for Nextjs rendering finish
-    await sleep(2000);
+    await sleep(1000);
     if (!window.location.href.match(/\/models\/\d*/)) {
       return;
     }
@@ -21,6 +59,9 @@ const addModelPreviewDownloadButton = async () => {
     if (getConfig('openShowMore')) {
       openShowMore(20);
     }
+    darkenTextColor();
+    deleteCreateButton();
+    deleteSuggestedResources();
 
     await addButtonContainer();
     await addModelImagesDownloadButton();
@@ -34,7 +75,7 @@ const addGalleryImageDownloadButton = async () => {
   try {
     // await waitForElement('.mantine-RichTextEditor-root');
     // FIXME: adhoc: wait for Nextjs rendering finish
-    await sleep(2000);
+    await sleep(1000);
     if (!window.location.href.match(/\/images\/\d*/)) {
       return;
     }

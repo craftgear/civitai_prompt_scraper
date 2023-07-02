@@ -1,4 +1,4 @@
-import { buttonStyle } from './styles';
+import { buttonStyle, buttonContainerStyle } from './styles';
 import {
   waitForElement,
   replaceWithDisabledButton,
@@ -120,10 +120,7 @@ export const addButtonContainer = async () => {
 
   const container = document.createElement('div');
   container.id = BUTTON_CONTAINER_ID;
-  container.setAttribute(
-    'style',
-    'display: flex; flex-direction: row; gap: 1rem'
-  );
+  container.setAttribute('style', buttonContainerStyle);
 
   buttonParent?.parentNode?.parentNode?.appendChild(container);
 };
