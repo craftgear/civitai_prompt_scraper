@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        Prompt Scraper - civitai.com
-// @version     1.2.6
+// @version     1.2.7
 // @namespace   https://github.com/craftgear/civitai_prompt_scraper
 // @description download images and prompts as a zip file
 // @license     MIT
@@ -83,6 +83,14 @@ const $292fc7f9388c589b$export$21cd342fafb0108a = `
   ${$292fc7f9388c589b$export$dbe9a8011f5e5b2d}
   height: 36px;
   flex: none;
+  `;
+const $292fc7f9388c589b$export$f272ae7639e11e3 = `
+  ${$292fc7f9388c589b$export$fd4d27a26b4854f3}
+  min-height: 36px;
+`;
+const $292fc7f9388c589b$export$18f0fed469926683 = `
+  ${$292fc7f9388c589b$export$dbe9a8011f5e5b2d}
+  min-height: 36px;
 `;
 const $292fc7f9388c589b$export$7ec3146dae3421e3 = $292fc7f9388c589b$export$fd4d27a26b4854f3;
 const $292fc7f9388c589b$export$b0c8f381295da638 = `
@@ -94,7 +102,7 @@ const $292fc7f9388c589b$export$b0c8f381295da638 = `
 
 
 var $39e7bd012fbaed99$exports = {};
-$39e7bd012fbaed99$exports = JSON.parse('{"name":"civitai_prompt_scraper","browserslist":"> 5%, last 1 versions, not dead","version":"1.2.6","description":"","source":"src/prompt_scraper.user.ts","browser ":"dist/prompt_scraper.user.js","targets":{"default":{"context":"browser","sourceMap":false,"includeNodeModules":true,"optimize":true}},"scripts":{"type-check":"tsc --noEmit","lint":"eslint","format":"prettier --write .","watch":"parcel watch","build":"rm -rf .parcel-cache/*; parcel build; zip -v -j ./dist/prompt_scraper.zip ./dist/prompt_scraper.user.js","clean":"rm ./dist/*","test":"echo \\"Error: no test specified\\" && exit 1"},"author":"Watanabe, Shunsuke","license":"MIT","devDependencies":{"@damoclark/parcel-optimizer-userscript":"^0.0.2","@parcel/packager-ts":"^2.8.3","@parcel/transformer-typescript-types":"^2.8.3","@tsconfig/recommended":"^1.0.2","@types/file-saver":"^2.0.5","@types/lodash":"^4.14.191","@typescript-eslint/eslint-plugin":"^5.52.0","@typescript-eslint/parser":"^5.52.0","@violentmonkey/types":"^0.1.5","eslint":"^8.34.0","eslint-config-standard-with-typescript":"^34.0.0","eslint-plugin-import":"^2.27.5","eslint-plugin-n":"^15.6.1","eslint-plugin-promise":"^6.1.1","parcel":"^2.8.3","prettier":"^2.8.4","rollup-plugin-cleanup":"^3.2.1","typescript":"^4.9.5"},"dependencies":{"@violentmonkey/url":"^0.1.0","@zip.js/zip.js":"^2.6.63","file-saver":"^2.0.5","html2canvas":"^1.4.1","lodash":"^4.17.21","wazip":"^0.1.0"}}');
+$39e7bd012fbaed99$exports = JSON.parse('{"name":"civitai_prompt_scraper","browserslist":"> 5%, last 1 versions, not dead","version":"1.2.7","description":"","source":"src/prompt_scraper.user.ts","browser ":"dist/prompt_scraper.user.js","targets":{"default":{"context":"browser","sourceMap":false,"includeNodeModules":true,"optimize":true}},"scripts":{"type-check":"tsc --noEmit","lint":"eslint","format":"prettier --write .","watch":"parcel watch","build":"rm -rf .parcel-cache/*; parcel build; zip -v -j ./dist/prompt_scraper.zip ./dist/prompt_scraper.user.js","clean":"rm ./dist/*","test":"echo \\"Error: no test specified\\" && exit 1"},"author":"Watanabe, Shunsuke","license":"MIT","devDependencies":{"@damoclark/parcel-optimizer-userscript":"^0.0.2","@parcel/packager-ts":"^2.8.3","@parcel/transformer-typescript-types":"^2.8.3","@tsconfig/recommended":"^1.0.2","@types/file-saver":"^2.0.5","@types/lodash":"^4.14.191","@typescript-eslint/eslint-plugin":"^5.52.0","@typescript-eslint/parser":"^5.52.0","@violentmonkey/types":"^0.1.5","eslint":"^8.34.0","eslint-config-standard-with-typescript":"^34.0.0","eslint-plugin-import":"^2.27.5","eslint-plugin-n":"^15.6.1","eslint-plugin-promise":"^6.1.1","parcel":"^2.8.3","prettier":"^2.8.4","rollup-plugin-cleanup":"^3.2.1","typescript":"^4.9.5"},"dependencies":{"@violentmonkey/url":"^0.1.0","@zip.js/zip.js":"^2.6.63","file-saver":"^2.0.5","html2canvas":"^1.4.1","lodash":"^4.17.21","wazip":"^0.1.0"}}');
 
 
 
@@ -12737,8 +12745,7 @@ function $65c0cd2b2ec0988a$export$3a5abe5201fb331() {
 }
 const $65c0cd2b2ec0988a$export$44487a86467333c3 = (fieldName)=>{
     const localConfigValues = (0, $afa9fb8bb7aaf429$export$c1a4367d4847eb06)();
-    console.log("----- localConfigValues:", localConfigValues);
-    if (localConfigValues && localConfigValues[fieldName]) return localConfigValues[fieldName];
+    if (localConfigValues !== undefined && localConfigValues[fieldName] !== undefined) return localConfigValues[fieldName];
     const inputField = $65c0cd2b2ec0988a$var$fields.find((x)=>x.name === fieldName);
     if (inputField) return inputField.value;
     throw new Error(`${(0, $966fc19e1e9bc989$export$731a191155ffa90a)} : ${fieldName}`);
@@ -12897,7 +12904,7 @@ const $8d59c42601ba8f61$var$getModeInfoAndImageList = async (href)=>{
 const $8d59c42601ba8f61$export$53039d7a8d9d297e = (buttonIdSelector)=>async ()=>{
         try {
             const button = await (0, $0fccda82d33153ac$export$1a1c301579a08d1e)(buttonIdSelector);
-            if (!button) return [];
+            if (!button) return null;
             button.innerText = (0, $966fc19e1e9bc989$export$731a191155ffa90a)("startingDownload");
             const { modelId: modelId , modelName: modelName , imageList: imageList , modelVersionId: modelVersionId , modelVersionName: modelVersionName , modelInfo: modelInfo  } = await $8d59c42601ba8f61$var$getModeInfoAndImageList(window.location.href);
             const filenameFormat = (0, $65c0cd2b2ec0988a$export$44487a86467333c3)("modelPreviewFilenameFormat");
@@ -12907,13 +12914,13 @@ const $8d59c42601ba8f61$export$53039d7a8d9d297e = (buttonIdSelector)=>async ()=>
                     url: x.url.replace(/width=\d*/, `width=${x.width},optimized=true`)
                 })));
             (0, $0fccda82d33153ac$export$92ecf871022de94d)(button, ` ${imageList.length} / ${imageList.length} ${(0, $966fc19e1e9bc989$export$4d9f09007b08c03d)()}`);
-            return [
-                imageList,
-                modelName
-            ];
+            return {
+                imageList: imageList,
+                modelName: modelName
+            };
         } catch (error) {
             alert(error.message);
-            return [];
+            return null;
         }
     };
 const $8d59c42601ba8f61$var$BUTTON_CONTAINER_ID = "civitai_prompt_scraper";
@@ -13009,7 +13016,7 @@ const $9a7e0bde1a099030$export$5fd187c0d03a79e = async ()=>{
     button.addEventListener("click", eventListener);
     button.id = $9a7e0bde1a099030$var$BUTTON_ID;
     button.innerText = (0, $966fc19e1e9bc989$export$d397f86d22f413e8)();
-    button.setAttribute("style", (0, $292fc7f9388c589b$export$fd4d27a26b4854f3));
+    button.setAttribute("style", (0, $292fc7f9388c589b$export$f272ae7639e11e3));
     button.setAttribute("data-state", (0, $a5923d2edfc72bc5$export$5d7ba7f5550f99d1).ready);
     if (document.querySelector(".mantine-Modal-modal")) {
         const parentNode = await (0, $0fccda82d33153ac$export$1a1c301579a08d1e)(".mantine-Modal-modal .mantine-Card-cardSection");
@@ -13018,13 +13025,9 @@ const $9a7e0bde1a099030$export$5fd187c0d03a79e = async ()=>{
         const parentNode = await (0, $0fccda82d33153ac$export$1a1c301579a08d1e)("#freezeBlock .mantine-Stack-root");
         parentNode?.appendChild(button);
     }
-    if ((0, $65c0cd2b2ec0988a$export$44487a86467333c3)("galleryAutoDownload") && button.getAttribute("data-state") === (0, $a5923d2edfc72bc5$export$5d7ba7f5550f99d1).ready) {
-        console.log("----- :", (0, $65c0cd2b2ec0988a$export$44487a86467333c3)("galleryAutoDownload"));
-        console.log(button.getAttribute("data-state"));
-        setTimeout(()=>{
-            button.click();
-        }, 0);
-    }
+    if ((0, $65c0cd2b2ec0988a$export$44487a86467333c3)("galleryAutoDownload") && button.getAttribute("data-state") === (0, $a5923d2edfc72bc5$export$5d7ba7f5550f99d1).ready) setTimeout(()=>{
+        button.click();
+    }, 0);
 };
 
 
@@ -13057,7 +13060,7 @@ const $2da5569f102e177a$var$downloadAllModelRelatedFiles = (buttonIdSelector)=>a
             window.open(modelDownloadUrl, "_blank");
         }, 0);
         // save previews as a zip file
-        const [previewImageList, modelName] = await (0, $8d59c42601ba8f61$export$53039d7a8d9d297e)(buttonIdSelector)();
+        const { imageList: previewImageList , modelName: modelName  } = await (0, $8d59c42601ba8f61$export$53039d7a8d9d297e)(buttonIdSelector)() ?? {};
         // save galleries as zip files
         const clientHeight = document.querySelector("body")?.clientHeight;
         if (clientHeight) window.scrollTo(0, clientHeight);
@@ -13094,7 +13097,7 @@ const $2da5569f102e177a$var$downloadAllModelRelatedFiles = (buttonIdSelector)=>a
             const onFinishFn = ()=>{
                 (0, $0fccda82d33153ac$export$92ecf871022de94d)(button, `${postId} ${(0, $966fc19e1e9bc989$export$4d9f09007b08c03d)()}`, (0, $292fc7f9388c589b$export$21cd342fafb0108a));
             };
-            return (0, $9a7e0bde1a099030$export$9473b35530fb3701)(`#${$2da5569f102e177a$var$BUTTON_ID}_${i}`, modelId, postId, modelName, onFinishFn, previewImageList)();
+            return (0, $9a7e0bde1a099030$export$9473b35530fb3701)(`#${$2da5569f102e177a$var$BUTTON_ID}_${i}`, modelId, postId, modelName ?? "", onFinishFn, previewImageList)();
         }));
         alert("done");
         console.warn("##### done #####");

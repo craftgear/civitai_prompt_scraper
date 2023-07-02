@@ -1,5 +1,5 @@
 import { ButtonState } from './types';
-import { buttonStyle } from './styles';
+import { galleryButtonStyle } from './styles';
 import {
   waitForElement,
   replaceWithDisabledButton,
@@ -156,7 +156,7 @@ export const addGalleryDownloadButton = async () => {
 
   button.id = BUTTON_ID;
   button.innerText = getButtonLabel();
-  button.setAttribute('style', buttonStyle);
+  button.setAttribute('style', galleryButtonStyle);
   button.setAttribute('data-state', ButtonState.ready);
   if (document.querySelector('.mantine-Modal-modal')) {
     const parentNode = await waitForElement(

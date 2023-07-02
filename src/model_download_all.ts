@@ -48,9 +48,8 @@ const downloadAllModelRelatedFiles = (buttonIdSelector: string) => async () => {
   }
 
   // save previews as a zip file
-  const [previewImageList, modelName] = await downloadImagesAndPrompts(
-    buttonIdSelector
-  )();
+  const { imageList: previewImageList, modelName } =
+    (await downloadImagesAndPrompts(buttonIdSelector)()) ?? {};
 
   // save galleries as zip files
   const clientHeight = document.querySelector('body')?.clientHeight;
@@ -107,7 +106,7 @@ const downloadAllModelRelatedFiles = (buttonIdSelector: string) => async () => {
             `#${BUTTON_ID}_${i}`,
             modelId,
             postId,
-            modelName,
+            modelName ?? '',
             onFinishFn,
             previewImageList
           )();

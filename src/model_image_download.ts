@@ -10,6 +10,7 @@ import {
   fetchModelInfoByModleIdOrModelVersionId,
   fetchGalleryData,
 } from './infra';
+import { GalleryImagesResponse } from './types';
 import { getConfig } from './config_panel';
 
 const BUTTON_ID = 'download-all-images-and-prompts';
@@ -68,12 +69,16 @@ const getModeInfoAndImageList = async (href: string) => {
 };
 
 export const downloadImagesAndPrompts =
-  (buttonIdSelector: string) => async () => {
+  (buttonIdSelector: string) =>
+  async (): Promise<{
+    imageList: GalleryImagesResponse['items'];
+    modelName: string;
+  } | null> => {
     try {
       const button = await waitForElement(buttonIdSelector);
 
       if (!button) {
-        return [];
+        return null;
       }
 
       button.innerText = getI18nLabel('startingDownload');
@@ -106,10 +111,10 @@ export const downloadImagesAndPrompts =
         ` ${imageList.length} / ${imageList.length} ${getButtonCompleteLabel()}`
       );
 
-      return [imageList, modelName];
+      return { imageList, modelName };
     } catch (error: unknown) {
       alert((error as Error).message);
-      return [];
+      return null;
     }
   };
 

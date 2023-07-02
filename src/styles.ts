@@ -50,6 +50,16 @@ export const downloadAllGalleryDisabledButtonStyle = `
   ${disabledButtonStyle}
   height: 36px;
   flex: none;
+  `;
+
+export const galleryButtonStyle = `
+  ${buttonStyle}
+  min-height: 36px;
+`;
+
+export const galleryDisabledButtonStyle = `
+  ${disabledButtonStyle}
+  min-height: 36px;
 `;
 
 export const downloadAllButtonStyle = buttonStyle;
