@@ -191,7 +191,10 @@ export function initConfigPanel() {
 
 export const getConfig = (fieldName: string): string | boolean => {
   const localConfigValues = loadConfig();
-  if (localConfigValues && localConfigValues[fieldName as ConfigKey]) {
+  if (
+    localConfigValues !== undefined &&
+    localConfigValues[fieldName as ConfigKey] !== undefined
+  ) {
     return localConfigValues[fieldName as ConfigKey];
   }
 

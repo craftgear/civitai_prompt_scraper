@@ -74,6 +74,14 @@ const $292fc7f9388c589b$export$dbe9a8011f5e5b2d = `
   background-color: grey;
   disable: true;
 `;
+const $292fc7f9388c589b$export$f272ae7639e11e3 = `
+  ${$292fc7f9388c589b$export$fd4d27a26b4854f3}
+  min-height: 36px;
+`;
+const $292fc7f9388c589b$export$18f0fed469926683 = `
+  ${$292fc7f9388c589b$export$dbe9a8011f5e5b2d}
+  min-height: 36px;
+`;
 const $292fc7f9388c589b$export$7ec3146dae3421e3 = $292fc7f9388c589b$export$fd4d27a26b4854f3;
 
 
@@ -12720,7 +12728,7 @@ function $65c0cd2b2ec0988a$export$3a5abe5201fb331() {
 }
 const $65c0cd2b2ec0988a$export$44487a86467333c3 = (fieldName)=>{
     const localConfigValues = (0, $afa9fb8bb7aaf429$export$c1a4367d4847eb06)();
-    if (localConfigValues && localConfigValues[fieldName]) return localConfigValues[fieldName];
+    if (localConfigValues !== undefined && localConfigValues[fieldName] !== undefined) return localConfigValues[fieldName];
     const inputField = $65c0cd2b2ec0988a$var$fields.find((x)=>x.name === fieldName);
     if (inputField) return inputField.value;
     throw new Error(`${(0, $966fc19e1e9bc989$export$731a191155ffa90a)} : ${fieldName}`);
@@ -12973,7 +12981,7 @@ const $9a7e0bde1a099030$export$5fd187c0d03a79e = async ()=>{
     button.addEventListener("click", eventListener);
     button.id = $9a7e0bde1a099030$var$BUTTON_ID;
     button.innerText = (0, $966fc19e1e9bc989$export$d397f86d22f413e8)();
-    button.setAttribute("style", (0, $292fc7f9388c589b$export$fd4d27a26b4854f3));
+    button.setAttribute("style", (0, $292fc7f9388c589b$export$f272ae7639e11e3));
     button.setAttribute("data-state", (0, $a5923d2edfc72bc5$export$5d7ba7f5550f99d1).ready);
     if (document.querySelector(".mantine-Modal-modal")) {
         const parentNode = await (0, $0fccda82d33153ac$export$1a1c301579a08d1e)(".mantine-Modal-modal .mantine-Card-cardSection");
@@ -12982,6 +12990,7 @@ const $9a7e0bde1a099030$export$5fd187c0d03a79e = async ()=>{
         const parentNode = await (0, $0fccda82d33153ac$export$1a1c301579a08d1e)("#freezeBlock .mantine-Stack-root");
         parentNode?.appendChild(button);
     }
+    console.log((0, $65c0cd2b2ec0988a$export$44487a86467333c3)("galleryAutoDownload"));
     if ((0, $65c0cd2b2ec0988a$export$44487a86467333c3)("galleryAutoDownload") && button.getAttribute("data-state") === (0, $a5923d2edfc72bc5$export$5d7ba7f5550f99d1).ready) setTimeout(()=>{
         button.click();
     }, 0);
@@ -13020,7 +13029,7 @@ const $29e4e9967394a818$var$openShowMore = ()=>{
     const showMoreButton = Array.from(document.querySelectorAll("button")).filter((x)=>x.innerHTML.includes("Show More"))[0];
     if (showMoreButton) {
         showMoreButton.click();
-        showMoreButton.remove();
+        showMoreButton.innerHTML = "Hide";
         return;
     }
     setTimeout(()=>{
