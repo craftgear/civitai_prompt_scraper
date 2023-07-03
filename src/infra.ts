@@ -127,9 +127,7 @@ export const fetchImg = async (
     };
   } catch (error) {
     if (url.includes('image.civitai.com')) {
-      return fetchImg(
-        url.replace('image.civitai.com', 'imagecache.civitai.com')
-      );
+      return fetchImg(url.replace(',optimized=true', ''));
     }
     throw error;
   }
