@@ -12829,6 +12829,7 @@ const $afa9fb8bb7aaf429$export$2ab75dd31a3868f2 = async (url)=>{
     }
 };
 const $afa9fb8bb7aaf429$export$b6bc24646229cedd = (buttnTextUpdateFn)=>(zipFilename, modelInfo)=>async (imgInfo)=>{
+            if (!modelInfo && imgInfo.length === 0) return;
             const addedNames = new Set();
             const blobWriter = new (0, $53e25169918aa98b$export$b1948fceba813858)(`application/zip`);
             const zipWriter = new (0, $183a0115a003f583$export$50f5658480930b4c)(blobWriter);
