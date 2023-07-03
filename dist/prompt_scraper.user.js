@@ -55,6 +55,7 @@ const $292fc7f9388c589b$export$2c795915441ef547 = `
 const $292fc7f9388c589b$export$fd4d27a26b4854f3 = `
   display: flex;
   flex: fit-content;
+  min-height: 36px;
   justify-content: center;
   align-items: center;
   color: white;
@@ -86,11 +87,9 @@ const $292fc7f9388c589b$export$21cd342fafb0108a = `
   `;
 const $292fc7f9388c589b$export$f272ae7639e11e3 = `
   ${$292fc7f9388c589b$export$fd4d27a26b4854f3}
-  min-height: 36px;
 `;
 const $292fc7f9388c589b$export$18f0fed469926683 = `
   ${$292fc7f9388c589b$export$dbe9a8011f5e5b2d}
-  min-height: 36px;
 `;
 const $292fc7f9388c589b$export$7ec3146dae3421e3 = $292fc7f9388c589b$export$fd4d27a26b4854f3;
 const $292fc7f9388c589b$export$b0c8f381295da638 = `
@@ -12883,7 +12882,7 @@ const $8d59c42601ba8f61$var$getModeInfoAndImageList = async (href)=>{
     const hrefModelId = href.match(/\/models\/(?<modelId>\d*)/)?.groups?.modelId ?? href.match(/modelId=(?<modelId>\d*)/)?.groups?.modelId;
     const hrefModelVersionId = href.match(/modelVersionId=(?<modelVersionId>\d*)/)?.groups?.modelVersionId;
     const modelInfo = await (0, $afa9fb8bb7aaf429$export$769102d94f147e19)(hrefModelId, hrefModelVersionId);
-    const { id: modelId , name: modelName , creator: { username: username  }  } = modelInfo;
+    const { id: modelId , name: modelName  } = modelInfo;
     if (!modelId) throw new Error((0, $966fc19e1e9bc989$export$731a191155ffa90a)("modelIdNotFoundError"));
     const modelVersionId = hrefModelVersionId ? hrefModelVersionId : modelInfo.modelVersions[0].id;
     if (!modelVersionId) throw new Error((0, $966fc19e1e9bc989$export$731a191155ffa90a)("modelVersionIdNotFoundError"));
@@ -12892,7 +12891,7 @@ const $8d59c42601ba8f61$var$getModeInfoAndImageList = async (href)=>{
     })?.name || "no_version_name";
     // use fetchGalleryData instead of fetchModelVersionData,
     // due to modelVersion api returns first 10 images of preview.
-    const imageList = await (0, $afa9fb8bb7aaf429$export$c6ace8a485846f08)(`${modelId}`, null, `${modelVersionId}`, username);
+    const imageList = await (0, $afa9fb8bb7aaf429$export$c6ace8a485846f08)(`${modelId}`, null, `${modelVersionId}`, null);
     return {
         modelId: modelId,
         modelName: modelName,
