@@ -30,7 +30,7 @@ const getModeInfoAndImageList = async (href: string) => {
   const {
     id: modelId,
     name: modelName,
-    // creator: { username: username },
+    creator: { username: username },
   } = modelInfo;
 
   if (!modelId) {
@@ -56,7 +56,7 @@ const getModeInfoAndImageList = async (href: string) => {
     `${modelId}`,
     null,
     `${modelVersionId}`,
-    null
+    `${username}`
   );
   return {
     modelId,

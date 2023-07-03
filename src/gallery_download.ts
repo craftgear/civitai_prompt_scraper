@@ -26,7 +26,7 @@ export const downloadGalleryImagesAndPrompts =
   ) =>
   async () => {
     try {
-      const _imgList = await fetchGalleryData(null, postId);
+      const _imgList = await fetchGalleryData(modelId, postId);
 
       // exclude downloaded images
       const downloadedImgIds = downLoadedImgList?.map(({ id }) => id) ?? [];
