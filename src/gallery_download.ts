@@ -23,7 +23,7 @@ const downloadGalleryImagesAndPrompts =
   ) =>
   async () => {
     try {
-      const imgList = await fetchGalleryData(modelId, postId);
+      const imgList = await fetchGalleryData(null, postId);
 
       const button = await waitForElement(buttonIdSelector);
       if (!button) {
