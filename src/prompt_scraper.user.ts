@@ -38,12 +38,16 @@ const deleteCreateButton = () => {
   }
 };
 
-const deleteSuggestedResources = () => {
+const deleteSuggestedResources = (retry = 5) => {
   const el = Array.from(
     document.querySelectorAll('.mantine-Container-root h2')
   ).filter((x: Element) => x.innerHTML.includes('Suggested Resources'))[0];
   if (el?.parentElement?.parentElement?.parentElement?.parentElement) {
     el?.parentElement?.parentElement?.parentElement?.parentElement?.remove();
+  } else {
+    setTimeout(() => {
+      deleteSuggestedResources(retry - 1);
+    }, 1000);
   }
 };
 
