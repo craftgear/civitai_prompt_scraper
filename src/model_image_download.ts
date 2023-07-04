@@ -1,4 +1,4 @@
-import { buttonStyle } from './styles';
+import { buttonStyle, buttonContainerStyle } from './styles';
 import {
   waitForElement,
   replaceWithDisabledButton,
@@ -110,9 +110,24 @@ export const downloadImagesAndPrompts =
     }
   };
 
-export const addModelImagesDownloadButton = async () => {
+const BUTTON_CONTAINER_ID = 'civitai_prompt_scraper';
+export const addButtonContainer = async () => {
   const downloadButtonSelector = "a[href^='/api/download/models/']";
-  await waitForElement(downloadButtonSelector);
+  const buttonParent = await waitForElement(downloadButtonSelector);
+
+  const container = document.createElement('div');
+  container.id = BUTTON_CONTAINER_ID;
+  container.setAttribute('style', buttonContainerStyle);
+
+  buttonParent?.parentNode?.parentNode?.appendChild(container);
+};
+
+export const getButtonContainerNode = async () => {
+  return waitForElement(`#${BUTTON_CONTAINER_ID}`);
+};
+
+export const addModelImagesDownloadButton = async () => {
+  const container = await getButtonContainerNode();
   const buttonIdSelector = `#${BUTTON_ID}`;
   document.querySelector(buttonIdSelector)?.remove();
 
@@ -124,8 +139,6 @@ export const addModelImagesDownloadButton = async () => {
   button.id = BUTTON_ID;
   button.innerText = getButtonLabel();
   button.setAttribute('style', buttonStyle);
-  const buttonParent = document.querySelector(downloadButtonSelector);
-  if (buttonParent) {
-    buttonParent.parentNode?.parentNode?.appendChild(button);
-  }
+
+  container?.appendChild(button);
 };
