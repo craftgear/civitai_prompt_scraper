@@ -29,27 +29,12 @@ const getGalleryModelIdAndPostId = (href: string) => {
 };
 
 const downloadAllModelRelatedFiles = (buttonIdSelector: string) => async () => {
-  // start downloading a model
-  await waitForElement(downloadButtonSelector);
-  const modelDownloadUrl = document
-    .querySelector(downloadButtonSelector)
-    ?.getAttribute('href');
-
-  const fileSizeText =
-    document.querySelector(downloadButtonSelector)?.innerHTML ?? '';
-  if (
-    modelDownloadUrl &&
-    // モデルの場合はダウンロードしない
-    !fileSizeText.includes(' GB)')
-  ) {
-    setTimeout(() => {
-      window.open(modelDownloadUrl, '_blank');
-    }, 0);
-  }
-
   // save previews as a zip file
   const { imageList: previewImageList, modelName } =
-    (await downloadImagesAndPrompts(buttonIdSelector)()) ?? {};
+    (await downloadImagesAndPrompts(
+      buttonIdSelector,
+      window.location.href
+    )()) ?? {};
 
   // save galleries as zip files
   const clientHeight = document.querySelector('body')?.clientHeight;
@@ -131,6 +116,26 @@ export const addDownloadAllButton = async () => {
   button.id = BUTTON_ID;
   button.innerText = 'dowload all'; //getButtonLabel();
   button.setAttribute('style', downloadAllButtonStyle);
+
+  // start downloading a model
+  button.addEventListener('click', async () => {
+    await waitForElement(downloadButtonSelector);
+    const modelDownloadUrl = document
+      .querySelector(downloadButtonSelector)
+      ?.getAttribute('href');
+
+    const fileSizeText =
+      document.querySelector(downloadButtonSelector)?.innerHTML ?? '';
+    if (
+      modelDownloadUrl &&
+      // モデルの場合はダウンロードしない
+      !fileSizeText.includes(' GB)')
+    ) {
+      setTimeout(() => {
+        window.open(modelDownloadUrl, '_blank');
+      }, 0);
+    }
+  });
 
   if (parentNode) {
     parentNode.appendChild(button);
