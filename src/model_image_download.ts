@@ -69,7 +69,7 @@ const getModeInfoAndImageList = async (href: string) => {
 };
 
 export const downloadImagesAndPrompts =
-  (buttonIdSelector: string) =>
+  (buttonIdSelector: string, location: string) =>
   async (): Promise<{
     imageList: GalleryImagesResponse['items'];
     modelName: string;
@@ -90,7 +90,7 @@ export const downloadImagesAndPrompts =
         modelVersionId,
         modelVersionName,
         modelInfo,
-      } = await getModeInfoAndImageList(window.location.href);
+      } = await getModeInfoAndImageList(location);
 
       const filenameFormat = getConfig('modelPreviewFilenameFormat');
       const filename = (filenameFormat as string)
@@ -140,7 +140,10 @@ export const addModelImagesDownloadButton = async () => {
   document.querySelector(buttonIdSelector)?.remove();
 
   const button = document.createElement('a');
-  button.addEventListener('click', downloadImagesAndPrompts(buttonIdSelector));
+  button.addEventListener(
+    'click',
+    downloadImagesAndPrompts(buttonIdSelector, window.location.href)
+  );
   button.id = BUTTON_ID;
   button.innerText = getButtonLabel();
   button.setAttribute('style', buttonStyle);
