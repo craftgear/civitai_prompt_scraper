@@ -7,6 +7,14 @@ import { InputField, Config, ConfigKey } from './types';
 const fields = [
   {
     type: 'checkbox',
+    name: 'downloadModelAsWell',
+    label: getI18nLabel('downloadModelAsWell'),
+    value: true,
+    desc: '',
+    style: 'margin-right: 0.5rem;',
+  },
+  {
+    type: 'checkbox',
     name: 'openShowMore',
     label: getI18nLabel('openShowMore'),
     value: true,

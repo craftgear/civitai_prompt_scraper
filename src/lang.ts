@@ -109,6 +109,12 @@ const i18n: {
     'zh-CN': '开始下载',
     'zh-TW': '開始下載',
   },
+  downloadModelAsWell: {
+    en: 'download model as well',
+    ja: '同時にモデルもダウンロードする',
+    'zh-CN': '也下载模型',
+    'zh-TW': '也下載模型',
+  },
 };
 
 const getLocale = () => {

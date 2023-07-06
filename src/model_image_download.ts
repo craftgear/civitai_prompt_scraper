@@ -13,6 +13,8 @@ import {
 import { getConfig } from './config_panel';
 
 const BUTTON_ID = 'download-all-images-and-prompts';
+const BUTTON_CONTAINER_ID = 'civitai_prompt_scraper';
+const downloadButtonSelector = "a[href^='/api/download/models/']";
 
 const getModeInfoAndImageList = async (href: string) => {
   const hrefModelId =
@@ -67,6 +69,17 @@ const getModeInfoAndImageList = async (href: string) => {
   };
 };
 
+const startModelDownload = async () => {
+  await waitForElement(downloadButtonSelector);
+  const modelDownloadUrl = document
+    .querySelector(downloadButtonSelector)
+    ?.getAttribute('href');
+
+  if (modelDownloadUrl) {
+    window.open(modelDownloadUrl, '_blank');
+  }
+};
+
 export const downloadImagesAndPrompts =
   (buttonIdSelector: string, location: string) => async () => {
     try {
@@ -110,8 +123,7 @@ export const downloadImagesAndPrompts =
     }
   };
 
-const BUTTON_CONTAINER_ID = 'civitai_prompt_scraper';
-export const addButtonContainer = async () => {
+const addButtonContainer = async () => {
   const downloadButtonSelector = "a[href^='/api/download/models/']";
   const buttonParent = await waitForElement(downloadButtonSelector);
 
@@ -120,6 +132,7 @@ export const addButtonContainer = async () => {
   container.setAttribute('style', buttonContainerStyle);
 
   buttonParent?.parentNode?.parentNode?.appendChild(container);
+  return container;
 };
 
 export const getButtonContainerNode = async () => {
@@ -127,7 +140,7 @@ export const getButtonContainerNode = async () => {
 };
 
 export const addModelImagesDownloadButton = async () => {
-  const container = await getButtonContainerNode();
+  const container = await addButtonContainer();
   const buttonIdSelector = `#${BUTTON_ID}`;
   document.querySelector(buttonIdSelector)?.remove();
 
@@ -139,6 +152,11 @@ export const addModelImagesDownloadButton = async () => {
   button.id = BUTTON_ID;
   button.innerText = getButtonLabel();
   button.setAttribute('style', buttonStyle);
+
+  if (getConfig('downloadModelAsWell')) {
+    // start downloading a model
+    button.addEventListener('click', startModelDownload);
+  }
 
   container?.appendChild(button);
 };

@@ -112,7 +112,7 @@ export const addGalleryDownloadButton = async () => {
   const eventListener = (() => {
     // open gallery from model preview images
     if (modelVersionId && prioritizedUserId) {
-      return downloadImagesAndPrompts(buttonIdSelector);
+      return downloadImagesAndPrompts(buttonIdSelector, window.location.href);
     }
     // open gallery from model gallery areas
     if (modelId && postId) {
