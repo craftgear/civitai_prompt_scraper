@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        Prompt Scraper - civitai.com
-// @version     1.2.11
+// @version     1.2.13
 // @namespace   https://github.com/craftgear/civitai_prompt_scraper
 // @description download images and prompts as a zip file
 // @license     MIT
@@ -103,7 +103,7 @@ const $292fc7f9388c589b$export$b0c8f381295da638 = `
 
 
 var $39e7bd012fbaed99$exports = {};
-$39e7bd012fbaed99$exports = JSON.parse('{"name":"civitai_prompt_scraper","browserslist":"> 5%, last 1 versions, not dead","version":"1.2.11","description":"","source":"src/prompt_scraper.user.ts","browser ":"dist/prompt_scraper.user.js","targets":{"default":{"context":"browser","sourceMap":false,"includeNodeModules":true,"optimize":true}},"scripts":{"type-check":"tsc --noEmit","lint":"eslint","format":"prettier --write .","watch":"parcel watch","build":"rm -rf .parcel-cache/*; parcel build; zip -v -j ./dist/prompt_scraper.zip ./dist/prompt_scraper.user.js","clean":"rm ./dist/*","test":"echo \\"Error: no test specified\\" && exit 1"},"author":"Watanabe, Shunsuke","license":"MIT","devDependencies":{"@damoclark/parcel-optimizer-userscript":"^0.0.2","@parcel/packager-ts":"^2.8.3","@parcel/transformer-typescript-types":"^2.8.3","@tsconfig/recommended":"^1.0.2","@types/file-saver":"^2.0.5","@types/lodash":"^4.14.191","@typescript-eslint/eslint-plugin":"^5.52.0","@typescript-eslint/parser":"^5.52.0","@violentmonkey/types":"^0.1.5","eslint":"^8.34.0","eslint-config-standard-with-typescript":"^34.0.0","eslint-plugin-import":"^2.27.5","eslint-plugin-n":"^15.6.1","eslint-plugin-promise":"^6.1.1","parcel":"^2.8.3","prettier":"^2.8.4","rollup-plugin-cleanup":"^3.2.1","typescript":"^4.9.5"},"dependencies":{"@violentmonkey/url":"^0.1.0","@zip.js/zip.js":"^2.6.63","file-saver":"^2.0.5","html2canvas":"^1.4.1","lodash":"^4.17.21","wazip":"^0.1.0"}}');
+$39e7bd012fbaed99$exports = JSON.parse('{"name":"civitai_prompt_scraper","browserslist":"> 5%, last 1 versions, not dead","version":"1.2.13","description":"","source":"src/prompt_scraper.user.ts","browser ":"dist/prompt_scraper.user.js","targets":{"default":{"context":"browser","sourceMap":false,"includeNodeModules":true,"optimize":true}},"scripts":{"type-check":"tsc --noEmit","lint":"eslint","format":"prettier --write .","watch":"parcel watch","build":"rm -rf .parcel-cache/*; parcel build; zip -v -j ./dist/prompt_scraper.zip ./dist/prompt_scraper.user.js","clean":"rm ./dist/*","test":"echo \\"Error: no test specified\\" && exit 1"},"author":"Watanabe, Shunsuke","license":"MIT","devDependencies":{"@damoclark/parcel-optimizer-userscript":"^0.0.2","@parcel/packager-ts":"^2.8.3","@parcel/transformer-typescript-types":"^2.8.3","@tsconfig/recommended":"^1.0.2","@types/file-saver":"^2.0.5","@types/lodash":"^4.14.191","@typescript-eslint/eslint-plugin":"^5.52.0","@typescript-eslint/parser":"^5.52.0","@violentmonkey/types":"^0.1.5","eslint":"^8.34.0","eslint-config-standard-with-typescript":"^34.0.0","eslint-plugin-import":"^2.27.5","eslint-plugin-n":"^15.6.1","eslint-plugin-promise":"^6.1.1","parcel":"^2.8.3","prettier":"^2.8.4","rollup-plugin-cleanup":"^3.2.1","typescript":"^4.9.5"},"dependencies":{"@violentmonkey/url":"^0.1.0","@zip.js/zip.js":"^2.6.63","file-saver":"^2.0.5","html2canvas":"^1.4.1","lodash":"^4.17.21","wazip":"^0.1.0"}}');
 
 
 
@@ -12967,6 +12967,7 @@ const $8d59c42601ba8f61$export$8b03a564a450b487 = async ()=>{
 
 
 
+
 const $9a7e0bde1a099030$var$BUTTON_ID = "download-all-gallery-images-and-prompts";
 const $9a7e0bde1a099030$var$downloadGalleryImagesAndPrompts = (buttonIdSelector, modelId, postId, modelName, onFinishFn)=>async ()=>{
         try {
@@ -12984,20 +12985,44 @@ const $9a7e0bde1a099030$var$downloadGalleryImagesAndPrompts = (buttonIdSelector,
             alert(error.message);
         }
     };
+const $9a7e0bde1a099030$var$downloadSingleImagesAndPrompts = (buttonIdSelector)=>async ()=>{
+        try {
+            const data = (0, $0fccda82d33153ac$export$ce1398d1c23018fa)();
+            const model = data.props.pageProps.trpcState.json.queries[0];
+            const { id: id , url: url , meta: meta , width: width , name: name , hash: hash  } = model.state.data;
+            if (!url || !width || !name) throw new Error(`image properties not found: url ${url}, width ${width}, name ${name}`);
+            const imgUrl = (0, $0fccda82d33153ac$export$b56cc0ee0a85f41e)(url, width, name);
+            const button = await (0, $0fccda82d33153ac$export$1a1c301579a08d1e)(buttonIdSelector);
+            if (!button) return;
+            await (0, $afa9fb8bb7aaf429$export$b6bc24646229cedd)((0, $0fccda82d33153ac$export$bb64a7e3f0f28938)(button))(`imageId_${id}.zip`)([
+                {
+                    url: imgUrl,
+                    hash: hash,
+                    meta: meta
+                }
+            ]);
+            (0, $0fccda82d33153ac$export$92ecf871022de94d)(button, (0, $966fc19e1e9bc989$export$4d9f09007b08c03d)());
+        } catch (error) {
+            alert(error.message);
+        }
+    };
 const $9a7e0bde1a099030$var$extractIdsFromUrl = (href)=>{
     const matchedModel = href.match(/modelId=(?<modelId>\d*)/);
-    const matchedModelVersion = href.match(/modelVersionId=(?<modelVersionId>\d*)/);
-    const matchedPost = href.match(/postId=(?<postId>\d*)/);
-    const matchedPrioritizedUser = href.match(/prioritizedUserIds=(?<prioritizedUserId>\d*)/);
     const modelId = matchedModel?.groups?.modelId || null;
+    const matchedModelVersion = href.match(/modelVersionId=(?<modelVersionId>\d*)/);
     const modelVersionId = matchedModelVersion?.groups?.modelVersionId || null;
+    const matchedPost = href.match(/postId=(?<postId>\d*)/);
     const postId = matchedPost?.groups?.postId || null;
+    const matchedPrioritizedUser = href.match(/prioritizedUserIds=(?<prioritizedUserId>\d*)/);
     const prioritizedUserId = matchedPrioritizedUser?.groups?.prioritizedUserId || null;
+    const matchedImageId = href.match(/images\/(?<imageId>\d*)/);
+    const imageId = matchedImageId?.groups?.imageId || null;
     return {
         modelVersionId: modelVersionId,
         prioritizedUserId: prioritizedUserId,
         modelId: modelId,
-        postId: postId
+        postId: postId,
+        imageId: imageId
     };
 };
 const $9a7e0bde1a099030$var$extractModelNameFromNextData = ()=>{
@@ -13012,7 +13037,7 @@ const $9a7e0bde1a099030$export$5fd187c0d03a79e = async ()=>{
     const _button = document.querySelector(buttonIdSelector);
     if (_button && _button.getAttribute("data-state") !== (0, $a5923d2edfc72bc5$export$5d7ba7f5550f99d1).ready) return;
     _button?.remove();
-    const { modelVersionId: modelVersionId , prioritizedUserId: prioritizedUserId , modelId: modelId , postId: postId  } = $9a7e0bde1a099030$var$extractIdsFromUrl(window.location.href);
+    const { modelVersionId: modelVersionId , prioritizedUserId: prioritizedUserId , modelId: modelId , postId: postId , imageId: imageId  } = $9a7e0bde1a099030$var$extractIdsFromUrl(window.location.href);
     const modelName = $9a7e0bde1a099030$var$extractModelNameFromNextData();
     const button = document.createElement("button");
     const onFinishFn = ()=>{
@@ -13025,6 +13050,7 @@ const $9a7e0bde1a099030$export$5fd187c0d03a79e = async ()=>{
         if (modelId && postId) return $9a7e0bde1a099030$var$downloadGalleryImagesAndPrompts(buttonIdSelector, modelId, postId, modelName, onFinishFn);
         // open gallery from post pages
         if (postId) return $9a7e0bde1a099030$var$downloadGalleryImagesAndPrompts(buttonIdSelector, null, postId, modelName, onFinishFn);
+        if (imageId) return $9a7e0bde1a099030$var$downloadSingleImagesAndPrompts(buttonIdSelector);
         return null;
     })();
     if (!eventListener) throw new Error("No necessary parameters found");

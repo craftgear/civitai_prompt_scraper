@@ -10,6 +10,7 @@ import { getI18nLabel, getButtonLabel, getButtonCompleteLabel } from './lang';
 import { fetchGalleryData, createZip } from './infra';
 import { downloadImagesAndPrompts } from './model_image_download';
 import { getConfig } from './config_panel';
+import { buildImgUrl } from './utils';
 
 const BUTTON_ID = 'download-all-gallery-images-and-prompts';
 
@@ -52,23 +53,56 @@ const downloadGalleryImagesAndPrompts =
     }
   };
 
+const downloadSingleImagesAndPrompts =
+  (buttonIdSelector: string) => async () => {
+    try {
+      const data = parseNextData();
+      const model = data.props.pageProps.trpcState.json.queries[0];
+      const { id, url, meta, width, name, hash } = model.state.data;
+      if (!url || !width || !name) {
+        throw new Error(
+          `image properties not found: url ${url}, width ${width}, name ${name}`
+        );
+      }
+      const imgUrl = buildImgUrl(url, width, name);
+
+      const button = await waitForElement(buttonIdSelector);
+      if (!button) {
+        return;
+      }
+
+      await createZip(updateButtonText(button))(`imageId_${id}.zip`)([
+        { url: imgUrl, hash, meta },
+      ]);
+
+      replaceWithDisabledButton(button, getButtonCompleteLabel());
+    } catch (error: unknown) {
+      alert((error as Error).message);
+    }
+  };
+
 const extractIdsFromUrl = (href: string) => {
   const matchedModel = href.match(/modelId=(?<modelId>\d*)/);
+  const modelId = matchedModel?.groups?.modelId || null;
+
   const matchedModelVersion = href.match(
     /modelVersionId=(?<modelVersionId>\d*)/
   );
+  const modelVersionId = matchedModelVersion?.groups?.modelVersionId || null;
+
   const matchedPost = href.match(/postId=(?<postId>\d*)/);
+  const postId = matchedPost?.groups?.postId || null;
+
   const matchedPrioritizedUser = href.match(
     /prioritizedUserIds=(?<prioritizedUserId>\d*)/
   );
-
-  const modelId = matchedModel?.groups?.modelId || null;
-  const modelVersionId = matchedModelVersion?.groups?.modelVersionId || null;
-  const postId = matchedPost?.groups?.postId || null;
   const prioritizedUserId =
     matchedPrioritizedUser?.groups?.prioritizedUserId || null;
 
-  return { modelVersionId, prioritizedUserId, modelId, postId };
+  const matchedImageId = href.match(/images\/(?<imageId>\d*)/);
+  const imageId = matchedImageId?.groups?.imageId || null;
+
+  return { modelVersionId, prioritizedUserId, modelId, postId, imageId };
 };
 
 const extractModelNameFromNextData = () => {
@@ -97,7 +131,7 @@ export const addGalleryDownloadButton = async () => {
   }
   _button?.remove();
 
-  const { modelVersionId, prioritizedUserId, modelId, postId } =
+  const { modelVersionId, prioritizedUserId, modelId, postId, imageId } =
     extractIdsFromUrl(window.location.href);
 
   const modelName = extractModelNameFromNextData();
@@ -133,6 +167,9 @@ export const addGalleryDownloadButton = async () => {
         modelName,
         onFinishFn
       );
+    }
+    if (imageId) {
+      return downloadSingleImagesAndPrompts(buttonIdSelector);
     }
     return null;
   })();
