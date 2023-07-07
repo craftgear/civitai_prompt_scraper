@@ -12626,7 +12626,7 @@ const $65c0cd2b2ec0988a$var$fields = [
         label: (0, $966fc19e1e9bc989$export$731a191155ffa90a)("downloadModelAsWell"),
         value: true,
         desc: "",
-        style: "margin-right: 0.5rem;"
+        style: "gap: 0.5rem;"
     },
     {
         type: "checkbox",
@@ -12634,7 +12634,7 @@ const $65c0cd2b2ec0988a$var$fields = [
         label: (0, $966fc19e1e9bc989$export$731a191155ffa90a)("openShowMore"),
         value: true,
         desc: "",
-        style: `margin-right: 0.5rem;`
+        style: "gap: 0.5rem;"
     },
     {
         type: "checkbox",
@@ -12642,7 +12642,7 @@ const $65c0cd2b2ec0988a$var$fields = [
         label: (0, $966fc19e1e9bc989$export$731a191155ffa90a)("continueWithFetchError"),
         value: false,
         desc: "",
-        style: "margin-right: 0.5rem;"
+        style: "gap: 0.5rem;"
     },
     {
         type: "checkbox",
@@ -12650,7 +12650,7 @@ const $65c0cd2b2ec0988a$var$fields = [
         label: (0, $966fc19e1e9bc989$export$731a191155ffa90a)("galleryAutoDownload"),
         value: true,
         desc: "",
-        style: "margin-right: 0.5rem;"
+        style: "gap: 0.5rem;"
     },
     {
         type: "text",
@@ -12674,7 +12674,7 @@ const $65c0cd2b2ec0988a$var$fields = [
         label: (0, $966fc19e1e9bc989$export$731a191155ffa90a)("preferModelNameToLoRAName"),
         value: false,
         desc: "",
-        style: "margin-right: 0.5rem; margin-left: 1rem;"
+        style: "gap: 0.5rem; margin-left: 0.5rem;"
     }
 ];
 const $65c0cd2b2ec0988a$var$addInputs = (parent, fields)=>{
@@ -12683,7 +12683,7 @@ const $65c0cd2b2ec0988a$var$addInputs = (parent, fields)=>{
         const inputEl = document.createElement("input");
         inputEl.type = type;
         inputEl.id = name;
-        inputEl.setAttribute("style", style);
+        // inputEl.setAttribute('style', style);
         const labelEl = document.createElement("label");
         labelEl.innerText = label;
         labelEl.setAttribute("for", name);
@@ -12692,14 +12692,18 @@ const $65c0cd2b2ec0988a$var$addInputs = (parent, fields)=>{
         descEl.setAttribute("style", "font-size: small; color: gray; margin-left: 1rem;");
         switch(type){
             case "checkbox":
-                div.setAttribute("style", "display: flex; justify-content: flex-start;");
+                div.setAttribute("style", `display: flex; justify-content: flex-start; ${style}`);
                 if (value) inputEl.checked = true;
                 div.appendChild(inputEl);
                 div.appendChild(labelEl);
                 div.appendChild(descEl);
                 break;
             case "text":
-                div.setAttribute("style", "display: flex; flex-direction: column; justify-content: flex-start; padding-top: 0.5rem; border-top: 1px solid #e0e0e0;");
+                div.setAttribute("style", `display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+         ${style}
+          `);
                 inputEl.value = value;
                 div.appendChild(labelEl);
                 div.appendChild(descEl);

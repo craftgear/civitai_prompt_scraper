@@ -11,7 +11,7 @@ const fields = [
     label: getI18nLabel('downloadModelAsWell'),
     value: true,
     desc: '',
-    style: 'margin-right: 0.5rem;',
+    style: 'gap: 0.5rem;',
   },
   {
     type: 'checkbox',
@@ -19,7 +19,7 @@ const fields = [
     label: getI18nLabel('openShowMore'),
     value: true,
     desc: '',
-    style: `margin-right: 0.5rem;`,
+    style: 'gap: 0.5rem;',
   },
   {
     type: 'checkbox',
@@ -27,7 +27,7 @@ const fields = [
     label: getI18nLabel('continueWithFetchError'),
     value: false,
     desc: '',
-    style: 'margin-right: 0.5rem;',
+    style: 'gap: 0.5rem;',
   },
   {
     type: 'checkbox',
@@ -35,7 +35,7 @@ const fields = [
     label: getI18nLabel('galleryAutoDownload'),
     value: true,
     desc: '',
-    style: 'margin-right: 0.5rem;',
+    style: 'gap: 0.5rem;',
   },
   {
     type: 'text',
@@ -45,8 +45,7 @@ const fields = [
     desc: `${getI18nLabel(
       'availableVariables'
     )} {modelId}, {modelName}, {modelVersionName}, {modelVersionId}`,
-
-    style: '',
+    style: ' padding-top: 0.5rem; border-top: 1px solid #ededef; margin-top: 0.5rem; ',
   },
   {
     type: 'text',
@@ -56,7 +55,7 @@ const fields = [
     desc: `${getI18nLabel(
       'availableVariables'
     )} {modelName}, {modelId}, {postId}`,
-    style: '',
+    style: ' padding-top: 0.5rem; border-top: 1px solid #ededef; margin-top: 0.5rem; ',
   },
   {
     type: 'checkbox',
@@ -64,7 +63,7 @@ const fields = [
     label: getI18nLabel('preferModelNameToLoRAName'),
     value: false,
     desc: '',
-    style: 'margin-right: 0.5rem; margin-left: 1rem;',
+    style: 'gap: 0.5rem; margin-left: 0.5rem;',
   },
 ];
 
@@ -74,7 +73,7 @@ const addInputs = (parent: HTMLElement, fields: InputField[]) => {
     const inputEl = document.createElement('input');
     inputEl.type = type;
     inputEl.id = name;
-    inputEl.setAttribute('style', style);
+    // inputEl.setAttribute('style', style);
 
     const labelEl = document.createElement('label');
     labelEl.innerText = label;
@@ -91,7 +90,7 @@ const addInputs = (parent: HTMLElement, fields: InputField[]) => {
       case 'checkbox': {
         div.setAttribute(
           'style',
-          'display: flex; justify-content: flex-start;'
+          `display: flex; justify-content: flex-start; ${style}`
         );
         if (value) {
           inputEl.checked = true;
@@ -105,7 +104,11 @@ const addInputs = (parent: HTMLElement, fields: InputField[]) => {
       case 'text': {
         div.setAttribute(
           'style',
-          'display: flex; flex-direction: column; justify-content: flex-start; padding-top: 0.5rem; border-top: 1px solid #e0e0e0;'
+          `display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+         ${style}
+          `
         );
         inputEl.value = value as string;
         div.appendChild(labelEl);
