@@ -12699,7 +12699,7 @@ const $65c0cd2b2ec0988a$var$addInputs = (parent, fields)=>{
                 div.appendChild(descEl);
                 break;
             case "text":
-                div.setAttribute("style", "display: flex; flex-direction: column; justify-content: flex-start;");
+                div.setAttribute("style", "display: flex; flex-direction: column; justify-content: flex-start; margin-top: 1rem;");
                 inputEl.value = value;
                 div.appendChild(labelEl);
                 div.appendChild(descEl);
@@ -13119,7 +13119,6 @@ const $29e4e9967394a818$var$openShowMore = ()=>{
     const showMoreButton = Array.from(document.querySelectorAll("button")).filter((x)=>x.innerHTML.includes("Show More"))[0];
     if (showMoreButton) {
         showMoreButton.click();
-        showMoreButton.innerHTML = "Hide";
         return;
     }
     setTimeout(()=>{

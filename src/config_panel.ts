@@ -105,7 +105,7 @@ const addInputs = (parent: HTMLElement, fields: InputField[]) => {
       case 'text': {
         div.setAttribute(
           'style',
-          'display: flex; flex-direction: column; justify-content: flex-start;'
+          'display: flex; flex-direction: column; justify-content: flex-start; margin-top: 1rem;'
         );
         inputEl.value = value as string;
         div.appendChild(labelEl);
