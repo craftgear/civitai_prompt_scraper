@@ -7,6 +7,14 @@ import { InputField, Config, ConfigKey } from './types';
 const fields = [
   {
     type: 'checkbox',
+    name: 'downloadModelAsWell',
+    label: getI18nLabel('downloadModelAsWell'),
+    value: true,
+    desc: '',
+    style: 'margin-right: 0.5rem;',
+  },
+  {
+    type: 'checkbox',
     name: 'openShowMore',
     label: getI18nLabel('openShowMore'),
     value: true,
@@ -49,6 +57,14 @@ const fields = [
       'availableVariables'
     )} {modelName}, {modelId}, {postId}`,
     style: '',
+  },
+  {
+    type: 'checkbox',
+    name: 'preferModelNameToLoRAName',
+    label: getI18nLabel('preferModelNameToLoRAName'),
+    value: false,
+    desc: '',
+    style: 'margin-right: 0.5rem; margin-left: 1rem;',
   },
 ];
 

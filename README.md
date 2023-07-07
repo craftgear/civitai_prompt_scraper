@@ -11,7 +11,9 @@ This works for ViolentMokey in both Chrome and Firefox.
   <br/>
   <br/>
 
-Download button on a model page to dowlonad preview images, preview images' metadata and model metadata.
+It adds a download button on a model page to dowlonad preview images, preview images' metadata and model metadata.
+
+You can also start downloading a model itself when you click the button.
 
 <img src="./_screenshots/model.jpeg" width="50%" />
 

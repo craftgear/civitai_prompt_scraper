@@ -109,6 +109,18 @@ const i18n: {
     'zh-CN': '开始下载',
     'zh-TW': '開始下載',
   },
+  downloadModelAsWell: {
+    en: 'download model as well',
+    ja: '同時にモデルもダウンロードする',
+    'zh-CN': '也下载模型',
+    'zh-TW': '也下載模型',
+  },
+  preferModelNameToLoRAName: {
+    en: 'prefer model names to LoRA names for {modelName}',
+    ja: '{modelName}の値としてLoRA名よりモデル名を優先する',
+    'zh-CN': '优先选择模型名称而不是 LoRA 名称作为 {modelName} 的值',
+    'zh-TW': '優先選擇模型名稱而不是 LoRA 名稱作為 {modelName} 的值',
+  },
 };
 
 const getLocale = () => {

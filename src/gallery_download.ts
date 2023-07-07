@@ -10,6 +10,7 @@ import { getI18nLabel, getButtonLabel, getButtonCompleteLabel } from './lang';
 import { fetchGalleryData, createZip } from './infra';
 import { downloadImagesAndPrompts } from './model_image_download';
 import { getConfig } from './config_panel';
+import { buildImgUrl } from './utils';
 
 import { GalleryImage } from './types';
 
@@ -61,41 +62,78 @@ export const downloadGalleryImagesAndPrompts =
     }
   };
 
+const downloadSingleImagesAndPrompts =
+  (buttonIdSelector: string) => async () => {
+    try {
+      const data = parseNextData();
+      const model = data.props.pageProps.trpcState.json.queries[0];
+      const { id, url, meta, width, name, hash } = model.state.data;
+      if (!url || !width || !name) {
+        throw new Error(
+          `image properties not found: url ${url}, width ${width}, name ${name}`
+        );
+      }
+      const imgUrl = buildImgUrl(url, width, name);
+
+      const button = await waitForElement(buttonIdSelector);
+      if (!button) {
+        return;
+      }
+
+      await createZip(updateButtonText(button))(`imageId_${id}.zip`)([
+        { url: imgUrl, hash, meta },
+      ]);
+
+      replaceWithDisabledButton(button, getButtonCompleteLabel());
+    } catch (error: unknown) {
+      alert((error as Error).message);
+    }
+  };
+
 const extractIdsFromUrl = (href: string) => {
   const matchedModel = href.match(/modelId=(?<modelId>\d*)/);
+  const modelId = matchedModel?.groups?.modelId || null;
+
   const matchedModelVersion = href.match(
     /modelVersionId=(?<modelVersionId>\d*)/
   );
+  const modelVersionId = matchedModelVersion?.groups?.modelVersionId || null;
+
   const matchedPost = href.match(/postId=(?<postId>\d*)/);
+  const postId = matchedPost?.groups?.postId || null;
+
   const matchedPrioritizedUser = href.match(
     /prioritizedUserIds=(?<prioritizedUserId>\d*)/
   );
-
-  const modelId = matchedModel?.groups?.modelId || null;
-  const modelVersionId = matchedModelVersion?.groups?.modelVersionId || null;
-  const postId = matchedPost?.groups?.postId || null;
   const prioritizedUserId =
     matchedPrioritizedUser?.groups?.prioritizedUserId || null;
 
-  return { modelVersionId, prioritizedUserId, modelId, postId };
+  const matchedImageId = href.match(/images\/(?<imageId>\d*)/);
+  const imageId = matchedImageId?.groups?.imageId || null;
+
+  return { modelVersionId, prioritizedUserId, modelId, postId, imageId };
 };
 
 const extractModelNameFromNextData = () => {
   const nextData = parseNextData();
 
-  // Apparently a key starts with double quotation(") is a LoRA name. starts with double quotation
+  const modelName =
+    nextData.props.pageProps?.trpcState?.json?.queries[0]?.state?.data?.meta
+      ?.Model ?? 'undefined';
+
+  if (getConfig('preferModelNameToLoRAName')) {
+    return modelName;
+  }
+
+  // Apparently a key starts with double quotation(") is a LoRA name.
   const keys = Object.keys(
     nextData.props.pageProps?.trpcState?.json?.queries[0]?.state?.data?.meta ??
       {}
   ).filter((x) => x.startsWith('"'));
-  if (keys.length > 0) {
-    return keys[0].replace('"', '');
-  }
 
-  return (
-    nextData.props.pageProps?.trpcState?.json?.queries[0]?.state?.data?.meta
-      ?.Model ?? ''
-  );
+  return keys.length > 0
+    ? keys.map((x) => x.replace('"', '')).join(',')
+    : 'undefined';
 };
 
 export const addGalleryDownloadButton = async () => {
@@ -108,7 +146,7 @@ export const addGalleryDownloadButton = async () => {
     _button?.remove();
   }
 
-  const { modelVersionId, prioritizedUserId, modelId, postId } =
+  const { modelVersionId, prioritizedUserId, modelId, postId, imageId } =
     extractIdsFromUrl(window.location.href);
 
   const modelName = extractModelNameFromNextData();
@@ -123,7 +161,7 @@ export const addGalleryDownloadButton = async () => {
   const eventListener = (() => {
     // open gallery from model preview images
     if (modelVersionId && prioritizedUserId) {
-      return downloadImagesAndPrompts(buttonIdSelector);
+      return downloadImagesAndPrompts(buttonIdSelector, window.location.href);
     }
     // open gallery from model gallery areas
     if (modelId && postId) {
@@ -144,6 +182,9 @@ export const addGalleryDownloadButton = async () => {
         modelName,
         onFinishFn
       );
+    }
+    if (imageId) {
+      return downloadSingleImagesAndPrompts(buttonIdSelector);
     }
     return null;
   })();

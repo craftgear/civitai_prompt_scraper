@@ -55,10 +55,12 @@ export const downloadAllGalleryDisabledButtonStyle = `
 
 export const galleryButtonStyle = `
   ${buttonStyle}
+  width: 100%;
 `;
 
 export const galleryDisabledButtonStyle = `
   ${disabledButtonStyle}
+  width: 100%;
 `;
 
 export const downloadAllButtonStyle = buttonStyle;
