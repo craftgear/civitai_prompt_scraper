@@ -12658,7 +12658,7 @@ const $65c0cd2b2ec0988a$var$fields = [
         label: (0, $966fc19e1e9bc989$export$731a191155ffa90a)("modelPreviewFilenameFormat"),
         value: "{modelName}[{modelId}]_{modelVersionId}.zip",
         desc: `${(0, $966fc19e1e9bc989$export$731a191155ffa90a)("availableVariables")} {modelId}, {modelName}, {modelVersionName}, {modelVersionId}`,
-        style: ""
+        style: " padding-top: 0.5rem; border-top: 1px solid #ededef; margin-top: 0.5rem; "
     },
     {
         type: "text",
@@ -12666,7 +12666,7 @@ const $65c0cd2b2ec0988a$var$fields = [
         label: (0, $966fc19e1e9bc989$export$731a191155ffa90a)("galleryFilenameFormat"),
         value: "{modelName}-modelId_{modelId}-postId_{postId}.zip",
         desc: `${(0, $966fc19e1e9bc989$export$731a191155ffa90a)("availableVariables")} {modelName}, {modelId}, {postId}`,
-        style: ""
+        style: " padding-top: 0.5rem; border-top: 1px solid #ededef; margin-top: 0.5rem; "
     },
     {
         type: "checkbox",
@@ -12683,7 +12683,6 @@ const $65c0cd2b2ec0988a$var$addInputs = (parent, fields)=>{
         const inputEl = document.createElement("input");
         inputEl.type = type;
         inputEl.id = name;
-        // inputEl.setAttribute('style', style);
         const labelEl = document.createElement("label");
         labelEl.innerText = label;
         labelEl.setAttribute("for", name);

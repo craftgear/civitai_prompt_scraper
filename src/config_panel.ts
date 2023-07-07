@@ -73,7 +73,6 @@ const addInputs = (parent: HTMLElement, fields: InputField[]) => {
     const inputEl = document.createElement('input');
     inputEl.type = type;
     inputEl.id = name;
-    // inputEl.setAttribute('style', style);
 
     const labelEl = document.createElement('label');
     labelEl.innerText = label;
