@@ -1,13 +1,27 @@
 import { addGalleryDownloadButton } from './gallery_download';
-import {
-  addModelImagesDownloadButton,
-  addButtonContainer,
-} from './model_image_download';
-import { initConfigPanel } from './config_panel';
-import { getConfig } from './config_panel';
+import { buttonContainerStyle } from './styles';
+import { addModelImagesDownloadButton } from './model_image_download';
+import { getConfig, initConfigPanel } from './config_panel';
 import { addDownloadAllButton } from './model_download_all';
 
-import { sleep, log } from './utils';
+import { sleep, log, waitForElement } from './utils';
+
+const BUTTON_CONTAINER_ID = 'civitai_prompt_scraper';
+const addButtonContainer = async () => {
+  const downloadButtonSelector = "a[href^='/api/download/models/']";
+  const buttonParent = await waitForElement(downloadButtonSelector);
+
+  const container = document.createElement('div');
+  container.id = BUTTON_CONTAINER_ID;
+  container.setAttribute('style', buttonContainerStyle);
+
+  buttonParent?.parentNode?.parentNode?.appendChild(container);
+  return container;
+};
+
+export const getButtonContainerNode = async () => {
+  return waitForElement(`#${BUTTON_CONTAINER_ID}`);
+};
 
 const darkenTextColor = () => {
   Array.from(document.querySelectorAll('.mantine-Spoiler-root span')).forEach(

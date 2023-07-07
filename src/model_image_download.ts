@@ -1,4 +1,4 @@
-import { buttonStyle, buttonContainerStyle } from './styles';
+import { buttonStyle } from './styles';
 import {
   waitForElement,
   replaceWithDisabledButton,
@@ -12,9 +12,9 @@ import {
 } from './infra';
 import { GalleryImagesResponse } from './types';
 import { getConfig } from './config_panel';
+import { getButtonContainerNode } from './prompt_scraper.user';
 
 const BUTTON_ID = 'download-all-images-and-prompts';
-const BUTTON_CONTAINER_ID = 'civitai_prompt_scraper';
 const downloadButtonSelector = "a[href^='/api/download/models/']";
 
 const getModeInfoAndImageList = async (href: string) => {
@@ -131,24 +131,8 @@ export const downloadImagesAndPrompts =
     }
   };
 
-export const addButtonContainer = async () => {
-  const downloadButtonSelector = "a[href^='/api/download/models/']";
-  const buttonParent = await waitForElement(downloadButtonSelector);
-
-  const container = document.createElement('div');
-  container.id = BUTTON_CONTAINER_ID;
-  container.setAttribute('style', buttonContainerStyle);
-
-  buttonParent?.parentNode?.parentNode?.appendChild(container);
-  return container;
-};
-
-export const getButtonContainerNode = async () => {
-  return waitForElement(`#${BUTTON_CONTAINER_ID}`);
-};
-
 export const addModelImagesDownloadButton = async () => {
-  const container = await addButtonContainer();
+  const container = await getButtonContainerNode();
   const buttonIdSelector = `#${BUTTON_ID}`;
   document.querySelector(buttonIdSelector)?.remove();
 
