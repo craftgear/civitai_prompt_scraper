@@ -110,7 +110,6 @@ const openShowMore = (retryCount = 1) => {
   )[0];
   if (showMoreButton) {
     showMoreButton.click();
-    showMoreButton.innerHTML = 'Hide';
     return;
   }
 
