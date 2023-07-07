@@ -12699,7 +12699,7 @@ const $65c0cd2b2ec0988a$var$addInputs = (parent, fields)=>{
                 div.appendChild(descEl);
                 break;
             case "text":
-                div.setAttribute("style", "display: flex; flex-direction: column; justify-content: flex-start; margin-top: 1rem;");
+                div.setAttribute("style", "display: flex; flex-direction: column; justify-content: flex-start; padding-top: 0.5rem; border-top: 1px solid #e0e0e0;");
                 inputEl.value = value;
                 div.appendChild(labelEl);
                 div.appendChild(descEl);
