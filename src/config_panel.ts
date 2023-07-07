@@ -58,6 +58,14 @@ const fields = [
     )} {modelName}, {modelId}, {postId}`,
     style: '',
   },
+  {
+    type: 'checkbox',
+    name: 'preferModelNameToLoRAName',
+    label: getI18nLabel('preferModelNameToLoRAName'),
+    value: false,
+    desc: '',
+    style: 'margin-right: 0.5rem; margin-left: 1rem;',
+  },
 ];
 
 const addInputs = (parent: HTMLElement, fields: InputField[]) => {

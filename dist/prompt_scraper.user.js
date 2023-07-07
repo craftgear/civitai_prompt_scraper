@@ -286,6 +286,12 @@ const $966fc19e1e9bc989$var$i18n = {
         ja: "同時にモデルもダウンロードする",
         "zh-CN": "也下载模型",
         "zh-TW": "也下載模型"
+    },
+    preferModelNameToLoRAName: {
+        en: "prefer model names to LoRA names for {modelName}",
+        ja: "{modelName}の値としてLoRA名よりモデル名を優先する",
+        "zh-CN": "优先选择模型名称而不是 LoRA 名称作为 {modelName} 的值",
+        "zh-TW": "優先選擇模型名稱而不是 LoRA 名稱作為 {modelName} 的值"
     }
 };
 const $966fc19e1e9bc989$var$getLocale = ()=>{
@@ -12661,6 +12667,14 @@ const $65c0cd2b2ec0988a$var$fields = [
         value: "{modelName}-modelId_{modelId}-postId_{postId}.zip",
         desc: `${(0, $966fc19e1e9bc989$export$731a191155ffa90a)("availableVariables")} {modelName}, {modelId}, {postId}`,
         style: ""
+    },
+    {
+        type: "checkbox",
+        name: "preferModelNameToLoRAName",
+        label: (0, $966fc19e1e9bc989$export$731a191155ffa90a)("preferModelNameToLoRAName"),
+        value: false,
+        desc: "",
+        style: "margin-right: 0.5rem; margin-left: 1rem;"
     }
 ];
 const $65c0cd2b2ec0988a$var$addInputs = (parent, fields)=>{
@@ -13027,10 +13041,11 @@ const $9a7e0bde1a099030$var$extractIdsFromUrl = (href)=>{
 };
 const $9a7e0bde1a099030$var$extractModelNameFromNextData = ()=>{
     const nextData = (0, $0fccda82d33153ac$export$ce1398d1c23018fa)();
-    // Apparently a key starts with double quotation(") is a LoRA name. starts with double quotation
+    const modelName = nextData.props.pageProps?.trpcState?.json?.queries[0]?.state?.data?.meta?.Model ?? "undefined";
+    if ((0, $65c0cd2b2ec0988a$export$44487a86467333c3)("preferModelNameToLoRAName")) return modelName;
+    // Apparently a key starts with double quotation(") is a LoRA name.
     const keys = Object.keys(nextData.props.pageProps?.trpcState?.json?.queries[0]?.state?.data?.meta ?? {}).filter((x)=>x.startsWith('"'));
-    if (keys.length > 0) return keys[0].replace('"', "");
-    return nextData.props.pageProps?.trpcState?.json?.queries[0]?.state?.data?.meta?.Model ?? "";
+    return keys.length > 0 ? keys.map((x)=>x.replace('"', "")).join(",") : "undefined";
 };
 const $9a7e0bde1a099030$export$5fd187c0d03a79e = async ()=>{
     const buttonIdSelector = `#${$9a7e0bde1a099030$var$BUTTON_ID}`;

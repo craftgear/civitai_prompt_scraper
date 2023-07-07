@@ -108,19 +108,23 @@ const extractIdsFromUrl = (href: string) => {
 const extractModelNameFromNextData = () => {
   const nextData = parseNextData();
 
-  // Apparently a key starts with double quotation(") is a LoRA name. starts with double quotation
+  const modelName =
+    nextData.props.pageProps?.trpcState?.json?.queries[0]?.state?.data?.meta
+      ?.Model ?? 'undefined';
+
+  if (getConfig('preferModelNameToLoRAName')) {
+    return modelName;
+  }
+
+  // Apparently a key starts with double quotation(") is a LoRA name.
   const keys = Object.keys(
     nextData.props.pageProps?.trpcState?.json?.queries[0]?.state?.data?.meta ??
       {}
   ).filter((x) => x.startsWith('"'));
-  if (keys.length > 0) {
-    return keys[0].replace('"', '');
-  }
 
-  return (
-    nextData.props.pageProps?.trpcState?.json?.queries[0]?.state?.data?.meta
-      ?.Model ?? ''
-  );
+  return keys.length > 0
+    ? keys.map((x) => x.replace('"', '')).join(',')
+    : 'undefined';
 };
 
 export const addGalleryDownloadButton = async () => {
