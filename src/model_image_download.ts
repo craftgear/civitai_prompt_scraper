@@ -118,6 +118,8 @@ export const downloadImagesAndPrompts =
         button,
         ` ${imageList.length} / ${imageList.length} ${getButtonCompleteLabel()}`
       );
+
+      return { imageList, modelName };
     } catch (error: unknown) {
       alert((error as Error).message);
     }
