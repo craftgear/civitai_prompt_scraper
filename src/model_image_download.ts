@@ -10,7 +10,6 @@ import {
   fetchModelInfoByModleIdOrModelVersionId,
   fetchGalleryData,
 } from './infra';
-import { GalleryImagesResponse } from './types';
 import { getConfig } from './config_panel';
 import { getButtonContainerNode } from './prompt_scraper.user';
 
@@ -82,16 +81,12 @@ const startModelDownload = async () => {
 };
 
 export const downloadImagesAndPrompts =
-  (buttonIdSelector: string, location: string) =>
-  async (): Promise<{
-    imageList: GalleryImagesResponse['items'];
-    modelName: string;
-  } | null> => {
+  (buttonIdSelector: string, location: string) => async () => {
     try {
       const button = await waitForElement(buttonIdSelector);
 
       if (!button) {
-        return null;
+        return;
       }
 
       button.innerText = getI18nLabel('startingDownload');
@@ -123,11 +118,8 @@ export const downloadImagesAndPrompts =
         button,
         ` ${imageList.length} / ${imageList.length} ${getButtonCompleteLabel()}`
       );
-
-      return { imageList, modelName };
     } catch (error: unknown) {
       alert((error as Error).message);
-      return null;
     }
   };
 
@@ -151,4 +143,24 @@ export const addModelImagesDownloadButton = async () => {
   }
 
   container?.appendChild(button);
+
+  // hide gallery button
+  const hideGallery = document.createElement('button');
+  hideGallery.innerHTML = 'x';
+  hideGallery.setAttribute('style', 'color: silver; border: none;');
+  hideGallery.addEventListener('click', () => {
+    const g: HTMLElement | null = document.querySelector('#gallery');
+    if (!g) {
+      return;
+    }
+    if (g.style.display === 'block') {
+      g.style.display = 'none';
+      return;
+    }
+    g.style.display = 'block';
+  });
+  const h2 = document.querySelector('#gallery h2');
+  if (h2) {
+    h2.parentNode?.appendChild(hideGallery);
+  }
 };

@@ -97,6 +97,7 @@ const $292fc7f9388c589b$export$7ec3146dae3421e3 = $292fc7f9388c589b$export$fd4d2
 const $292fc7f9388c589b$export$b0c8f381295da638 = `
   display: flex;
   flex-direction: row;
+
   gap: 0.7rem
 `;
 
@@ -12944,7 +12945,7 @@ const $8d59c42601ba8f61$var$startModelDownload = async ()=>{
 const $8d59c42601ba8f61$export$53039d7a8d9d297e = (buttonIdSelector, location)=>async ()=>{
         try {
             const button = await (0, $0fccda82d33153ac$export$1a1c301579a08d1e)(buttonIdSelector);
-            if (!button) return null;
+            if (!button) return;
             button.innerText = (0, $966fc19e1e9bc989$export$731a191155ffa90a)("startingDownload");
             const { modelId: modelId , modelName: modelName , imageList: imageList , modelVersionId: modelVersionId , modelVersionName: modelVersionName , modelInfo: modelInfo  } = await $8d59c42601ba8f61$var$getModeInfoAndImageList(location);
             const filenameFormat = (0, $65c0cd2b2ec0988a$export$44487a86467333c3)("modelPreviewFilenameFormat");
@@ -12954,13 +12955,8 @@ const $8d59c42601ba8f61$export$53039d7a8d9d297e = (buttonIdSelector, location)=>
                     url: x.url.replace(/width=\d*/, `width=${x.width},optimized=true`)
                 })));
             (0, $0fccda82d33153ac$export$92ecf871022de94d)(button, ` ${imageList.length} / ${imageList.length} ${(0, $966fc19e1e9bc989$export$4d9f09007b08c03d)()}`);
-            return {
-                imageList: imageList,
-                modelName: modelName
-            };
         } catch (error) {
             alert(error.message);
-            return null;
         }
     };
 const $8d59c42601ba8f61$export$8b03a564a450b487 = async ()=>{
@@ -12975,6 +12971,21 @@ const $8d59c42601ba8f61$export$8b03a564a450b487 = async ()=>{
     if ((0, $65c0cd2b2ec0988a$export$44487a86467333c3)("downloadModelAsWell")) // start downloading a model
     button.addEventListener("click", $8d59c42601ba8f61$var$startModelDownload);
     container?.appendChild(button);
+    // hide gallery button
+    const hideGallery = document.createElement("button");
+    hideGallery.innerHTML = "x";
+    hideGallery.setAttribute("style", "color: silver; border: none;");
+    hideGallery.addEventListener("click", ()=>{
+        const g = document.querySelector("#gallery");
+        if (!g) return;
+        if (g.style.display === "block") {
+            g.style.display = "none";
+            return;
+        }
+        g.style.display = "block";
+    });
+    const h2 = document.querySelector("#gallery h2");
+    if (h2) h2.parentNode?.appendChild(hideGallery);
 };
 
 
