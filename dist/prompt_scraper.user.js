@@ -13149,8 +13149,11 @@ const $2da5569f102e177a$var$downloadAllModelRelatedFiles = (buttonIdSelector)=>a
             };
             return (0, $9a7e0bde1a099030$export$9473b35530fb3701)(`#${$2da5569f102e177a$var$BUTTON_ID}_${i}`, modelId, postId, modelName ?? "", onFinishFn, previewImageList)();
         }));
-        alert("done");
+        setTimeout(()=>{
+            alert("done");
+        }, 100);
         console.warn("##### done #####");
+        return;
     };
 const $2da5569f102e177a$export$3b6a8e903180e269 = async ()=>{
     const parentNode = await (0, $29e4e9967394a818$export$4a2d37b006372286)();

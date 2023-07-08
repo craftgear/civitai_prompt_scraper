@@ -68,5 +68,6 @@ export const downloadAllButtonStyle = buttonStyle;
 export const buttonContainerStyle = `
   display: flex;
   flex-direction: row;
+
   gap: 0.7rem
 `;

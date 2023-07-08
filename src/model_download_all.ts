@@ -96,8 +96,11 @@ const downloadAllModelRelatedFiles = (buttonIdSelector: string) => async () => {
         })
   );
 
-  alert('done');
+  setTimeout(() => {
+    alert('done');
+  }, 100);
   console.warn('##### done #####');
+  return;
 };
 
 export const addDownloadAllButton = async () => {
