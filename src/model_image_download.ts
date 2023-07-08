@@ -118,6 +118,8 @@ export const downloadImagesAndPrompts =
         button,
         ` ${imageList.length} / ${imageList.length} ${getButtonCompleteLabel()}`
       );
+
+      return { imageList, modelName };
     } catch (error: unknown) {
       alert((error as Error).message);
     }
@@ -153,11 +155,12 @@ export const addModelImagesDownloadButton = async () => {
     if (!g) {
       return;
     }
-    if (g.style.display === 'block') {
-      g.style.display = 'none';
+    g.style.overflow = 'hidden';
+    if (g.style.height === '300px') {
+      g.style.height = 'auto';
       return;
     }
-    g.style.display = 'block';
+    g.style.height = '300px';
   });
   const h2 = document.querySelector('#gallery h2');
   if (h2) {

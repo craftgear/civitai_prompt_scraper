@@ -65,6 +65,17 @@ const deleteSuggestedResources = (retry = 5) => {
   }
 };
 
+const deleteMainPaddingBottom = (retry = 5) => {
+  const el: HTMLElement | null = document.querySelector('main');
+  if (!el) {
+    setTimeout(() => {
+      deleteMainPaddingBottom(retry - 1);
+    }, 1000);
+    return;
+  }
+  el.style.paddingBottom = '0';
+};
+
 const addModelPreviewDownloadButton = async () => {
   try {
     // await waitForElement('#gallery a[href^="/images"]');
@@ -80,6 +91,7 @@ const addModelPreviewDownloadButton = async () => {
     darkenTextColor();
     deleteCreateButton();
     deleteSuggestedResources();
+    deleteMainPaddingBottom();
 
     await addButtonContainer();
     await addModelImagesDownloadButton();

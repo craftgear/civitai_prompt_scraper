@@ -12955,6 +12955,10 @@ const $8d59c42601ba8f61$export$53039d7a8d9d297e = (buttonIdSelector, location)=>
                     url: x.url.replace(/width=\d*/, `width=${x.width},optimized=true`)
                 })));
             (0, $0fccda82d33153ac$export$92ecf871022de94d)(button, ` ${imageList.length} / ${imageList.length} ${(0, $966fc19e1e9bc989$export$4d9f09007b08c03d)()}`);
+            return {
+                imageList: imageList,
+                modelName: modelName
+            };
         } catch (error) {
             alert(error.message);
         }
@@ -12978,11 +12982,12 @@ const $8d59c42601ba8f61$export$8b03a564a450b487 = async ()=>{
     hideGallery.addEventListener("click", ()=>{
         const g = document.querySelector("#gallery");
         if (!g) return;
-        if (g.style.display === "block") {
-            g.style.display = "none";
+        g.style.overflow = "hidden";
+        if (g.style.height === "300px") {
+            g.style.height = "auto";
             return;
         }
-        g.style.display = "block";
+        g.style.height = "300px";
     });
     const h2 = document.querySelector("#gallery h2");
     if (h2) h2.parentNode?.appendChild(hideGallery);
@@ -13227,6 +13232,16 @@ const $29e4e9967394a818$var$deleteSuggestedResources = (retry = 5)=>{
         $29e4e9967394a818$var$deleteSuggestedResources(retry - 1);
     }, 1000);
 };
+const $29e4e9967394a818$var$deleteMainPaddingBottom = (retry = 5)=>{
+    const el = document.querySelector("main");
+    if (!el) {
+        setTimeout(()=>{
+            $29e4e9967394a818$var$deleteMainPaddingBottom(retry - 1);
+        }, 1000);
+        return;
+    }
+    el.style.paddingBottom = "0";
+};
 const $29e4e9967394a818$var$addModelPreviewDownloadButton = async ()=>{
     try {
         // await waitForElement('#gallery a[href^="/images"]');
@@ -13238,6 +13253,7 @@ const $29e4e9967394a818$var$addModelPreviewDownloadButton = async ()=>{
         $29e4e9967394a818$var$darkenTextColor();
         $29e4e9967394a818$var$deleteCreateButton();
         $29e4e9967394a818$var$deleteSuggestedResources();
+        $29e4e9967394a818$var$deleteMainPaddingBottom();
         await $29e4e9967394a818$var$addButtonContainer();
         await (0, $8d59c42601ba8f61$export$8b03a564a450b487)();
         await (0, $2da5569f102e177a$export$3b6a8e903180e269)();
