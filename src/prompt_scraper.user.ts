@@ -91,7 +91,7 @@ const addModelPreviewDownloadButton = async () => {
     darkenTextColor();
     deleteCreateButton();
     deleteSuggestedResources();
-    deleteMainPaddingBottom();
+    // deleteMainPaddingBottom();
 
     await addButtonContainer();
     await addModelImagesDownloadButton();

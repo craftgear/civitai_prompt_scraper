@@ -9,7 +9,10 @@ import { /** getI18nLabel **/ getButtonCompleteLabel } from './lang';
 const BUTTON_ID = 'download-all-model-related-files';
 const downloadButtonSelector = "a[href^='/api/download/models/']";
 
-import { downloadImagesAndPrompts } from './model_image_download';
+import {
+  downloadImagesAndPrompts,
+  toggleGallary,
+} from './model_image_download';
 import { getButtonContainerNode } from './prompt_scraper.user';
 import { downloadGalleryImagesAndPrompts } from './gallery_download';
 
@@ -120,6 +123,7 @@ export const addDownloadAllButton = async () => {
 
   // start downloading a model
   button.addEventListener('click', async () => {
+    toggleGallary();
     await waitForElement(downloadButtonSelector);
     const modelDownloadUrl = document
       .querySelector(downloadButtonSelector)
@@ -141,4 +145,6 @@ export const addDownloadAllButton = async () => {
   if (parentNode) {
     parentNode.appendChild(button);
   }
+
+  toggleGallary();
 };

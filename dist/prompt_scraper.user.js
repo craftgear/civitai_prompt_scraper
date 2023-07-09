@@ -12963,6 +12963,16 @@ const $8d59c42601ba8f61$export$53039d7a8d9d297e = (buttonIdSelector, location)=>
             alert(error.message);
         }
     };
+const $8d59c42601ba8f61$export$c8adea586cc90d44 = ()=>{
+    const g = document.querySelector("#gallery");
+    if (!g) return;
+    g.style.overflow = "hidden";
+    if (g.style.height === "700px") {
+        g.style.height = "auto";
+        return;
+    }
+    g.style.height = "700px";
+};
 const $8d59c42601ba8f61$export$8b03a564a450b487 = async ()=>{
     const container = await (0, $29e4e9967394a818$export$4a2d37b006372286)();
     const buttonIdSelector = `#${$8d59c42601ba8f61$var$BUTTON_ID}`;
@@ -12979,16 +12989,7 @@ const $8d59c42601ba8f61$export$8b03a564a450b487 = async ()=>{
     const hideGallery = document.createElement("button");
     hideGallery.innerHTML = "x";
     hideGallery.setAttribute("style", "color: silver; border: none;");
-    hideGallery.addEventListener("click", ()=>{
-        const g = document.querySelector("#gallery");
-        if (!g) return;
-        g.style.overflow = "hidden";
-        if (g.style.height === "300px") {
-            g.style.height = "auto";
-            return;
-        }
-        g.style.height = "300px";
-    });
+    hideGallery.addEventListener("click", $8d59c42601ba8f61$export$c8adea586cc90d44);
     const h2 = document.querySelector("#gallery h2");
     if (h2) h2.parentNode?.appendChild(hideGallery);
 };
@@ -13182,6 +13183,7 @@ const $2da5569f102e177a$export$3b6a8e903180e269 = async ()=>{
     button.setAttribute("style", (0, $292fc7f9388c589b$export$7ec3146dae3421e3));
     // start downloading a model
     button.addEventListener("click", async ()=>{
+        (0, $8d59c42601ba8f61$export$c8adea586cc90d44)();
         await (0, $0fccda82d33153ac$export$1a1c301579a08d1e)($2da5569f102e177a$var$downloadButtonSelector);
         const modelDownloadUrl = document.querySelector($2da5569f102e177a$var$downloadButtonSelector)?.getAttribute("href");
         const fileSizeText = document.querySelector($2da5569f102e177a$var$downloadButtonSelector)?.innerHTML ?? "";
@@ -13191,6 +13193,7 @@ const $2da5569f102e177a$export$3b6a8e903180e269 = async ()=>{
         }, 0);
     });
     if (parentNode) parentNode.appendChild(button);
+    (0, $8d59c42601ba8f61$export$c8adea586cc90d44)();
 };
 
 
@@ -13253,7 +13256,7 @@ const $29e4e9967394a818$var$addModelPreviewDownloadButton = async ()=>{
         $29e4e9967394a818$var$darkenTextColor();
         $29e4e9967394a818$var$deleteCreateButton();
         $29e4e9967394a818$var$deleteSuggestedResources();
-        $29e4e9967394a818$var$deleteMainPaddingBottom();
+        // deleteMainPaddingBottom();
         await $29e4e9967394a818$var$addButtonContainer();
         await (0, $8d59c42601ba8f61$export$8b03a564a450b487)();
         await (0, $2da5569f102e177a$export$3b6a8e903180e269)();

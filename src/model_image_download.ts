@@ -125,6 +125,19 @@ export const downloadImagesAndPrompts =
     }
   };
 
+export const toggleGallary = () => {
+  const g: HTMLElement | null = document.querySelector('#gallery');
+  if (!g) {
+    return;
+  }
+  g.style.overflow = 'hidden';
+  if (g.style.height === '700px') {
+    g.style.height = 'auto';
+    return;
+  }
+  g.style.height = '700px';
+};
+
 export const addModelImagesDownloadButton = async () => {
   const container = await getButtonContainerNode();
   const buttonIdSelector = `#${BUTTON_ID}`;
@@ -150,18 +163,7 @@ export const addModelImagesDownloadButton = async () => {
   const hideGallery = document.createElement('button');
   hideGallery.innerHTML = 'x';
   hideGallery.setAttribute('style', 'color: silver; border: none;');
-  hideGallery.addEventListener('click', () => {
-    const g: HTMLElement | null = document.querySelector('#gallery');
-    if (!g) {
-      return;
-    }
-    g.style.overflow = 'hidden';
-    if (g.style.height === '300px') {
-      g.style.height = 'auto';
-      return;
-    }
-    g.style.height = '300px';
-  });
+  hideGallery.addEventListener('click', toggleGallary);
   const h2 = document.querySelector('#gallery h2');
   if (h2) {
     h2.parentNode?.appendChild(hideGallery);
