@@ -13147,14 +13147,14 @@ const $29e4e9967394a818$var$addGalleryImageDownloadButton = async ()=>{
         alert(error.message);
     }
 };
-const $29e4e9967394a818$var$openShowMore = ()=>{
+const $29e4e9967394a818$var$openShowMore = (retry = 5)=>{
     const showMoreButton = Array.from(document.querySelectorAll("button")).filter((x)=>x.innerHTML.includes("Show More"))[0];
     if (showMoreButton) {
         showMoreButton.click();
         return;
     }
-    setTimeout(()=>{
-        $29e4e9967394a818$var$openShowMore();
+    if (retry > 0) setTimeout(()=>{
+        $29e4e9967394a818$var$openShowMore(retry - 1);
     }, 1000);
 };
 let $29e4e9967394a818$var$prevHref = "";
@@ -13180,7 +13180,7 @@ const $29e4e9967394a818$var$observer = new MutationObserver(async (_mutationList
     }
     if (window.location.href.match(/\/models\/\d*/)) {
         await $29e4e9967394a818$var$addModelPreviewDownloadButton();
-        if ((0, $65c0cd2b2ec0988a$export$44487a86467333c3)("openShowMore")) $29e4e9967394a818$var$openShowMore();
+        if ((0, $65c0cd2b2ec0988a$export$44487a86467333c3)("openShowMore")) $29e4e9967394a818$var$openShowMore(30);
     } else if (window.location.href.match(/\/images\/\d*/)) await $29e4e9967394a818$var$addGalleryImageDownloadButton();
     (0, $0fccda82d33153ac$export$bef1f36f5486a6a3)("done");
 })();
