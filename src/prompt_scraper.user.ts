@@ -86,7 +86,7 @@ const addModelPreviewDownloadButton = async () => {
     }
     log('model');
     if (getConfig('openShowMore')) {
-      openShowMore(20);
+      openShowMore(30);
     }
     darkenTextColor();
     deleteCreateButton();

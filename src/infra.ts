@@ -1,6 +1,6 @@
 import { saveAs } from 'file-saver';
 import { BlobWriter, BlobReader, TextReader, ZipWriter } from '@zip.js/zip.js';
-import { sleep } from './utils';
+import { chunkArray, sleep } from './utils';
 import {
   GalleryImagesResponse,
   ModelResponse,
@@ -133,6 +133,56 @@ export const fetchImg = async (
   }
 };
 
+const fetchImgs =
+  (
+    zipWriter: ZipWriter<Blob>,
+    buttnTextUpdateFn: (text: string) => void | null,
+    addedNames: Set<string>,
+    errors: string[]
+  ) =>
+  async (
+    imgInfo: { url: string; hash: string; meta: Object; btnText: string }[]
+  ) =>
+    await Promise.all(
+      imgInfo.map(async (x) => {
+        try {
+          const response = await fetchImg(x.url);
+          if (!response) {
+            throw new Error('response is null');
+          }
+          const { blob, contentType } = response;
+
+          let name =
+            extractFilebasenameFromImageUrl(x.url) ||
+            x.hash.replace(/[\;\:\?\*\.]/g, '_');
+          while (addedNames.has(name)) {
+            name += '_';
+          }
+
+          const filename =
+            (contentType && `${name}.${contentType.split('/')[1]}`) ||
+            `${name}.png`;
+
+          await zipWriter.add(filename, new BlobReader(blob));
+          addedNames.add(name);
+
+          if (!!x.meta) {
+            const jsonFilename = name + '.json';
+            await zipWriter.add(
+              jsonFilename,
+              new TextReader(JSON.stringify(x.meta, null, '\t'))
+            );
+          }
+          if (buttnTextUpdateFn) {
+            buttnTextUpdateFn(x.btnText);
+          }
+        } catch (e: unknown) {
+          console.log('error: ', (e as Error).message, x.url);
+          errors.push(`${(e as Error).message}, ${x.url}`);
+        }
+      })
+    );
+
 export const createZip =
   (buttnTextUpdateFn: (text: string) => void | null) =>
   (zipFilename: string, modelInfo?: Object) =>
@@ -142,7 +192,6 @@ export const createZip =
     if (!modelInfo && imgInfo.length === 0) {
       return;
     }
-    const addedNames = new Set();
     const blobWriter = new BlobWriter(`application/zip`);
     const zipWriter = new ZipWriter(blobWriter);
 
@@ -153,58 +202,27 @@ export const createZip =
       );
     }
 
-    let counter = 0;
-    let errors = [];
+    const imgInfoWithBtnText = imgInfo.map((x, i) => ({
+      ...x,
+      btnText: `${i + 1} / ${imgInfo.length} ${getButtonProgressLabel()}`,
+    }));
 
-    for (const x of imgInfo) {
-      if (buttnTextUpdateFn) {
-        buttnTextUpdateFn(
-          `${counter + 1} / ${imgInfo.length} ${getButtonProgressLabel()}`
-        );
-      }
-
-      try {
-        const response = await fetchImg(x.url);
-        if (!response) {
-          throw new Error('response is null');
-        }
-        const { blob, contentType } = response;
-
-        let name =
-          extractFilebasenameFromImageUrl(x.url) ||
-          x.hash.replace(/[\;\:\?\*\.]/g, '_');
-        while (addedNames.has(name)) {
-          name += '_';
-        }
-
-        const filename =
-          (contentType && `${name}.${contentType.split('/')[1]}`) ||
-          `${name}.png`;
-
-        await zipWriter.add(filename, new BlobReader(blob));
-        addedNames.add(name);
-
-        if (!!x.meta) {
-          const jsonFilename = name + '.json';
-          await zipWriter.add(
-            jsonFilename,
-            new TextReader(JSON.stringify(x.meta, null, '\t'))
-          );
-        }
-
-        counter += 1;
-      } catch (e: unknown) {
-        console.log('error: ', (e as Error).message, x.url);
-        errors.push(`${(e as Error).message}, ${x.url}`);
-        if (!getConfig('continueWithFetchError')) {
-          break;
-        }
-      }
-      await sleep(100);
+    const addedNames = new Set<string>();
+    let errors: string[] = [];
+    const predicate = fetchImgs(
+      zipWriter,
+      buttnTextUpdateFn,
+      addedNames,
+      errors
+    );
+    for (const xs of chunkArray(imgInfoWithBtnText)) {
+      await predicate(xs);
+      await sleep(500);
     }
 
     if (errors.length > 0) {
       if (!getConfig('continueWithFetchError')) {
+        zipWriter.close(undefined, {});
         throw new Error(errors.join('\n\r'));
       }
     }

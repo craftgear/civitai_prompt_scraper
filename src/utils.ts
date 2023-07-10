@@ -71,6 +71,16 @@ export const getModelIdFromNextData = () => {
   return model.state.data.id;
 };
 
+export const chunkArray = <T>(xs: T[], chunkSize = 5): T[][] =>
+  xs.reduce<T[][]>((acc: T[][], curr: T) => {
+    const tail: T[] = acc.pop() ?? [];
+    if (tail.length < chunkSize) {
+      tail.push(curr);
+      return [...acc, tail];
+    }
+    return [...acc, tail, [curr]];
+  }, []);
+
 // export const screenShot = async () => {
 //    const main = await waitForElement('body');
 //
