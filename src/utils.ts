@@ -4,6 +4,7 @@ import { NextData } from './types';
 import pkg from '../package.json';
 import { disabledButtonStyle } from './styles';
 // import { saveAs } from 'file-saver';
+import { buttonContainerStyle } from './styles';
 
 export const log = (...xs: any[]) => {
   console.log(`${pkg.name}:`, ...xs);
@@ -80,6 +81,77 @@ export const chunkArray = <T>(xs: T[], chunkSize = 5): T[][] =>
     }
     return [...acc, tail, [curr]];
   }, []);
+
+const BUTTON_CONTAINER_ID = 'civitai_prompt_scraper';
+export const addButtonContainer = async () => {
+  const downloadButtonSelector = "a[href^='/api/download/models/']";
+  const buttonParent = await waitForElement(downloadButtonSelector);
+
+  const container = document.createElement('div');
+  container.id = BUTTON_CONTAINER_ID;
+  container.setAttribute('style', buttonContainerStyle);
+
+  buttonParent?.parentNode?.parentNode?.appendChild(container);
+  return container;
+};
+
+export const getButtonContainerNode = async () => {
+  return waitForElement(`#${BUTTON_CONTAINER_ID}`);
+};
+
+export const darkenTextColor = () => {
+  Array.from(document.querySelectorAll('.mantine-Spoiler-root span')).forEach(
+    (x) => {
+      const style = x.getAttribute('style');
+      const colorValue = (style?.match(/color:\s*(.*);?/) ?? [])[1];
+      if (!colorValue) {
+        return;
+      }
+      if (colorValue.startsWith('rgb')) {
+        x.setAttribute('style', `${x.getAttribute('style')} color: black;`);
+        return;
+      }
+      const colorNumber = new Number(`0x${colorValue.slice(1)}`);
+      if (colorNumber > 10000000) {
+        x.setAttribute('style', `${x.getAttribute('style')} color: black;`);
+      }
+    }
+  );
+};
+
+export const deleteCreateButton = () => {
+  const createButton = Array.from(document.querySelectorAll('button')).filter(
+    (x: HTMLElement) => x.innerHTML.includes('Create')
+  )[0];
+  if (createButton) {
+    createButton?.remove();
+  }
+};
+
+export const deleteSuggestedResources = (retry = 5) => {
+  const el = Array.from(
+    document.querySelectorAll('.mantine-Container-root h2')
+  ).filter((x: Element) => x.innerHTML.includes('Suggested Resources'))[0];
+  if (el?.parentElement?.parentElement?.parentElement?.parentElement) {
+    el?.parentElement?.parentElement?.parentElement?.parentElement?.remove();
+  } else {
+    setTimeout(() => {
+      deleteSuggestedResources(retry - 1);
+    }, 1000);
+  }
+};
+
+export const deleteMainPaddingBottom = (retry = 5) => {
+  const el: HTMLElement | null = document.querySelector('main');
+  if (!el) {
+    setTimeout(() => {
+      deleteMainPaddingBottom(retry - 1);
+    }, 1000);
+    return;
+  }
+  el.style.paddingBottom = '0';
+};
+
 
 // export const screenShot = async () => {
 //    const main = await waitForElement('body');

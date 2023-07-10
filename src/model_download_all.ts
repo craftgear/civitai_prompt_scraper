@@ -13,7 +13,7 @@ import {
   downloadImagesAndPrompts,
   toggleGallary,
 } from './model_image_download';
-import { getButtonContainerNode } from './prompt_scraper.user';
+import { getButtonContainerNode } from './utils';
 import { downloadGalleryImagesAndPrompts } from './gallery_download';
 
 const getGalleryModelIdAndPostId = (href: string) => {

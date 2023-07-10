@@ -108,6 +108,7 @@ $39e7bd012fbaed99$exports = JSON.parse('{"name":"civitai_prompt_scraper","browse
 
 
 
+
 const $0fccda82d33153ac$export$bef1f36f5486a6a3 = (...xs)=>{
     console.log(`${(0, (/*@__PURE__*/$parcel$interopDefault($39e7bd012fbaed99$exports))).name}:`, ...xs);
 };
@@ -166,7 +167,54 @@ const $0fccda82d33153ac$export$f922ebe57f2c36e8 = (xs, chunkSize = 5)=>xs.reduce
                 curr
             ]
         ];
-    }, []); // export const screenShot = async () => {
+    }, []);
+const $0fccda82d33153ac$var$BUTTON_CONTAINER_ID = "civitai_prompt_scraper";
+const $0fccda82d33153ac$export$3d6ebb5b74790dc2 = async ()=>{
+    const downloadButtonSelector = "a[href^='/api/download/models/']";
+    const buttonParent = await $0fccda82d33153ac$export$1a1c301579a08d1e(downloadButtonSelector);
+    const container = document.createElement("div");
+    container.id = $0fccda82d33153ac$var$BUTTON_CONTAINER_ID;
+    container.setAttribute("style", (0, $292fc7f9388c589b$export$b0c8f381295da638));
+    buttonParent?.parentNode?.parentNode?.appendChild(container);
+    return container;
+};
+const $0fccda82d33153ac$export$4a2d37b006372286 = async ()=>{
+    return $0fccda82d33153ac$export$1a1c301579a08d1e(`#${$0fccda82d33153ac$var$BUTTON_CONTAINER_ID}`);
+};
+const $0fccda82d33153ac$export$5bc69941fea37f21 = ()=>{
+    Array.from(document.querySelectorAll(".mantine-Spoiler-root span")).forEach((x)=>{
+        const style = x.getAttribute("style");
+        const colorValue = (style?.match(/color:\s*(.*);?/) ?? [])[1];
+        if (!colorValue) return;
+        if (colorValue.startsWith("rgb")) {
+            x.setAttribute("style", `${x.getAttribute("style")} color: black;`);
+            return;
+        }
+        const colorNumber = new Number(`0x${colorValue.slice(1)}`);
+        if (colorNumber > 10000000) x.setAttribute("style", `${x.getAttribute("style")} color: black;`);
+    });
+};
+const $0fccda82d33153ac$export$d450a001006e5818 = ()=>{
+    const createButton = Array.from(document.querySelectorAll("button")).filter((x)=>x.innerHTML.includes("Create"))[0];
+    if (createButton) createButton?.remove();
+};
+const $0fccda82d33153ac$export$5ffcb0107c13639c = (retry = 5)=>{
+    const el = Array.from(document.querySelectorAll(".mantine-Container-root h2")).filter((x)=>x.innerHTML.includes("Suggested Resources"))[0];
+    if (el?.parentElement?.parentElement?.parentElement?.parentElement) el?.parentElement?.parentElement?.parentElement?.parentElement?.remove();
+    else setTimeout(()=>{
+        $0fccda82d33153ac$export$5ffcb0107c13639c(retry - 1);
+    }, 1000);
+};
+const $0fccda82d33153ac$export$980dc319601fa7a6 = (retry = 5)=>{
+    const el = document.querySelector("main");
+    if (!el) {
+        setTimeout(()=>{
+            $0fccda82d33153ac$export$980dc319601fa7a6(retry - 1);
+        }, 1000);
+        return;
+    }
+    el.style.paddingBottom = "0";
+}; // export const screenShot = async () => {
  //    const main = await waitForElement('body');
  //
  //    if (!main) {
@@ -12880,6 +12928,7 @@ const $afa9fb8bb7aaf429$export$2ab75dd31a3868f2 = async (url)=>{
 };
 const $afa9fb8bb7aaf429$var$fetchImgs = (zipWriter, buttnTextUpdateFn, addedNames, errors)=>async (imgInfo)=>await Promise.all(imgInfo.map(async (x)=>{
             try {
+                if (buttnTextUpdateFn) buttnTextUpdateFn(x.btnText);
                 const response = await $afa9fb8bb7aaf429$export$2ab75dd31a3868f2(x.url);
                 if (!response) throw new Error("response is null");
                 const { blob: blob , contentType: contentType  } = response;
@@ -12892,7 +12941,6 @@ const $afa9fb8bb7aaf429$var$fetchImgs = (zipWriter, buttnTextUpdateFn, addedName
                     const jsonFilename = name + ".json";
                     await zipWriter.add(jsonFilename, new (0, $53e25169918aa98b$export$43d3fd7deddee00)(JSON.stringify(x.meta, null, "	")));
                 }
-                if (buttnTextUpdateFn) buttnTextUpdateFn(x.btnText);
             } catch (e) {
                 console.log("error: ", e.message, x.url);
                 errors.push(`${e.message}, ${x.url}`);
@@ -12999,7 +13047,7 @@ const $8d59c42601ba8f61$export$c8adea586cc90d44 = ()=>{
     g.style.height = "700px";
 };
 const $8d59c42601ba8f61$export$8b03a564a450b487 = async ()=>{
-    const container = await (0, $29e4e9967394a818$export$4a2d37b006372286)();
+    const container = await (0, $0fccda82d33153ac$export$4a2d37b006372286)();
     const buttonIdSelector = `#${$8d59c42601ba8f61$var$BUTTON_ID}`;
     document.querySelector(buttonIdSelector)?.remove();
     const button = document.createElement("a");
@@ -13138,7 +13186,6 @@ const $9a7e0bde1a099030$export$5fd187c0d03a79e = async ()=>{
 
 
 
-
 const $2da5569f102e177a$var$BUTTON_ID = "download-all-model-related-files";
 const $2da5569f102e177a$var$downloadButtonSelector = "a[href^='/api/download/models/']";
 const $2da5569f102e177a$var$getGalleryModelIdAndPostId = (href)=>{
@@ -13198,7 +13245,7 @@ const $2da5569f102e177a$var$downloadAllModelRelatedFiles = (buttonIdSelector)=>a
         return;
     };
 const $2da5569f102e177a$export$3b6a8e903180e269 = async ()=>{
-    const parentNode = await (0, $29e4e9967394a818$export$4a2d37b006372286)();
+    const parentNode = await (0, $0fccda82d33153ac$export$4a2d37b006372286)();
     const buttonIdSelector = `#${$2da5569f102e177a$var$BUTTON_ID}`;
     document.querySelector(buttonIdSelector)?.remove();
     const button = document.createElement("a");
@@ -13223,53 +13270,6 @@ const $2da5569f102e177a$export$3b6a8e903180e269 = async ()=>{
 
 
 
-const $29e4e9967394a818$var$BUTTON_CONTAINER_ID = "civitai_prompt_scraper";
-const $29e4e9967394a818$var$addButtonContainer = async ()=>{
-    const downloadButtonSelector = "a[href^='/api/download/models/']";
-    const buttonParent = await (0, $0fccda82d33153ac$export$1a1c301579a08d1e)(downloadButtonSelector);
-    const container = document.createElement("div");
-    container.id = $29e4e9967394a818$var$BUTTON_CONTAINER_ID;
-    container.setAttribute("style", (0, $292fc7f9388c589b$export$b0c8f381295da638));
-    buttonParent?.parentNode?.parentNode?.appendChild(container);
-    return container;
-};
-const $29e4e9967394a818$export$4a2d37b006372286 = async ()=>{
-    return (0, $0fccda82d33153ac$export$1a1c301579a08d1e)(`#${$29e4e9967394a818$var$BUTTON_CONTAINER_ID}`);
-};
-const $29e4e9967394a818$var$darkenTextColor = ()=>{
-    Array.from(document.querySelectorAll(".mantine-Spoiler-root span")).forEach((x)=>{
-        const style = x.getAttribute("style");
-        const colorValue = (style?.match(/color:\s*(.*);?/) ?? [])[1];
-        if (!colorValue) return;
-        if (colorValue.startsWith("rgb")) {
-            x.setAttribute("style", `${x.getAttribute("style")} color: black;`);
-            return;
-        }
-        const colorNumber = new Number(`0x${colorValue.slice(1)}`);
-        if (colorNumber > 10000000) x.setAttribute("style", `${x.getAttribute("style")} color: black;`);
-    });
-};
-const $29e4e9967394a818$var$deleteCreateButton = ()=>{
-    const createButton = Array.from(document.querySelectorAll("button")).filter((x)=>x.innerHTML.includes("Create"))[0];
-    if (createButton) createButton?.remove();
-};
-const $29e4e9967394a818$var$deleteSuggestedResources = (retry = 5)=>{
-    const el = Array.from(document.querySelectorAll(".mantine-Container-root h2")).filter((x)=>x.innerHTML.includes("Suggested Resources"))[0];
-    if (el?.parentElement?.parentElement?.parentElement?.parentElement) el?.parentElement?.parentElement?.parentElement?.parentElement?.remove();
-    else setTimeout(()=>{
-        $29e4e9967394a818$var$deleteSuggestedResources(retry - 1);
-    }, 1000);
-};
-const $29e4e9967394a818$var$deleteMainPaddingBottom = (retry = 5)=>{
-    const el = document.querySelector("main");
-    if (!el) {
-        setTimeout(()=>{
-            $29e4e9967394a818$var$deleteMainPaddingBottom(retry - 1);
-        }, 1000);
-        return;
-    }
-    el.style.paddingBottom = "0";
-};
 const $29e4e9967394a818$var$addModelPreviewDownloadButton = async ()=>{
     try {
         // await waitForElement('#gallery a[href^="/images"]');
@@ -13278,13 +13278,13 @@ const $29e4e9967394a818$var$addModelPreviewDownloadButton = async ()=>{
         if (!window.location.href.match(/\/models\/\d*/)) return;
         (0, $0fccda82d33153ac$export$bef1f36f5486a6a3)("model");
         if ((0, $65c0cd2b2ec0988a$export$44487a86467333c3)("openShowMore")) $29e4e9967394a818$var$openShowMore(30);
-        $29e4e9967394a818$var$darkenTextColor();
-        $29e4e9967394a818$var$deleteCreateButton();
-        $29e4e9967394a818$var$deleteSuggestedResources();
+        (0, $0fccda82d33153ac$export$5bc69941fea37f21)();
+        (0, $0fccda82d33153ac$export$d450a001006e5818)();
+        (0, $0fccda82d33153ac$export$5ffcb0107c13639c)();
         // deleteMainPaddingBottom();
-        await $29e4e9967394a818$var$addButtonContainer();
-        await (0, $8d59c42601ba8f61$export$8b03a564a450b487)();
+        await (0, $0fccda82d33153ac$export$3d6ebb5b74790dc2)();
         await (0, $2da5569f102e177a$export$3b6a8e903180e269)();
+        await (0, $8d59c42601ba8f61$export$8b03a564a450b487)();
     } catch (error) {
         alert(error.message);
     }

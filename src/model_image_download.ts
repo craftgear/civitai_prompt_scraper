@@ -11,7 +11,7 @@ import {
   fetchGalleryData,
 } from './infra';
 import { getConfig } from './config_panel';
-import { getButtonContainerNode } from './prompt_scraper.user';
+import { getButtonContainerNode } from './utils';
 
 const BUTTON_ID = 'download-all-images-and-prompts';
 const downloadButtonSelector = "a[href^='/api/download/models/']";
