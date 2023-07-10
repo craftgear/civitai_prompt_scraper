@@ -53,7 +53,7 @@ const addGalleryImageDownloadButton = async () => {
   }
 };
 
-const openShowMore = (retryCount = 1) => {
+const openShowMore = (retry = 5) => {
   const showMoreButton = Array.from(document.querySelectorAll('button')).filter(
     (x: HTMLElement) => x.innerHTML.includes('Show More')
   )[0];
@@ -61,10 +61,9 @@ const openShowMore = (retryCount = 1) => {
     showMoreButton.click();
     return;
   }
-
-  if (retryCount > 0) {
+  if (retry > 0) {
     setTimeout(() => {
-      openShowMore(retryCount - 1);
+      openShowMore(retry - 1);
     }, 1000);
   }
 };
@@ -98,6 +97,9 @@ const observer = new MutationObserver(async (_mutationList) => {
 
   if (window.location.href.match(/\/models\/\d*/)) {
     await addModelPreviewDownloadButton();
+    if (getConfig('openShowMore')) {
+      openShowMore(30);
+    }
   } else if (window.location.href.match(/\/images\/\d*/)) {
     await addGalleryImageDownloadButton();
   }

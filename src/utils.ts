@@ -152,7 +152,6 @@ export const deleteMainPaddingBottom = (retry = 5) => {
   el.style.paddingBottom = '0';
 };
 
-
 // export const screenShot = async () => {
 //    const main = await waitForElement('body');
 //
