@@ -138,7 +138,7 @@ const $0fccda82d33153ac$export$92ecf871022de94d = (button, text)=>{
     disabledButton.setAttribute("data-state", (0, $a5923d2edfc72bc5$export$5d7ba7f5550f99d1).done);
     button.parentNode?.replaceChild(disabledButton, button);
 };
-const $0fccda82d33153ac$export$f922ebe57f2c36e8 = (xs, chunkSize = 3)=>xs.reduce((acc, curr)=>{
+const $0fccda82d33153ac$export$f922ebe57f2c36e8 = (xs, chunkSize = 5)=>xs.reduce((acc, curr)=>{
         const tail = acc.pop() ?? [];
         if (tail.length < chunkSize) {
             tail.push(curr);
