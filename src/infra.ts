@@ -134,52 +134,36 @@ export const fetchImg = async (
 };
 
 const fetchImgs =
-  (
-    zipWriter: ZipWriter<Blob>,
-    buttnTextUpdateFn: (text: string) => void | null,
-    addedNames: Set<string>,
-    errors: string[]
-  ) =>
-  async (
-    imgInfo: { url: string; hash: string; meta: Object; btnText: string }[]
-  ) =>
+  (zipWriter: ZipWriter<Blob>, addedNames: Set<string>) =>
+  async (imgInfo: { url: string; hash: string; meta: Object }[]) =>
     await Promise.all(
       imgInfo.map(async (x) => {
-        try {
-          if (buttnTextUpdateFn) {
-            buttnTextUpdateFn(x.btnText);
-          }
+        const response = await fetchImg(x.url);
+        if (!response) {
+          throw new Error(`response is null: ${x.url}`);
+        }
+        const { blob, contentType } = response;
 
-          const response = await fetchImg(x.url);
-          if (!response) {
-            throw new Error('response is null');
-          }
-          const { blob, contentType } = response;
+        let name =
+          extractFilebasenameFromImageUrl(x.url) ||
+          x.hash.replace(/[\;\:\?\*\.]/g, '_');
+        while (addedNames.has(name)) {
+          name += '_';
+        }
 
-          let name =
-            extractFilebasenameFromImageUrl(x.url) ||
-            x.hash.replace(/[\;\:\?\*\.]/g, '_');
-          while (addedNames.has(name)) {
-            name += '_';
-          }
+        const filename =
+          (contentType && `${name}.${contentType.split('/')[1]}`) ||
+          `${name}.png`;
 
-          const filename =
-            (contentType && `${name}.${contentType.split('/')[1]}`) ||
-            `${name}.png`;
+        await zipWriter.add(filename, new BlobReader(blob));
+        addedNames.add(name);
 
-          await zipWriter.add(filename, new BlobReader(blob));
-          addedNames.add(name);
-
-          if (!!x.meta) {
-            const jsonFilename = name + '.json';
-            await zipWriter.add(
-              jsonFilename,
-              new TextReader(JSON.stringify(x.meta, null, '\t'))
-            );
-          }
-        } catch (e: unknown) {
-          console.log('error: ', (e as Error).message, x.url);
-          errors.push(`${(e as Error).message}, ${x.url}`);
+        if (!!x.meta) {
+          const jsonFilename = name + '.json';
+          await zipWriter.add(
+            jsonFilename,
+            new TextReader(JSON.stringify(x.meta, null, '\t'))
+          );
         }
       })
     );
@@ -203,29 +187,27 @@ export const createZip =
       );
     }
 
-    const imgInfoWithBtnText = imgInfo.map((x, i) => ({
-      ...x,
-      btnText: `${i + 1} / ${imgInfo.length} ${getButtonProgressLabel()}`,
-    }));
-
     const addedNames = new Set<string>();
-    let errors: string[] = [];
-    const predicate = fetchImgs(
-      zipWriter,
-      buttnTextUpdateFn,
-      addedNames,
-      errors
-    );
-    for (const xs of chunkArray(imgInfoWithBtnText)) {
-      await predicate(xs);
-      await sleep(500);
-    }
-
-    if (errors.length > 0) {
-      if (!getConfig('continueWithFetchError')) {
-        zipWriter.close(undefined, {});
-        throw new Error(errors.join('\n\r'));
+    const predicate = fetchImgs(zipWriter, addedNames);
+    let counter = 0;
+    for (const xs of chunkArray(imgInfo)) {
+      counter += xs.length;
+      if (buttnTextUpdateFn) {
+        buttnTextUpdateFn(
+          `${counter} / ${imgInfo.length} ${getButtonProgressLabel()}`
+        );
       }
+
+      try {
+        await predicate(xs);
+      } catch (e: unknown) {
+        console.log('error: ', (e as Error).message);
+        if (!getConfig('continueWithFetchError')) {
+          zipWriter.close(undefined, {});
+          throw e;
+        }
+      }
+      await sleep(500);
     }
 
     saveAs(await zipWriter.close(undefined, {}), zipFilename);

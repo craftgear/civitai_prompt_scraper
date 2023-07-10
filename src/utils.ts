@@ -56,7 +56,7 @@ export const replaceWithDisabledButton = (
   button.parentNode?.replaceChild(disabledButton, button);
 };
 
-export const chunkArray = <T>(xs: T[], chunkSize = 3): T[][] =>
+export const chunkArray = <T>(xs: T[], chunkSize = 5): T[][] =>
   xs.reduce<T[][]>((acc: T[][], curr: T) => {
     const tail: T[] = acc.pop() ?? [];
     if (tail.length < chunkSize) {
