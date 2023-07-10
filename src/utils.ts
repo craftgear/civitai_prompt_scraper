@@ -56,6 +56,16 @@ export const replaceWithDisabledButton = (
   button.parentNode?.replaceChild(disabledButton, button);
 };
 
+export const chunkArray = <T>(xs: T[], chunkSize = 3): T[][] =>
+  xs.reduce<T[][]>((acc: T[][], curr: T) => {
+    const tail: T[] = acc.pop() ?? [];
+    if (tail.length < chunkSize) {
+      tail.push(curr);
+      return [...acc, tail];
+    }
+    return [...acc, tail, [curr]];
+  }, []);
+
 // export const screenShot = async () => {
 //   const main = await waitForElement('main');
 //

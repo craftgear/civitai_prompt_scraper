@@ -137,7 +137,24 @@ const $0fccda82d33153ac$export$92ecf871022de94d = (button, text)=>{
     disabledButton.innerText = text;
     disabledButton.setAttribute("data-state", (0, $a5923d2edfc72bc5$export$5d7ba7f5550f99d1).done);
     button.parentNode?.replaceChild(disabledButton, button);
-}; // export const screenShot = async () => {
+};
+const $0fccda82d33153ac$export$f922ebe57f2c36e8 = (xs, chunkSize = 3)=>xs.reduce((acc, curr)=>{
+        const tail = acc.pop() ?? [];
+        if (tail.length < chunkSize) {
+            tail.push(curr);
+            return [
+                ...acc,
+                tail
+            ];
+        }
+        return [
+            ...acc,
+            tail,
+            [
+                curr
+            ]
+        ];
+    }, []); // export const screenShot = async () => {
  //   const main = await waitForElement('main');
  //
  //   if (!main) {
@@ -12858,39 +12875,47 @@ const $afa9fb8bb7aaf429$export$2ab75dd31a3868f2 = async (url)=>{
         throw error;
     }
 };
+const $afa9fb8bb7aaf429$var$fetchImgs = (zipWriter, buttnTextUpdateFn, addedNames, errors)=>async (imgInfo)=>await Promise.all(imgInfo.map(async (x)=>{
+            try {
+                if (buttnTextUpdateFn) buttnTextUpdateFn(x.btnText);
+                const response = await $afa9fb8bb7aaf429$export$2ab75dd31a3868f2(x.url);
+                if (!response) throw new Error("response is null");
+                const { blob: blob , contentType: contentType  } = response;
+                let name = $afa9fb8bb7aaf429$var$extractFilebasenameFromImageUrl(x.url) || x.hash.replace(/[\;\:\?\*\.]/g, "_");
+                while(addedNames.has(name))name += "_";
+                const filename = contentType && `${name}.${contentType.split("/")[1]}` || `${name}.png`;
+                await zipWriter.add(filename, new (0, $53e25169918aa98b$export$aa5015be25fe7f79)(blob));
+                addedNames.add(name);
+                if (!!x.meta) {
+                    const jsonFilename = name + ".json";
+                    await zipWriter.add(jsonFilename, new (0, $53e25169918aa98b$export$43d3fd7deddee00)(JSON.stringify(x.meta, null, "	")));
+                }
+            } catch (e) {
+                console.log("error: ", e.message, x.url);
+                errors.push(`${e.message}, ${x.url}`);
+            }
+        }));
 const $afa9fb8bb7aaf429$export$b6bc24646229cedd = (buttnTextUpdateFn)=>(zipFilename, modelInfo)=>async (imgInfo)=>{
             if (!modelInfo && imgInfo.length === 0) return;
-            const addedNames = new Set();
             const blobWriter = new (0, $53e25169918aa98b$export$b1948fceba813858)(`application/zip`);
             const zipWriter = new (0, $183a0115a003f583$export$50f5658480930b4c)(blobWriter);
             if (modelInfo) await zipWriter.add("model_info.json", new (0, $53e25169918aa98b$export$43d3fd7deddee00)(JSON.stringify(modelInfo, null, "	")));
-            let counter = 0;
+            const imgInfoWithBtnText = imgInfo.map((x, i)=>({
+                    ...x,
+                    btnText: `${i + 1} / ${imgInfo.length} ${(0, $966fc19e1e9bc989$export$ccac0588af5e2fe6)()}`
+                }));
+            const addedNames = new Set();
             let errors = [];
-            for (const x of imgInfo){
-                if (buttnTextUpdateFn) buttnTextUpdateFn(`${counter + 1} / ${imgInfo.length} ${(0, $966fc19e1e9bc989$export$ccac0588af5e2fe6)()}`);
-                try {
-                    const response = await $afa9fb8bb7aaf429$export$2ab75dd31a3868f2(x.url);
-                    if (!response) throw new Error("response is null");
-                    const { blob: blob , contentType: contentType  } = response;
-                    let name = $afa9fb8bb7aaf429$var$extractFilebasenameFromImageUrl(x.url) || x.hash.replace(/[\;\:\?\*\.]/g, "_");
-                    while(addedNames.has(name))name += "_";
-                    const filename = contentType && `${name}.${contentType.split("/")[1]}` || `${name}.png`;
-                    await zipWriter.add(filename, new (0, $53e25169918aa98b$export$aa5015be25fe7f79)(blob));
-                    addedNames.add(name);
-                    if (!!x.meta) {
-                        const jsonFilename = name + ".json";
-                        await zipWriter.add(jsonFilename, new (0, $53e25169918aa98b$export$43d3fd7deddee00)(JSON.stringify(x.meta, null, "	")));
-                    }
-                    counter += 1;
-                } catch (e) {
-                    console.log("error: ", e.message, x.url);
-                    errors.push(`${e.message}, ${x.url}`);
-                    if (!(0, $65c0cd2b2ec0988a$export$44487a86467333c3)("continueWithFetchError")) break;
-                }
-                await (0, $0fccda82d33153ac$export$e772c8ff12451969)(100);
+            const predicate = $afa9fb8bb7aaf429$var$fetchImgs(zipWriter, buttnTextUpdateFn, addedNames, errors);
+            for (const xs of (0, $0fccda82d33153ac$export$f922ebe57f2c36e8)(imgInfoWithBtnText)){
+                await predicate(xs);
+                await (0, $0fccda82d33153ac$export$e772c8ff12451969)(500);
             }
             if (errors.length > 0) {
-                if (!(0, $65c0cd2b2ec0988a$export$44487a86467333c3)("continueWithFetchError")) throw new Error(errors.join("\n\r"));
+                if (!(0, $65c0cd2b2ec0988a$export$44487a86467333c3)("continueWithFetchError")) {
+                    zipWriter.close(undefined, {});
+                    throw new Error(errors.join("\n\r"));
+                }
             }
             (0, $b9a27db92abc3f0f$exports.saveAs)(await zipWriter.close(undefined, {}), zipFilename);
         };
@@ -12952,6 +12977,10 @@ const $8d59c42601ba8f61$export$53039d7a8d9d297e = (buttonIdSelector, location)=>
                     url: x.url.replace(/width=\d*/, `width=${x.width},optimized=true`)
                 })));
             (0, $0fccda82d33153ac$export$92ecf871022de94d)(button, ` ${imageList.length} / ${imageList.length} ${(0, $966fc19e1e9bc989$export$4d9f09007b08c03d)()}`);
+            return {
+                imageList: imageList,
+                modelName: modelName
+            };
         } catch (error) {
             alert(error.message);
         }
