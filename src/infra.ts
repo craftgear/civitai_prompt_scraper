@@ -146,6 +146,10 @@ const fetchImgs =
     await Promise.all(
       imgInfo.map(async (x) => {
         try {
+          if (buttnTextUpdateFn) {
+            buttnTextUpdateFn(x.btnText);
+          }
+
           const response = await fetchImg(x.url);
           if (!response) {
             throw new Error('response is null');
@@ -172,9 +176,6 @@ const fetchImgs =
               jsonFilename,
               new TextReader(JSON.stringify(x.meta, null, '\t'))
             );
-          }
-          if (buttnTextUpdateFn) {
-            buttnTextUpdateFn(x.btnText);
           }
         } catch (e: unknown) {
           console.log('error: ', (e as Error).message, x.url);

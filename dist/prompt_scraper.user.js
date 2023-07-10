@@ -166,9 +166,7 @@ const $0fccda82d33153ac$export$f922ebe57f2c36e8 = (xs, chunkSize = 5)=>xs.reduce
                 curr
             ]
         ];
-    }, []); //Stashed changes
- //Stashed changes
- // export const screenShot = async () => {
+    }, []); // export const screenShot = async () => {
  //    const main = await waitForElement('body');
  //
  //    if (!main) {
