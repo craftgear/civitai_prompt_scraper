@@ -3,14 +3,7 @@ import { addModelImagesDownloadButton } from './model_image_download';
 import { getConfig, initConfigPanel } from './config_panel';
 import { addDownloadAllButton } from './model_download_all';
 
-import {
-  sleep,
-  log,
-  darkenTextColor,
-  deleteCreateButton,
-  deleteSuggestedResources,
-  addButtonContainer,
-} from './utils';
+import { sleep, log, addButtonContainer } from './utils';
 
 const addModelPreviewDownloadButton = async () => {
   try {
@@ -24,11 +17,6 @@ const addModelPreviewDownloadButton = async () => {
     if (getConfig('openShowMore')) {
       openShowMore(30);
     }
-    darkenTextColor();
-    deleteCreateButton();
-    deleteSuggestedResources();
-    // deleteMainPaddingBottom();
-
     await addButtonContainer();
 
     await addModelImagesDownloadButton();

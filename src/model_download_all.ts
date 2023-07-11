@@ -3,8 +3,15 @@ import {
   downloadAllGalleryButtonStyle,
   downloadAllGalleryDisabledButtonStyle,
 } from './styles';
-import { sleep, waitForElement, replaceWithDisabledButton } from './utils';
-import { /** getI18nLabel **/ getButtonCompleteLabel } from './lang';
+import {
+  sleep,
+  waitForElement,
+  replaceWithDisabledButton,
+  darkenTextColor,
+  deleteCreateButton,
+  deleteSuggestedResources,
+} from './utils';
+import { getButtonCompleteLabel } from './lang';
 
 const BUTTON_ID = 'download-all-model-related-files';
 const downloadButtonSelector = "a[href^='/api/download/models/']";
@@ -107,6 +114,11 @@ const downloadAllModelRelatedFiles = (buttonIdSelector: string) => async () => {
 };
 
 export const addDownloadAllButton = async () => {
+  darkenTextColor();
+  deleteCreateButton();
+  deleteSuggestedResources();
+  // deleteMainPaddingBottom();
+
   const parentNode = await getButtonContainerNode();
 
   const buttonIdSelector = `#${BUTTON_ID}`;
