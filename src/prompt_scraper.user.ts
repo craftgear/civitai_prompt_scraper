@@ -3,7 +3,7 @@ import { addModelImagesDownloadButton } from './model_image_download';
 import { initConfigPanel } from './config_panel';
 import { getConfig } from './config_panel';
 
-import { sleep, log } from './utils';
+import { sleep, log, addButtonContainer } from './utils';
 
 const addModelPreviewDownloadButton = async () => {
   try {
@@ -15,6 +15,7 @@ const addModelPreviewDownloadButton = async () => {
     }
     log('model');
 
+    await addButtonContainer();
     await addModelImagesDownloadButton();
   } catch (error: unknown) {
     alert((error as Error).message);

@@ -2,7 +2,7 @@ import { ButtonState } from './types';
 // import html2canvas from 'html2canvas';
 import { NextData } from './types';
 import pkg from '../package.json';
-import { disabledButtonStyle } from './styles';
+import { disabledButtonStyle, buttonContainerStyle } from './styles';
 
 export const log = (...xs: any[]) => {
   console.log(`${pkg.name}:`, ...xs);
@@ -65,6 +65,23 @@ export const chunkArray = <T>(xs: T[], chunkSize = 5): T[][] =>
     }
     return [...acc, tail, [curr]];
   }, []);
+
+const BUTTON_CONTAINER_ID = 'civitai_prompt_scraper';
+export const addButtonContainer = async () => {
+  const downloadButtonSelector = "a[href^='/api/download/models/']";
+  const buttonParent = await waitForElement(downloadButtonSelector);
+
+  const container = document.createElement('div');
+  container.id = BUTTON_CONTAINER_ID;
+  container.setAttribute('style', buttonContainerStyle);
+
+  buttonParent?.parentNode?.parentNode?.appendChild(container);
+  return container;
+};
+
+export const getButtonContainerNode = async () => {
+  return waitForElement(`#${BUTTON_CONTAINER_ID}`);
+};
 
 // export const screenShot = async () => {
 //   const main = await waitForElement('main');
