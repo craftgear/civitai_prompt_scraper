@@ -63,7 +63,12 @@ export const galleryDisabledButtonStyle = `
   width: 100%;
 `;
 
-export const downloadAllButtonStyle = buttonStyle;
+export const downloadAllButtonStyle = `
+  ${buttonStyle}
+  padding: 0;
+  fontWeight: bold;
+  background-color: #868e96;
+`;
 
 export const buttonContainerStyle = `
   display: flex;

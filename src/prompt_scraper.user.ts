@@ -30,9 +30,9 @@ const addModelPreviewDownloadButton = async () => {
     // deleteMainPaddingBottom();
 
     await addButtonContainer();
-    await addDownloadAllButton();
 
     await addModelImagesDownloadButton();
+    await addDownloadAllButton();
   } catch (error: unknown) {
     alert((error as Error).message);
   }

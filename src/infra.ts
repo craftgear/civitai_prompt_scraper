@@ -198,7 +198,7 @@ export const createZip =
           counter += xs.length;
           if (buttnTextUpdateFn) {
             buttnTextUpdateFn(
-              `${counter} / ${imgInfo.length} ${getButtonProgressLabel()}`
+              ` ${counter} / ${imgInfo.length} ${getButtonProgressLabel()} `
             );
           }
 

@@ -93,7 +93,12 @@ const $292fc7f9388c589b$export$18f0fed469926683 = `
   ${$292fc7f9388c589b$export$dbe9a8011f5e5b2d}
   width: 100%;
 `;
-const $292fc7f9388c589b$export$7ec3146dae3421e3 = $292fc7f9388c589b$export$fd4d27a26b4854f3;
+const $292fc7f9388c589b$export$7ec3146dae3421e3 = `
+  ${$292fc7f9388c589b$export$fd4d27a26b4854f3}
+  padding: 0;
+  fontWeight: bold;
+  background-color: #868e96;
+`;
 const $292fc7f9388c589b$export$b0c8f381295da638 = `
   display: flex;
   flex-direction: row;
@@ -141,7 +146,6 @@ const $0fccda82d33153ac$export$92ecf871022de94d = (button, text, style)=>{
     disabledButton.setAttribute("data-state", (0, $a5923d2edfc72bc5$export$5d7ba7f5550f99d1).done);
     button.parentNode?.replaceChild(disabledButton, button);
 };
-<<<<<<< HEAD
 const $0fccda82d33153ac$export$df511617a3ec46cd = ()=>{
     const data = $0fccda82d33153ac$export$ce1398d1c23018fa();
     const images = data.props.pageProps.trpcState.json.queries[0];
@@ -152,8 +156,6 @@ const $0fccda82d33153ac$export$5abe6706d40a9183 = ()=>{
     const model = data.props.pageProps.trpcState.json.queries[1];
     return model.state.data.id;
 };
-=======
->>>>>>> main
 const $0fccda82d33153ac$export$f922ebe57f2c36e8 = (xs, chunkSize = 5)=>xs.reduce((acc, curr)=>{
         const tail = acc.pop() ?? [];
         if (tail.length < chunkSize) {
@@ -170,7 +172,6 @@ const $0fccda82d33153ac$export$f922ebe57f2c36e8 = (xs, chunkSize = 5)=>xs.reduce
                 curr
             ]
         ];
-<<<<<<< HEAD
     }, []);
 const $0fccda82d33153ac$var$BUTTON_CONTAINER_ID = "civitai_prompt_scraper";
 const $0fccda82d33153ac$export$3d6ebb5b74790dc2 = async ()=>{
@@ -220,10 +221,6 @@ const $0fccda82d33153ac$export$980dc319601fa7a6 = (retry = 5)=>{
     el.style.paddingBottom = "0";
 }; // export const screenShot = async () => {
  //    const main = await waitForElement('body');
-=======
-    }, []); // export const screenShot = async () => {
- //   const main = await waitForElement('main');
->>>>>>> main
  //
  //    if (!main) {
  //      return;
@@ -12695,6 +12692,7 @@ try {
 
 
 
+
 const $65c0cd2b2ec0988a$var$fields = [
     {
         type: "checkbox",
@@ -12934,26 +12932,6 @@ const $afa9fb8bb7aaf429$export$2ab75dd31a3868f2 = async (url)=>{
         throw error;
     }
 };
-<<<<<<< HEAD
-const $afa9fb8bb7aaf429$var$fetchImgs = (zipWriter, buttnTextUpdateFn, addedNames, errors)=>async (imgInfo)=>await Promise.all(imgInfo.map(async (x)=>{
-            try {
-                if (buttnTextUpdateFn) buttnTextUpdateFn(x.btnText);
-                const response = await $afa9fb8bb7aaf429$export$2ab75dd31a3868f2(x.url);
-                if (!response) throw new Error("response is null");
-                const { blob: blob , contentType: contentType  } = response;
-                let name = $afa9fb8bb7aaf429$var$extractFilebasenameFromImageUrl(x.url) || x.hash.replace(/[\;\:\?\*\.]/g, "_");
-                while(addedNames.has(name))name += "_";
-                const filename = contentType && `${name}.${contentType.split("/")[1]}` || `${name}.png`;
-                await zipWriter.add(filename, new (0, $53e25169918aa98b$export$aa5015be25fe7f79)(blob));
-                addedNames.add(name);
-                if (!!x.meta) {
-                    const jsonFilename = name + ".json";
-                    await zipWriter.add(jsonFilename, new (0, $53e25169918aa98b$export$43d3fd7deddee00)(JSON.stringify(x.meta, null, "	")));
-                }
-            } catch (e) {
-                console.log("error: ", e.message, x.url);
-                errors.push(`${e.message}, ${x.url}`);
-=======
 const $afa9fb8bb7aaf429$var$fetchImgs = (zipWriter, addedNames)=>async (imgInfo)=>await Promise.all(imgInfo.map(async (x)=>{
             const response = await $afa9fb8bb7aaf429$export$2ab75dd31a3868f2(x.url);
             if (!response) throw new Error(`response is null: ${x.url}`);
@@ -12966,7 +12944,6 @@ const $afa9fb8bb7aaf429$var$fetchImgs = (zipWriter, addedNames)=>async (imgInfo)
             if (!!x.meta) {
                 const jsonFilename = name + ".json";
                 await zipWriter.add(jsonFilename, new (0, $53e25169918aa98b$export$43d3fd7deddee00)(JSON.stringify(x.meta, null, "	")));
->>>>>>> main
             }
         }));
 const $afa9fb8bb7aaf429$export$b6bc24646229cedd = (buttnTextUpdateFn)=>(zipFilename, modelInfo)=>async (imgInfo)=>{
@@ -12974,30 +12951,12 @@ const $afa9fb8bb7aaf429$export$b6bc24646229cedd = (buttnTextUpdateFn)=>(zipFilen
             const blobWriter = new (0, $53e25169918aa98b$export$b1948fceba813858)(`application/zip`);
             const zipWriter = new (0, $183a0115a003f583$export$50f5658480930b4c)(blobWriter);
             if (modelInfo) await zipWriter.add("model_info.json", new (0, $53e25169918aa98b$export$43d3fd7deddee00)(JSON.stringify(modelInfo, null, "	")));
-<<<<<<< HEAD
-            const imgInfoWithBtnText = imgInfo.map((x, i)=>({
-                    ...x,
-                    btnText: `${i + 1} / ${imgInfo.length} ${(0, $966fc19e1e9bc989$export$ccac0588af5e2fe6)()}`
-                }));
-            const addedNames = new Set();
-            let errors = [];
-            const predicate = $afa9fb8bb7aaf429$var$fetchImgs(zipWriter, buttnTextUpdateFn, addedNames, errors);
-            for (const xs of (0, $0fccda82d33153ac$export$f922ebe57f2c36e8)(imgInfoWithBtnText)){
-                await predicate(xs);
-                await (0, $0fccda82d33153ac$export$e772c8ff12451969)(500);
-            }
-            if (errors.length > 0) {
-                if (!(0, $65c0cd2b2ec0988a$export$44487a86467333c3)("continueWithFetchError")) {
-                    zipWriter.close(undefined, {});
-                    throw new Error(errors.join("\n\r"));
-                }
-=======
             const addedNames = new Set();
             const predicate = $afa9fb8bb7aaf429$var$fetchImgs(zipWriter, addedNames);
             let counter = 0;
             for (const xs of (0, $0fccda82d33153ac$export$f922ebe57f2c36e8)(imgInfo)){
                 counter += xs.length;
-                if (buttnTextUpdateFn) buttnTextUpdateFn(`${counter} / ${imgInfo.length} ${(0, $966fc19e1e9bc989$export$ccac0588af5e2fe6)()}`);
+                if (buttnTextUpdateFn) buttnTextUpdateFn(` ${counter} / ${imgInfo.length} ${(0, $966fc19e1e9bc989$export$ccac0588af5e2fe6)()} `);
                 try {
                     await predicate(xs);
                 } catch (e) {
@@ -13008,7 +12967,6 @@ const $afa9fb8bb7aaf429$export$b6bc24646229cedd = (buttnTextUpdateFn)=>(zipFilen
                     }
                 }
                 await (0, $0fccda82d33153ac$export$e772c8ff12451969)(500);
->>>>>>> main
             }
             (0, $b9a27db92abc3f0f$exports.saveAs)(await zipWriter.close(undefined, {}), zipFilename);
         };
@@ -13293,7 +13251,7 @@ const $2da5569f102e177a$export$3b6a8e903180e269 = async ()=>{
     const button = document.createElement("a");
     button.addEventListener("click", $2da5569f102e177a$var$downloadAllModelRelatedFiles(buttonIdSelector));
     button.id = $2da5569f102e177a$var$BUTTON_ID;
-    button.innerText = "dowload all"; //getButtonLabel();
+    button.innerText = "⇣"; //getButtonLabel();
     button.setAttribute("style", (0, $292fc7f9388c589b$export$7ec3146dae3421e3));
     // start downloading a model
     button.addEventListener("click", async ()=>{
@@ -13325,8 +13283,8 @@ const $29e4e9967394a818$var$addModelPreviewDownloadButton = async ()=>{
         (0, $0fccda82d33153ac$export$5ffcb0107c13639c)();
         // deleteMainPaddingBottom();
         await (0, $0fccda82d33153ac$export$3d6ebb5b74790dc2)();
-        await (0, $2da5569f102e177a$export$3b6a8e903180e269)();
         await (0, $8d59c42601ba8f61$export$8b03a564a450b487)();
+        await (0, $2da5569f102e177a$export$3b6a8e903180e269)();
     } catch (error) {
         alert(error.message);
     }
@@ -13343,23 +13301,14 @@ const $29e4e9967394a818$var$addGalleryImageDownloadButton = async ()=>{
         alert(error.message);
     }
 };
-<<<<<<< HEAD
-const $29e4e9967394a818$var$openShowMore = (retryCount = 1)=>{
-=======
 const $29e4e9967394a818$var$openShowMore = (retry = 5)=>{
->>>>>>> main
     const showMoreButton = Array.from(document.querySelectorAll("button")).filter((x)=>x.innerHTML.includes("Show More"))[0];
     if (showMoreButton) {
         showMoreButton.click();
         return;
     }
-<<<<<<< HEAD
-    if (retryCount > 0) setTimeout(()=>{
-        $29e4e9967394a818$var$openShowMore(retryCount - 1);
-=======
     if (retry > 0) setTimeout(()=>{
         $29e4e9967394a818$var$openShowMore(retry - 1);
->>>>>>> main
     }, 1000);
 };
 let $29e4e9967394a818$var$prevHref = "";
@@ -13383,15 +13332,10 @@ const $29e4e9967394a818$var$observer = new MutationObserver(async (_mutationList
         });
         (0, $65c0cd2b2ec0988a$export$3a5abe5201fb331)();
     }
-<<<<<<< HEAD
-    if (window.location.href.match(/\/models\/\d*/)) await $29e4e9967394a818$var$addModelPreviewDownloadButton();
-    else if (window.location.href.match(/\/images\/\d*/)) await $29e4e9967394a818$var$addGalleryImageDownloadButton();
-=======
     if (window.location.href.match(/\/models\/\d*/)) {
         await $29e4e9967394a818$var$addModelPreviewDownloadButton();
         if ((0, $65c0cd2b2ec0988a$export$44487a86467333c3)("openShowMore")) $29e4e9967394a818$var$openShowMore(30);
     } else if (window.location.href.match(/\/images\/\d*/)) await $29e4e9967394a818$var$addGalleryImageDownloadButton();
->>>>>>> main
     (0, $0fccda82d33153ac$export$bef1f36f5486a6a3)("done");
 })();
 

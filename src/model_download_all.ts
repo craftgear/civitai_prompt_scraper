@@ -118,7 +118,7 @@ export const addDownloadAllButton = async () => {
     downloadAllModelRelatedFiles(buttonIdSelector)
   );
   button.id = BUTTON_ID;
-  button.innerText = 'dowload all'; //getButtonLabel();
+  button.innerText = '⇣'; //getButtonLabel();
   button.setAttribute('style', downloadAllButtonStyle);
 
   // start downloading a model
