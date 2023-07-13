@@ -42,7 +42,8 @@
     "parcel": "^2.8.3",
     "prettier": "^2.8.4",
     "rollup-plugin-cleanup": "^3.2.1",
-    "typescript": "^4.9.5"
+    "typescript": "^4.9.5",
+    "vitest": "^0.33.0"
   },
   "dependencies": {
     "@violentmonkey/url": "^0.1.0",

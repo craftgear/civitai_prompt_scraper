@@ -109,7 +109,7 @@ const $292fc7f9388c589b$export$b0c8f381295da638 = `
 
 
 var $39e7bd012fbaed99$exports = {};
-$39e7bd012fbaed99$exports = JSON.parse('{"name":"civitai_prompt_scraper","browserslist":"> 5%, last 1 versions, not dead","version":"1.2.15","description":"","source":"src/prompt_scraper.user.ts","browser ":"dist/prompt_scraper.user.js","targets":{"default":{"context":"browser","sourceMap":false,"includeNodeModules":true,"optimize":true}},"scripts":{"type-check":"tsc --noEmit","lint":"eslint","format":"prettier --write .","watch":"parcel watch","build":"rm -rf .parcel-cache/*; parcel build; zip -v -j ./dist/prompt_scraper.zip ./dist/prompt_scraper.user.js","clean":"rm ./dist/*","test":"echo \\"Error: no test specified\\" && exit 1"},"author":"Watanabe, Shunsuke","license":"MIT","devDependencies":{"@damoclark/parcel-optimizer-userscript":"^0.0.2","@parcel/packager-ts":"^2.8.3","@parcel/transformer-typescript-types":"^2.8.3","@tsconfig/recommended":"^1.0.2","@types/file-saver":"^2.0.5","@types/lodash":"^4.14.191","@typescript-eslint/eslint-plugin":"^5.52.0","@typescript-eslint/parser":"^5.52.0","@violentmonkey/types":"^0.1.5","eslint":"^8.34.0","eslint-config-standard-with-typescript":"^34.0.0","eslint-plugin-import":"^2.27.5","eslint-plugin-n":"^15.6.1","eslint-plugin-promise":"^6.1.1","parcel":"^2.8.3","prettier":"^2.8.4","rollup-plugin-cleanup":"^3.2.1","typescript":"^4.9.5"},"dependencies":{"@violentmonkey/url":"^0.1.0","@zip.js/zip.js":"^2.6.63","file-saver":"^2.0.5","html2canvas":"^1.4.1","lodash":"^4.17.21","wazip":"^0.1.0"}}');
+$39e7bd012fbaed99$exports = JSON.parse('{"name":"civitai_prompt_scraper","browserslist":"> 5%, last 1 versions, not dead","version":"1.2.15","description":"","source":"src/prompt_scraper.user.ts","browser ":"dist/prompt_scraper.user.js","targets":{"default":{"context":"browser","sourceMap":false,"includeNodeModules":true,"optimize":true}},"scripts":{"type-check":"tsc --noEmit","lint":"eslint","format":"prettier --write .","watch":"parcel watch","build":"rm -rf .parcel-cache/*; parcel build; zip -v -j ./dist/prompt_scraper.zip ./dist/prompt_scraper.user.js","clean":"rm ./dist/*","test":"echo \\"Error: no test specified\\" && exit 1"},"author":"Watanabe, Shunsuke","license":"MIT","devDependencies":{"@damoclark/parcel-optimizer-userscript":"^0.0.2","@parcel/packager-ts":"^2.8.3","@parcel/transformer-typescript-types":"^2.8.3","@tsconfig/recommended":"^1.0.2","@types/file-saver":"^2.0.5","@types/lodash":"^4.14.191","@typescript-eslint/eslint-plugin":"^5.52.0","@typescript-eslint/parser":"^5.52.0","@violentmonkey/types":"^0.1.5","eslint":"^8.34.0","eslint-config-standard-with-typescript":"^34.0.0","eslint-plugin-import":"^2.27.5","eslint-plugin-n":"^15.6.1","eslint-plugin-promise":"^6.1.1","parcel":"^2.8.3","prettier":"^2.8.4","rollup-plugin-cleanup":"^3.2.1","typescript":"^4.9.5","vitest":"^0.33.0"},"dependencies":{"@violentmonkey/url":"^0.1.0","@zip.js/zip.js":"^2.6.63","file-saver":"^2.0.5","html2canvas":"^1.4.1","lodash":"^4.17.21","wazip":"^0.1.0"}}');
 
 
 
@@ -156,7 +156,7 @@ const $0fccda82d33153ac$export$5abe6706d40a9183 = ()=>{
     const model = data.props.pageProps.trpcState.json.queries[1];
     return model.state.data.id;
 };
-const $0fccda82d33153ac$export$f922ebe57f2c36e8 = (xs, chunkSize = 5)=>xs.reduce((acc, curr)=>{
+const $0fccda82d33153ac$export$f922ebe57f2c36e8 = (xs, chunkSize = 7)=>xs.reduce((acc, curr)=>{
         const tail = acc.pop() ?? [];
         if (tail.length < chunkSize) {
             tail.push(curr);
@@ -13244,6 +13244,10 @@ const $2da5569f102e177a$var$downloadAllModelRelatedFiles = (buttonIdSelector)=>a
         return;
     };
 const $2da5569f102e177a$export$3b6a8e903180e269 = async ()=>{
+    (0, $0fccda82d33153ac$export$5bc69941fea37f21)();
+    (0, $0fccda82d33153ac$export$d450a001006e5818)();
+    (0, $0fccda82d33153ac$export$5ffcb0107c13639c)();
+    // deleteMainPaddingBottom();
     const parentNode = await (0, $0fccda82d33153ac$export$4a2d37b006372286)();
     const buttonIdSelector = `#${$2da5569f102e177a$var$BUTTON_ID}`;
     document.querySelector(buttonIdSelector)?.remove();
@@ -13277,10 +13281,6 @@ const $29e4e9967394a818$var$addModelPreviewDownloadButton = async ()=>{
         if (!window.location.href.match(/\/models\/\d*/)) return;
         (0, $0fccda82d33153ac$export$bef1f36f5486a6a3)("model");
         if ((0, $65c0cd2b2ec0988a$export$44487a86467333c3)("openShowMore")) $29e4e9967394a818$var$openShowMore(30);
-        (0, $0fccda82d33153ac$export$5bc69941fea37f21)();
-        (0, $0fccda82d33153ac$export$d450a001006e5818)();
-        (0, $0fccda82d33153ac$export$5ffcb0107c13639c)();
-        // deleteMainPaddingBottom();
         await (0, $0fccda82d33153ac$export$3d6ebb5b74790dc2)();
         await (0, $8d59c42601ba8f61$export$8b03a564a450b487)();
         await (0, $2da5569f102e177a$export$3b6a8e903180e269)();

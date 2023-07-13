@@ -72,7 +72,7 @@ export const getModelIdFromNextData = () => {
   return model.state.data.id;
 };
 
-export const chunkArray = <T>(xs: T[], chunkSize = 5): T[][] =>
+export const chunkArray = <T>(xs: T[], chunkSize = 7): T[][] =>
   xs.reduce<T[][]>((acc: T[][], curr: T) => {
     const tail: T[] = acc.pop() ?? [];
     if (tail.length < chunkSize) {
