@@ -13171,6 +13171,109 @@ const $d19ac646c457e538$export$5fd187c0d03a79e = async (href)=>{
 
 
 
+
+
+const $d0863934825ddb3b$var$BUTTON_ID = "download-all-model-related-files";
+const $d0863934825ddb3b$var$downloadButtonSelector = "a[href^='/api/download/models/']";
+const $d0863934825ddb3b$var$getGalleryModelIdAndPostId = (href)=>{
+    const hrefModelId = href.match(/modelId=(?<modelId>\d*)/)?.groups?.modelId;
+    const hrefPostId = href.match(/postId=(?<postId>\d*)/)?.groups?.postId;
+    if (!hrefModelId || !hrefPostId) throw new Error("Either modelId or postId found");
+    return {
+        modelId: hrefModelId,
+        postId: hrefPostId
+    };
+};
+const $d0863934825ddb3b$var$downloadAllModelRelatedFiles = (buttonIdSelector)=>async ()=>{
+        // save previews as a zip file
+        const { imageList: previewImageList , modelName: modelName  } = await (0, $e7c35bcf17ffba9d$export$53039d7a8d9d297e)(buttonIdSelector, window.location.href)() ?? {};
+        // save galleries as zip files
+        const clientHeight = document.querySelector("body")?.clientHeight;
+        if (clientHeight) window.scrollTo(0, clientHeight);
+        else document.querySelector("#gallery")?.scrollIntoView();
+        const galleryElementSelector = '#gallery a[href^="/images/"]';
+        await (0, $06cbd27ebbbf5f2a$export$1a1c301579a08d1e)(galleryElementSelector);
+        await (0, $81ffdad4556cbf55$export$e772c8ff12451969)(1000);
+        const galleryLinks = document.querySelectorAll(galleryElementSelector);
+        const postIds = (()=>{
+            const postIdSet = new Set();
+            return Array.from(galleryLinks).reduce((acc, x)=>{
+                const href = x.getAttribute("href");
+                if (!href) return acc;
+                const { modelId: modelId , postId: postId  } = $d0863934825ddb3b$var$getGalleryModelIdAndPostId(href);
+                if (!postId) return acc;
+                if (postIdSet.has(postId)) return acc;
+                postIdSet.add(postId);
+                return [
+                    ...acc,
+                    {
+                        modelId: modelId,
+                        postId: postId,
+                        x: x
+                    }
+                ];
+            }, []);
+        })();
+        await Promise.all(postIds.length === 1 ? [] : postIds.map(async ({ modelId: modelId , postId: postId , x: x  }, i)=>{
+            const button = document.createElement("div");
+            button.id = `${$d0863934825ddb3b$var$BUTTON_ID}_${i}`;
+            button.innerText = `${modelId}_${postId}`;
+            button.setAttribute("style", (0, $b7e86ce3c5d2c83d$export$ef377faaa0db520));
+            x.parentNode?.parentNode?.appendChild(button);
+            const onFinishFn = ()=>{
+                (0, $06cbd27ebbbf5f2a$export$92ecf871022de94d)(button, `${postId} ${(0, $3a42d740ecc81982$export$4d9f09007b08c03d)()}`, (0, $b7e86ce3c5d2c83d$export$21cd342fafb0108a));
+            };
+            return (0, $d19ac646c457e538$export$9473b35530fb3701)(`#${$d0863934825ddb3b$var$BUTTON_ID}_${i}`, modelId, postId, modelName ?? "", onFinishFn, previewImageList)();
+        }));
+        setTimeout(()=>{
+            alert("done");
+        }, 100);
+        console.warn("##### done #####");
+        return;
+    };
+const $d0863934825ddb3b$export$264fba47316a17c2 = async (href)=>{
+    (0, $06cbd27ebbbf5f2a$export$5bc69941fea37f21)();
+    (0, $06cbd27ebbbf5f2a$export$d450a001006e5818)();
+    (0, $06cbd27ebbbf5f2a$export$5ffcb0107c13639c)();
+    // deleteMainPaddingBottom();
+    const parentNode = await (0, $06cbd27ebbbf5f2a$export$4a2d37b006372286)();
+    const buttonIdSelector = `#${$d0863934825ddb3b$var$BUTTON_ID}`;
+    document.querySelector(buttonIdSelector)?.remove();
+    const button = document.createElement("a");
+    button.addEventListener("click", $d0863934825ddb3b$var$downloadAllModelRelatedFiles(buttonIdSelector));
+    button.id = $d0863934825ddb3b$var$BUTTON_ID;
+    button.innerText = "⇣"; //getButtonLabel();
+    button.setAttribute("style", (0, $b7e86ce3c5d2c83d$export$7ec3146dae3421e3));
+    // start downloading a model
+    button.addEventListener("click", async ()=>{
+        (0, $e7c35bcf17ffba9d$export$c8adea586cc90d44)();
+        await (0, $06cbd27ebbbf5f2a$export$1a1c301579a08d1e)($d0863934825ddb3b$var$downloadButtonSelector);
+        const modelDownloadUrl = document.querySelector($d0863934825ddb3b$var$downloadButtonSelector)?.getAttribute("href");
+        const fileSizeText = document.querySelector($d0863934825ddb3b$var$downloadButtonSelector)?.innerHTML ?? "";
+        if (modelDownloadUrl && // モデルの場合はダウンロードしない
+        !fileSizeText.includes(" GB)")) setTimeout(()=>{
+            window.open(modelDownloadUrl, "_blank");
+        }, 0);
+    });
+    if (parentNode) parentNode.appendChild(button);
+    (0, $e7c35bcf17ffba9d$export$c8adea586cc90d44)();
+};
+
+
+
+
+
+
+const $ca465a359cd2bf87$var$addDownloadAllButton = async ()=>{
+    const href = window.location.href;
+    try {
+        if (!href.match(/\/models\/\d*/)) return;
+        (0, $81ffdad4556cbf55$export$bef1f36f5486a6a3)("download all");
+        await (0, $d0863934825ddb3b$export$264fba47316a17c2)(href);
+    } catch (error) {
+        alert(error.message);
+    }
+};
 const $ca465a359cd2bf87$var$addModelPreviewDownloadButton = async ()=>{
     const href = window.location.href;
     try {
@@ -13215,6 +13318,7 @@ const $ca465a359cd2bf87$var$observer = new MutationObserver(async (_mutationList
         $ca465a359cd2bf87$var$prevHref = href;
         await $ca465a359cd2bf87$var$addModelPreviewDownloadButton();
         await $ca465a359cd2bf87$var$addGalleryImageDownloadButton();
+        await $ca465a359cd2bf87$var$addDownloadAllButton();
     }
 });
 async function $ca465a359cd2bf87$export$2e2bcd8739ae039() {
@@ -13231,8 +13335,14 @@ async function $ca465a359cd2bf87$export$2e2bcd8739ae039() {
     }
     if (window.location.href.match(/\/models\/\d*/)) {
         await $ca465a359cd2bf87$var$addModelPreviewDownloadButton();
+        await $ca465a359cd2bf87$var$addDownloadAllButton();
         if ((0, $2e4159cc418f5166$export$44487a86467333c3)("openShowMore")) $ca465a359cd2bf87$var$openShowMore(30);
-    } else if (window.location.href.match(/\/images\/\d*/)) await $ca465a359cd2bf87$var$addGalleryImageDownloadButton();
+        return;
+    }
+    if (window.location.href.match(/\/images\/\d*/)) {
+        await $ca465a359cd2bf87$var$addGalleryImageDownloadButton();
+        return;
+    }
     (0, $81ffdad4556cbf55$export$bef1f36f5486a6a3)("done");
 }
 

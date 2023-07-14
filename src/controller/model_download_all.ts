@@ -113,7 +113,7 @@ const downloadAllModelRelatedFiles = (buttonIdSelector: string) => async () => {
   return;
 };
 
-export const addDownloadAllButton = async () => {
+export const addModelDownloadAllButton = async (href: string) => {
   darkenTextColor();
   deleteCreateButton();
   deleteSuggestedResources();

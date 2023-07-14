@@ -1,9 +1,24 @@
 import { addGalleryDownloadButton } from './controller/gallery_download';
+import { addModelDownloadAllButton } from './controller/model_download_all';
 import { addModelImagesDownloadButton } from './controller/model_image_download';
 import { getConfig, initConfigPanel } from './infra/config_panel';
 
 import { addButtonContainer } from './utils/dom';
 import { log, sleep } from './utils/utils';
+
+const addDownloadAllButton = async () => {
+  const href = window.location.href;
+  try {
+    if (!href.match(/\/models\/\d*/)) {
+      return;
+    }
+    log('download all');
+
+    await addModelDownloadAllButton(href);
+  } catch (error: unknown) {
+    alert((error as Error).message);
+  }
+};
 
 const addModelPreviewDownloadButton = async () => {
   const href = window.location.href;
@@ -63,6 +78,7 @@ const observer = new MutationObserver(async (_mutationList) => {
 
     await addModelPreviewDownloadButton();
     await addGalleryImageDownloadButton();
+    await addDownloadAllButton();
   }
 });
 
@@ -83,12 +99,17 @@ export default async function () {
 
   if (window.location.href.match(/\/models\/\d*/)) {
     await addModelPreviewDownloadButton();
+    await addDownloadAllButton();
 
     if (getConfig('openShowMore')) {
       openShowMore(30);
     }
-  } else if (window.location.href.match(/\/images\/\d*/)) {
+    return;
+  }
+
+  if (window.location.href.match(/\/images\/\d*/)) {
     await addGalleryImageDownloadButton();
+    return;
   }
 
   log('done');
