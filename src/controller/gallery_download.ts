@@ -13,7 +13,8 @@ import { createButton, getTitle, selector, setTitle } from '../infra/dom';
 import { createZip } from '../infra/file';
 import { fetchGalleryData } from '../infra/req';
 import {
-  parseNextData,
+  parseModelMetaFromGalleryNextData,
+  parseModelMetaFromSingleImageNextData,
   replaceWithDisabledButton,
   updateButtonText,
   waitForElement,
@@ -31,6 +32,7 @@ const downloadGalleryImagesAndPrompts =
   ) =>
   async () => {
     try {
+      // 2023.07.15 try to pass null as modelId to avoid 500 Internal Error
       const imgList = await fetchGalleryData(null, postId);
 
       const button = await waitForElement(buttonIdSelector);
@@ -63,8 +65,7 @@ const downloadGalleryImagesAndPrompts =
 const downloadSingleImagesAndPrompts =
   (buttonIdSelector: string) => async () => {
     try {
-      const data = parseNextData();
-      const model = data.props.pageProps.trpcState.json.queries[0];
+      const model = parseModelMetaFromSingleImageNextData();
       const { id, url, meta, width, name, hash } = model.state.data;
       if (!url || !width || !name) {
         throw new Error(
@@ -113,21 +114,16 @@ const extractIdsFromUrl = (href: string) => {
 };
 
 const extractModelNameFromNextData = () => {
-  const nextData = parseNextData();
+  const metaData = parseModelMetaFromGalleryNextData();
 
-  const modelName =
-    nextData.props.pageProps?.trpcState?.json?.queries[0]?.state?.data?.meta
-      ?.Model ?? 'undefined';
+  const modelName = metaData?.Model ?? 'undefined';
 
   if (getConfig('preferModelNameToLoRAName')) {
     return modelName;
   }
 
   // Apparently a key starts with double quotation(") is a LoRA name.
-  const keys = Object.keys(
-    nextData.props.pageProps?.trpcState?.json?.queries[0]?.state?.data?.meta ??
-      {}
-  ).filter((x) => x.startsWith('"'));
+  const keys = Object.keys(metaData).filter((x) => x.startsWith('"'));
 
   return keys.length > 0
     ? keys.map((x) => x.replace('"', '')).join(',')

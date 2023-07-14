@@ -12873,6 +12873,13 @@ const $98f6748fc1e9fd4e$export$70d1bf7729efff40 = ()=>document.title;
 
 
 /**
+ * domain related
+ */ const $6790e4d8d7342a47$export$b56cc0ee0a85f41e = (url, width, name)=>`https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/${url}/width=${width},optimized=true/${name ?? ""}`;
+const $6790e4d8d7342a47$export$1f977c13d93a3bf8 = (nextData)=>nextData.props.pageProps.trpcState.json.queries[0] || {};
+const $6790e4d8d7342a47$export$446f1005883b7406 = (nextData)=>nextData.props.pageProps?.trpcState?.json?.queries[0]?.state?.data?.meta || {};
+
+
+/**
  * api responses
  */ let $c08fa57dad1b6e82$export$5d7ba7f5550f99d1;
 (function(ButtonState) {
@@ -12892,13 +12899,15 @@ const $06cbd27ebbbf5f2a$export$1a1c301579a08d1e = async (descriptor, retryLimit 
         return await $06cbd27ebbbf5f2a$export$1a1c301579a08d1e(descriptor, retryLimit - 1);
     } else return element;
 };
-const $06cbd27ebbbf5f2a$export$ce1398d1c23018fa = ()=>{
+const $06cbd27ebbbf5f2a$var$parseNextData = ()=>{
     const nextData = (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)("#__NEXT_DATA__") || {
         innerText: ""
     };
     const data = JSON.parse(nextData.innerText);
     return data;
 };
+const $06cbd27ebbbf5f2a$export$3f424da2b61cf569 = ()=>(0, $6790e4d8d7342a47$export$1f977c13d93a3bf8)($06cbd27ebbbf5f2a$var$parseNextData());
+const $06cbd27ebbbf5f2a$export$c6edc740badbb62e = ()=>(0, $6790e4d8d7342a47$export$446f1005883b7406)($06cbd27ebbbf5f2a$var$parseNextData());
 const $06cbd27ebbbf5f2a$export$bb64a7e3f0f28938 = (button)=>(text)=>{
         button.innerText = text;
     };
@@ -12991,10 +13000,6 @@ const $e7c35bcf17ffba9d$export$8b03a564a450b487 = async (href)=>{
 };
 
 
-/**
- * domain related
- */ const $afea35e19f749eec$export$b56cc0ee0a85f41e = (url, width, name)=>`https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/${url}/width=${width},optimized=true/${name ?? ""}`;
-
 
 
 
@@ -13005,7 +13010,7 @@ const $e7c35bcf17ffba9d$export$8b03a564a450b487 = async (href)=>{
 const $d19ac646c457e538$var$BUTTON_ID = "download-all-gallery-images-and-prompts";
 const $d19ac646c457e538$var$downloadGalleryImagesAndPrompts = (buttonIdSelector, modelId, postId, modelName, onFinishFn)=>async ()=>{
         try {
-            const imgList = await (0, $c3454b9ab01d445e$export$c6ace8a485846f08)(modelId, postId);
+            const imgList = await (0, $c3454b9ab01d445e$export$c6ace8a485846f08)(null, postId);
             const button = await (0, $06cbd27ebbbf5f2a$export$1a1c301579a08d1e)(buttonIdSelector);
             if (!button) return;
             button.setAttribute("data-state", "in-progress");
@@ -13021,11 +13026,10 @@ const $d19ac646c457e538$var$downloadGalleryImagesAndPrompts = (buttonIdSelector,
     };
 const $d19ac646c457e538$var$downloadSingleImagesAndPrompts = (buttonIdSelector)=>async ()=>{
         try {
-            const data = (0, $06cbd27ebbbf5f2a$export$ce1398d1c23018fa)();
-            const model = data.props.pageProps.trpcState.json.queries[0];
+            const model = (0, $06cbd27ebbbf5f2a$export$3f424da2b61cf569)();
             const { id: id , url: url , meta: meta , width: width , name: name , hash: hash  } = model.state.data;
             if (!url || !width || !name) throw new Error(`image properties not found: url ${url}, width ${width}, name ${name}`);
-            const imgUrl = (0, $afea35e19f749eec$export$b56cc0ee0a85f41e)(url, width, name);
+            const imgUrl = (0, $6790e4d8d7342a47$export$b56cc0ee0a85f41e)(url, width, name);
             const button = await (0, $06cbd27ebbbf5f2a$export$1a1c301579a08d1e)(buttonIdSelector);
             if (!button) return;
             await (0, $c5da2b8a14082d8b$export$b6bc24646229cedd)((0, $06cbd27ebbbf5f2a$export$bb64a7e3f0f28938)(button))(`imageId_${id}.zip`)([
@@ -13060,11 +13064,11 @@ const $d19ac646c457e538$var$extractIdsFromUrl = (href)=>{
     };
 };
 const $d19ac646c457e538$var$extractModelNameFromNextData = ()=>{
-    const nextData = (0, $06cbd27ebbbf5f2a$export$ce1398d1c23018fa)();
-    const modelName = nextData.props.pageProps?.trpcState?.json?.queries[0]?.state?.data?.meta?.Model ?? "undefined";
+    const metaData = (0, $06cbd27ebbbf5f2a$export$c6edc740badbb62e)();
+    const modelName = metaData?.Model ?? "undefined";
     if ((0, $2e4159cc418f5166$export$44487a86467333c3)("preferModelNameToLoRAName")) return modelName;
     // Apparently a key starts with double quotation(") is a LoRA name.
-    const keys = Object.keys(nextData.props.pageProps?.trpcState?.json?.queries[0]?.state?.data?.meta ?? {}).filter((x)=>x.startsWith('"'));
+    const keys = Object.keys(metaData).filter((x)=>x.startsWith('"'));
     return keys.length > 0 ? keys.map((x)=>x.replace('"', "")).join(",") : "undefined";
 };
 const $d19ac646c457e538$export$5fd187c0d03a79e = async (href)=>{

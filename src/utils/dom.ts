@@ -1,4 +1,8 @@
 import { buttonContainerStyle, disabledButtonStyle } from '../assets/styles';
+import {
+  extractModelMetaFromGalleryNextData,
+  extractModelMetaFromSingleImageNextData,
+} from '../domain/logic';
 import { ButtonState, NextData } from '../domain/types';
 import { createDiv, selector } from '../infra/dom';
 
@@ -23,13 +27,19 @@ export const waitForElement = async (
   }
 };
 
-export const parseNextData = () => {
+const parseNextData = () => {
   const nextData: NextData = (selector('#__NEXT_DATA__') as HTMLElement) || {
     innerText: '',
   };
   const data = JSON.parse(nextData.innerText);
   return data;
 };
+
+export const parseModelMetaFromSingleImageNextData = () =>
+  extractModelMetaFromSingleImageNextData(parseNextData());
+
+export const parseModelMetaFromGalleryNextData = () =>
+  extractModelMetaFromGalleryNextData(parseNextData());
 
 export const updateButtonText = (button: HTMLElement) => (text: string) => {
   button.innerText = text;
