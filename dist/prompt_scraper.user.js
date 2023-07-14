@@ -13057,14 +13057,6 @@ const $e7c35bcf17ffba9d$export$8b03a564a450b487 = async (href)=>{
 };
 
 
-<<<<<<< HEAD
-/**
- * domain related
- */ const $afea35e19f749eec$export$b56cc0ee0a85f41e = (url, width, name)=>`https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/${url}/width=${width},optimized=true/${name ?? ""}`;
-const $afea35e19f749eec$export$d4f944df512c8799 = (nextData)=>nextData.props.pageProps?.trpcState?.json?.queries[0]?.state?.data?.meta ?? {};
-
-=======
->>>>>>> main
 
 
 
@@ -13075,14 +13067,11 @@ const $afea35e19f749eec$export$d4f944df512c8799 = (nextData)=>nextData.props.pag
 const $d19ac646c457e538$var$BUTTON_ID = "download-all-gallery-images-and-prompts";
 const $d19ac646c457e538$export$9473b35530fb3701 = (buttonIdSelector, modelId, postId, modelName, onFinishFn, downLoadedImgList)=>async ()=>{
         try {
-<<<<<<< HEAD
-            const _imgList = await (0, $c3454b9ab01d445e$export$c6ace8a485846f08)(modelId, postId);
+            // 2023.07.15 try to pass null as modelId to avoid 500 Internal Error
+            const _imgList = await (0, $c3454b9ab01d445e$export$c6ace8a485846f08)(null, postId);
             // exclude downloaded images
             const downloadedImgIds = downLoadedImgList?.map(({ id: id  })=>id) ?? [];
             const imgList = _imgList.filter(({ id: id  })=>!downloadedImgIds.includes(id));
-=======
-            const imgList = await (0, $c3454b9ab01d445e$export$c6ace8a485846f08)(null, postId);
->>>>>>> main
             const button = await (0, $06cbd27ebbbf5f2a$export$1a1c301579a08d1e)(buttonIdSelector);
             if (!button) return;
             button.setAttribute("data-state", "in-progress");
