@@ -5,7 +5,7 @@ import {
 } from '../assets/lang';
 import { galleryButtonStyle } from '../assets/styles';
 import { downloadImagesAndPrompts } from '../controller/model_image_download';
-import { buildImgUrl } from '../domain/rules';
+import { buildImgUrl } from '../domain/logic';
 import { ButtonState } from '../domain/types';
 
 import { getConfig } from '../infra/config_panel';
@@ -13,7 +13,8 @@ import { createButton, getTitle, selector, setTitle } from '../infra/dom';
 import { createZip } from '../infra/file';
 import { fetchGalleryData } from '../infra/req';
 import {
-  parseNextData,
+  parseModelMetaFromGalleryNextData,
+  parseModelMetaFromSingleImageNextData,
   replaceWithDisabledButton,
   updateButtonText,
   waitForElement,
@@ -32,48 +33,48 @@ export const downloadGalleryImagesAndPrompts =
     onFinishFn?: () => void,
     downLoadedImgList?: GalleryImage[]
   ) =>
-  async () => {
-    try {
-      const _imgList = await fetchGalleryData(modelId, postId);
-
+    async () => {
+      try {
+        // 2023.07.15 try to pass null as modelId to avoid 500 Internal Error
+      const _imgList = await fetchGalleryData(null, postId); 
+        
       // exclude downloaded images
-      const downloadedImgIds = downLoadedImgList?.map(({ id }) => id) ?? [];
-      const imgList = _imgList.filter(
-        ({ id }) => !downloadedImgIds.includes(id)
-      );
+        const downloadedImgIds = downLoadedImgList?.map(({ id }) => id) ?? [];
+        const imgList = _imgList.filter(
+          ({ id }) => !downloadedImgIds.includes(id)
+          
 
       const button = await waitForElement(buttonIdSelector);
       if (!button) {
-        return;
-      }
-      button.setAttribute('data-state', 'in-progress');
-      button.innerText = getI18nLabel('startingDownload');
-
+          return;
+          
+        button.setAttribute('data-state', 'in-progress');
+        button.innerText = getI18nLabel('startingDownload');
+        
       const filenameFormat = getConfig('galleryFilenameFormat');
-      const filename = (filenameFormat as string)
-        .replace('{modelId}', modelId ?? '')
-        .replace('{modelName}', modelName ?? '')
-        .replace('{postId}', postId);
-
+        const filename = (filenameFormat as string)
+          .replace('{modelId}', modelId ?? '')
+          .replace('{modelName}', modelName ?? '')
+          .replace('{postId}', postId);
+          
       await createZip(updateButtonText(button))(filename)(imgList);
-
+        
       if (onFinishFn) {
-        onFinishFn();
-      }
-      replaceWithDisabledButton(
-        button,
-        ` ${imgList.length} / ${imgList.length} ${getButtonCompleteLabel()}`
-      );
-    } catch (error: unknown) {
-      alert((error as Error).message);
-    }
-  };
-
+          onFinishFn();
+          
+        replaceWithDisabledButton(
+          button,
+          ` ${imgList.length} / ${imgList.length} ${getButtonCompleteLabel()}`
+          
+        catch (error: unknown) {
+        alert((error as Error).message);
+        
+      
+    
 const downloadSingleImagesAndPrompts =
   (buttonIdSelector: string) => async () => {
     try {
-      const data = parseNextData();
-      const model = data.props.pageProps.trpcState.json.queries[0];
+      const model = parseModelMetaFromSingleImageNextData();
       const { id, url, meta, width, name, hash } = model.state.data;
       if (!url || !width || !name) {
         throw new Error(
@@ -122,21 +123,16 @@ const extractIdsFromUrl = (href: string) => {
 };
 
 const extractModelNameFromNextData = () => {
-  const nextData = parseNextData();
+  const metaData = parseModelMetaFromGalleryNextData();
 
-  const modelName =
-    nextData.props.pageProps?.trpcState?.json?.queries[0]?.state?.data?.meta
-      ?.Model ?? 'undefined';
+  const modelName = metaData?.Model ?? 'undefined';
 
   if (getConfig('preferModelNameToLoRAName')) {
     return modelName;
   }
 
   // Apparently a key starts with double quotation(") is a LoRA name.
-  const keys = Object.keys(
-    nextData.props.pageProps?.trpcState?.json?.queries[0]?.state?.data?.meta ??
-      {}
-  ).filter((x) => x.startsWith('"'));
+  const keys = Object.keys(metaData).filter((x) => x.startsWith('"'));
 
   return keys.length > 0
     ? keys.map((x) => x.replace('"', '')).join(',')
