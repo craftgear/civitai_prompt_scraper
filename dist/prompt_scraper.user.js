@@ -12542,7 +12542,7 @@ var $b9a27db92abc3f0f$exports = {};
 
 
 var $39e7bd012fbaed99$exports = {};
-$39e7bd012fbaed99$exports = JSON.parse('{"name":"civitai_prompt_scraper","browserslist":"> 5%, last 1 versions, not dead","version":"1.2.15","description":"","source":"src/prompt_scraper.user.ts","browser ":"dist/prompt_scraper.user.js","targets":{"default":{"context":"browser","sourceMap":false,"includeNodeModules":true,"optimize":true}},"scripts":{"type-check":"tsc --noEmit","lint":"eslint","format":"prettier --write .","watch":"parcel watch","build":"rm -rf .parcel-cache/*; parcel build; zip -v -j ./dist/prompt_scraper.zip ./dist/prompt_scraper.user.js","clean":"rm ./dist/*","test":"vitest","check":"tsc --noEmit"},"author":"Watanabe, Shunsuke","license":"MIT","devDependencies":{"@damoclark/parcel-optimizer-userscript":"^0.0.2","@parcel/packager-ts":"^2.8.3","@parcel/transformer-typescript-types":"^2.8.3","@tsconfig/recommended":"^1.0.2","@types/file-saver":"^2.0.5","@types/lodash":"^4.14.191","@typescript-eslint/eslint-plugin":"^5.52.0","@typescript-eslint/parser":"^5.52.0","@violentmonkey/types":"^0.1.5","eslint":"^8.34.0","eslint-config-standard-with-typescript":"^34.0.0","eslint-plugin-import":"^2.27.5","eslint-plugin-n":"^15.6.1","eslint-plugin-promise":"^6.1.1","parcel":"^2.8.3","prettier":"^2.8.4","prettier-plugin-organize-imports":"^3.2.2","rollup-plugin-cleanup":"^3.2.1","typescript":"^4.9.5","vitest":"^0.33.0"},"dependencies":{"@violentmonkey/url":"^0.1.0","@zip.js/zip.js":"^2.6.63","file-saver":"^2.0.5","html2canvas":"^1.4.1","lodash":"^4.17.21","wazip":"^0.1.0"}}');
+$39e7bd012fbaed99$exports = JSON.parse('{"name":"civitai_prompt_scraper","browserslist":"> 5%, last 1 versions, not dead","version":"1.2.15","description":"","source":"src/prompt_scraper.user.ts","browser ":"dist/prompt_scraper.user.js","targets":{"default":{"context":"browser","sourceMap":false,"includeNodeModules":true,"optimize":true}},"scripts":{"type-check":"tsc --noEmit","lint":"eslint","format":"prettier --write .","watch":"parcel watch","build":"rm -rf .parcel-cache/*; parcel build; zip -v -j ./dist/prompt_scraper.zip ./dist/prompt_scraper.user.js","clean":"rm ./dist/*","test":"vitest --dom","check":"tsc --noEmit"},"author":"Watanabe, Shunsuke","license":"MIT","devDependencies":{"@damoclark/parcel-optimizer-userscript":"^0.0.2","@parcel/packager-ts":"^2.8.3","@parcel/transformer-typescript-types":"^2.8.3","@tsconfig/recommended":"^1.0.2","@types/file-saver":"^2.0.5","@types/lodash":"^4.14.191","@typescript-eslint/eslint-plugin":"^5.52.0","@typescript-eslint/parser":"^5.52.0","@violentmonkey/types":"^0.1.5","eslint":"^8.34.0","eslint-config-standard-with-typescript":"^34.0.0","eslint-plugin-import":"^2.27.5","eslint-plugin-n":"^15.6.1","eslint-plugin-promise":"^6.1.1","happy-dom":"^10.3.2","parcel":"^2.8.3","prettier":"^2.8.4","prettier-plugin-organize-imports":"^3.2.2","rollup-plugin-cleanup":"^3.2.1","typescript":"^4.9.5","vitest":"^0.33.0"},"dependencies":{"@violentmonkey/url":"^0.1.0","@zip.js/zip.js":"^2.6.63","file-saver":"^2.0.5","html2canvas":"^1.4.1","lodash":"^4.17.21","wazip":"^0.1.0"}}');
 
 
 const $81ffdad4556cbf55$export$bef1f36f5486a6a3 = (...xs)=>{
@@ -12858,17 +12858,6 @@ const $2e4159cc418f5166$export$44487a86467333c3 = (fieldName)=>{
 };
 
 
-
-
-
-let $c08fa57dad1b6e82$export$5d7ba7f5550f99d1;
-(function(ButtonState) {
-    ButtonState["ready"] = "ready";
-    ButtonState["inProgress"] = "in-progress";
-    ButtonState["done"] = "done";
-})($c08fa57dad1b6e82$export$5d7ba7f5550f99d1 || ($c08fa57dad1b6e82$export$5d7ba7f5550f99d1 = {}));
-
-
 const $98f6748fc1e9fd4e$export$aea217a45095ce11 = (selector)=>document.querySelector(selector);
 const $98f6748fc1e9fd4e$export$2917eca99ebef21a = (selector)=>document.querySelectorAll(selector);
 const $98f6748fc1e9fd4e$export$331ff980f0d45cff = ()=>document.createElement("div");
@@ -12878,6 +12867,20 @@ const $98f6748fc1e9fd4e$export$420a7f2fd9cad6f6 = (x)=>{
     document.title = x;
 };
 const $98f6748fc1e9fd4e$export$70d1bf7729efff40 = ()=>document.title;
+
+
+
+
+
+/**
+ * api responses
+ */ let $c08fa57dad1b6e82$export$5d7ba7f5550f99d1;
+(function(ButtonState) {
+    ButtonState["ready"] = "ready";
+    ButtonState["inProgress"] = "in-progress";
+    ButtonState["done"] = "done";
+})($c08fa57dad1b6e82$export$5d7ba7f5550f99d1 || ($c08fa57dad1b6e82$export$5d7ba7f5550f99d1 = {}));
+
 
 
 
@@ -12896,7 +12899,6 @@ const $06cbd27ebbbf5f2a$export$ce1398d1c23018fa = ()=>{
     const data = JSON.parse(nextData.innerText);
     return data;
 };
-const $06cbd27ebbbf5f2a$export$93fc97d6343f50fb = ()=>{};
 const $06cbd27ebbbf5f2a$export$bb64a7e3f0f28938 = (button)=>(text)=>{
         button.innerText = text;
     };
@@ -12937,7 +12939,7 @@ const $e7c35bcf17ffba9d$var$getModeInfoAndImageList = async (href)=>{
         return `${x.id}` === `${modelVersionId}`;
     })?.name || "no_version_name";
     // use fetchGalleryData instead of fetchModelVersionData,
-    // due to modelVersion api returns first 10 images of preview.
+    // due to modelVersion api returns only first 10 images of preview.
     const imageList = await (0, $c3454b9ab01d445e$export$c6ace8a485846f08)(`${modelId}`, null, `${modelVersionId}`, `${username}`);
     return {
         modelId: modelId,
@@ -12974,11 +12976,11 @@ const $e7c35bcf17ffba9d$export$53039d7a8d9d297e = (buttonIdSelector, location)=>
             alert(error.message);
         }
     };
-const $e7c35bcf17ffba9d$export$8b03a564a450b487 = async (selector, createLink, href)=>{
+const $e7c35bcf17ffba9d$export$8b03a564a450b487 = async (href)=>{
     const container = await (0, $06cbd27ebbbf5f2a$export$4a2d37b006372286)();
     const buttonIdSelector = `#${$e7c35bcf17ffba9d$var$BUTTON_ID}`;
-    selector(buttonIdSelector)?.remove();
-    const button = createLink();
+    (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)(buttonIdSelector)?.remove();
+    const button = (0, $98f6748fc1e9fd4e$export$cdda5b1be25f9499)();
     button.addEventListener("click", $e7c35bcf17ffba9d$export$53039d7a8d9d297e(buttonIdSelector, href));
     button.id = $e7c35bcf17ffba9d$var$BUTTON_ID;
     button.innerText = (0, $3a42d740ecc81982$export$d397f86d22f413e8)();
@@ -12992,6 +12994,7 @@ const $e7c35bcf17ffba9d$export$8b03a564a450b487 = async (selector, createLink, h
 /**
  * domain related
  */ const $afea35e19f749eec$export$b56cc0ee0a85f41e = (url, width, name)=>`https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/${url}/width=${width},optimized=true/${name ?? ""}`;
+
 
 
 
@@ -13064,16 +13067,16 @@ const $d19ac646c457e538$var$extractModelNameFromNextData = ()=>{
     const keys = Object.keys(nextData.props.pageProps?.trpcState?.json?.queries[0]?.state?.data?.meta ?? {}).filter((x)=>x.startsWith('"'));
     return keys.length > 0 ? keys.map((x)=>x.replace('"', "")).join(",") : "undefined";
 };
-const $d19ac646c457e538$export$5fd187c0d03a79e = async (selector, createButton, setTitle, getTitle, href)=>{
+const $d19ac646c457e538$export$5fd187c0d03a79e = async (href)=>{
     const buttonIdSelector = `#${$d19ac646c457e538$var$BUTTON_ID}`;
-    const _button = selector(buttonIdSelector);
+    const _button = (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)(buttonIdSelector);
     if (_button && _button.getAttribute("data-state") !== (0, $c08fa57dad1b6e82$export$5d7ba7f5550f99d1).ready) return;
     _button?.remove();
     const { modelVersionId: modelVersionId , prioritizedUserId: prioritizedUserId , modelId: modelId , postId: postId , imageId: imageId  } = $d19ac646c457e538$var$extractIdsFromUrl(href);
     const modelName = $d19ac646c457e538$var$extractModelNameFromNextData();
-    const button = createButton();
+    const button = (0, $98f6748fc1e9fd4e$export$9b6d6ca62970729f)();
     const onFinishFn = ()=>{
-        if ((0, $2e4159cc418f5166$export$44487a86467333c3)("galleryAutoDownload")) setTitle("✅ " + getTitle());
+        if ((0, $2e4159cc418f5166$export$44487a86467333c3)("galleryAutoDownload")) (0, $98f6748fc1e9fd4e$export$420a7f2fd9cad6f6)("✅ " + (0, $98f6748fc1e9fd4e$export$70d1bf7729efff40)());
     };
     const eventListener = (()=>{
         // open gallery from model preview images
@@ -13091,10 +13094,10 @@ const $d19ac646c457e538$export$5fd187c0d03a79e = async (selector, createButton, 
     button.innerText = (0, $3a42d740ecc81982$export$d397f86d22f413e8)();
     button.setAttribute("style", (0, $b7e86ce3c5d2c83d$export$f272ae7639e11e3));
     button.setAttribute("data-state", (0, $c08fa57dad1b6e82$export$5d7ba7f5550f99d1).ready);
-    if (selector(".mantine-Modal-modal")) {
+    if ((0, $98f6748fc1e9fd4e$export$aea217a45095ce11)(".mantine-Modal-modal")) {
         const parentNode = await (0, $06cbd27ebbbf5f2a$export$1a1c301579a08d1e)(".mantine-Modal-modal .mantine-Card-cardSection");
         parentNode?.appendChild(button);
-    } else if (!selector("#gallery")) {
+    } else if (!(0, $98f6748fc1e9fd4e$export$aea217a45095ce11)("#gallery")) {
         const parentNode = await (0, $06cbd27ebbbf5f2a$export$1a1c301579a08d1e)("#freezeBlock .mantine-Stack-root");
         parentNode?.appendChild(button);
     }
@@ -13102,7 +13105,6 @@ const $d19ac646c457e538$export$5fd187c0d03a79e = async (selector, createButton, 
         button.click();
     }, 0);
 };
-
 
 
 
@@ -13118,7 +13120,7 @@ const $ca465a359cd2bf87$var$addModelPreviewDownloadButton = async ()=>{
         if (!href.match(/\/models\/\d*/)) return;
         (0, $81ffdad4556cbf55$export$bef1f36f5486a6a3)("model");
         await (0, $06cbd27ebbbf5f2a$export$3d6ebb5b74790dc2)();
-        await (0, $e7c35bcf17ffba9d$export$8b03a564a450b487)((0, $98f6748fc1e9fd4e$export$aea217a45095ce11), (0, $98f6748fc1e9fd4e$export$cdda5b1be25f9499), href);
+        await (0, $e7c35bcf17ffba9d$export$8b03a564a450b487)(href);
     } catch (error) {
         alert(error.message);
     }
@@ -13131,7 +13133,7 @@ const $ca465a359cd2bf87$var$addGalleryImageDownloadButton = async ()=>{
         await (0, $81ffdad4556cbf55$export$e772c8ff12451969)(2000);
         if (!href.match(/\/images\/\d*/)) return;
         (0, $81ffdad4556cbf55$export$bef1f36f5486a6a3)("gallery");
-        await (0, $d19ac646c457e538$export$5fd187c0d03a79e)((0, $98f6748fc1e9fd4e$export$aea217a45095ce11), (0, $98f6748fc1e9fd4e$export$9b6d6ca62970729f), (0, $98f6748fc1e9fd4e$export$420a7f2fd9cad6f6), (0, $98f6748fc1e9fd4e$export$70d1bf7729efff40), href);
+        await (0, $d19ac646c457e538$export$5fd187c0d03a79e)(href);
     } catch (error) {
         alert(error.message);
     }
