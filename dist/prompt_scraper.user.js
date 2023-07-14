@@ -12555,7 +12555,7 @@ const $81ffdad4556cbf55$export$bef1f36f5486a6a3 = (...xs)=>{
     console.log(`${(0, (/*@__PURE__*/$parcel$interopDefault($39e7bd012fbaed99$exports))).name}:`, ...xs);
 };
 const $81ffdad4556cbf55$export$e772c8ff12451969 = (ms = 1000)=>new Promise((resolve)=>setTimeout(()=>resolve(true), ms));
-const $81ffdad4556cbf55$export$f922ebe57f2c36e8 = (xs, chunkSize = 5)=>xs.reduce((acc, curr)=>{
+const $81ffdad4556cbf55$export$f922ebe57f2c36e8 = (xs, chunkSize = 10)=>xs.reduce((acc, curr)=>{
         const tail = acc.pop() ?? [];
         if (tail.length < chunkSize) {
             tail.push(curr);
@@ -13051,6 +13051,7 @@ const $e7c35bcf17ffba9d$export$8b03a564a450b487 = async (href)=>{
 /**
  * domain related
  */ const $afea35e19f749eec$export$b56cc0ee0a85f41e = (url, width, name)=>`https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/${url}/width=${width},optimized=true/${name ?? ""}`;
+const $afea35e19f749eec$export$d4f944df512c8799 = (nextData)=>nextData.props.pageProps?.trpcState?.json?.queries[0]?.state?.data?.meta ?? {};
 
 
 
