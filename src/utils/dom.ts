@@ -37,10 +37,11 @@ export const updateButtonText = (button: HTMLElement) => (text: string) => {
 
 export const replaceWithDisabledButton = (
   button: HTMLElement,
-  text: string
+  text: string,
+  style?: string,
 ) => {
   const disabledButton = createDiv();
-  disabledButton.setAttribute('style', disabledButtonStyle);
+  disabledButton.setAttribute('style', style ? style : disabledButtonStyle);
   disabledButton.id = button.id;
   disabledButton.innerText = text;
   disabledButton.setAttribute('data-state', ButtonState.done);
@@ -63,3 +64,58 @@ export const addButtonContainer = async () => {
 export const getButtonContainerNode = async () => {
   return waitForElement(`#${BUTTON_CONTAINER_ID}`);
 };
+
+
+export const darkenTextColor = () => {
+  Array.from(document.querySelectorAll('.mantine-Spoiler-root span')).forEach(
+    (x) => {
+      const style = x.getAttribute('style');
+      const colorValue = (style?.match(/color:\s*(.*);?/) ?? [])[1];
+      if (!colorValue) {
+        return;
+      }
+      if (colorValue.startsWith('rgb')) {
+        x.setAttribute('style', `${x.getAttribute('style')} color: black;`);
+        return;
+      }
+      const colorNumber = new Number(`0x${colorValue.slice(1)}`);
+      if (colorNumber > 10000000) {
+        x.setAttribute('style', `${x.getAttribute('style')} color: black;`);
+      }
+    }
+  );
+};
+
+export const deleteCreateButton = () => {
+  const createButton = Array.from(document.querySelectorAll('button')).filter(
+    (x: HTMLElement) => x.innerHTML.includes('Create')
+  )[0];
+  if (createButton) {
+    createButton?.remove();
+  }
+};
+
+export const deleteSuggestedResources = (retry = 5) => {
+  const el = Array.from(
+    document.querySelectorAll('.mantine-Container-root h2')
+  ).filter((x: Element) => x.innerHTML.includes('Suggested Resources'))[0];
+  if (el?.parentElement?.parentElement?.parentElement?.parentElement) {
+    el?.parentElement?.parentElement?.parentElement?.parentElement?.remove();
+  } else {
+    setTimeout(() => {
+      deleteSuggestedResources(retry - 1);
+    }, 1000);
+  }
+};
+
+export const deleteMainPaddingBottom = (retry = 5) => {
+  const el: HTMLElement | null = document.querySelector('main');
+  if (!el) {
+    setTimeout(() => {
+      deleteMainPaddingBottom(retry - 1);
+    }, 1000);
+    return;
+  }
+  el.style.paddingBottom = '0';
+};
+

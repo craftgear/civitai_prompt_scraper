@@ -24,232 +24,10 @@ typeof globalThis !== 'undefined'
   : typeof global !== 'undefined'
   ? global
   : {};
-<<<<<<< HEAD
-let $a5923d2edfc72bc5$export$5d7ba7f5550f99d1;
-(function(ButtonState) {
-    ButtonState["ready"] = "ready";
-    ButtonState["inProgress"] = "in-progress";
-    ButtonState["done"] = "done";
-})($a5923d2edfc72bc5$export$5d7ba7f5550f99d1 || ($a5923d2edfc72bc5$export$5d7ba7f5550f99d1 = {}));
-
-
-const $292fc7f9388c589b$export$2c795915441ef547 = `
-  z-index: 100;
-  position: fixed;
-  top: 2rem;
-  right: 2rem;
-  width: 400px;
-
-  display: none;
-  gap: 0.5rem;
-  flex-direction: column;
-  padding: 1rem;
-
-  color: black;
-  border: 1px solid silver;
-  background: white;
-  box-shadow: 2px 2px 5px silver;
-`;
-const $292fc7f9388c589b$export$fd4d27a26b4854f3 = `
-  display: flex;
-  flex: fit-content;
-  min-height: 36px;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  background-color: #228be6;
-  height: 36px;
-  border-radius: 4px;
-  font-weight: bold;
-  font-size: small;
-  cursor: pointer;
-  word-break: keep-all;
-  padding: 0 2rem;
-  white-space: nowrap;
-  overflow: hidden;
-`;
-const $292fc7f9388c589b$export$dbe9a8011f5e5b2d = `
-  ${$292fc7f9388c589b$export$fd4d27a26b4854f3}
-  background-color: grey;
-  disable: true;
-`;
-const $292fc7f9388c589b$export$ef377faaa0db520 = `
-  ${$292fc7f9388c589b$export$fd4d27a26b4854f3}
-  height: 36px;
-  flex: none;
-`;
-const $292fc7f9388c589b$export$21cd342fafb0108a = `
-  ${$292fc7f9388c589b$export$dbe9a8011f5e5b2d}
-  height: 36px;
-  flex: none;
-  `;
-const $292fc7f9388c589b$export$f272ae7639e11e3 = `
-  ${$292fc7f9388c589b$export$fd4d27a26b4854f3}
-  width: 100%;
-`;
-const $292fc7f9388c589b$export$18f0fed469926683 = `
-  ${$292fc7f9388c589b$export$dbe9a8011f5e5b2d}
-  width: 100%;
-`;
-const $292fc7f9388c589b$export$7ec3146dae3421e3 = `
-  ${$292fc7f9388c589b$export$fd4d27a26b4854f3}
-  padding: 0;
-  fontWeight: bold;
-  background-color: #868e96;
-`;
-const $292fc7f9388c589b$export$b0c8f381295da638 = `
-  display: flex;
-  flex-direction: row;
-
-  gap: 0.7rem
-`;
-
-
-
-var $39e7bd012fbaed99$exports = {};
-$39e7bd012fbaed99$exports = JSON.parse('{"name":"civitai_prompt_scraper","browserslist":"> 5%, last 1 versions, not dead","version":"1.2.15","description":"","source":"src/prompt_scraper.user.ts","browser ":"dist/prompt_scraper.user.js","targets":{"default":{"context":"browser","sourceMap":false,"includeNodeModules":true,"optimize":true}},"scripts":{"type-check":"tsc --noEmit","lint":"eslint","format":"prettier --write .","watch":"parcel watch","build":"rm -rf .parcel-cache/*; parcel build; zip -v -j ./dist/prompt_scraper.zip ./dist/prompt_scraper.user.js","clean":"rm ./dist/*","test":"echo \\"Error: no test specified\\" && exit 1"},"author":"Watanabe, Shunsuke","license":"MIT","devDependencies":{"@damoclark/parcel-optimizer-userscript":"^0.0.2","@parcel/packager-ts":"^2.8.3","@parcel/transformer-typescript-types":"^2.8.3","@tsconfig/recommended":"^1.0.2","@types/file-saver":"^2.0.5","@types/lodash":"^4.14.191","@typescript-eslint/eslint-plugin":"^5.52.0","@typescript-eslint/parser":"^5.52.0","@violentmonkey/types":"^0.1.5","eslint":"^8.34.0","eslint-config-standard-with-typescript":"^34.0.0","eslint-plugin-import":"^2.27.5","eslint-plugin-n":"^15.6.1","eslint-plugin-promise":"^6.1.1","parcel":"^2.8.3","prettier":"^2.8.4","rollup-plugin-cleanup":"^3.2.1","typescript":"^4.9.5","vitest":"^0.33.0"},"dependencies":{"@violentmonkey/url":"^0.1.0","@zip.js/zip.js":"^2.6.63","file-saver":"^2.0.5","html2canvas":"^1.4.1","lodash":"^4.17.21","wazip":"^0.1.0"}}');
-
-
-
-
-const $0fccda82d33153ac$export$bef1f36f5486a6a3 = (...xs)=>{
-    console.log(`${(0, (/*@__PURE__*/$parcel$interopDefault($39e7bd012fbaed99$exports))).name}:`, ...xs);
-};
-const $0fccda82d33153ac$export$e772c8ff12451969 = (ms = 1000)=>new Promise((resolve)=>setTimeout(()=>resolve(true), ms));
-const $0fccda82d33153ac$export$1a1c301579a08d1e = async (selector, retryLimit = 10)=>{
-    if (retryLimit < 1) return null;
-    const element = document.querySelector(selector);
-    if (!element) {
-        await $0fccda82d33153ac$export$e772c8ff12451969();
-        return await $0fccda82d33153ac$export$1a1c301579a08d1e(selector, retryLimit - 1);
-    } else return element;
-};
-const $0fccda82d33153ac$export$b56cc0ee0a85f41e = (url, width, name)=>`https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/${url}/width=${width},optimized=true/${name ?? ""}`;
-const $0fccda82d33153ac$export$ce1398d1c23018fa = ()=>{
-    const nextData = document.querySelector("#__NEXT_DATA__") || {
-        innerText: ""
-    };
-    const data = JSON.parse(nextData.innerText);
-    return data;
-};
-const $0fccda82d33153ac$export$bb64a7e3f0f28938 = (button)=>(text)=>{
-        button.innerText = text;
-    };
-const $0fccda82d33153ac$export$92ecf871022de94d = (button, text, style)=>{
-    const disabledButton = document.createElement("div");
-    disabledButton.setAttribute("style", style ?? (0, $292fc7f9388c589b$export$dbe9a8011f5e5b2d));
-    disabledButton.id = button.id;
-    disabledButton.className = "disabled";
-    disabledButton.innerText = text;
-    disabledButton.setAttribute("data-state", (0, $a5923d2edfc72bc5$export$5d7ba7f5550f99d1).done);
-    button.parentNode?.replaceChild(disabledButton, button);
-};
-const $0fccda82d33153ac$export$df511617a3ec46cd = ()=>{
-    const data = $0fccda82d33153ac$export$ce1398d1c23018fa();
-    const images = data.props.pageProps.trpcState.json.queries[0];
-    return images.state.data.pages[0].items;
-};
-const $0fccda82d33153ac$export$5abe6706d40a9183 = ()=>{
-    const data = $0fccda82d33153ac$export$ce1398d1c23018fa();
-    const model = data.props.pageProps.trpcState.json.queries[1];
-    return model.state.data.id;
-};
-const $0fccda82d33153ac$export$f922ebe57f2c36e8 = (xs, chunkSize = 7)=>xs.reduce((acc, curr)=>{
-        const tail = acc.pop() ?? [];
-        if (tail.length < chunkSize) {
-            tail.push(curr);
-            return [
-                ...acc,
-                tail
-            ];
-        }
-        return [
-            ...acc,
-            tail,
-            [
-                curr
-            ]
-        ];
-    }, []);
-const $0fccda82d33153ac$var$BUTTON_CONTAINER_ID = "civitai_prompt_scraper";
-const $0fccda82d33153ac$export$3d6ebb5b74790dc2 = async ()=>{
-    const downloadButtonSelector = "a[href^='/api/download/models/']";
-    const buttonParent = await $0fccda82d33153ac$export$1a1c301579a08d1e(downloadButtonSelector);
-    const container = document.createElement("div");
-    container.id = $0fccda82d33153ac$var$BUTTON_CONTAINER_ID;
-    container.setAttribute("style", (0, $292fc7f9388c589b$export$b0c8f381295da638));
-    buttonParent?.parentNode?.parentNode?.appendChild(container);
-    return container;
-};
-const $0fccda82d33153ac$export$4a2d37b006372286 = async ()=>{
-    return $0fccda82d33153ac$export$1a1c301579a08d1e(`#${$0fccda82d33153ac$var$BUTTON_CONTAINER_ID}`);
-};
-const $0fccda82d33153ac$export$5bc69941fea37f21 = ()=>{
-    Array.from(document.querySelectorAll(".mantine-Spoiler-root span")).forEach((x)=>{
-        const style = x.getAttribute("style");
-        const colorValue = (style?.match(/color:\s*(.*);?/) ?? [])[1];
-        if (!colorValue) return;
-        if (colorValue.startsWith("rgb")) {
-            x.setAttribute("style", `${x.getAttribute("style")} color: black;`);
-            return;
-        }
-        const colorNumber = new Number(`0x${colorValue.slice(1)}`);
-        if (colorNumber > 10000000) x.setAttribute("style", `${x.getAttribute("style")} color: black;`);
-    });
-};
-const $0fccda82d33153ac$export$d450a001006e5818 = ()=>{
-    const createButton = Array.from(document.querySelectorAll("button")).filter((x)=>x.innerHTML.includes("Create"))[0];
-    if (createButton) createButton?.remove();
-};
-const $0fccda82d33153ac$export$5ffcb0107c13639c = (retry = 5)=>{
-    const el = Array.from(document.querySelectorAll(".mantine-Container-root h2")).filter((x)=>x.innerHTML.includes("Suggested Resources"))[0];
-    if (el?.parentElement?.parentElement?.parentElement?.parentElement) el?.parentElement?.parentElement?.parentElement?.parentElement?.remove();
-    else setTimeout(()=>{
-        $0fccda82d33153ac$export$5ffcb0107c13639c(retry - 1);
-    }, 1000);
-};
-const $0fccda82d33153ac$export$980dc319601fa7a6 = (retry = 5)=>{
-    const el = document.querySelector("main");
-    if (!el) {
-        setTimeout(()=>{
-            $0fccda82d33153ac$export$980dc319601fa7a6(retry - 1);
-        }, 1000);
-        return;
-    }
-    el.style.paddingBottom = "0";
-}; // export const screenShot = async () => {
- //    const main = await waitForElement('body');
- //
- //    if (!main) {
- //      return;
- //    }
- //    main.style.letterSpacing = '0.1rem';
- //
- //    document.querySelectorAll('canvas').forEach((x) => x.remove());
- //    const canvas = await html2canvas(main, {
- //      allowTaint: true,
- //      useCORS: true,
- //    });
- //
- //    // saveAs(canvas.toDataURL(), 'test.png');
- //    const div = document.createElement('div');
- //    div.setAttribute('style', 'border: 1px solid red;');
- //    div.appendChild(canvas);
- //
- //    document.body.appendChild(div);
- //
- //    main.style.letterSpacing = 'none';
- //  };
- //
-
-
-const $966fc19e1e9bc989$var$i18n = {
-=======
 function $parcel$interopDefault(a) {
   return a && a.__esModule ? a.default : a;
 }
 const $3a42d740ecc81982$var$i18n = {
->>>>>>> main
     buttonLabel: {
         en: "Download images with JSON",
         ja: "画像&JSONダウンロード",
@@ -441,10 +219,16 @@ const $b7e86ce3c5d2c83d$export$18f0fed469926683 = `
   ${$b7e86ce3c5d2c83d$export$dbe9a8011f5e5b2d}
   width: 100%;
 `;
-const $b7e86ce3c5d2c83d$export$7ec3146dae3421e3 = $b7e86ce3c5d2c83d$export$fd4d27a26b4854f3;
+const $b7e86ce3c5d2c83d$export$7ec3146dae3421e3 = `
+  ${$b7e86ce3c5d2c83d$export$fd4d27a26b4854f3}
+  padding: 0;
+  fontWeight: bold;
+  background-color: #868e96;
+`;
 const $b7e86ce3c5d2c83d$export$b0c8f381295da638 = `
   display: flex;
   flex-direction: row;
+
   gap: 0.7rem
 `;
 
@@ -13080,128 +12864,6 @@ const $2e4159cc418f5166$export$44487a86467333c3 = (fieldName)=>{
 };
 
 
-<<<<<<< HEAD
-const $afa9fb8bb7aaf429$var$extractFilebasenameFromImageUrl = (url)=>{
-    const filename = url.split("/").slice(-1)[0];
-    return filename.split(".")[0];
-};
-const $afa9fb8bb7aaf429$var$API_URL = "https://civitai.com/api/v1";
-const $afa9fb8bb7aaf429$var$HEADERS = {
-    "Accept-Encoding": "gzip, deflate, br",
-    Origin: "https://civitai.com",
-    Referer: "https://civitai.com/",
-    Cookie: document.cookie
-};
-const $afa9fb8bb7aaf429$export$998f418383804028 = async (modelId)=>{
-    const response = await fetch(`${$afa9fb8bb7aaf429$var$API_URL}/models/${modelId}`, {
-        method: "GET",
-        headers: $afa9fb8bb7aaf429$var$HEADERS
-    });
-    if (response.status >= 400) throw new Error(` ${response.status} ${response.statusText}`);
-    return await response.json();
-};
-const $afa9fb8bb7aaf429$export$426617fe0a326605 = async (modelVersionId)=>{
-    const response = await fetch(`${$afa9fb8bb7aaf429$var$API_URL}/model-versions/${modelVersionId}`, {
-        method: "GET",
-        headers: $afa9fb8bb7aaf429$var$HEADERS
-    });
-    if (response.status >= 400) throw new Error(` ${response.status} ${response.statusText}`);
-    return await response.json();
-};
-const $afa9fb8bb7aaf429$export$769102d94f147e19 = async (modelId, modelVersionId)=>{
-    const id = modelId ? modelId : modelVersionId ? (await $afa9fb8bb7aaf429$export$426617fe0a326605(modelVersionId)).modelId.toString() : "";
-    if (!id) throw new Error((0, $966fc19e1e9bc989$export$731a191155ffa90a)("modelIdNotFoundError"));
-    const modelInfo = await $afa9fb8bb7aaf429$export$998f418383804028(id);
-    return modelInfo;
-};
-const $afa9fb8bb7aaf429$export$c6ace8a485846f08 = async (modelId, postId, modelVersionId, username)=>{
-    let url = `${$afa9fb8bb7aaf429$var$API_URL}/images`;
-    let params = [
-        "limit=20"
-    ];
-    if (postId) params.push(`postId=${postId}`);
-    if (modelId) params.push(`modelId=${modelId}`);
-    if (modelVersionId) params.push(`modelVersionId=${modelVersionId}`);
-    if (username) params.push(`username=${username}`);
-    if (params.length > 0) url = `${url}?${params.join("&")}`;
-    const response = await fetch(url, {
-        method: "GET",
-        headers: $afa9fb8bb7aaf429$var$HEADERS
-    });
-    if (response.status >= 400) throw new Error(` ${response.status} ${response.statusText}`);
-    const data = await response.json();
-    return data.items.map((x)=>{
-        return {
-            ...x,
-            url: x.url.replace(/width=\d*/, `width=${x.width},optimized=true`)
-        };
-    });
-};
-const $afa9fb8bb7aaf429$export$2ab75dd31a3868f2 = async (url)=>{
-    try {
-        const response = await fetch(url, {
-            method: "GET",
-            headers: {
-                Accept: "image/webp,image/jpeg,image/avif;q=0.9,image/apng;q=0.8,image/*;q=0.7",
-                ...$afa9fb8bb7aaf429$var$HEADERS
-            }
-        });
-        const contentType = response.headers.get("content-type") || "";
-        const blob = await response.blob();
-        return {
-            blob: blob,
-            contentType: contentType
-        };
-    } catch (error) {
-        if (url.includes("image.civitai.com")) return $afa9fb8bb7aaf429$export$2ab75dd31a3868f2(url.replace(",optimized=true", ""));
-        throw error;
-    }
-};
-const $afa9fb8bb7aaf429$var$fetchImgs = (zipWriter, addedNames)=>async (imgInfo)=>await Promise.all(imgInfo.map(async (x)=>{
-            const response = await $afa9fb8bb7aaf429$export$2ab75dd31a3868f2(x.url);
-            if (!response) throw new Error(`response is null: ${x.url}`);
-            const { blob: blob , contentType: contentType  } = response;
-            let name = $afa9fb8bb7aaf429$var$extractFilebasenameFromImageUrl(x.url) || x.hash.replace(/[\;\:\?\*\.]/g, "_");
-            while(addedNames.has(name))name += "_";
-            const filename = contentType && `${name}.${contentType.split("/")[1]}` || `${name}.png`;
-            await zipWriter.add(filename, new (0, $53e25169918aa98b$export$aa5015be25fe7f79)(blob));
-            addedNames.add(name);
-            if (!!x.meta) {
-                const jsonFilename = name + ".json";
-                await zipWriter.add(jsonFilename, new (0, $53e25169918aa98b$export$43d3fd7deddee00)(JSON.stringify(x.meta, null, "	")));
-            }
-        }));
-const $afa9fb8bb7aaf429$export$b6bc24646229cedd = (buttnTextUpdateFn)=>(zipFilename, modelInfo)=>async (imgInfo)=>{
-            if (!modelInfo && imgInfo.length === 0) return;
-            const blobWriter = new (0, $53e25169918aa98b$export$b1948fceba813858)(`application/zip`);
-            const zipWriter = new (0, $183a0115a003f583$export$50f5658480930b4c)(blobWriter);
-            if (modelInfo) await zipWriter.add("model_info.json", new (0, $53e25169918aa98b$export$43d3fd7deddee00)(JSON.stringify(modelInfo, null, "	")));
-            const addedNames = new Set();
-            const predicate = $afa9fb8bb7aaf429$var$fetchImgs(zipWriter, addedNames);
-            let counter = 0;
-            for (const xs of (0, $0fccda82d33153ac$export$f922ebe57f2c36e8)(imgInfo)){
-                counter += xs.length;
-                if (buttnTextUpdateFn) buttnTextUpdateFn(` ${counter} / ${imgInfo.length} ${(0, $966fc19e1e9bc989$export$ccac0588af5e2fe6)()} `);
-                try {
-                    await predicate(xs);
-                } catch (e) {
-                    console.log("error: ", e.message);
-                    if (!(0, $65c0cd2b2ec0988a$export$44487a86467333c3)("continueWithFetchError")) {
-                        zipWriter.close(undefined, {});
-                        throw e;
-                    }
-                }
-                await (0, $0fccda82d33153ac$export$e772c8ff12451969)(500);
-            }
-            (0, $b9a27db92abc3f0f$exports.saveAs)(await zipWriter.close(undefined, {}), zipFilename);
-        };
-const $afa9fb8bb7aaf429$export$a9dbc6b31fb3d42b = (config)=>{
-    localStorage.setItem("config", JSON.stringify(config));
-};
-const $afa9fb8bb7aaf429$export$c1a4367d4847eb06 = ()=>{
-    const config = localStorage.getItem("config");
-    return config ? JSON.parse(config) : {};
-=======
 const $98f6748fc1e9fd4e$export$aea217a45095ce11 = (selector)=>document.querySelector(selector);
 const $98f6748fc1e9fd4e$export$2917eca99ebef21a = (selector)=>document.querySelectorAll(selector);
 const $98f6748fc1e9fd4e$export$331ff980f0d45cff = ()=>document.createElement("div");
@@ -13209,7 +12871,6 @@ const $98f6748fc1e9fd4e$export$9b6d6ca62970729f = ()=>document.createElement("bu
 const $98f6748fc1e9fd4e$export$cdda5b1be25f9499 = ()=>document.createElement("a");
 const $98f6748fc1e9fd4e$export$420a7f2fd9cad6f6 = (x)=>{
     document.title = x;
->>>>>>> main
 };
 const $98f6748fc1e9fd4e$export$70d1bf7729efff40 = ()=>document.title;
 
@@ -13228,11 +12889,6 @@ const $98f6748fc1e9fd4e$export$70d1bf7729efff40 = ()=>document.title;
 
 
 
-<<<<<<< HEAD
-const $8d59c42601ba8f61$var$BUTTON_ID = "download-all-images-and-prompts";
-const $8d59c42601ba8f61$var$downloadButtonSelector = "a[href^='/api/download/models/']";
-const $8d59c42601ba8f61$var$getModeInfoAndImageList = async (href)=>{
-=======
 
 const $06cbd27ebbbf5f2a$export$1a1c301579a08d1e = async (descriptor, retryLimit = 10)=>{
     if (retryLimit < 1) return null;
@@ -13252,9 +12908,9 @@ const $06cbd27ebbbf5f2a$export$ce1398d1c23018fa = ()=>{
 const $06cbd27ebbbf5f2a$export$bb64a7e3f0f28938 = (button)=>(text)=>{
         button.innerText = text;
     };
-const $06cbd27ebbbf5f2a$export$92ecf871022de94d = (button, text)=>{
+const $06cbd27ebbbf5f2a$export$92ecf871022de94d = (button, text, style)=>{
     const disabledButton = (0, $98f6748fc1e9fd4e$export$331ff980f0d45cff)();
-    disabledButton.setAttribute("style", (0, $b7e86ce3c5d2c83d$export$dbe9a8011f5e5b2d));
+    disabledButton.setAttribute("style", style ? style : (0, $b7e86ce3c5d2c83d$export$dbe9a8011f5e5b2d));
     disabledButton.id = button.id;
     disabledButton.innerText = text;
     disabledButton.setAttribute("data-state", (0, $c08fa57dad1b6e82$export$5d7ba7f5550f99d1).done);
@@ -13273,12 +12929,45 @@ const $06cbd27ebbbf5f2a$export$3d6ebb5b74790dc2 = async ()=>{
 const $06cbd27ebbbf5f2a$export$4a2d37b006372286 = async ()=>{
     return $06cbd27ebbbf5f2a$export$1a1c301579a08d1e(`#${$06cbd27ebbbf5f2a$var$BUTTON_CONTAINER_ID}`);
 };
+const $06cbd27ebbbf5f2a$export$5bc69941fea37f21 = ()=>{
+    Array.from(document.querySelectorAll(".mantine-Spoiler-root span")).forEach((x)=>{
+        const style = x.getAttribute("style");
+        const colorValue = (style?.match(/color:\s*(.*);?/) ?? [])[1];
+        if (!colorValue) return;
+        if (colorValue.startsWith("rgb")) {
+            x.setAttribute("style", `${x.getAttribute("style")} color: black;`);
+            return;
+        }
+        const colorNumber = new Number(`0x${colorValue.slice(1)}`);
+        if (colorNumber > 10000000) x.setAttribute("style", `${x.getAttribute("style")} color: black;`);
+    });
+};
+const $06cbd27ebbbf5f2a$export$d450a001006e5818 = ()=>{
+    const createButton = Array.from(document.querySelectorAll("button")).filter((x)=>x.innerHTML.includes("Create"))[0];
+    if (createButton) createButton?.remove();
+};
+const $06cbd27ebbbf5f2a$export$5ffcb0107c13639c = (retry = 5)=>{
+    const el = Array.from(document.querySelectorAll(".mantine-Container-root h2")).filter((x)=>x.innerHTML.includes("Suggested Resources"))[0];
+    if (el?.parentElement?.parentElement?.parentElement?.parentElement) el?.parentElement?.parentElement?.parentElement?.parentElement?.remove();
+    else setTimeout(()=>{
+        $06cbd27ebbbf5f2a$export$5ffcb0107c13639c(retry - 1);
+    }, 1000);
+};
+const $06cbd27ebbbf5f2a$export$980dc319601fa7a6 = (retry = 5)=>{
+    const el = document.querySelector("main");
+    if (!el) {
+        setTimeout(()=>{
+            $06cbd27ebbbf5f2a$export$980dc319601fa7a6(retry - 1);
+        }, 1000);
+        return;
+    }
+    el.style.paddingBottom = "0";
+};
 
 
 const $e7c35bcf17ffba9d$var$BUTTON_ID = "download-all-images-and-prompts";
 const $e7c35bcf17ffba9d$var$downloadButtonSelector = "a[href^='/api/download/models/']";
 const $e7c35bcf17ffba9d$var$getModeInfoAndImageList = async (href)=>{
->>>>>>> main
     const hrefModelId = href.match(/\/models\/(?<modelId>\d*)/)?.groups?.modelId ?? href.match(/modelId=(?<modelId>\d*)/)?.groups?.modelId;
     const hrefModelVersionId = href.match(/modelVersionId=(?<modelVersionId>\d*)/)?.groups?.modelVersionId;
     const modelInfo = await (0, $c3454b9ab01d445e$export$769102d94f147e19)(hrefModelId, hrefModelVersionId);
@@ -13327,8 +13016,7 @@ const $e7c35bcf17ffba9d$export$53039d7a8d9d297e = (buttonIdSelector, location)=>
             alert(error.message);
         }
     };
-<<<<<<< HEAD
-const $8d59c42601ba8f61$export$c8adea586cc90d44 = ()=>{
+const $e7c35bcf17ffba9d$export$c8adea586cc90d44 = ()=>{
     const g = document.querySelector("#gallery");
     if (!g) return;
     g.style.overflow = "hidden";
@@ -13338,18 +13026,6 @@ const $8d59c42601ba8f61$export$c8adea586cc90d44 = ()=>{
     }
     g.style.height = "700px";
 };
-const $8d59c42601ba8f61$export$8b03a564a450b487 = async ()=>{
-    const container = await (0, $0fccda82d33153ac$export$4a2d37b006372286)();
-    const buttonIdSelector = `#${$8d59c42601ba8f61$var$BUTTON_ID}`;
-    document.querySelector(buttonIdSelector)?.remove();
-    const button = document.createElement("a");
-    button.addEventListener("click", $8d59c42601ba8f61$export$53039d7a8d9d297e(buttonIdSelector, window.location.href));
-    button.id = $8d59c42601ba8f61$var$BUTTON_ID;
-    button.innerText = (0, $966fc19e1e9bc989$export$d397f86d22f413e8)();
-    button.setAttribute("style", (0, $292fc7f9388c589b$export$fd4d27a26b4854f3));
-    if ((0, $65c0cd2b2ec0988a$export$44487a86467333c3)("downloadModelAsWell")) // start downloading a model
-    button.addEventListener("click", $8d59c42601ba8f61$var$startModelDownload);
-=======
 const $e7c35bcf17ffba9d$export$8b03a564a450b487 = async (href)=>{
     const container = await (0, $06cbd27ebbbf5f2a$export$4a2d37b006372286)();
     const buttonIdSelector = `#${$e7c35bcf17ffba9d$var$BUTTON_ID}`;
@@ -13361,13 +13037,12 @@ const $e7c35bcf17ffba9d$export$8b03a564a450b487 = async (href)=>{
     button.setAttribute("style", (0, $b7e86ce3c5d2c83d$export$fd4d27a26b4854f3));
     if ((0, $2e4159cc418f5166$export$44487a86467333c3)("downloadModelAsWell")) // start downloading a model
     button.addEventListener("click", $e7c35bcf17ffba9d$var$startModelDownload);
->>>>>>> main
     container?.appendChild(button);
     // hide gallery button
     const hideGallery = document.createElement("button");
     hideGallery.innerHTML = "x";
     hideGallery.setAttribute("style", "color: silver; border: none;");
-    hideGallery.addEventListener("click", $8d59c42601ba8f61$export$c8adea586cc90d44);
+    hideGallery.addEventListener("click", $e7c35bcf17ffba9d$export$c8adea586cc90d44);
     const h2 = document.querySelector("#gallery h2");
     if (h2) h2.parentNode?.appendChild(hideGallery);
 };
@@ -13378,16 +13053,6 @@ const $e7c35bcf17ffba9d$export$8b03a564a450b487 = async (href)=>{
  */ const $afea35e19f749eec$export$b56cc0ee0a85f41e = (url, width, name)=>`https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/${url}/width=${width},optimized=true/${name ?? ""}`;
 
 
-<<<<<<< HEAD
-const $9a7e0bde1a099030$var$BUTTON_ID = "download-all-gallery-images-and-prompts";
-const $9a7e0bde1a099030$export$9473b35530fb3701 = (buttonIdSelector, modelId, postId, modelName, onFinishFn, downLoadedImgList)=>async ()=>{
-        try {
-            const _imgList = await (0, $afa9fb8bb7aaf429$export$c6ace8a485846f08)(modelId, postId);
-            // exclude downloaded images
-            const downloadedImgIds = downLoadedImgList?.map(({ id: id  })=>id) ?? [];
-            const imgList = _imgList.filter(({ id: id  })=>!downloadedImgIds.includes(id));
-            const button = await (0, $0fccda82d33153ac$export$1a1c301579a08d1e)(buttonIdSelector);
-=======
 
 
 
@@ -13395,11 +13060,13 @@ const $9a7e0bde1a099030$export$9473b35530fb3701 = (buttonIdSelector, modelId, po
 
 
 const $d19ac646c457e538$var$BUTTON_ID = "download-all-gallery-images-and-prompts";
-const $d19ac646c457e538$var$downloadGalleryImagesAndPrompts = (buttonIdSelector, modelId, postId, modelName, onFinishFn)=>async ()=>{
+const $d19ac646c457e538$export$9473b35530fb3701 = (buttonIdSelector, modelId, postId, modelName, onFinishFn, downLoadedImgList)=>async ()=>{
         try {
-            const imgList = await (0, $c3454b9ab01d445e$export$c6ace8a485846f08)(modelId, postId);
+            const _imgList = await (0, $c3454b9ab01d445e$export$c6ace8a485846f08)(modelId, postId);
+            // exclude downloaded images
+            const downloadedImgIds = downLoadedImgList?.map(({ id: id  })=>id) ?? [];
+            const imgList = _imgList.filter(({ id: id  })=>!downloadedImgIds.includes(id));
             const button = await (0, $06cbd27ebbbf5f2a$export$1a1c301579a08d1e)(buttonIdSelector);
->>>>>>> main
             if (!button) return;
             button.setAttribute("data-state", "in-progress");
             button.innerText = (0, $3a42d740ecc81982$export$731a191155ffa90a)("startingDownload");
@@ -13460,25 +13127,14 @@ const $d19ac646c457e538$var$extractModelNameFromNextData = ()=>{
     const keys = Object.keys(nextData.props.pageProps?.trpcState?.json?.queries[0]?.state?.data?.meta ?? {}).filter((x)=>x.startsWith('"'));
     return keys.length > 0 ? keys.map((x)=>x.replace('"', "")).join(",") : "undefined";
 };
-<<<<<<< HEAD
-const $9a7e0bde1a099030$export$5fd187c0d03a79e = async ()=>{
-    const buttonIdSelector = `#${$9a7e0bde1a099030$var$BUTTON_ID}`;
-    const _button = document.querySelector(buttonIdSelector);
-    if (_button && _button.getAttribute("data-state") !== (0, $a5923d2edfc72bc5$export$5d7ba7f5550f99d1).ready) return;
-    if (_button) _button?.remove();
-    const { modelVersionId: modelVersionId , prioritizedUserId: prioritizedUserId , modelId: modelId , postId: postId , imageId: imageId  } = $9a7e0bde1a099030$var$extractIdsFromUrl(window.location.href);
-    const modelName = $9a7e0bde1a099030$var$extractModelNameFromNextData();
-    const button = document.createElement("button");
-=======
 const $d19ac646c457e538$export$5fd187c0d03a79e = async (href)=>{
     const buttonIdSelector = `#${$d19ac646c457e538$var$BUTTON_ID}`;
     const _button = (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)(buttonIdSelector);
     if (_button && _button.getAttribute("data-state") !== (0, $c08fa57dad1b6e82$export$5d7ba7f5550f99d1).ready) return;
-    _button?.remove();
+    if (_button) _button?.remove();
     const { modelVersionId: modelVersionId , prioritizedUserId: prioritizedUserId , modelId: modelId , postId: postId , imageId: imageId  } = $d19ac646c457e538$var$extractIdsFromUrl(href);
     const modelName = $d19ac646c457e538$var$extractModelNameFromNextData();
     const button = (0, $98f6748fc1e9fd4e$export$9b6d6ca62970729f)();
->>>>>>> main
     const onFinishFn = ()=>{
         if ((0, $2e4159cc418f5166$export$44487a86467333c3)("galleryAutoDownload")) (0, $98f6748fc1e9fd4e$export$420a7f2fd9cad6f6)("✅ " + (0, $98f6748fc1e9fd4e$export$70d1bf7729efff40)());
     };
@@ -13486,17 +13142,10 @@ const $d19ac646c457e538$export$5fd187c0d03a79e = async (href)=>{
         // open gallery from model preview images
         if (modelVersionId && prioritizedUserId) return (0, $e7c35bcf17ffba9d$export$53039d7a8d9d297e)(buttonIdSelector, href);
         // open gallery from model gallery areas
-<<<<<<< HEAD
-        if (modelId && postId) return $9a7e0bde1a099030$export$9473b35530fb3701(buttonIdSelector, modelId, postId, modelName, onFinishFn);
+        if (modelId && postId) return $d19ac646c457e538$export$9473b35530fb3701(buttonIdSelector, modelId, postId, modelName, onFinishFn);
         // open gallery from post pages
-        if (postId) return $9a7e0bde1a099030$export$9473b35530fb3701(buttonIdSelector, null, postId, modelName, onFinishFn);
-        if (imageId) return $9a7e0bde1a099030$var$downloadSingleImagesAndPrompts(buttonIdSelector);
-=======
-        if (modelId && postId) return $d19ac646c457e538$var$downloadGalleryImagesAndPrompts(buttonIdSelector, modelId, postId, modelName, onFinishFn);
-        // open gallery from post pages
-        if (postId) return $d19ac646c457e538$var$downloadGalleryImagesAndPrompts(buttonIdSelector, null, postId, modelName, onFinishFn);
+        if (postId) return $d19ac646c457e538$export$9473b35530fb3701(buttonIdSelector, null, postId, modelName, onFinishFn);
         if (imageId) return $d19ac646c457e538$var$downloadSingleImagesAndPrompts(buttonIdSelector);
->>>>>>> main
         return null;
     })();
     if (!eventListener) throw new Error("No necessary parameters found");
@@ -13522,111 +13171,6 @@ const $d19ac646c457e538$export$5fd187c0d03a79e = async (href)=>{
 
 
 
-<<<<<<< HEAD
-
-
-
-
-const $2da5569f102e177a$var$BUTTON_ID = "download-all-model-related-files";
-const $2da5569f102e177a$var$downloadButtonSelector = "a[href^='/api/download/models/']";
-const $2da5569f102e177a$var$getGalleryModelIdAndPostId = (href)=>{
-    const hrefModelId = href.match(/modelId=(?<modelId>\d*)/)?.groups?.modelId;
-    const hrefPostId = href.match(/postId=(?<postId>\d*)/)?.groups?.postId;
-    if (!hrefModelId || !hrefPostId) throw new Error("Either modelId or postId found");
-    return {
-        modelId: hrefModelId,
-        postId: hrefPostId
-    };
-};
-const $2da5569f102e177a$var$downloadAllModelRelatedFiles = (buttonIdSelector)=>async ()=>{
-        // save previews as a zip file
-        const { imageList: previewImageList , modelName: modelName  } = await (0, $8d59c42601ba8f61$export$53039d7a8d9d297e)(buttonIdSelector, window.location.href)() ?? {};
-        // save galleries as zip files
-        const clientHeight = document.querySelector("body")?.clientHeight;
-        if (clientHeight) window.scrollTo(0, clientHeight);
-        else document.querySelector("#gallery")?.scrollIntoView();
-        const galleryElementSelector = '#gallery a[href^="/images/"]';
-        await (0, $0fccda82d33153ac$export$1a1c301579a08d1e)(galleryElementSelector);
-        await (0, $0fccda82d33153ac$export$e772c8ff12451969)(1000);
-        const galleryLinks = document.querySelectorAll(galleryElementSelector);
-        const postIds = (()=>{
-            const postIdSet = new Set();
-            return Array.from(galleryLinks).reduce((acc, x)=>{
-                const href = x.getAttribute("href");
-                if (!href) return acc;
-                const { modelId: modelId , postId: postId  } = $2da5569f102e177a$var$getGalleryModelIdAndPostId(href);
-                if (!postId) return acc;
-                if (postIdSet.has(postId)) return acc;
-                postIdSet.add(postId);
-                return [
-                    ...acc,
-                    {
-                        modelId: modelId,
-                        postId: postId,
-                        x: x
-                    }
-                ];
-            }, []);
-        })();
-        await Promise.all(postIds.length === 1 ? [] : postIds.map(async ({ modelId: modelId , postId: postId , x: x  }, i)=>{
-            const button = document.createElement("div");
-            button.id = `${$2da5569f102e177a$var$BUTTON_ID}_${i}`;
-            button.innerText = `${modelId}_${postId}`;
-            button.setAttribute("style", (0, $292fc7f9388c589b$export$ef377faaa0db520));
-            x.parentNode?.parentNode?.appendChild(button);
-            const onFinishFn = ()=>{
-                (0, $0fccda82d33153ac$export$92ecf871022de94d)(button, `${postId} ${(0, $966fc19e1e9bc989$export$4d9f09007b08c03d)()}`, (0, $292fc7f9388c589b$export$21cd342fafb0108a));
-            };
-            return (0, $9a7e0bde1a099030$export$9473b35530fb3701)(`#${$2da5569f102e177a$var$BUTTON_ID}_${i}`, modelId, postId, modelName ?? "", onFinishFn, previewImageList)();
-        }));
-        setTimeout(()=>{
-            alert("done");
-        }, 100);
-        console.warn("##### done #####");
-        return;
-    };
-const $2da5569f102e177a$export$3b6a8e903180e269 = async ()=>{
-    (0, $0fccda82d33153ac$export$5bc69941fea37f21)();
-    (0, $0fccda82d33153ac$export$d450a001006e5818)();
-    (0, $0fccda82d33153ac$export$5ffcb0107c13639c)();
-    // deleteMainPaddingBottom();
-    const parentNode = await (0, $0fccda82d33153ac$export$4a2d37b006372286)();
-    const buttonIdSelector = `#${$2da5569f102e177a$var$BUTTON_ID}`;
-    document.querySelector(buttonIdSelector)?.remove();
-    const button = document.createElement("a");
-    button.addEventListener("click", $2da5569f102e177a$var$downloadAllModelRelatedFiles(buttonIdSelector));
-    button.id = $2da5569f102e177a$var$BUTTON_ID;
-    button.innerText = "⇣"; //getButtonLabel();
-    button.setAttribute("style", (0, $292fc7f9388c589b$export$7ec3146dae3421e3));
-    // start downloading a model
-    button.addEventListener("click", async ()=>{
-        (0, $8d59c42601ba8f61$export$c8adea586cc90d44)();
-        await (0, $0fccda82d33153ac$export$1a1c301579a08d1e)($2da5569f102e177a$var$downloadButtonSelector);
-        const modelDownloadUrl = document.querySelector($2da5569f102e177a$var$downloadButtonSelector)?.getAttribute("href");
-        const fileSizeText = document.querySelector($2da5569f102e177a$var$downloadButtonSelector)?.innerHTML ?? "";
-        if (modelDownloadUrl && // モデルの場合はダウンロードしない
-        !fileSizeText.includes(" GB)")) setTimeout(()=>{
-            window.open(modelDownloadUrl, "_blank");
-        }, 0);
-    });
-    if (parentNode) parentNode.appendChild(button);
-    (0, $8d59c42601ba8f61$export$c8adea586cc90d44)();
-};
-
-
-
-const $29e4e9967394a818$var$addModelPreviewDownloadButton = async ()=>{
-    try {
-        // await waitForElement('#gallery a[href^="/images"]');
-        // FIXME: adhoc: wait for Nextjs rendering finish
-        await (0, $0fccda82d33153ac$export$e772c8ff12451969)(1000);
-        if (!window.location.href.match(/\/models\/\d*/)) return;
-        (0, $0fccda82d33153ac$export$bef1f36f5486a6a3)("model");
-        if ((0, $65c0cd2b2ec0988a$export$44487a86467333c3)("openShowMore")) $29e4e9967394a818$var$openShowMore(30);
-        await (0, $0fccda82d33153ac$export$3d6ebb5b74790dc2)();
-        await (0, $8d59c42601ba8f61$export$8b03a564a450b487)();
-        await (0, $2da5569f102e177a$export$3b6a8e903180e269)();
-=======
 const $ca465a359cd2bf87$var$addModelPreviewDownloadButton = async ()=>{
     const href = window.location.href;
     try {
@@ -13637,7 +13181,6 @@ const $ca465a359cd2bf87$var$addModelPreviewDownloadButton = async ()=>{
         (0, $81ffdad4556cbf55$export$bef1f36f5486a6a3)("model");
         await (0, $06cbd27ebbbf5f2a$export$3d6ebb5b74790dc2)();
         await (0, $e7c35bcf17ffba9d$export$8b03a564a450b487)(href);
->>>>>>> main
     } catch (error) {
         alert(error.message);
     }
@@ -13647,17 +13190,10 @@ const $ca465a359cd2bf87$var$addGalleryImageDownloadButton = async ()=>{
     try {
         // await waitForElement('.mantine-RichTextEditor-root');
         // FIXME: adhoc: wait for Nextjs rendering finish
-<<<<<<< HEAD
-        await (0, $0fccda82d33153ac$export$e772c8ff12451969)(1000);
-        if (!window.location.href.match(/\/images\/\d*/)) return;
-        (0, $0fccda82d33153ac$export$bef1f36f5486a6a3)("gallery");
-        await (0, $9a7e0bde1a099030$export$5fd187c0d03a79e)();
-=======
         await (0, $81ffdad4556cbf55$export$e772c8ff12451969)(2000);
         if (!href.match(/\/images\/\d*/)) return;
         (0, $81ffdad4556cbf55$export$bef1f36f5486a6a3)("gallery");
         await (0, $d19ac646c457e538$export$5fd187c0d03a79e)(href);
->>>>>>> main
     } catch (error) {
         alert(error.message);
     }

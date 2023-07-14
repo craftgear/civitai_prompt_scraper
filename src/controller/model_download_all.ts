@@ -1,27 +1,27 @@
+import { getButtonCompleteLabel } from '../assets/lang';
 import {
   downloadAllButtonStyle,
   downloadAllGalleryButtonStyle,
   downloadAllGalleryDisabledButtonStyle,
-} from './styles';
+} from '../assets/styles';
 import {
-  sleep,
-  waitForElement,
-  replaceWithDisabledButton,
   darkenTextColor,
   deleteCreateButton,
   deleteSuggestedResources,
-} from './utils';
-import { getButtonCompleteLabel } from './lang';
+  getButtonContainerNode,
+  replaceWithDisabledButton,
+  waitForElement,
+} from '../utils/dom';
+import { sleep } from '../utils/utils';
 
 const BUTTON_ID = 'download-all-model-related-files';
 const downloadButtonSelector = "a[href^='/api/download/models/']";
 
+import { downloadGalleryImagesAndPrompts } from './gallery_download';
 import {
   downloadImagesAndPrompts,
   toggleGallary,
 } from './model_image_download';
-import { getButtonContainerNode } from './utils';
-import { downloadGalleryImagesAndPrompts } from './gallery_download';
 
 const getGalleryModelIdAndPostId = (href: string) => {
   const hrefModelId = href.match(/modelId=(?<modelId>\d*)/)?.groups?.modelId;
