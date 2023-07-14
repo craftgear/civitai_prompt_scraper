@@ -14,9 +14,6 @@
 //
 
 (function () {
-function $parcel$interopDefault(a) {
-  return a && a.__esModule ? a.default : a;
-}
 var $parcel$global =
 typeof globalThis !== 'undefined'
   ? globalThis
@@ -27,6 +24,7 @@ typeof globalThis !== 'undefined'
   : typeof global !== 'undefined'
   ? global
   : {};
+<<<<<<< HEAD
 let $a5923d2edfc72bc5$export$5d7ba7f5550f99d1;
 (function(ButtonState) {
     ButtonState["ready"] = "ready";
@@ -246,6 +244,12 @@ const $0fccda82d33153ac$export$980dc319601fa7a6 = (retry = 5)=>{
 
 
 const $966fc19e1e9bc989$var$i18n = {
+=======
+function $parcel$interopDefault(a) {
+  return a && a.__esModule ? a.default : a;
+}
+const $3a42d740ecc81982$var$i18n = {
+>>>>>>> main
     buttonLabel: {
         en: "Download images with JSON",
         ja: "画像&JSONダウンロード",
@@ -367,94 +371,87 @@ const $966fc19e1e9bc989$var$i18n = {
         "zh-TW": "優先選擇模型名稱而不是 LoRA 名稱作為 {modelName} 的值"
     }
 };
-const $966fc19e1e9bc989$var$getLocale = ()=>{
+const $3a42d740ecc81982$var$getLocale = ()=>{
     return window.navigator.language;
 };
-const $966fc19e1e9bc989$export$731a191155ffa90a = (labelName)=>{
-    const locale = $966fc19e1e9bc989$var$getLocale();
-    return $966fc19e1e9bc989$var$i18n[labelName][locale] ?? $966fc19e1e9bc989$var$i18n[labelName]["en"];
+const $3a42d740ecc81982$export$731a191155ffa90a = (labelName)=>{
+    const locale = $3a42d740ecc81982$var$getLocale();
+    return $3a42d740ecc81982$var$i18n[labelName][locale] ?? $3a42d740ecc81982$var$i18n[labelName]["en"];
 };
-const $966fc19e1e9bc989$export$d397f86d22f413e8 = ()=>$966fc19e1e9bc989$export$731a191155ffa90a("buttonLabel");
-const $966fc19e1e9bc989$export$ccac0588af5e2fe6 = ()=>$966fc19e1e9bc989$export$731a191155ffa90a("buttonProgressLabel");
-const $966fc19e1e9bc989$export$4d9f09007b08c03d = ()=>$966fc19e1e9bc989$export$731a191155ffa90a("buttonCompleteLabel");
+const $3a42d740ecc81982$export$d397f86d22f413e8 = ()=>$3a42d740ecc81982$export$731a191155ffa90a("buttonLabel");
+const $3a42d740ecc81982$export$ccac0588af5e2fe6 = ()=>$3a42d740ecc81982$export$731a191155ffa90a("buttonProgressLabel");
+const $3a42d740ecc81982$export$4d9f09007b08c03d = ()=>$3a42d740ecc81982$export$731a191155ffa90a("buttonCompleteLabel");
 
 
-var $b9a27db92abc3f0f$exports = {};
-(function(a, b) {
-    if ("function" == typeof define && define.amd) define([], b);
-    else b();
-})($b9a27db92abc3f0f$exports, function() {
-    "use strict";
-    function b(a, b) {
-        return "undefined" == typeof b ? b = {
-            autoBom: !1
-        } : "object" != typeof b && (console.warn("Deprecated: Expected third argument to be a object"), b = {
-            autoBom: !b
-        }), b.autoBom && /^\s*(?:text\/\S*|application\/xml|\S*\/\S*\+xml)\s*;.*charset\s*=\s*utf-8/i.test(a.type) ? new Blob([
-            "\uFEFF",
-            a
-        ], {
-            type: a.type
-        }) : a;
-    }
-    function c(a, b, c) {
-        var d = new XMLHttpRequest;
-        d.open("GET", a), d.responseType = "blob", d.onload = function() {
-            g(d.response, b, c);
-        }, d.onerror = function() {
-            console.error("could not download file");
-        }, d.send();
-    }
-    function d(a) {
-        var b = new XMLHttpRequest;
-        b.open("HEAD", a, !1);
-        try {
-            b.send();
-        } catch (a) {}
-        return 200 <= b.status && 299 >= b.status;
-    }
-    function e(a) {
-        try {
-            a.dispatchEvent(new MouseEvent("click"));
-        } catch (c) {
-            var b = document.createEvent("MouseEvents");
-            b.initMouseEvent("click", !0, !0, window, 0, 0, 0, 80, 20, !1, !1, !1, !1, 0, null), a.dispatchEvent(b);
-        }
-    }
-    var f = "object" == typeof window && window.window === window ? window : "object" == typeof self && self.self === self ? self : "object" == typeof $parcel$global && $parcel$global.global === $parcel$global ? $parcel$global : void 0, a = f.navigator && /Macintosh/.test(navigator.userAgent) && /AppleWebKit/.test(navigator.userAgent) && !/Safari/.test(navigator.userAgent), g = f.saveAs || ("object" != typeof window || window !== f ? function() {} : "download" in HTMLAnchorElement.prototype && !a ? function(b, g, h) {
-        var i = f.URL || f.webkitURL, j = document.createElement("a");
-        g = g || b.name || "download", j.download = g, j.rel = "noopener", "string" == typeof b ? (j.href = b, j.origin === location.origin ? e(j) : d(j.href) ? c(b, g, h) : e(j, j.target = "_blank")) : (j.href = i.createObjectURL(b), setTimeout(function() {
-            i.revokeObjectURL(j.href);
-        }, 4E4), setTimeout(function() {
-            e(j);
-        }, 0));
-    } : "msSaveOrOpenBlob" in navigator ? function(f, g, h) {
-        if (g = g || f.name || "download", "string" != typeof f) navigator.msSaveOrOpenBlob(b(f, h), g);
-        else if (d(f)) c(f, g, h);
-        else {
-            var i = document.createElement("a");
-            i.href = f, i.target = "_blank", setTimeout(function() {
-                e(i);
-            });
-        }
-    } : function(b, d, e, g) {
-        if (g = g || open("", "_blank"), g && (g.document.title = g.document.body.innerText = "downloading..."), "string" == typeof b) return c(b, d, e);
-        var h = "application/octet-stream" === b.type, i = /constructor/i.test(f.HTMLElement) || f.safari, j = /CriOS\/[\d]+/.test(navigator.userAgent);
-        if ((j || h && i || a) && "undefined" != typeof FileReader) {
-            var k = new FileReader;
-            k.onloadend = function() {
-                var a = k.result;
-                a = j ? a : a.replace(/^data:[^;]*;/, "data:attachment/file;"), g ? g.location.href = a : location = a, g = null;
-            }, k.readAsDataURL(b);
-        } else {
-            var l = f.URL || f.webkitURL, m = l.createObjectURL(b);
-            g ? g.location = m : location.href = m, g = null, setTimeout(function() {
-                l.revokeObjectURL(m);
-            }, 4E4);
-        }
-    });
-    f.saveAs = g.saveAs = g, $b9a27db92abc3f0f$exports = g;
-});
+const $b7e86ce3c5d2c83d$export$2c795915441ef547 = `
+  z-index: 100;
+  position: fixed;
+  top: 2rem;
+  right: 2rem;
+  width: 400px;
+
+  display: none;
+  gap: 0.5rem;
+  flex-direction: column;
+  padding: 1rem;
+
+  color: black;
+  border: 1px solid silver;
+  background: white;
+  box-shadow: 2px 2px 5px silver;
+`;
+const $b7e86ce3c5d2c83d$export$fd4d27a26b4854f3 = `
+  display: flex;
+  flex: fit-content;
+  min-height: 36px;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  background-color: #228be6;
+  height: 36px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: small;
+  cursor: pointer;
+  word-break: keep-all;
+  padding: 0 2rem;
+  white-space: nowrap;
+  overflow: hidden;
+`;
+const $b7e86ce3c5d2c83d$export$dbe9a8011f5e5b2d = `
+  ${$b7e86ce3c5d2c83d$export$fd4d27a26b4854f3}
+  background-color: grey;
+  disable: true;
+`;
+const $b7e86ce3c5d2c83d$export$ef377faaa0db520 = `
+  ${$b7e86ce3c5d2c83d$export$fd4d27a26b4854f3}
+  height: 36px;
+  flex: none;
+`;
+const $b7e86ce3c5d2c83d$export$21cd342fafb0108a = `
+  ${$b7e86ce3c5d2c83d$export$dbe9a8011f5e5b2d}
+  height: 36px;
+  flex: none;
+  `;
+const $b7e86ce3c5d2c83d$export$f272ae7639e11e3 = `
+  ${$b7e86ce3c5d2c83d$export$fd4d27a26b4854f3}
+  width: 100%;
+`;
+const $b7e86ce3c5d2c83d$export$18f0fed469926683 = `
+  ${$b7e86ce3c5d2c83d$export$dbe9a8011f5e5b2d}
+  width: 100%;
+`;
+const $b7e86ce3c5d2c83d$export$7ec3146dae3421e3 = $b7e86ce3c5d2c83d$export$fd4d27a26b4854f3;
+const $b7e86ce3c5d2c83d$export$b0c8f381295da638 = `
+  display: flex;
+  flex-direction: row;
+  gap: 0.7rem
+`;
+
+
+
+
+// eslint-disable-next-line
 
 
 /// <reference types="./index.d.ts" />
@@ -12687,16 +12684,245 @@ try {
 });
 
 
+var $b9a27db92abc3f0f$exports = {};
+(function(a, b) {
+    if ("function" == typeof define && define.amd) define([], b);
+    else b();
+})($b9a27db92abc3f0f$exports, function() {
+    "use strict";
+    function b(a, b) {
+        return "undefined" == typeof b ? b = {
+            autoBom: !1
+        } : "object" != typeof b && (console.warn("Deprecated: Expected third argument to be a object"), b = {
+            autoBom: !b
+        }), b.autoBom && /^\s*(?:text\/\S*|application\/xml|\S*\/\S*\+xml)\s*;.*charset\s*=\s*utf-8/i.test(a.type) ? new Blob([
+            "\uFEFF",
+            a
+        ], {
+            type: a.type
+        }) : a;
+    }
+    function c(a, b, c) {
+        var d = new XMLHttpRequest;
+        d.open("GET", a), d.responseType = "blob", d.onload = function() {
+            g(d.response, b, c);
+        }, d.onerror = function() {
+            console.error("could not download file");
+        }, d.send();
+    }
+    function d(a) {
+        var b = new XMLHttpRequest;
+        b.open("HEAD", a, !1);
+        try {
+            b.send();
+        } catch (a) {}
+        return 200 <= b.status && 299 >= b.status;
+    }
+    function e(a) {
+        try {
+            a.dispatchEvent(new MouseEvent("click"));
+        } catch (c) {
+            var b = document.createEvent("MouseEvents");
+            b.initMouseEvent("click", !0, !0, window, 0, 0, 0, 80, 20, !1, !1, !1, !1, 0, null), a.dispatchEvent(b);
+        }
+    }
+    var f = "object" == typeof window && window.window === window ? window : "object" == typeof self && self.self === self ? self : "object" == typeof $parcel$global && $parcel$global.global === $parcel$global ? $parcel$global : void 0, a = f.navigator && /Macintosh/.test(navigator.userAgent) && /AppleWebKit/.test(navigator.userAgent) && !/Safari/.test(navigator.userAgent), g = f.saveAs || ("object" != typeof window || window !== f ? function() {} : "download" in HTMLAnchorElement.prototype && !a ? function(b, g, h) {
+        var i = f.URL || f.webkitURL, j = document.createElement("a");
+        g = g || b.name || "download", j.download = g, j.rel = "noopener", "string" == typeof b ? (j.href = b, j.origin === location.origin ? e(j) : d(j.href) ? c(b, g, h) : e(j, j.target = "_blank")) : (j.href = i.createObjectURL(b), setTimeout(function() {
+            i.revokeObjectURL(j.href);
+        }, 4E4), setTimeout(function() {
+            e(j);
+        }, 0));
+    } : "msSaveOrOpenBlob" in navigator ? function(f, g, h) {
+        if (g = g || f.name || "download", "string" != typeof f) navigator.msSaveOrOpenBlob(b(f, h), g);
+        else if (d(f)) c(f, g, h);
+        else {
+            var i = document.createElement("a");
+            i.href = f, i.target = "_blank", setTimeout(function() {
+                e(i);
+            });
+        }
+    } : function(b, d, e, g) {
+        if (g = g || open("", "_blank"), g && (g.document.title = g.document.body.innerText = "downloading..."), "string" == typeof b) return c(b, d, e);
+        var h = "application/octet-stream" === b.type, i = /constructor/i.test(f.HTMLElement) || f.safari, j = /CriOS\/[\d]+/.test(navigator.userAgent);
+        if ((j || h && i || a) && "undefined" != typeof FileReader) {
+            var k = new FileReader;
+            k.onloadend = function() {
+                var a = k.result;
+                a = j ? a : a.replace(/^data:[^;]*;/, "data:attachment/file;"), g ? g.location.href = a : location = a, g = null;
+            }, k.readAsDataURL(b);
+        } else {
+            var l = f.URL || f.webkitURL, m = l.createObjectURL(b);
+            g ? g.location = m : location.href = m, g = null, setTimeout(function() {
+                l.revokeObjectURL(m);
+            }, 4E4);
+        }
+    });
+    f.saveAs = g.saveAs = g, $b9a27db92abc3f0f$exports = g;
+});
+
+
+
+var $39e7bd012fbaed99$exports = {};
+$39e7bd012fbaed99$exports = JSON.parse('{"name":"civitai_prompt_scraper","browserslist":"> 5%, last 1 versions, not dead","version":"1.2.15","description":"","source":"src/prompt_scraper.user.ts","browser ":"dist/prompt_scraper.user.js","targets":{"default":{"context":"browser","sourceMap":false,"includeNodeModules":true,"optimize":true}},"scripts":{"type-check":"tsc --noEmit","lint":"eslint","format":"prettier --write .","watch":"parcel watch","build":"rm -rf .parcel-cache/*; parcel build; zip -v -j ./dist/prompt_scraper.zip ./dist/prompt_scraper.user.js","clean":"rm ./dist/*","test":"vitest --dom","check":"tsc --noEmit"},"author":"Watanabe, Shunsuke","license":"MIT","devDependencies":{"@damoclark/parcel-optimizer-userscript":"^0.0.2","@parcel/packager-ts":"^2.8.3","@parcel/transformer-typescript-types":"^2.8.3","@tsconfig/recommended":"^1.0.2","@types/file-saver":"^2.0.5","@types/lodash":"^4.14.191","@typescript-eslint/eslint-plugin":"^5.52.0","@typescript-eslint/parser":"^5.52.0","@violentmonkey/types":"^0.1.5","eslint":"^8.34.0","eslint-config-standard-with-typescript":"^34.0.0","eslint-plugin-import":"^2.27.5","eslint-plugin-n":"^15.6.1","eslint-plugin-promise":"^6.1.1","happy-dom":"^10.3.2","parcel":"^2.8.3","prettier":"^2.8.4","prettier-plugin-organize-imports":"^3.2.2","rollup-plugin-cleanup":"^3.2.1","typescript":"^4.9.5","vitest":"^0.33.0"},"dependencies":{"@violentmonkey/url":"^0.1.0","@zip.js/zip.js":"^2.6.63","file-saver":"^2.0.5","html2canvas":"^1.4.1","lodash":"^4.17.21","wazip":"^0.1.0"}}');
+
+
+const $81ffdad4556cbf55$export$bef1f36f5486a6a3 = (...xs)=>{
+    console.log(`${(0, (/*@__PURE__*/$parcel$interopDefault($39e7bd012fbaed99$exports))).name}:`, ...xs);
+};
+const $81ffdad4556cbf55$export$e772c8ff12451969 = (ms = 1000)=>new Promise((resolve)=>setTimeout(()=>resolve(true), ms));
+const $81ffdad4556cbf55$export$f922ebe57f2c36e8 = (xs, chunkSize = 5)=>xs.reduce((acc, curr)=>{
+        const tail = acc.pop() ?? [];
+        if (tail.length < chunkSize) {
+            tail.push(curr);
+            return [
+                ...acc,
+                tail
+            ];
+        }
+        return [
+            ...acc,
+            tail,
+            [
+                curr
+            ]
+        ];
+    }, []);
 
 
 
 
 
-const $65c0cd2b2ec0988a$var$fields = [
+const $c3454b9ab01d445e$var$extractFilebasenameFromImageUrl = (url)=>{
+    const filename = url.split("/").slice(-1)[0];
+    return filename.split(".")[0];
+};
+const $c3454b9ab01d445e$var$API_URL = "https://civitai.com/api/v1";
+const $c3454b9ab01d445e$var$HEADERS = {
+    "Accept-Encoding": "gzip, deflate, br",
+    Origin: "https://civitai.com",
+    Referer: "https://civitai.com/",
+    Cookie: document.cookie
+};
+const $c3454b9ab01d445e$export$998f418383804028 = async (modelId)=>{
+    const response = await fetch(`${$c3454b9ab01d445e$var$API_URL}/models/${modelId}`, {
+        method: "GET",
+        headers: $c3454b9ab01d445e$var$HEADERS
+    });
+    if (response.status >= 400) throw new Error(` ${response.status} ${response.statusText}`);
+    return await response.json();
+};
+const $c3454b9ab01d445e$export$426617fe0a326605 = async (modelVersionId)=>{
+    const response = await fetch(`${$c3454b9ab01d445e$var$API_URL}/model-versions/${modelVersionId}`, {
+        method: "GET",
+        headers: $c3454b9ab01d445e$var$HEADERS
+    });
+    if (response.status >= 400) throw new Error(` ${response.status} ${response.statusText}`);
+    return await response.json();
+};
+const $c3454b9ab01d445e$export$769102d94f147e19 = async (modelId, modelVersionId)=>{
+    const id = modelId ? modelId : modelVersionId ? (await $c3454b9ab01d445e$export$426617fe0a326605(modelVersionId)).modelId.toString() : "";
+    if (!id) throw new Error((0, $3a42d740ecc81982$export$731a191155ffa90a)("modelIdNotFoundError"));
+    const modelInfo = await $c3454b9ab01d445e$export$998f418383804028(id);
+    return modelInfo;
+};
+const $c3454b9ab01d445e$export$c6ace8a485846f08 = async (modelId, postId, modelVersionId, username)=>{
+    let url = `${$c3454b9ab01d445e$var$API_URL}/images`;
+    const params = [
+        "limit=20"
+    ];
+    if (postId) params.push(`postId=${postId}`);
+    if (modelId) params.push(`modelId=${modelId}`);
+    if (modelVersionId) params.push(`modelVersionId=${modelVersionId}`);
+    if (username) params.push(`username=${username}`);
+    if (params.length > 0) url = `${url}?${params.join("&")}`;
+    const response = await fetch(url, {
+        method: "GET",
+        headers: $c3454b9ab01d445e$var$HEADERS
+    });
+    if (response.status >= 400) throw new Error(` ${response.status} ${response.statusText}`);
+    const data = await response.json();
+    return data.items.map((x)=>{
+        return {
+            ...x,
+            url: x.url.replace(/width=\d*/, `width=${x.width},optimized=true`)
+        };
+    });
+};
+const $c3454b9ab01d445e$export$2ab75dd31a3868f2 = async (url)=>{
+    try {
+        const response = await fetch(url, {
+            method: "GET",
+            headers: {
+                Accept: "image/webp,image/jpeg,image/avif;q=0.9,image/apng;q=0.8,image/*;q=0.7",
+                ...$c3454b9ab01d445e$var$HEADERS
+            }
+        });
+        const contentType = response.headers.get("content-type") || "";
+        const blob = await response.blob();
+        return {
+            blob: blob,
+            contentType: contentType
+        };
+    } catch (error) {
+        if (url.includes("image.civitai.com")) return $c3454b9ab01d445e$export$2ab75dd31a3868f2(url.replace(",optimized=true", ""));
+        throw error;
+    }
+};
+const $c3454b9ab01d445e$export$e9e7897c93aa9943 = (zipWriter, addedNames)=>async (imgInfo)=>await Promise.all(imgInfo.map(async (x)=>{
+            const response = await $c3454b9ab01d445e$export$2ab75dd31a3868f2(x.url);
+            if (!response) throw new Error(`response is null: ${x.url}`);
+            const { blob: blob , contentType: contentType  } = response;
+            let name = $c3454b9ab01d445e$var$extractFilebasenameFromImageUrl(x.url) || x.hash.replace(/[;:?*.]/g, "_");
+            while(addedNames.has(name))name += "_";
+            const filename = contentType && `${name}.${contentType.split("/")[1]}` || `${name}.png`;
+            await zipWriter.add(filename, new (0, $53e25169918aa98b$export$aa5015be25fe7f79)(blob));
+            addedNames.add(name);
+            if (x.meta) {
+                const jsonFilename = name + ".json";
+                await zipWriter.add(jsonFilename, new (0, $53e25169918aa98b$export$43d3fd7deddee00)(JSON.stringify(x.meta, null, "	")));
+            }
+        }));
+
+
+const $c5da2b8a14082d8b$export$b6bc24646229cedd = (buttnTextUpdateFn)=>(zipFilename, modelInfo)=>async (imgInfo)=>{
+            if (!modelInfo && imgInfo.length === 0) return;
+            const blobWriter = new (0, $53e25169918aa98b$export$b1948fceba813858)(`application/zip`);
+            const zipWriter = new (0, $183a0115a003f583$export$50f5658480930b4c)(blobWriter);
+            if (modelInfo) await zipWriter.add("model_info.json", new (0, $53e25169918aa98b$export$43d3fd7deddee00)(JSON.stringify(modelInfo, null, "	")));
+            const addedNames = new Set();
+            const predicate = (0, $c3454b9ab01d445e$export$e9e7897c93aa9943)(zipWriter, addedNames);
+            let counter = 0;
+            for (const xs of (0, $81ffdad4556cbf55$export$f922ebe57f2c36e8)(imgInfo)){
+                counter += xs.length;
+                if (buttnTextUpdateFn) buttnTextUpdateFn(`${counter} / ${imgInfo.length} ${(0, $3a42d740ecc81982$export$ccac0588af5e2fe6)()}`);
+                try {
+                    await predicate(xs);
+                } catch (e) {
+                    console.log("error: ", e.message);
+                    if (!(0, $2e4159cc418f5166$export$44487a86467333c3)("continueWithFetchError")) {
+                        zipWriter.close(undefined, {});
+                        throw e;
+                    }
+                }
+                await (0, $81ffdad4556cbf55$export$e772c8ff12451969)(500);
+            }
+            (0, $b9a27db92abc3f0f$exports.saveAs)(await zipWriter.close(undefined, {}), zipFilename);
+        };
+const $c5da2b8a14082d8b$export$a9dbc6b31fb3d42b = (config)=>{
+    localStorage.setItem("config", JSON.stringify(config));
+};
+const $c5da2b8a14082d8b$export$c1a4367d4847eb06 = ()=>{
+    const config = localStorage.getItem("config");
+    return config ? JSON.parse(config) : {};
+};
+
+
+const $2e4159cc418f5166$var$fields = [
     {
         type: "checkbox",
         name: "downloadModelAsWell",
-        label: (0, $966fc19e1e9bc989$export$731a191155ffa90a)("downloadModelAsWell"),
+        label: (0, $3a42d740ecc81982$export$731a191155ffa90a)("downloadModelAsWell"),
         value: true,
         desc: "",
         style: "gap: 0.5rem;"
@@ -12704,7 +12930,7 @@ const $65c0cd2b2ec0988a$var$fields = [
     {
         type: "checkbox",
         name: "openShowMore",
-        label: (0, $966fc19e1e9bc989$export$731a191155ffa90a)("openShowMore"),
+        label: (0, $3a42d740ecc81982$export$731a191155ffa90a)("openShowMore"),
         value: true,
         desc: "",
         style: "gap: 0.5rem;"
@@ -12712,7 +12938,7 @@ const $65c0cd2b2ec0988a$var$fields = [
     {
         type: "checkbox",
         name: "continueWithFetchError",
-        label: (0, $966fc19e1e9bc989$export$731a191155ffa90a)("continueWithFetchError"),
+        label: (0, $3a42d740ecc81982$export$731a191155ffa90a)("continueWithFetchError"),
         value: false,
         desc: "",
         style: "gap: 0.5rem;"
@@ -12720,7 +12946,7 @@ const $65c0cd2b2ec0988a$var$fields = [
     {
         type: "checkbox",
         name: "galleryAutoDownload",
-        label: (0, $966fc19e1e9bc989$export$731a191155ffa90a)("galleryAutoDownload"),
+        label: (0, $3a42d740ecc81982$export$731a191155ffa90a)("galleryAutoDownload"),
         value: true,
         desc: "",
         style: "gap: 0.5rem;"
@@ -12728,29 +12954,29 @@ const $65c0cd2b2ec0988a$var$fields = [
     {
         type: "text",
         name: "modelPreviewFilenameFormat",
-        label: (0, $966fc19e1e9bc989$export$731a191155ffa90a)("modelPreviewFilenameFormat"),
+        label: (0, $3a42d740ecc81982$export$731a191155ffa90a)("modelPreviewFilenameFormat"),
         value: "{modelName}[{modelId}]_{modelVersionId}.zip",
-        desc: `${(0, $966fc19e1e9bc989$export$731a191155ffa90a)("availableVariables")} {modelId}, {modelName}, {modelVersionName}, {modelVersionId}`,
+        desc: `${(0, $3a42d740ecc81982$export$731a191155ffa90a)("availableVariables")} {modelId}, {modelName}, {modelVersionName}, {modelVersionId}`,
         style: " padding-top: 0.5rem; border-top: 1px solid #ededef; margin-top: 0.5rem; "
     },
     {
         type: "text",
         name: "galleryFilenameFormat",
-        label: (0, $966fc19e1e9bc989$export$731a191155ffa90a)("galleryFilenameFormat"),
+        label: (0, $3a42d740ecc81982$export$731a191155ffa90a)("galleryFilenameFormat"),
         value: "{modelName}-modelId_{modelId}-postId_{postId}.zip",
-        desc: `${(0, $966fc19e1e9bc989$export$731a191155ffa90a)("availableVariables")} {modelName}, {modelId}, {postId}`,
+        desc: `${(0, $3a42d740ecc81982$export$731a191155ffa90a)("availableVariables")} {modelName}, {modelId}, {postId}`,
         style: " padding-top: 0.5rem; border-top: 1px solid #ededef; margin-top: 0.5rem; "
     },
     {
         type: "checkbox",
         name: "preferModelNameToLoRAName",
-        label: (0, $966fc19e1e9bc989$export$731a191155ffa90a)("preferModelNameToLoRAName"),
+        label: (0, $3a42d740ecc81982$export$731a191155ffa90a)("preferModelNameToLoRAName"),
         value: false,
         desc: "",
         style: "gap: 0.5rem; margin-left: 0.5rem;"
     }
 ];
-const $65c0cd2b2ec0988a$var$addInputs = (parent, fields)=>{
+const $2e4159cc418f5166$var$addInputs = (parent, fields)=>{
     fields.forEach(({ type: type , name: name , label: label , value: value , desc: desc , style: style  })=>{
         const div = document.createElement("div");
         const inputEl = document.createElement("input");
@@ -12781,12 +13007,11 @@ const $65c0cd2b2ec0988a$var$addInputs = (parent, fields)=>{
                 div.appendChild(descEl);
                 div.appendChild(inputEl);
                 break;
-            default:
         }
         parent.appendChild(div);
     });
 };
-const $65c0cd2b2ec0988a$var$getValuesOfInputs = (fields)=>{
+const $2e4159cc418f5166$var$getValuesOfInputs = (fields)=>{
     return fields.reduce(function(acc, cur) {
         const el = document.querySelector("#" + cur.name);
         if (cur.type === "checkbox") return {
@@ -12799,17 +13024,17 @@ const $65c0cd2b2ec0988a$var$getValuesOfInputs = (fields)=>{
         };
     }, {});
 };
-const $65c0cd2b2ec0988a$var$addButtons = (parent)=>{
-    var saveButton = document.createElement("button");
-    saveButton.textContent = (0, $966fc19e1e9bc989$export$731a191155ffa90a)("saveConfig");
+const $2e4159cc418f5166$var$addButtons = (parent)=>{
+    const saveButton = document.createElement("button");
+    saveButton.textContent = (0, $3a42d740ecc81982$export$731a191155ffa90a)("saveConfig");
     saveButton.setAttribute("style", "color: white; background: #228be6; padding: 0.5rem 2rem;");
     saveButton.addEventListener("click", function() {
-        const values = $65c0cd2b2ec0988a$var$getValuesOfInputs($65c0cd2b2ec0988a$var$fields);
-        (0, $afa9fb8bb7aaf429$export$a9dbc6b31fb3d42b)(values);
+        const values = $2e4159cc418f5166$var$getValuesOfInputs($2e4159cc418f5166$var$fields);
+        (0, $c5da2b8a14082d8b$export$a9dbc6b31fb3d42b)(values);
         parent.style.display = "none";
     });
-    var cancelButton = document.createElement("button");
-    cancelButton.textContent = (0, $966fc19e1e9bc989$export$731a191155ffa90a)("cancelConfig");
+    const cancelButton = document.createElement("button");
+    cancelButton.textContent = (0, $3a42d740ecc81982$export$731a191155ffa90a)("cancelConfig");
     cancelButton.setAttribute("style", "padding: 0.5rem 0.5rem;");
     cancelButton.addEventListener("click", function() {
         parent.style.display = "none";
@@ -12820,41 +13045,42 @@ const $65c0cd2b2ec0988a$var$addButtons = (parent)=>{
     buttonGroup.appendChild(cancelButton);
     parent.appendChild(buttonGroup);
 };
-const $65c0cd2b2ec0988a$var$buildSettingsPanel = (localConfigValues)=>{
+const $2e4159cc418f5166$var$buildSettingsPanel = (localConfigValues)=>{
     // 設定パネルを作成
-    var panel = document.createElement("div");
-    panel.setAttribute("style", (0, $292fc7f9388c589b$export$2c795915441ef547));
+    const panel = document.createElement("div");
+    panel.setAttribute("style", (0, $b7e86ce3c5d2c83d$export$2c795915441ef547));
     const title = document.createElement("h6");
-    title.textContent = (0, $966fc19e1e9bc989$export$731a191155ffa90a)("configPanelTitle");
+    title.textContent = (0, $3a42d740ecc81982$export$731a191155ffa90a)("configPanelTitle");
     title.setAttribute("style", "margin-top: 0; margin-bottom: 0.5rem; border-bottom: 1px solid silver;");
     panel.appendChild(title);
-    $65c0cd2b2ec0988a$var$addInputs(panel, $65c0cd2b2ec0988a$var$fields.map(function(x) {
+    $2e4159cc418f5166$var$addInputs(panel, $2e4159cc418f5166$var$fields.map(function(x) {
         return {
             ...x,
             value: localConfigValues[x.name] !== undefined ? localConfigValues[x.name] : x.value
         };
     }));
-    $65c0cd2b2ec0988a$var$addButtons(panel);
+    $2e4159cc418f5166$var$addButtons(panel);
     return panel;
 };
-function $65c0cd2b2ec0988a$export$3a5abe5201fb331() {
-    const localConfigValues = (0, $afa9fb8bb7aaf429$export$c1a4367d4847eb06)();
-    const panel = $65c0cd2b2ec0988a$var$buildSettingsPanel(localConfigValues);
+function $2e4159cc418f5166$export$3a5abe5201fb331() {
+    const localConfigValues = (0, $c5da2b8a14082d8b$export$c1a4367d4847eb06)();
+    const panel = $2e4159cc418f5166$var$buildSettingsPanel(localConfigValues);
     document?.querySelector("body")?.appendChild(panel);
     // register a menu command
-    GM_registerMenuCommand((0, $966fc19e1e9bc989$export$731a191155ffa90a)("configPanelMenu"), function() {
+    GM_registerMenuCommand((0, $3a42d740ecc81982$export$731a191155ffa90a)("configPanelMenu"), function() {
         panel.style.display = "flex";
     });
 }
-const $65c0cd2b2ec0988a$export$44487a86467333c3 = (fieldName)=>{
-    const localConfigValues = (0, $afa9fb8bb7aaf429$export$c1a4367d4847eb06)();
+const $2e4159cc418f5166$export$44487a86467333c3 = (fieldName)=>{
+    const localConfigValues = (0, $c5da2b8a14082d8b$export$c1a4367d4847eb06)();
     if (localConfigValues !== undefined && localConfigValues[fieldName] !== undefined) return localConfigValues[fieldName];
-    const inputField = $65c0cd2b2ec0988a$var$fields.find((x)=>x.name === fieldName);
+    const inputField = $2e4159cc418f5166$var$fields.find((x)=>x.name === fieldName);
     if (inputField) return inputField.value;
-    throw new Error(`${(0, $966fc19e1e9bc989$export$731a191155ffa90a)} : ${fieldName}`);
+    throw new Error(`${(0, $3a42d740ecc81982$export$731a191155ffa90a)} : ${fieldName}`);
 };
 
 
+<<<<<<< HEAD
 const $afa9fb8bb7aaf429$var$extractFilebasenameFromImageUrl = (url)=>{
     const filename = url.split("/").slice(-1)[0];
     return filename.split(".")[0];
@@ -12975,31 +13201,97 @@ const $afa9fb8bb7aaf429$export$a9dbc6b31fb3d42b = (config)=>{
 const $afa9fb8bb7aaf429$export$c1a4367d4847eb06 = ()=>{
     const config = localStorage.getItem("config");
     return config ? JSON.parse(config) : {};
+=======
+const $98f6748fc1e9fd4e$export$aea217a45095ce11 = (selector)=>document.querySelector(selector);
+const $98f6748fc1e9fd4e$export$2917eca99ebef21a = (selector)=>document.querySelectorAll(selector);
+const $98f6748fc1e9fd4e$export$331ff980f0d45cff = ()=>document.createElement("div");
+const $98f6748fc1e9fd4e$export$9b6d6ca62970729f = ()=>document.createElement("button");
+const $98f6748fc1e9fd4e$export$cdda5b1be25f9499 = ()=>document.createElement("a");
+const $98f6748fc1e9fd4e$export$420a7f2fd9cad6f6 = (x)=>{
+    document.title = x;
+>>>>>>> main
 };
+const $98f6748fc1e9fd4e$export$70d1bf7729efff40 = ()=>document.title;
 
 
 
 
 
+/**
+ * api responses
+ */ let $c08fa57dad1b6e82$export$5d7ba7f5550f99d1;
+(function(ButtonState) {
+    ButtonState["ready"] = "ready";
+    ButtonState["inProgress"] = "in-progress";
+    ButtonState["done"] = "done";
+})($c08fa57dad1b6e82$export$5d7ba7f5550f99d1 || ($c08fa57dad1b6e82$export$5d7ba7f5550f99d1 = {}));
 
 
 
+<<<<<<< HEAD
 const $8d59c42601ba8f61$var$BUTTON_ID = "download-all-images-and-prompts";
 const $8d59c42601ba8f61$var$downloadButtonSelector = "a[href^='/api/download/models/']";
 const $8d59c42601ba8f61$var$getModeInfoAndImageList = async (href)=>{
+=======
+
+const $06cbd27ebbbf5f2a$export$1a1c301579a08d1e = async (descriptor, retryLimit = 10)=>{
+    if (retryLimit < 1) return null;
+    const element = (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)(descriptor);
+    if (!element) {
+        await (0, $81ffdad4556cbf55$export$e772c8ff12451969)();
+        return await $06cbd27ebbbf5f2a$export$1a1c301579a08d1e(descriptor, retryLimit - 1);
+    } else return element;
+};
+const $06cbd27ebbbf5f2a$export$ce1398d1c23018fa = ()=>{
+    const nextData = (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)("#__NEXT_DATA__") || {
+        innerText: ""
+    };
+    const data = JSON.parse(nextData.innerText);
+    return data;
+};
+const $06cbd27ebbbf5f2a$export$bb64a7e3f0f28938 = (button)=>(text)=>{
+        button.innerText = text;
+    };
+const $06cbd27ebbbf5f2a$export$92ecf871022de94d = (button, text)=>{
+    const disabledButton = (0, $98f6748fc1e9fd4e$export$331ff980f0d45cff)();
+    disabledButton.setAttribute("style", (0, $b7e86ce3c5d2c83d$export$dbe9a8011f5e5b2d));
+    disabledButton.id = button.id;
+    disabledButton.innerText = text;
+    disabledButton.setAttribute("data-state", (0, $c08fa57dad1b6e82$export$5d7ba7f5550f99d1).done);
+    button.parentNode?.replaceChild(disabledButton, button);
+};
+const $06cbd27ebbbf5f2a$var$BUTTON_CONTAINER_ID = "civitai_prompt_scraper";
+const $06cbd27ebbbf5f2a$export$3d6ebb5b74790dc2 = async ()=>{
+    const downloadButtonSelector = "a[href^='/api/download/models/']";
+    const buttonParent = await $06cbd27ebbbf5f2a$export$1a1c301579a08d1e(downloadButtonSelector);
+    const container = (0, $98f6748fc1e9fd4e$export$331ff980f0d45cff)();
+    container.id = $06cbd27ebbbf5f2a$var$BUTTON_CONTAINER_ID;
+    container.setAttribute("style", (0, $b7e86ce3c5d2c83d$export$b0c8f381295da638));
+    buttonParent?.parentNode?.parentNode?.appendChild(container);
+    return container;
+};
+const $06cbd27ebbbf5f2a$export$4a2d37b006372286 = async ()=>{
+    return $06cbd27ebbbf5f2a$export$1a1c301579a08d1e(`#${$06cbd27ebbbf5f2a$var$BUTTON_CONTAINER_ID}`);
+};
+
+
+const $e7c35bcf17ffba9d$var$BUTTON_ID = "download-all-images-and-prompts";
+const $e7c35bcf17ffba9d$var$downloadButtonSelector = "a[href^='/api/download/models/']";
+const $e7c35bcf17ffba9d$var$getModeInfoAndImageList = async (href)=>{
+>>>>>>> main
     const hrefModelId = href.match(/\/models\/(?<modelId>\d*)/)?.groups?.modelId ?? href.match(/modelId=(?<modelId>\d*)/)?.groups?.modelId;
     const hrefModelVersionId = href.match(/modelVersionId=(?<modelVersionId>\d*)/)?.groups?.modelVersionId;
-    const modelInfo = await (0, $afa9fb8bb7aaf429$export$769102d94f147e19)(hrefModelId, hrefModelVersionId);
+    const modelInfo = await (0, $c3454b9ab01d445e$export$769102d94f147e19)(hrefModelId, hrefModelVersionId);
     const { id: modelId , name: modelName , creator: { username: username  }  } = modelInfo;
-    if (!modelId) throw new Error((0, $966fc19e1e9bc989$export$731a191155ffa90a)("modelIdNotFoundError"));
+    if (!modelId) throw new Error((0, $3a42d740ecc81982$export$731a191155ffa90a)("modelIdNotFoundError"));
     const modelVersionId = hrefModelVersionId ? hrefModelVersionId : modelInfo.modelVersions[0].id;
-    if (!modelVersionId) throw new Error((0, $966fc19e1e9bc989$export$731a191155ffa90a)("modelVersionIdNotFoundError"));
+    if (!modelVersionId) throw new Error((0, $3a42d740ecc81982$export$731a191155ffa90a)("modelVersionIdNotFoundError"));
     const modelVersionName = modelInfo.modelVersions.find((x)=>{
         return `${x.id}` === `${modelVersionId}`;
     })?.name || "no_version_name";
     // use fetchGalleryData instead of fetchModelVersionData,
-    // due to modelVersion api returns first 10 images of preview.
-    const imageList = await (0, $afa9fb8bb7aaf429$export$c6ace8a485846f08)(`${modelId}`, null, `${modelVersionId}`, `${username}`);
+    // due to modelVersion api returns only first 10 images of preview.
+    const imageList = await (0, $c3454b9ab01d445e$export$c6ace8a485846f08)(`${modelId}`, null, `${modelVersionId}`, `${username}`);
     return {
         modelId: modelId,
         modelName: modelName,
@@ -13009,24 +13301,24 @@ const $8d59c42601ba8f61$var$getModeInfoAndImageList = async (href)=>{
         modelInfo: modelInfo
     };
 };
-const $8d59c42601ba8f61$var$startModelDownload = async ()=>{
-    await (0, $0fccda82d33153ac$export$1a1c301579a08d1e)($8d59c42601ba8f61$var$downloadButtonSelector);
-    const modelDownloadUrl = document.querySelector($8d59c42601ba8f61$var$downloadButtonSelector)?.getAttribute("href");
+const $e7c35bcf17ffba9d$var$startModelDownload = async ()=>{
+    await (0, $06cbd27ebbbf5f2a$export$1a1c301579a08d1e)($e7c35bcf17ffba9d$var$downloadButtonSelector);
+    const modelDownloadUrl = document.querySelector($e7c35bcf17ffba9d$var$downloadButtonSelector)?.getAttribute("href");
     if (modelDownloadUrl) window.open(modelDownloadUrl, "_blank");
 };
-const $8d59c42601ba8f61$export$53039d7a8d9d297e = (buttonIdSelector, location)=>async ()=>{
+const $e7c35bcf17ffba9d$export$53039d7a8d9d297e = (buttonIdSelector, location)=>async ()=>{
         try {
-            const button = await (0, $0fccda82d33153ac$export$1a1c301579a08d1e)(buttonIdSelector);
+            const button = await (0, $06cbd27ebbbf5f2a$export$1a1c301579a08d1e)(buttonIdSelector);
             if (!button) return;
-            button.innerText = (0, $966fc19e1e9bc989$export$731a191155ffa90a)("startingDownload");
-            const { modelId: modelId , modelName: modelName , imageList: imageList , modelVersionId: modelVersionId , modelVersionName: modelVersionName , modelInfo: modelInfo  } = await $8d59c42601ba8f61$var$getModeInfoAndImageList(location);
-            const filenameFormat = (0, $65c0cd2b2ec0988a$export$44487a86467333c3)("modelPreviewFilenameFormat");
+            button.innerText = (0, $3a42d740ecc81982$export$731a191155ffa90a)("startingDownload");
+            const { modelId: modelId , modelName: modelName , imageList: imageList , modelVersionId: modelVersionId , modelVersionName: modelVersionName , modelInfo: modelInfo  } = await $e7c35bcf17ffba9d$var$getModeInfoAndImageList(location);
+            const filenameFormat = (0, $2e4159cc418f5166$export$44487a86467333c3)("modelPreviewFilenameFormat");
             const filename = filenameFormat.replace("{modelId}", `${modelId ?? ""}`).replace("{modelName}", modelName).replace("{modelVersionId}", `${modelVersionId}`).replace("{modelVersionName}", modelVersionName);
-            await (0, $afa9fb8bb7aaf429$export$b6bc24646229cedd)((0, $0fccda82d33153ac$export$bb64a7e3f0f28938)(button))(filename, modelInfo)(imageList.map((x)=>({
+            await (0, $c5da2b8a14082d8b$export$b6bc24646229cedd)((0, $06cbd27ebbbf5f2a$export$bb64a7e3f0f28938)(button))(filename, modelInfo)(imageList.map((x)=>({
                     ...x,
                     url: x.url.replace(/width=\d*/, `width=${x.width},optimized=true`)
                 })));
-            (0, $0fccda82d33153ac$export$92ecf871022de94d)(button, ` ${imageList.length} / ${imageList.length} ${(0, $966fc19e1e9bc989$export$4d9f09007b08c03d)()}`);
+            (0, $06cbd27ebbbf5f2a$export$92ecf871022de94d)(button, ` ${imageList.length} / ${imageList.length} ${(0, $3a42d740ecc81982$export$4d9f09007b08c03d)()}`);
             return {
                 imageList: imageList,
                 modelName: modelName
@@ -13035,6 +13327,7 @@ const $8d59c42601ba8f61$export$53039d7a8d9d297e = (buttonIdSelector, location)=>
             alert(error.message);
         }
     };
+<<<<<<< HEAD
 const $8d59c42601ba8f61$export$c8adea586cc90d44 = ()=>{
     const g = document.querySelector("#gallery");
     if (!g) return;
@@ -13056,6 +13349,19 @@ const $8d59c42601ba8f61$export$8b03a564a450b487 = async ()=>{
     button.setAttribute("style", (0, $292fc7f9388c589b$export$fd4d27a26b4854f3));
     if ((0, $65c0cd2b2ec0988a$export$44487a86467333c3)("downloadModelAsWell")) // start downloading a model
     button.addEventListener("click", $8d59c42601ba8f61$var$startModelDownload);
+=======
+const $e7c35bcf17ffba9d$export$8b03a564a450b487 = async (href)=>{
+    const container = await (0, $06cbd27ebbbf5f2a$export$4a2d37b006372286)();
+    const buttonIdSelector = `#${$e7c35bcf17ffba9d$var$BUTTON_ID}`;
+    (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)(buttonIdSelector)?.remove();
+    const button = (0, $98f6748fc1e9fd4e$export$cdda5b1be25f9499)();
+    button.addEventListener("click", $e7c35bcf17ffba9d$export$53039d7a8d9d297e(buttonIdSelector, href));
+    button.id = $e7c35bcf17ffba9d$var$BUTTON_ID;
+    button.innerText = (0, $3a42d740ecc81982$export$d397f86d22f413e8)();
+    button.setAttribute("style", (0, $b7e86ce3c5d2c83d$export$fd4d27a26b4854f3));
+    if ((0, $2e4159cc418f5166$export$44487a86467333c3)("downloadModelAsWell")) // start downloading a model
+    button.addEventListener("click", $e7c35bcf17ffba9d$var$startModelDownload);
+>>>>>>> main
     container?.appendChild(button);
     // hide gallery button
     const hideGallery = document.createElement("button");
@@ -13067,8 +13373,12 @@ const $8d59c42601ba8f61$export$8b03a564a450b487 = async ()=>{
 };
 
 
+/**
+ * domain related
+ */ const $afea35e19f749eec$export$b56cc0ee0a85f41e = (url, width, name)=>`https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/${url}/width=${width},optimized=true/${name ?? ""}`;
 
 
+<<<<<<< HEAD
 const $9a7e0bde1a099030$var$BUTTON_ID = "download-all-gallery-images-and-prompts";
 const $9a7e0bde1a099030$export$9473b35530fb3701 = (buttonIdSelector, modelId, postId, modelName, onFinishFn, downLoadedImgList)=>async ()=>{
         try {
@@ -13077,40 +13387,53 @@ const $9a7e0bde1a099030$export$9473b35530fb3701 = (buttonIdSelector, modelId, po
             const downloadedImgIds = downLoadedImgList?.map(({ id: id  })=>id) ?? [];
             const imgList = _imgList.filter(({ id: id  })=>!downloadedImgIds.includes(id));
             const button = await (0, $0fccda82d33153ac$export$1a1c301579a08d1e)(buttonIdSelector);
+=======
+
+
+
+
+
+
+const $d19ac646c457e538$var$BUTTON_ID = "download-all-gallery-images-and-prompts";
+const $d19ac646c457e538$var$downloadGalleryImagesAndPrompts = (buttonIdSelector, modelId, postId, modelName, onFinishFn)=>async ()=>{
+        try {
+            const imgList = await (0, $c3454b9ab01d445e$export$c6ace8a485846f08)(modelId, postId);
+            const button = await (0, $06cbd27ebbbf5f2a$export$1a1c301579a08d1e)(buttonIdSelector);
+>>>>>>> main
             if (!button) return;
             button.setAttribute("data-state", "in-progress");
-            button.innerText = (0, $966fc19e1e9bc989$export$731a191155ffa90a)("startingDownload");
-            const filenameFormat = (0, $65c0cd2b2ec0988a$export$44487a86467333c3)("galleryFilenameFormat");
+            button.innerText = (0, $3a42d740ecc81982$export$731a191155ffa90a)("startingDownload");
+            const filenameFormat = (0, $2e4159cc418f5166$export$44487a86467333c3)("galleryFilenameFormat");
             const filename = filenameFormat.replace("{modelId}", modelId ?? "").replace("{modelName}", modelName ?? "").replace("{postId}", postId);
-            await (0, $afa9fb8bb7aaf429$export$b6bc24646229cedd)((0, $0fccda82d33153ac$export$bb64a7e3f0f28938)(button))(filename)(imgList);
+            await (0, $c5da2b8a14082d8b$export$b6bc24646229cedd)((0, $06cbd27ebbbf5f2a$export$bb64a7e3f0f28938)(button))(filename)(imgList);
             if (onFinishFn) onFinishFn();
-            (0, $0fccda82d33153ac$export$92ecf871022de94d)(button, ` ${imgList.length} / ${imgList.length} ${(0, $966fc19e1e9bc989$export$4d9f09007b08c03d)()}`);
+            (0, $06cbd27ebbbf5f2a$export$92ecf871022de94d)(button, ` ${imgList.length} / ${imgList.length} ${(0, $3a42d740ecc81982$export$4d9f09007b08c03d)()}`);
         } catch (error) {
             alert(error.message);
         }
     };
-const $9a7e0bde1a099030$var$downloadSingleImagesAndPrompts = (buttonIdSelector)=>async ()=>{
+const $d19ac646c457e538$var$downloadSingleImagesAndPrompts = (buttonIdSelector)=>async ()=>{
         try {
-            const data = (0, $0fccda82d33153ac$export$ce1398d1c23018fa)();
+            const data = (0, $06cbd27ebbbf5f2a$export$ce1398d1c23018fa)();
             const model = data.props.pageProps.trpcState.json.queries[0];
             const { id: id , url: url , meta: meta , width: width , name: name , hash: hash  } = model.state.data;
             if (!url || !width || !name) throw new Error(`image properties not found: url ${url}, width ${width}, name ${name}`);
-            const imgUrl = (0, $0fccda82d33153ac$export$b56cc0ee0a85f41e)(url, width, name);
-            const button = await (0, $0fccda82d33153ac$export$1a1c301579a08d1e)(buttonIdSelector);
+            const imgUrl = (0, $afea35e19f749eec$export$b56cc0ee0a85f41e)(url, width, name);
+            const button = await (0, $06cbd27ebbbf5f2a$export$1a1c301579a08d1e)(buttonIdSelector);
             if (!button) return;
-            await (0, $afa9fb8bb7aaf429$export$b6bc24646229cedd)((0, $0fccda82d33153ac$export$bb64a7e3f0f28938)(button))(`imageId_${id}.zip`)([
+            await (0, $c5da2b8a14082d8b$export$b6bc24646229cedd)((0, $06cbd27ebbbf5f2a$export$bb64a7e3f0f28938)(button))(`imageId_${id}.zip`)([
                 {
                     url: imgUrl,
                     hash: hash,
                     meta: meta
                 }
             ]);
-            (0, $0fccda82d33153ac$export$92ecf871022de94d)(button, (0, $966fc19e1e9bc989$export$4d9f09007b08c03d)());
+            (0, $06cbd27ebbbf5f2a$export$92ecf871022de94d)(button, (0, $3a42d740ecc81982$export$4d9f09007b08c03d)());
         } catch (error) {
             alert(error.message);
         }
     };
-const $9a7e0bde1a099030$var$extractIdsFromUrl = (href)=>{
+const $d19ac646c457e538$var$extractIdsFromUrl = (href)=>{
     const matchedModel = href.match(/modelId=(?<modelId>\d*)/);
     const modelId = matchedModel?.groups?.modelId || null;
     const matchedModelVersion = href.match(/modelVersionId=(?<modelVersionId>\d*)/);
@@ -13129,14 +13452,15 @@ const $9a7e0bde1a099030$var$extractIdsFromUrl = (href)=>{
         imageId: imageId
     };
 };
-const $9a7e0bde1a099030$var$extractModelNameFromNextData = ()=>{
-    const nextData = (0, $0fccda82d33153ac$export$ce1398d1c23018fa)();
+const $d19ac646c457e538$var$extractModelNameFromNextData = ()=>{
+    const nextData = (0, $06cbd27ebbbf5f2a$export$ce1398d1c23018fa)();
     const modelName = nextData.props.pageProps?.trpcState?.json?.queries[0]?.state?.data?.meta?.Model ?? "undefined";
-    if ((0, $65c0cd2b2ec0988a$export$44487a86467333c3)("preferModelNameToLoRAName")) return modelName;
+    if ((0, $2e4159cc418f5166$export$44487a86467333c3)("preferModelNameToLoRAName")) return modelName;
     // Apparently a key starts with double quotation(") is a LoRA name.
     const keys = Object.keys(nextData.props.pageProps?.trpcState?.json?.queries[0]?.state?.data?.meta ?? {}).filter((x)=>x.startsWith('"'));
     return keys.length > 0 ? keys.map((x)=>x.replace('"', "")).join(",") : "undefined";
 };
+<<<<<<< HEAD
 const $9a7e0bde1a099030$export$5fd187c0d03a79e = async ()=>{
     const buttonIdSelector = `#${$9a7e0bde1a099030$var$BUTTON_ID}`;
     const _button = document.querySelector(buttonIdSelector);
@@ -13145,33 +13469,50 @@ const $9a7e0bde1a099030$export$5fd187c0d03a79e = async ()=>{
     const { modelVersionId: modelVersionId , prioritizedUserId: prioritizedUserId , modelId: modelId , postId: postId , imageId: imageId  } = $9a7e0bde1a099030$var$extractIdsFromUrl(window.location.href);
     const modelName = $9a7e0bde1a099030$var$extractModelNameFromNextData();
     const button = document.createElement("button");
+=======
+const $d19ac646c457e538$export$5fd187c0d03a79e = async (href)=>{
+    const buttonIdSelector = `#${$d19ac646c457e538$var$BUTTON_ID}`;
+    const _button = (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)(buttonIdSelector);
+    if (_button && _button.getAttribute("data-state") !== (0, $c08fa57dad1b6e82$export$5d7ba7f5550f99d1).ready) return;
+    _button?.remove();
+    const { modelVersionId: modelVersionId , prioritizedUserId: prioritizedUserId , modelId: modelId , postId: postId , imageId: imageId  } = $d19ac646c457e538$var$extractIdsFromUrl(href);
+    const modelName = $d19ac646c457e538$var$extractModelNameFromNextData();
+    const button = (0, $98f6748fc1e9fd4e$export$9b6d6ca62970729f)();
+>>>>>>> main
     const onFinishFn = ()=>{
-        if ((0, $65c0cd2b2ec0988a$export$44487a86467333c3)("galleryAutoDownload")) document.title = "✅ " + document.title;
+        if ((0, $2e4159cc418f5166$export$44487a86467333c3)("galleryAutoDownload")) (0, $98f6748fc1e9fd4e$export$420a7f2fd9cad6f6)("✅ " + (0, $98f6748fc1e9fd4e$export$70d1bf7729efff40)());
     };
     const eventListener = (()=>{
         // open gallery from model preview images
-        if (modelVersionId && prioritizedUserId) return (0, $8d59c42601ba8f61$export$53039d7a8d9d297e)(buttonIdSelector, window.location.href);
+        if (modelVersionId && prioritizedUserId) return (0, $e7c35bcf17ffba9d$export$53039d7a8d9d297e)(buttonIdSelector, href);
         // open gallery from model gallery areas
+<<<<<<< HEAD
         if (modelId && postId) return $9a7e0bde1a099030$export$9473b35530fb3701(buttonIdSelector, modelId, postId, modelName, onFinishFn);
         // open gallery from post pages
         if (postId) return $9a7e0bde1a099030$export$9473b35530fb3701(buttonIdSelector, null, postId, modelName, onFinishFn);
         if (imageId) return $9a7e0bde1a099030$var$downloadSingleImagesAndPrompts(buttonIdSelector);
+=======
+        if (modelId && postId) return $d19ac646c457e538$var$downloadGalleryImagesAndPrompts(buttonIdSelector, modelId, postId, modelName, onFinishFn);
+        // open gallery from post pages
+        if (postId) return $d19ac646c457e538$var$downloadGalleryImagesAndPrompts(buttonIdSelector, null, postId, modelName, onFinishFn);
+        if (imageId) return $d19ac646c457e538$var$downloadSingleImagesAndPrompts(buttonIdSelector);
+>>>>>>> main
         return null;
     })();
     if (!eventListener) throw new Error("No necessary parameters found");
     button.addEventListener("click", eventListener);
-    button.id = $9a7e0bde1a099030$var$BUTTON_ID;
-    button.innerText = (0, $966fc19e1e9bc989$export$d397f86d22f413e8)();
-    button.setAttribute("style", (0, $292fc7f9388c589b$export$f272ae7639e11e3));
-    button.setAttribute("data-state", (0, $a5923d2edfc72bc5$export$5d7ba7f5550f99d1).ready);
-    if (document.querySelector(".mantine-Modal-modal")) {
-        const parentNode = await (0, $0fccda82d33153ac$export$1a1c301579a08d1e)(".mantine-Modal-modal .mantine-Card-cardSection");
+    button.id = $d19ac646c457e538$var$BUTTON_ID;
+    button.innerText = (0, $3a42d740ecc81982$export$d397f86d22f413e8)();
+    button.setAttribute("style", (0, $b7e86ce3c5d2c83d$export$f272ae7639e11e3));
+    button.setAttribute("data-state", (0, $c08fa57dad1b6e82$export$5d7ba7f5550f99d1).ready);
+    if ((0, $98f6748fc1e9fd4e$export$aea217a45095ce11)(".mantine-Modal-modal")) {
+        const parentNode = await (0, $06cbd27ebbbf5f2a$export$1a1c301579a08d1e)(".mantine-Modal-modal .mantine-Card-cardSection");
         parentNode?.appendChild(button);
-    } else if (!document.querySelector("#gallery")) {
-        const parentNode = await (0, $0fccda82d33153ac$export$1a1c301579a08d1e)("#freezeBlock .mantine-Stack-root");
+    } else if (!(0, $98f6748fc1e9fd4e$export$aea217a45095ce11)("#gallery")) {
+        const parentNode = await (0, $06cbd27ebbbf5f2a$export$1a1c301579a08d1e)("#freezeBlock .mantine-Stack-root");
         parentNode?.appendChild(button);
     }
-    if ((0, $65c0cd2b2ec0988a$export$44487a86467333c3)("galleryAutoDownload") && button.getAttribute("data-state") === (0, $a5923d2edfc72bc5$export$5d7ba7f5550f99d1).ready) setTimeout(()=>{
+    if ((0, $2e4159cc418f5166$export$44487a86467333c3)("galleryAutoDownload") && button.getAttribute("data-state") === (0, $c08fa57dad1b6e82$export$5d7ba7f5550f99d1).ready) setTimeout(()=>{
         button.click();
     }, 0);
 };
@@ -13181,6 +13522,7 @@ const $9a7e0bde1a099030$export$5fd187c0d03a79e = async ()=>{
 
 
 
+<<<<<<< HEAD
 
 
 
@@ -13284,58 +13626,81 @@ const $29e4e9967394a818$var$addModelPreviewDownloadButton = async ()=>{
         await (0, $0fccda82d33153ac$export$3d6ebb5b74790dc2)();
         await (0, $8d59c42601ba8f61$export$8b03a564a450b487)();
         await (0, $2da5569f102e177a$export$3b6a8e903180e269)();
+=======
+const $ca465a359cd2bf87$var$addModelPreviewDownloadButton = async ()=>{
+    const href = window.location.href;
+    try {
+        // await waitForElement('#gallery a[href^="/images"]');
+        // FIXME: adhoc: wait for Nextjs rendering finish
+        await (0, $81ffdad4556cbf55$export$e772c8ff12451969)(2000);
+        if (!href.match(/\/models\/\d*/)) return;
+        (0, $81ffdad4556cbf55$export$bef1f36f5486a6a3)("model");
+        await (0, $06cbd27ebbbf5f2a$export$3d6ebb5b74790dc2)();
+        await (0, $e7c35bcf17ffba9d$export$8b03a564a450b487)(href);
+>>>>>>> main
     } catch (error) {
         alert(error.message);
     }
 };
-const $29e4e9967394a818$var$addGalleryImageDownloadButton = async ()=>{
+const $ca465a359cd2bf87$var$addGalleryImageDownloadButton = async ()=>{
+    const href = window.location.href;
     try {
         // await waitForElement('.mantine-RichTextEditor-root');
         // FIXME: adhoc: wait for Nextjs rendering finish
+<<<<<<< HEAD
         await (0, $0fccda82d33153ac$export$e772c8ff12451969)(1000);
         if (!window.location.href.match(/\/images\/\d*/)) return;
         (0, $0fccda82d33153ac$export$bef1f36f5486a6a3)("gallery");
         await (0, $9a7e0bde1a099030$export$5fd187c0d03a79e)();
+=======
+        await (0, $81ffdad4556cbf55$export$e772c8ff12451969)(2000);
+        if (!href.match(/\/images\/\d*/)) return;
+        (0, $81ffdad4556cbf55$export$bef1f36f5486a6a3)("gallery");
+        await (0, $d19ac646c457e538$export$5fd187c0d03a79e)(href);
+>>>>>>> main
     } catch (error) {
         alert(error.message);
     }
 };
-const $29e4e9967394a818$var$openShowMore = (retry = 5)=>{
+const $ca465a359cd2bf87$var$openShowMore = (retry = 5)=>{
     const showMoreButton = Array.from(document.querySelectorAll("button")).filter((x)=>x.innerHTML.includes("Show More"))[0];
     if (showMoreButton) {
         showMoreButton.click();
         return;
     }
     if (retry > 0) setTimeout(()=>{
-        $29e4e9967394a818$var$openShowMore(retry - 1);
+        $ca465a359cd2bf87$var$openShowMore(retry - 1);
     }, 1000);
 };
-let $29e4e9967394a818$var$prevHref = "";
-const $29e4e9967394a818$var$observer = new MutationObserver(async (_mutationList)=>{
+let $ca465a359cd2bf87$var$prevHref = "";
+const $ca465a359cd2bf87$var$observer = new MutationObserver(async (_mutationList)=>{
     const href = window.location.href;
-    if ($29e4e9967394a818$var$prevHref !== href) {
-        $29e4e9967394a818$var$prevHref = href;
-        await $29e4e9967394a818$var$addModelPreviewDownloadButton();
-        await $29e4e9967394a818$var$addGalleryImageDownloadButton();
+    if ($ca465a359cd2bf87$var$prevHref !== href) {
+        $ca465a359cd2bf87$var$prevHref = href;
+        await $ca465a359cd2bf87$var$addModelPreviewDownloadButton();
+        await $ca465a359cd2bf87$var$addGalleryImageDownloadButton();
     }
 });
-(async function() {
-    $29e4e9967394a818$var$prevHref = window.location.href;
-    (0, $0fccda82d33153ac$export$bef1f36f5486a6a3)("start");
+async function $ca465a359cd2bf87$export$2e2bcd8739ae039() {
+    $ca465a359cd2bf87$var$prevHref = window.location.href;
+    (0, $81ffdad4556cbf55$export$bef1f36f5486a6a3)("start");
     const html = document.querySelector("html");
     if (html) {
-        $29e4e9967394a818$var$observer.observe(html, {
+        $ca465a359cd2bf87$var$observer.observe(html, {
             attributes: true,
             childList: true,
             subtree: true
         });
-        (0, $65c0cd2b2ec0988a$export$3a5abe5201fb331)();
+        (0, $2e4159cc418f5166$export$3a5abe5201fb331)();
     }
     if (window.location.href.match(/\/models\/\d*/)) {
-        await $29e4e9967394a818$var$addModelPreviewDownloadButton();
-        if ((0, $65c0cd2b2ec0988a$export$44487a86467333c3)("openShowMore")) $29e4e9967394a818$var$openShowMore(30);
-    } else if (window.location.href.match(/\/images\/\d*/)) await $29e4e9967394a818$var$addGalleryImageDownloadButton();
-    (0, $0fccda82d33153ac$export$bef1f36f5486a6a3)("done");
-})();
+        await $ca465a359cd2bf87$var$addModelPreviewDownloadButton();
+        if ((0, $2e4159cc418f5166$export$44487a86467333c3)("openShowMore")) $ca465a359cd2bf87$var$openShowMore(30);
+    } else if (window.location.href.match(/\/images\/\d*/)) await $ca465a359cd2bf87$var$addGalleryImageDownloadButton();
+    (0, $81ffdad4556cbf55$export$bef1f36f5486a6a3)("done");
+}
+
+
+(0, $ca465a359cd2bf87$export$2e2bcd8739ae039)();
 
 })();

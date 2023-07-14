@@ -1,14 +1,10 @@
-import { saveAs } from 'file-saver';
-import { BlobWriter, BlobReader, TextReader, ZipWriter } from '@zip.js/zip.js';
-import { chunkArray, sleep } from './utils';
+import { BlobReader, TextReader, ZipWriter } from '@zip.js/zip.js';
+import { getI18nLabel } from '../assets/lang';
 import {
   GalleryImagesResponse,
   ModelResponse,
   ModelVersionResponse,
-  Config,
-} from './types';
-import { getButtonProgressLabel, getI18nLabel } from './lang';
-import { getConfig } from './config_panel';
+} from '../domain/types';
 
 const extractFilebasenameFromImageUrl = (url: string) => {
   const filename = url.split('/').slice(-1)[0];
@@ -71,7 +67,7 @@ export const fetchGalleryData = async (
   username?: string | null
 ) => {
   let url = `${API_URL}/images`;
-  let params = ['limit=20'];
+  const params = ['limit=20'];
 
   if (postId) {
     params.push(`postId=${postId}`);
@@ -133,9 +129,9 @@ export const fetchImg = async (
   }
 };
 
-const fetchImgs =
+export const fetchImgs =
   (zipWriter: ZipWriter<Blob>, addedNames: Set<string>) =>
-  async (imgInfo: { url: string; hash: string; meta: Object }[]) =>
+  async (imgInfo: { url: string; hash: string; meta: unknown }[]) =>
     await Promise.all(
       imgInfo.map(async (x) => {
         const response = await fetchImg(x.url);
@@ -146,7 +142,7 @@ const fetchImgs =
 
         let name =
           extractFilebasenameFromImageUrl(x.url) ||
-          x.hash.replace(/[\;\:\?\*\.]/g, '_');
+          x.hash.replace(/[;:?*.]/g, '_');
         while (addedNames.has(name)) {
           name += '_';
         }
@@ -158,7 +154,7 @@ const fetchImgs =
         await zipWriter.add(filename, new BlobReader(blob));
         addedNames.add(name);
 
-        if (!!x.meta) {
+        if (x.meta) {
           const jsonFilename = name + '.json';
           await zipWriter.add(
             jsonFilename,
@@ -167,57 +163,3 @@ const fetchImgs =
         }
       })
     );
-
-export const createZip =
-  (buttnTextUpdateFn: (text: string) => void | null) =>
-  (zipFilename: string, modelInfo?: Object) =>
-  async (
-    imgInfo: { url: string; hash: string; meta: Object }[]
-  ): Promise<void> => {
-    if (!modelInfo && imgInfo.length === 0) {
-      return;
-    }
-    const blobWriter = new BlobWriter(`application/zip`);
-    const zipWriter = new ZipWriter(blobWriter);
-
-    if (modelInfo) {
-      await zipWriter.add(
-        'model_info.json',
-        new TextReader(JSON.stringify(modelInfo, null, '\t'))
-      );
-    }
-
-    const addedNames = new Set<string>();
-    const predicate = fetchImgs(zipWriter, addedNames);
-    let counter = 0;
-    for (const xs of chunkArray(imgInfo)) {
-      counter += xs.length;
-      if (buttnTextUpdateFn) {
-        buttnTextUpdateFn(
-          ` ${counter} / ${imgInfo.length} ${getButtonProgressLabel()} `
-        );
-      }
-
-      try {
-        await predicate(xs);
-      } catch (e: unknown) {
-        console.log('error: ', (e as Error).message);
-        if (!getConfig('continueWithFetchError')) {
-          zipWriter.close(undefined, {});
-          throw e;
-        }
-      }
-      await sleep(500);
-    }
-
-    saveAs(await zipWriter.close(undefined, {}), zipFilename);
-  };
-
-export const saveConfig = (config: Config) => {
-  localStorage.setItem('config', JSON.stringify(config));
-};
-
-export const loadConfig = (): Config => {
-  const config = localStorage.getItem('config');
-  return config ? JSON.parse(config) : {};
-};
