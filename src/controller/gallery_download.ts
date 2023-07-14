@@ -5,7 +5,7 @@ import {
 } from '../assets/lang';
 import { galleryButtonStyle } from '../assets/styles';
 import { downloadImagesAndPrompts } from '../controller/model_image_download';
-import { buildImgUrl } from '../domain/rules';
+import { buildImgUrl } from '../domain/logic';
 import { ButtonState } from '../domain/types';
 
 import { getConfig } from '../infra/config_panel';

@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 
-import { buildImgUrl } from './rules';
+import { buildImgUrl } from './logic';
 
 describe(' buildImgUrl ', () => {
   test('with name', () => {
