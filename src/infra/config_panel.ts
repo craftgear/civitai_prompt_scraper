@@ -1,8 +1,9 @@
+// eslint-disable-next-line
 declare var GM_registerMenuCommand: any;
-import { saveConfig, loadConfig } from './infra';
-import { getI18nLabel } from './lang';
-import { configPanelStyle } from './styles';
-import { InputField, Config, ConfigKey } from './types';
+import { getI18nLabel } from '../assets/lang';
+import { configPanelStyle } from '../assets/styles';
+import { Config, ConfigKey, InputField } from '../domain/types';
+import { loadConfig, saveConfig } from '../infra/file';
 
 const fields = [
   {
@@ -45,7 +46,8 @@ const fields = [
     desc: `${getI18nLabel(
       'availableVariables'
     )} {modelId}, {modelName}, {modelVersionName}, {modelVersionId}`,
-    style: ' padding-top: 0.5rem; border-top: 1px solid #ededef; margin-top: 0.5rem; ',
+    style:
+      ' padding-top: 0.5rem; border-top: 1px solid #ededef; margin-top: 0.5rem; ',
   },
   {
     type: 'text',
@@ -55,7 +57,8 @@ const fields = [
     desc: `${getI18nLabel(
       'availableVariables'
     )} {modelName}, {modelId}, {postId}`,
-    style: ' padding-top: 0.5rem; border-top: 1px solid #ededef; margin-top: 0.5rem; ',
+    style:
+      ' padding-top: 0.5rem; border-top: 1px solid #ededef; margin-top: 0.5rem; ',
   },
   {
     type: 'checkbox',
@@ -115,8 +118,6 @@ const addInputs = (parent: HTMLElement, fields: InputField[]) => {
         div.appendChild(inputEl);
         break;
       }
-      default: {
-      }
     }
     parent.appendChild(div);
   });
@@ -133,7 +134,7 @@ const getValuesOfInputs = (fields: InputField[]) => {
 };
 
 const addButtons = (parent: HTMLDivElement) => {
-  var saveButton = document.createElement('button');
+  const saveButton = document.createElement('button');
   saveButton.textContent = getI18nLabel('saveConfig');
   saveButton.setAttribute(
     'style',
@@ -145,7 +146,7 @@ const addButtons = (parent: HTMLDivElement) => {
     parent.style.display = 'none';
   });
 
-  var cancelButton = document.createElement('button');
+  const cancelButton = document.createElement('button');
   cancelButton.textContent = getI18nLabel('cancelConfig');
   cancelButton.setAttribute('style', 'padding: 0.5rem 0.5rem;');
   cancelButton.addEventListener('click', function () {
@@ -166,7 +167,7 @@ const addButtons = (parent: HTMLDivElement) => {
 
 const buildSettingsPanel = (localConfigValues: Config) => {
   // 設定パネルを作成
-  var panel = document.createElement('div');
+  const panel = document.createElement('div');
   panel.setAttribute('style', configPanelStyle);
 
   const title = document.createElement('h6');

@@ -1,16 +1,23 @@
-import { ButtonState } from './types';
-import { galleryButtonStyle } from './styles';
 import {
-  waitForElement,
+  getButtonCompleteLabel,
+  getButtonLabel,
+  getI18nLabel,
+} from '../assets/lang';
+import { galleryButtonStyle } from '../assets/styles';
+import { downloadImagesAndPrompts } from '../controller/model_image_download';
+import { buildImgUrl } from '../domain/rules';
+import { ButtonState } from '../domain/types';
+
+import { getConfig } from '../infra/config_panel';
+import { createButton, getTitle, selector, setTitle } from '../infra/dom';
+import { createZip } from '../infra/file';
+import { fetchGalleryData } from '../infra/req';
+import {
+  parseNextData,
   replaceWithDisabledButton,
   updateButtonText,
-  parseNextData,
-} from './utils';
-import { getI18nLabel, getButtonLabel, getButtonCompleteLabel } from './lang';
-import { fetchGalleryData, createZip } from './infra';
-import { downloadImagesAndPrompts } from './model_image_download';
-import { getConfig } from './config_panel';
-import { buildImgUrl } from './utils';
+  waitForElement,
+} from '../utils/dom';
 
 const BUTTON_ID = 'download-all-gallery-images-and-prompts';
 
@@ -20,7 +27,7 @@ const downloadGalleryImagesAndPrompts =
     modelId: string | null,
     postId: string,
     modelName: string | null,
-    onFinishFn?: Function
+    onFinishFn?: () => void
   ) =>
   async () => {
     try {
@@ -127,30 +134,31 @@ const extractModelNameFromNextData = () => {
     : 'undefined';
 };
 
-export const addGalleryDownloadButton = async () => {
+export const addGalleryDownloadButton = async (href: string) => {
   const buttonIdSelector = `#${BUTTON_ID}`;
-  const _button = document.querySelector(buttonIdSelector);
+  const _button = selector(buttonIdSelector);
   if (_button && _button.getAttribute('data-state') !== ButtonState.ready) {
     return;
   }
   _button?.remove();
 
   const { modelVersionId, prioritizedUserId, modelId, postId, imageId } =
-    extractIdsFromUrl(window.location.href);
+    extractIdsFromUrl(href);
 
   const modelName = extractModelNameFromNextData();
 
-  const button = document.createElement('button');
+  const button = createButton();
 
   const onFinishFn = () => {
     if (getConfig('galleryAutoDownload')) {
-      document.title = '✅ ' + document.title;
+      setTitle('✅ ' + getTitle());
     }
   };
+
   const eventListener = (() => {
     // open gallery from model preview images
     if (modelVersionId && prioritizedUserId) {
-      return downloadImagesAndPrompts(buttonIdSelector, window.location.href);
+      return downloadImagesAndPrompts(buttonIdSelector, href);
     }
     // open gallery from model gallery areas
     if (modelId && postId) {
@@ -188,12 +196,12 @@ export const addGalleryDownloadButton = async () => {
   button.innerText = getButtonLabel();
   button.setAttribute('style', galleryButtonStyle);
   button.setAttribute('data-state', ButtonState.ready);
-  if (document.querySelector('.mantine-Modal-modal')) {
+  if (selector('.mantine-Modal-modal')) {
     const parentNode = await waitForElement(
       '.mantine-Modal-modal .mantine-Card-cardSection'
     );
     parentNode?.appendChild(button);
-  } else if (!document.querySelector('#gallery')) {
+  } else if (!selector('#gallery')) {
     const parentNode = await waitForElement('#freezeBlock .mantine-Stack-root');
     parentNode?.appendChild(button);
   }

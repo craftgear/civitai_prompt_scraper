@@ -1,17 +1,23 @@
-import { buttonStyle } from './styles';
 import {
-  waitForElement,
+  getButtonCompleteLabel,
+  getButtonLabel,
+  getI18nLabel,
+} from '../assets/lang';
+import { buttonStyle } from '../assets/styles';
+
+import { getConfig } from '../infra/config_panel';
+import { createLink, selector } from '../infra/dom';
+import { createZip } from '../infra/file';
+import {
+  fetchGalleryData,
+  fetchModelInfoByModleIdOrModelVersionId,
+} from '../infra/req';
+import {
+  getButtonContainerNode,
   replaceWithDisabledButton,
   updateButtonText,
-  getButtonContainerNode,
-} from './utils';
-import { getI18nLabel, getButtonLabel, getButtonCompleteLabel } from './lang';
-import {
-  createZip,
-  fetchModelInfoByModleIdOrModelVersionId,
-  fetchGalleryData,
-} from './infra';
-import { getConfig } from './config_panel';
+  waitForElement,
+} from '../utils/dom';
 
 const BUTTON_ID = 'download-all-images-and-prompts';
 const downloadButtonSelector = "a[href^='/api/download/models/']";
@@ -52,7 +58,7 @@ const getModeInfoAndImageList = async (href: string) => {
     })?.name || 'no_version_name';
 
   // use fetchGalleryData instead of fetchModelVersionData,
-  // due to modelVersion api returns first 10 images of preview.
+  // due to modelVersion api returns only first 10 images of preview.
   const imageList = await fetchGalleryData(
     `${modelId}`,
     null,
@@ -125,15 +131,15 @@ export const downloadImagesAndPrompts =
     }
   };
 
-export const addModelImagesDownloadButton = async () => {
+export const addModelImagesDownloadButton = async (href: string) => {
   const container = await getButtonContainerNode();
   const buttonIdSelector = `#${BUTTON_ID}`;
-  document.querySelector(buttonIdSelector)?.remove();
+  selector(buttonIdSelector)?.remove();
 
-  const button = document.createElement('a');
+  const button = createLink();
   button.addEventListener(
     'click',
-    downloadImagesAndPrompts(buttonIdSelector, window.location.href)
+    downloadImagesAndPrompts(buttonIdSelector, href)
   );
   button.id = BUTTON_ID;
   button.innerText = getButtonLabel();

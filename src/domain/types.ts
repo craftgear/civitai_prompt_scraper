@@ -1,3 +1,6 @@
+/**
+ * api responses
+ */
 type ModelVersionFile = {
   name: string;
   id: number;
@@ -124,6 +127,7 @@ type ImageStats = {
   heartCount: number;
   commentCount: number;
 };
+
 export type GalleryImagesResponse = {
   items: {
     id: number;
@@ -151,6 +155,9 @@ export type NextData = {
   innerText: string;
 };
 
+/**
+ * config panel
+ */
 export type InputField = {
   type: string;
   name: string;
@@ -165,10 +172,22 @@ export type Config = {
 } & {
   [key in 'modelPreviewFilenameFormat' | 'galleryFilenameFormat']: string;
 };
+
 export type ConfigKey = keyof Config;
 
+/**
+ * DOM
+ */
 export enum ButtonState {
   ready = 'ready',
   inProgress = 'in-progress',
   done = 'done',
 }
+
+export type Selector = (x: string) => Element | null;
+export type SelectorAll = (x: string) => NodeList;
+export type CreateDiv = () => HTMLDivElement;
+export type CreateButton = () => HTMLButtonElement;
+export type CreateLink = () => HTMLAnchorElement;
+export type SetTitle = (x: string) => void;
+export type GetTitle = () => string;
