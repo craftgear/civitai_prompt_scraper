@@ -12960,17 +12960,48 @@ const $06cbd27ebbbf5f2a$export$5ffcb0107c13639c = (retry = 5)=>{
     if (el?.parentElement?.parentElement?.parentElement?.parentElement) el?.parentElement?.parentElement?.parentElement?.parentElement?.remove();
     else setTimeout(()=>{
         $06cbd27ebbbf5f2a$export$5ffcb0107c13639c(retry - 1);
-    }, 1000);
+    }, 500);
+};
+const $06cbd27ebbbf5f2a$export$260b7aeca61b2fed = (retry = 5)=>{
+    const el = Array.from(document.querySelectorAll(".mantine-Container-root h2")).filter((x)=>x.innerHTML.includes("Discussion"))[0];
+    if (el?.parentElement?.parentElement?.parentElement?.parentElement) el?.parentElement?.parentElement?.parentElement?.parentElement?.remove();
+    else setTimeout(()=>{
+        $06cbd27ebbbf5f2a$export$260b7aeca61b2fed(retry - 1);
+    }, 500);
 };
 const $06cbd27ebbbf5f2a$export$980dc319601fa7a6 = (retry = 5)=>{
     const el = document.querySelector("main");
     if (!el) {
         setTimeout(()=>{
             $06cbd27ebbbf5f2a$export$980dc319601fa7a6(retry - 1);
-        }, 1000);
+        }, 500);
         return;
     }
     el.style.paddingBottom = "0";
+};
+const $06cbd27ebbbf5f2a$var$GALLERY_HIDDEN_HIGHT = "300px";
+const $06cbd27ebbbf5f2a$export$a2488c4469b72767 = ()=>{
+    const g = (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)("#gallery");
+    if (!g) return;
+    g.style.height = "auto";
+    return;
+};
+const $06cbd27ebbbf5f2a$export$2da3e68033eaa011 = ()=>{
+    const g = (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)("#gallery");
+    if (!g) return;
+    g.style.overflow = "hidden";
+    g.style.height = $06cbd27ebbbf5f2a$var$GALLERY_HIDDEN_HIGHT;
+    return;
+};
+const $06cbd27ebbbf5f2a$export$3ff3f28c173b1fa2 = ()=>{
+    const g = (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)("#gallery");
+    if (!g) return;
+    g.style.overflow = "hidden";
+    if (g.style.height === $06cbd27ebbbf5f2a$var$GALLERY_HIDDEN_HIGHT) {
+        g.style.height = "auto";
+        return;
+    }
+    g.style.height = $06cbd27ebbbf5f2a$var$GALLERY_HIDDEN_HIGHT;
 };
 
 
@@ -13025,16 +13056,6 @@ const $e7c35bcf17ffba9d$export$53039d7a8d9d297e = (buttonIdSelector, location)=>
             alert(error.message);
         }
     };
-const $e7c35bcf17ffba9d$export$c8adea586cc90d44 = ()=>{
-    const g = document.querySelector("#gallery");
-    if (!g) return;
-    g.style.overflow = "hidden";
-    if (g.style.height === "700px") {
-        g.style.height = "auto";
-        return;
-    }
-    g.style.height = "700px";
-};
 const $e7c35bcf17ffba9d$export$8b03a564a450b487 = async (href)=>{
     const container = await (0, $06cbd27ebbbf5f2a$export$4a2d37b006372286)();
     const buttonIdSelector = `#${$e7c35bcf17ffba9d$var$BUTTON_ID}`;
@@ -13047,13 +13068,13 @@ const $e7c35bcf17ffba9d$export$8b03a564a450b487 = async (href)=>{
     if ((0, $2e4159cc418f5166$export$44487a86467333c3)("downloadModelAsWell")) // start downloading a model
     button.addEventListener("click", $e7c35bcf17ffba9d$var$startModelDownload);
     container?.appendChild(button);
-    // hide gallery button
-    const hideGallery = document.createElement("button");
-    hideGallery.innerHTML = "x";
-    hideGallery.setAttribute("style", "color: silver; border: none;");
-    hideGallery.addEventListener("click", $e7c35bcf17ffba9d$export$c8adea586cc90d44);
+    // show/hide gallery button
+    const xGallery = document.createElement("button");
+    xGallery.innerHTML = "x";
+    xGallery.setAttribute("style", "color: silver; border: none;");
+    xGallery.addEventListener("click", (0, $06cbd27ebbbf5f2a$export$3ff3f28c173b1fa2));
     const h2 = document.querySelector("#gallery h2");
-    if (h2) h2.parentNode?.appendChild(hideGallery);
+    if (h2) h2.parentNode?.appendChild(xGallery);
 };
 
 
@@ -13237,10 +13258,12 @@ const $d0863934825ddb3b$var$downloadAllModelRelatedFiles = (buttonIdSelector)=>a
         return;
     };
 const $d0863934825ddb3b$export$264fba47316a17c2 = async (href)=>{
+    (0, $06cbd27ebbbf5f2a$export$2da3e68033eaa011)();
     (0, $06cbd27ebbbf5f2a$export$5bc69941fea37f21)();
     (0, $06cbd27ebbbf5f2a$export$d450a001006e5818)();
     (0, $06cbd27ebbbf5f2a$export$5ffcb0107c13639c)();
     // deleteMainPaddingBottom();
+    (0, $06cbd27ebbbf5f2a$export$260b7aeca61b2fed)();
     const parentNode = await (0, $06cbd27ebbbf5f2a$export$4a2d37b006372286)();
     const buttonIdSelector = `#${$d0863934825ddb3b$var$BUTTON_ID}`;
     document.querySelector(buttonIdSelector)?.remove();
@@ -13251,7 +13274,7 @@ const $d0863934825ddb3b$export$264fba47316a17c2 = async (href)=>{
     button.setAttribute("style", (0, $b7e86ce3c5d2c83d$export$7ec3146dae3421e3));
     // start downloading a model
     button.addEventListener("click", async ()=>{
-        (0, $e7c35bcf17ffba9d$export$c8adea586cc90d44)();
+        (0, $06cbd27ebbbf5f2a$export$a2488c4469b72767)();
         await (0, $06cbd27ebbbf5f2a$export$1a1c301579a08d1e)($d0863934825ddb3b$var$downloadButtonSelector);
         const modelDownloadUrl = document.querySelector($d0863934825ddb3b$var$downloadButtonSelector)?.getAttribute("href");
         const fileSizeText = document.querySelector($d0863934825ddb3b$var$downloadButtonSelector)?.innerHTML ?? "";
@@ -13261,7 +13284,6 @@ const $d0863934825ddb3b$export$264fba47316a17c2 = async (href)=>{
         }, 0);
     });
     if (parentNode) parentNode.appendChild(button);
-    (0, $e7c35bcf17ffba9d$export$c8adea586cc90d44)();
 };
 
 

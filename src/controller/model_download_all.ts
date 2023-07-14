@@ -7,8 +7,11 @@ import {
 import {
   darkenTextColor,
   deleteCreateButton,
+  deleteDiscussion,
   deleteSuggestedResources,
   getButtonContainerNode,
+  hideGallery,
+  openGallery,
   replaceWithDisabledButton,
   waitForElement,
 } from '../utils/dom';
@@ -18,10 +21,7 @@ const BUTTON_ID = 'download-all-model-related-files';
 const downloadButtonSelector = "a[href^='/api/download/models/']";
 
 import { downloadGalleryImagesAndPrompts } from './gallery_download';
-import {
-  downloadImagesAndPrompts,
-  toggleGallary,
-} from './model_image_download';
+import { downloadImagesAndPrompts } from './model_image_download';
 
 const getGalleryModelIdAndPostId = (href: string) => {
   const hrefModelId = href.match(/modelId=(?<modelId>\d*)/)?.groups?.modelId;
@@ -114,10 +114,12 @@ const downloadAllModelRelatedFiles = (buttonIdSelector: string) => async () => {
 };
 
 export const addModelDownloadAllButton = async (href: string) => {
+  hideGallery();
   darkenTextColor();
   deleteCreateButton();
   deleteSuggestedResources();
   // deleteMainPaddingBottom();
+  deleteDiscussion();
 
   const parentNode = await getButtonContainerNode();
 
@@ -135,7 +137,7 @@ export const addModelDownloadAllButton = async (href: string) => {
 
   // start downloading a model
   button.addEventListener('click', async () => {
-    toggleGallary();
+    openGallery();
     await waitForElement(downloadButtonSelector);
     const modelDownloadUrl = document
       .querySelector(downloadButtonSelector)
@@ -157,6 +159,4 @@ export const addModelDownloadAllButton = async (href: string) => {
   if (parentNode) {
     parentNode.appendChild(button);
   }
-
-  toggleGallary();
 };

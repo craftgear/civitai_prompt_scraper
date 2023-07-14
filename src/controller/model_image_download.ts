@@ -15,6 +15,7 @@ import {
 import {
   getButtonContainerNode,
   replaceWithDisabledButton,
+  toggleGallery,
   updateButtonText,
   waitForElement,
 } from '../utils/dom';
@@ -131,19 +132,6 @@ export const downloadImagesAndPrompts =
     }
   };
 
-export const toggleGallary = () => {
-  const g: HTMLElement | null = document.querySelector('#gallery');
-  if (!g) {
-    return;
-  }
-  g.style.overflow = 'hidden';
-  if (g.style.height === '700px') {
-    g.style.height = 'auto';
-    return;
-  }
-  g.style.height = '700px';
-};
-
 export const addModelImagesDownloadButton = async (href: string) => {
   const container = await getButtonContainerNode();
   const buttonIdSelector = `#${BUTTON_ID}`;
@@ -165,13 +153,13 @@ export const addModelImagesDownloadButton = async (href: string) => {
 
   container?.appendChild(button);
 
-  // hide gallery button
-  const hideGallery = document.createElement('button');
-  hideGallery.innerHTML = 'x';
-  hideGallery.setAttribute('style', 'color: silver; border: none;');
-  hideGallery.addEventListener('click', toggleGallary);
+  // show/hide gallery button
+  const xGallery = document.createElement('button');
+  xGallery.innerHTML = 'x';
+  xGallery.setAttribute('style', 'color: silver; border: none;');
+  xGallery.addEventListener('click', toggleGallery);
   const h2 = document.querySelector('#gallery h2');
   if (h2) {
-    h2.parentNode?.appendChild(hideGallery);
+    h2.parentNode?.appendChild(xGallery);
   }
 };

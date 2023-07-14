@@ -48,7 +48,7 @@ export const updateButtonText = (button: HTMLElement) => (text: string) => {
 export const replaceWithDisabledButton = (
   button: HTMLElement,
   text: string,
-  style?: string,
+  style?: string
 ) => {
   const disabledButton = createDiv();
   disabledButton.setAttribute('style', style ? style : disabledButtonStyle);
@@ -74,7 +74,6 @@ export const addButtonContainer = async () => {
 export const getButtonContainerNode = async () => {
   return waitForElement(`#${BUTTON_CONTAINER_ID}`);
 };
-
 
 export const darkenTextColor = () => {
   Array.from(document.querySelectorAll('.mantine-Spoiler-root span')).forEach(
@@ -114,7 +113,20 @@ export const deleteSuggestedResources = (retry = 5) => {
   } else {
     setTimeout(() => {
       deleteSuggestedResources(retry - 1);
-    }, 1000);
+    }, 500);
+  }
+};
+
+export const deleteDiscussion = (retry = 5) => {
+  const el = Array.from(
+    document.querySelectorAll('.mantine-Container-root h2')
+  ).filter((x: Element) => x.innerHTML.includes('Discussion'))[0];
+  if (el?.parentElement?.parentElement?.parentElement?.parentElement) {
+    el?.parentElement?.parentElement?.parentElement?.parentElement?.remove();
+  } else {
+    setTimeout(() => {
+      deleteDiscussion(retry - 1);
+    }, 500);
   }
 };
 
@@ -123,9 +135,41 @@ export const deleteMainPaddingBottom = (retry = 5) => {
   if (!el) {
     setTimeout(() => {
       deleteMainPaddingBottom(retry - 1);
-    }, 1000);
+    }, 500);
     return;
   }
   el.style.paddingBottom = '0';
 };
 
+const GALLERY_HIDDEN_HIGHT = '300px';
+export const openGallery = () => {
+  const g: HTMLElement | null = selector('#gallery');
+  if (!g) {
+    return;
+  }
+  g.style.height = 'auto';
+  return;
+};
+
+export const hideGallery = () => {
+  const g: HTMLElement | null = selector('#gallery');
+  if (!g) {
+    return;
+  }
+  g.style.overflow = 'hidden';
+  g.style.height = GALLERY_HIDDEN_HIGHT;
+  return;
+};
+
+export const toggleGallery = () => {
+  const g: HTMLElement | null = selector('#gallery');
+  if (!g) {
+    return;
+  }
+  g.style.overflow = 'hidden';
+  if (g.style.height === GALLERY_HIDDEN_HIGHT) {
+    g.style.height = 'auto';
+    return;
+  }
+  g.style.height = GALLERY_HIDDEN_HIGHT;
+};
