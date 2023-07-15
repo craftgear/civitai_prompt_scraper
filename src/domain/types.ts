@@ -184,7 +184,7 @@ export enum ButtonState {
   done = 'done',
 }
 
-export type Selector = (x: string) => Element | null;
+export type Selector = (x: string) => HTMLElement | null;
 export type SelectorAll = (x: string) => NodeList;
 export type CreateDiv = () => HTMLDivElement;
 export type CreateButton = () => HTMLButtonElement;
