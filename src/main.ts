@@ -16,6 +16,10 @@ const addModelPreviewDownloadButton = async () => {
     }
     log('model');
 
+    if (getConfig('openShowMore')) {
+      openShowMore(30);
+    }
+
     await addButtonContainer();
     await addModelImagesDownloadButton(href);
   } catch (error: unknown) {
@@ -56,7 +60,7 @@ const openShowMore = (retry = 5) => {
 
 let prevHref = '';
 
-const observer = new MutationObserver(async (_mutationList) => {
+const observer = new MutationObserver(async () => {
   const href = window.location.href;
   if (prevHref !== href) {
     prevHref = href;
@@ -84,9 +88,6 @@ export default async function () {
   if (window.location.href.match(/\/models\/\d*/)) {
     await addModelPreviewDownloadButton();
 
-    if (getConfig('openShowMore')) {
-      openShowMore(30);
-    }
   } else if (window.location.href.match(/\/images\/\d*/)) {
     await addGalleryImageDownloadButton();
   }
