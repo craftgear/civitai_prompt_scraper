@@ -220,6 +220,6 @@ export const addGalleryDownloadButton = async (href: string) => {
   ) {
     setTimeout(() => {
       button.click();
-    }, 100);
+    }, 500);
   }
 };

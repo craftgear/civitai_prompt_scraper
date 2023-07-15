@@ -12951,18 +12951,20 @@ const $06cbd27ebbbf5f2a$export$5bc69941fea37f21 = ()=>{
 };
 const $06cbd27ebbbf5f2a$export$d450a001006e5818 = ()=>{
     const createButton = Array.from(document.querySelectorAll("button")).filter((x)=>x.innerHTML.includes("Create"))[0];
-    if (createButton) createButton?.remove();
+    if (createButton) createButton.style.display = "none";
 };
 const $06cbd27ebbbf5f2a$export$5ffcb0107c13639c = (retry = 5)=>{
     const el = Array.from(document.querySelectorAll(".mantine-Container-root h2")).filter((x)=>x.innerHTML.includes("Suggested Resources"))[0];
-    if (el?.parentElement?.parentElement?.parentElement?.parentElement) el?.parentElement?.parentElement?.parentElement?.parentElement?.remove();
+    const targetEl = el?.parentElement?.parentElement?.parentElement?.parentElement;
+    if (targetEl) targetEl.style.display = "none";
     else setTimeout(()=>{
         $06cbd27ebbbf5f2a$export$5ffcb0107c13639c(retry - 1);
     }, 1000);
 };
 const $06cbd27ebbbf5f2a$export$260b7aeca61b2fed = (retry = 5)=>{
     const el = Array.from(document.querySelectorAll(".mantine-Container-root h2")).filter((x)=>x.innerHTML.includes("Discussion"))[0];
-    if (el?.parentElement?.parentElement?.parentElement?.parentElement) el?.parentElement?.parentElement?.parentElement?.parentElement?.remove();
+    const targetEl = el?.parentElement?.parentElement?.parentElement?.parentElement;
+    if (targetEl) targetEl.style.display = "none";
     else setTimeout(()=>{
         $06cbd27ebbbf5f2a$export$260b7aeca61b2fed(retry - 1);
     }, 1000);
@@ -13083,8 +13085,7 @@ const $e7c35bcf17ffba9d$export$8b03a564a450b487 = async (href)=>{
 const $d19ac646c457e538$var$BUTTON_ID = "download-all-gallery-images-and-prompts";
 const $d19ac646c457e538$export$9473b35530fb3701 = (buttonIdSelector, modelId, postId, modelName, onFinishFn, downLoadedImgList)=>async ()=>{
         try {
-            // 2023.07.15 try to pass null as modelId to avoid 500 Internal Error
-            const _imgList = await (0, $c3454b9ab01d445e$export$c6ace8a485846f08)(null, postId);
+            const _imgList = await (0, $c3454b9ab01d445e$export$c6ace8a485846f08)(modelId, postId);
             // exclude downloaded images
             const downloadedImgIds = downLoadedImgList?.map(({ id: id  })=>id) ?? [];
             const imgList = _imgList.filter(({ id: id  })=>!downloadedImgIds.includes(id));
@@ -13184,7 +13185,7 @@ const $d19ac646c457e538$export$5fd187c0d03a79e = async (href)=>{
     }
     if ((0, $2e4159cc418f5166$export$44487a86467333c3)("galleryAutoDownload") && button.getAttribute("data-state") === (0, $c08fa57dad1b6e82$export$5d7ba7f5550f99d1).ready) setTimeout(()=>{
         button.click();
-    }, 0);
+    }, 500);
 };
 
 

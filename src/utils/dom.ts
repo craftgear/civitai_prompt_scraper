@@ -100,7 +100,7 @@ export const deleteCreateButton = () => {
     (x: HTMLElement) => x.innerHTML.includes('Create')
   )[0];
   if (createButton) {
-    createButton?.remove();
+    createButton.style.display = 'none';
   }
 };
 
@@ -108,8 +108,9 @@ export const deleteSuggestedResources = (retry = 5) => {
   const el = Array.from(
     document.querySelectorAll('.mantine-Container-root h2')
   ).filter((x: Element) => x.innerHTML.includes('Suggested Resources'))[0];
-  if (el?.parentElement?.parentElement?.parentElement?.parentElement) {
-    el?.parentElement?.parentElement?.parentElement?.parentElement?.remove();
+  const targetEl = el?.parentElement?.parentElement?.parentElement?.parentElement;
+  if (targetEl) {
+    targetEl.style.display = 'none';
   } else {
     setTimeout(() => {
       deleteSuggestedResources(retry - 1);
@@ -121,8 +122,9 @@ export const deleteDiscussion = (retry = 5) => {
   const el = Array.from(
     document.querySelectorAll('.mantine-Container-root h2')
   ).filter((x: Element) => x.innerHTML.includes('Discussion'))[0];
-  if (el?.parentElement?.parentElement?.parentElement?.parentElement) {
-    el?.parentElement?.parentElement?.parentElement?.parentElement?.remove();
+  const targetEl = el?.parentElement?.parentElement?.parentElement?.parentElement;
+  if (targetEl) {
+    targetEl.style.display = 'none';
   } else {
     setTimeout(() => {
       deleteDiscussion(retry - 1);
