@@ -73,3 +73,16 @@ export const addButtonContainer = async () => {
 export const getButtonContainerNode = async () => {
   return waitForElement(`#${BUTTON_CONTAINER_ID}`);
 };
+
+export const toggleGallery = () => {
+  const g: HTMLElement | null = selector('#gallery');
+  if (!g) {
+      return;
+  }
+  g.style.overflow = 'hidden';
+  if (g.style.height === GALLERY_HIDDEN_HIGHT) {
+    g.style.height = 'auto';
+    return;
+  }
+  g.style.height = GALLERY_HIDDEN_HIGHT;
+};
