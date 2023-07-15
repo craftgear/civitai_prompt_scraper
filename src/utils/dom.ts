@@ -28,10 +28,8 @@ export const waitForElement = async (
 };
 
 const parseNextData = () => {
-  const nextData: NextData = (selector('#__NEXT_DATA__') as HTMLElement) || {
-    innerText: '',
-  };
-  const data = JSON.parse(nextData.innerText);
+  const nextData: NextData = (selector('#__NEXT_DATA__') as HTMLElement);
+  const data = nextData ? JSON.parse(nextData.innerText) : {};
   return data;
 };
 
