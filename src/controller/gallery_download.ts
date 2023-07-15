@@ -33,44 +33,44 @@ export const downloadGalleryImagesAndPrompts =
     onFinishFn?: () => void,
     downLoadedImgList?: GalleryImage[]
   ) =>
-  async () => {
-    try {
-      const _imgList = await fetchGalleryData(modelId, postId);
+    async () => {
+      try {
+        const _imgList = await fetchGalleryData(modelId, postId);
 
-      // exclude downloaded images
-      const downloadedImgIds = downLoadedImgList?.map(({ id }) => id) ?? [];
-      const imgList = _imgList.filter(
-        ({ id }) => !downloadedImgIds.includes(id)
-      );
+        // exclude downloaded images
+        const downloadedImgIds = downLoadedImgList?.map(({ id }) => id) ?? [];
+        const imgList = _imgList.filter(
+          ({ id }) => !downloadedImgIds.includes(id)
+        );
 
-      const button = await waitForElement(buttonIdSelector);
-      if (!button) {
-        return;
+        const button = await waitForElement(buttonIdSelector);
+        if (!button) {
+          return;
+        }
+
+        button.setAttribute('data-state', 'in-progress');
+        button.innerText = getI18nLabel('startingDownload');
+
+        const filenameFormat = getConfig('galleryFilenameFormat');
+        const filename = (filenameFormat as string)
+          .replace('{modelId}', modelId ?? '')
+          .replace('{modelName}', modelName ?? '')
+          .replace('{postId}', postId);
+
+        await createZip(updateButtonText(button))(filename)(imgList);
+
+        if (onFinishFn) {
+          onFinishFn();
+        }
+
+        replaceWithDisabledButton(
+          button,
+          ` ${imgList.length} / ${imgList.length} ${getButtonCompleteLabel()}`
+        );
+      } catch (error: unknown) {
+        alert((error as Error).message);
       }
-
-      button.setAttribute('data-state', 'in-progress');
-      button.innerText = getI18nLabel('startingDownload');
-
-      const filenameFormat = getConfig('galleryFilenameFormat');
-      const filename = (filenameFormat as string)
-        .replace('{modelId}', modelId ?? '')
-        .replace('{modelName}', modelName ?? '')
-        .replace('{postId}', postId);
-
-      await createZip(updateButtonText(button))(filename)(imgList);
-
-      if (onFinishFn) {
-        onFinishFn();
-      }
-
-      replaceWithDisabledButton(
-        button,
-        ` ${imgList.length} / ${imgList.length} ${getButtonCompleteLabel()}`
-      );
-    } catch (error: unknown) {
-      alert((error as Error).message);
-    }
-  };
+    };
 
 const downloadSingleImagesAndPrompts =
   (buttonIdSelector: string) => async () => {

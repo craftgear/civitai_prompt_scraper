@@ -13088,10 +13088,14 @@ const $e7c35bcf17ffba9d$export$8b03a564a450b487 = async (href)=>{
 const $d19ac646c457e538$var$BUTTON_ID = "download-all-gallery-images-and-prompts";
 const $d19ac646c457e538$export$9473b35530fb3701 = (buttonIdSelector, modelId, postId, modelName, onFinishFn, downLoadedImgList)=>async ()=>{
         try {
+<<<<<<< HEAD
             const _imgList = await (0, $c3454b9ab01d445e$export$c6ace8a485846f08)(modelId, postId);
             // exclude downloaded images
             const downloadedImgIds = downLoadedImgList?.map(({ id: id  })=>id) ?? [];
             const imgList = _imgList.filter(({ id: id  })=>!downloadedImgIds.includes(id));
+=======
+            const imgList = await (0, $c3454b9ab01d445e$export$c6ace8a485846f08)(modelId, postId);
+>>>>>>> main
             const button = await (0, $06cbd27ebbbf5f2a$export$1a1c301579a08d1e)(buttonIdSelector);
             if (!button) return;
             button.setAttribute("data-state", "in-progress");

@@ -75,6 +75,40 @@ export const getButtonContainerNode = async () => {
   return waitForElement(`#${BUTTON_CONTAINER_ID}`);
 };
 
+const GALLERY_HIDDEN_HIGHT = '300px';
+export const toggleGallery = () => {
+  const g: HTMLElement | null = selector('#gallery');
+  if (!g) {
+    return;
+  }
+  g.style.overflow = 'hidden';
+  if (g.style.height === GALLERY_HIDDEN_HIGHT) {
+    g.style.height = 'auto';
+    return;
+  }
+  g.style.height = GALLERY_HIDDEN_HIGHT;
+};
+
+export const openGallery = () => {
+  const g: HTMLElement | null = selector('#gallery');
+  if (!g) {
+    return;
+  }
+  g.style.height = 'auto';
+  return;
+};
+
+export const hideGallery = () => {
+  const g: HTMLElement | null = selector('#gallery');
+  if (!g) {
+    return;
+  }
+  g.style.overflow = 'hidden';
+  g.style.height = GALLERY_HIDDEN_HIGHT;
+  return;
+};
+
+
 export const darkenTextColor = () => {
   Array.from(document.querySelectorAll('.mantine-Spoiler-root span')).forEach(
     (x) => {
@@ -143,35 +177,3 @@ export const deleteMainPaddingBottom = (retry = 5) => {
   el.style.paddingBottom = '0';
 };
 
-const GALLERY_HIDDEN_HIGHT = '300px';
-export const openGallery = () => {
-  const g: HTMLElement | null = selector('#gallery');
-  if (!g) {
-    return;
-  }
-  g.style.height = 'auto';
-  return;
-};
-
-export const hideGallery = () => {
-  const g: HTMLElement | null = selector('#gallery');
-  if (!g) {
-    return;
-  }
-  g.style.overflow = 'hidden';
-  g.style.height = GALLERY_HIDDEN_HIGHT;
-  return;
-};
-
-export const toggleGallery = () => {
-  const g: HTMLElement | null = selector('#gallery');
-  if (!g) {
-    return;
-  }
-  g.style.overflow = 'hidden';
-  if (g.style.height === GALLERY_HIDDEN_HIGHT) {
-    g.style.height = 'auto';
-    return;
-  }
-  g.style.height = GALLERY_HIDDEN_HIGHT;
-};

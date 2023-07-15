@@ -17,6 +17,7 @@ import {
   replaceWithDisabledButton,
   toggleGallery,
   updateButtonText,
+  toggleGallery, 
   waitForElement,
 } from '../utils/dom';
 
