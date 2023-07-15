@@ -35,8 +35,7 @@ export const downloadGalleryImagesAndPrompts =
   ) =>
   async () => {
     try {
-      // 2023.07.15 try to pass null as modelId to avoid 500 Internal Error
-      const _imgList = await fetchGalleryData(null, postId);
+      const _imgList = await fetchGalleryData(modelId, postId);
 
       // exclude downloaded images
       const downloadedImgIds = downLoadedImgList?.map(({ id }) => id) ?? [];
@@ -221,6 +220,6 @@ export const addGalleryDownloadButton = async (href: string) => {
   ) {
     setTimeout(() => {
       button.click();
-    }, 0);
+    }, 100);
   }
 };

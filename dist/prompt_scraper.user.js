@@ -12577,6 +12577,15 @@ const $81ffdad4556cbf55$export$f922ebe57f2c36e8 = (xs, chunkSize = 10)=>xs.reduc
 
 
 
+/**
+ * domain related
+ */ const $6790e4d8d7342a47$export$b56cc0ee0a85f41e = (url, width, name)=>`https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/${url}/width=${width},optimized=true/${name ?? ""}`;
+const $6790e4d8d7342a47$export$b3bdca59378516d4 = (url)=>url.replace(/width=(\d*)/, `width=$1,optimized=true`);
+const $6790e4d8d7342a47$export$e8d0c38aad57b50f = (url)=>url.replace(",optimized=true", "");
+const $6790e4d8d7342a47$export$1f977c13d93a3bf8 = (nextData)=>nextData.props.pageProps.trpcState.json.queries[0] || {};
+const $6790e4d8d7342a47$export$446f1005883b7406 = (nextData)=>nextData.props.pageProps?.trpcState?.json?.queries[0]?.state?.data?.meta || {};
+
+
 const $c3454b9ab01d445e$var$extractFilebasenameFromImageUrl = (url)=>{
     const filename = url.split("/").slice(-1)[0];
     return filename.split(".")[0];
@@ -12626,12 +12635,7 @@ const $c3454b9ab01d445e$export$c6ace8a485846f08 = async (modelId, postId, modelV
     });
     if (response.status >= 400) throw new Error(` ${response.status} ${response.statusText}`);
     const data = await response.json();
-    return data.items.map((x)=>{
-        return {
-            ...x,
-            url: x.url.replace(/width=\d*/, `width=${x.width},optimized=true`)
-        };
-    });
+    return data.items;
 };
 const $c3454b9ab01d445e$export$2ab75dd31a3868f2 = async (url)=>{
     try {
@@ -12649,12 +12653,12 @@ const $c3454b9ab01d445e$export$2ab75dd31a3868f2 = async (url)=>{
             contentType: contentType
         };
     } catch (error) {
-        if (url.includes("image.civitai.com")) return $c3454b9ab01d445e$export$2ab75dd31a3868f2(url.replace(",optimized=true", ""));
+        if (url.includes("image.civitai.com")) return $c3454b9ab01d445e$export$2ab75dd31a3868f2((0, $6790e4d8d7342a47$export$e8d0c38aad57b50f)(url));
         throw error;
     }
 };
 const $c3454b9ab01d445e$export$e9e7897c93aa9943 = (zipWriter, addedNames)=>async (imgInfo)=>await Promise.all(imgInfo.map(async (x)=>{
-            const response = await $c3454b9ab01d445e$export$2ab75dd31a3868f2(x.url);
+            const response = await $c3454b9ab01d445e$export$2ab75dd31a3868f2((0, $6790e4d8d7342a47$export$b3bdca59378516d4)(x.url));
             if (!response) throw new Error(`response is null: ${x.url}`);
             const { blob: blob , contentType: contentType  } = response;
             let name = $c3454b9ab01d445e$var$extractFilebasenameFromImageUrl(x.url) || x.hash.replace(/[;:?*.]/g, "_");
@@ -12878,12 +12882,6 @@ const $98f6748fc1e9fd4e$export$70d1bf7729efff40 = ()=>document.title;
 
 
 
-/**
- * domain related
- */ const $6790e4d8d7342a47$export$b56cc0ee0a85f41e = (url, width, name)=>`https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/${url}/width=${width},optimized=true/${name ?? ""}`;
-const $6790e4d8d7342a47$export$1f977c13d93a3bf8 = (nextData)=>nextData.props.pageProps.trpcState.json.queries[0] || {};
-const $6790e4d8d7342a47$export$446f1005883b7406 = (nextData)=>nextData.props.pageProps?.trpcState?.json?.queries[0]?.state?.data?.meta || {};
-
 
 /**
  * api responses
@@ -12960,21 +12958,21 @@ const $06cbd27ebbbf5f2a$export$5ffcb0107c13639c = (retry = 5)=>{
     if (el?.parentElement?.parentElement?.parentElement?.parentElement) el?.parentElement?.parentElement?.parentElement?.parentElement?.remove();
     else setTimeout(()=>{
         $06cbd27ebbbf5f2a$export$5ffcb0107c13639c(retry - 1);
-    }, 500);
+    }, 1000);
 };
 const $06cbd27ebbbf5f2a$export$260b7aeca61b2fed = (retry = 5)=>{
     const el = Array.from(document.querySelectorAll(".mantine-Container-root h2")).filter((x)=>x.innerHTML.includes("Discussion"))[0];
     if (el?.parentElement?.parentElement?.parentElement?.parentElement) el?.parentElement?.parentElement?.parentElement?.parentElement?.remove();
     else setTimeout(()=>{
         $06cbd27ebbbf5f2a$export$260b7aeca61b2fed(retry - 1);
-    }, 500);
+    }, 1000);
 };
 const $06cbd27ebbbf5f2a$export$980dc319601fa7a6 = (retry = 5)=>{
     const el = document.querySelector("main");
     if (!el) {
         setTimeout(()=>{
             $06cbd27ebbbf5f2a$export$980dc319601fa7a6(retry - 1);
-        }, 500);
+        }, 1000);
         return;
     }
     el.style.paddingBottom = "0";
@@ -13043,10 +13041,7 @@ const $e7c35bcf17ffba9d$export$53039d7a8d9d297e = (buttonIdSelector, location)=>
             const { modelId: modelId , modelName: modelName , imageList: imageList , modelVersionId: modelVersionId , modelVersionName: modelVersionName , modelInfo: modelInfo  } = await $e7c35bcf17ffba9d$var$getModeInfoAndImageList(location);
             const filenameFormat = (0, $2e4159cc418f5166$export$44487a86467333c3)("modelPreviewFilenameFormat");
             const filename = filenameFormat.replace("{modelId}", `${modelId ?? ""}`).replace("{modelName}", modelName).replace("{modelVersionId}", `${modelVersionId}`).replace("{modelVersionName}", modelVersionName);
-            await (0, $c5da2b8a14082d8b$export$b6bc24646229cedd)((0, $06cbd27ebbbf5f2a$export$bb64a7e3f0f28938)(button))(filename, modelInfo)(imageList.map((x)=>({
-                    ...x,
-                    url: x.url.replace(/width=\d*/, `width=${x.width},optimized=true`)
-                })));
+            await (0, $c5da2b8a14082d8b$export$b6bc24646229cedd)((0, $06cbd27ebbbf5f2a$export$bb64a7e3f0f28938)(button))(filename, modelInfo)(imageList);
             (0, $06cbd27ebbbf5f2a$export$92ecf871022de94d)(button, ` ${imageList.length} / ${imageList.length} ${(0, $3a42d740ecc81982$export$4d9f09007b08c03d)()}`);
             return {
                 imageList: imageList,

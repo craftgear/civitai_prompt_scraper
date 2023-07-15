@@ -113,7 +113,7 @@ export const deleteSuggestedResources = (retry = 5) => {
   } else {
     setTimeout(() => {
       deleteSuggestedResources(retry - 1);
-    }, 500);
+    }, 1000);
   }
 };
 
@@ -126,7 +126,7 @@ export const deleteDiscussion = (retry = 5) => {
   } else {
     setTimeout(() => {
       deleteDiscussion(retry - 1);
-    }, 500);
+    }, 1000);
   }
 };
 
@@ -135,7 +135,7 @@ export const deleteMainPaddingBottom = (retry = 5) => {
   if (!el) {
     setTimeout(() => {
       deleteMainPaddingBottom(retry - 1);
-    }, 500);
+    }, 1000);
     return;
   }
   el.style.paddingBottom = '0';

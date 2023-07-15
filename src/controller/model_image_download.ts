@@ -114,12 +114,7 @@ export const downloadImagesAndPrompts =
         .replace('{modelVersionId}', `${modelVersionId}`)
         .replace('{modelVersionName}', modelVersionName);
 
-      await createZip(updateButtonText(button))(filename, modelInfo)(
-        imageList.map((x) => ({
-          ...x,
-          url: x.url.replace(/width=\d*/, `width=${x.width},optimized=true`),
-        }))
-      );
+      await createZip(updateButtonText(button))(filename, modelInfo)(imageList);
 
       replaceWithDisabledButton(
         button,
