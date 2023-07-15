@@ -149,12 +149,15 @@ export const addModelImagesDownloadButton = async (href: string) => {
   container?.appendChild(button);
 
   // show/hide gallery button
-  const xGallery = document.createElement('button');
-  xGallery.innerHTML = 'x';
-  xGallery.setAttribute('style', 'color: silver; border: none;');
-  xGallery.addEventListener('click', toggleGallery);
-  const h2 = document.querySelector('#gallery h2');
-  if (h2) {
-    h2.parentNode?.appendChild(xGallery);
+  if (!selector('#hide-gallery')) {
+    const xGallery = document.createElement('button');
+    xGallery.id = 'hide-gallery'
+    xGallery.innerHTML = 'x';
+    xGallery.setAttribute('style', 'color: silver; border: none;');
+    xGallery.addEventListener('click', toggleGallery);
+    const h2 = document.querySelector('#gallery h2');
+    if (h2) {
+      h2.parentNode?.appendChild(xGallery);
+    }
   }
 };

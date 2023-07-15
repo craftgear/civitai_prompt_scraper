@@ -13066,12 +13066,15 @@ const $e7c35bcf17ffba9d$export$8b03a564a450b487 = async (href)=>{
     button.addEventListener("click", $e7c35bcf17ffba9d$var$startModelDownload);
     container?.appendChild(button);
     // show/hide gallery button
-    const xGallery = document.createElement("button");
-    xGallery.innerHTML = "x";
-    xGallery.setAttribute("style", "color: silver; border: none;");
-    xGallery.addEventListener("click", (0, $06cbd27ebbbf5f2a$export$3ff3f28c173b1fa2));
-    const h2 = document.querySelector("#gallery h2");
-    if (h2) h2.parentNode?.appendChild(xGallery);
+    if (!(0, $98f6748fc1e9fd4e$export$aea217a45095ce11)("#hide-gallery")) {
+        const xGallery = document.createElement("button");
+        xGallery.id = "hide-gallery";
+        xGallery.innerHTML = "x";
+        xGallery.setAttribute("style", "color: silver; border: none;");
+        xGallery.addEventListener("click", (0, $06cbd27ebbbf5f2a$export$3ff3f28c173b1fa2));
+        const h2 = document.querySelector("#gallery h2");
+        if (h2) h2.parentNode?.appendChild(xGallery);
+    }
 };
 
 
