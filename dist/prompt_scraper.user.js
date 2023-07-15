@@ -12571,6 +12571,15 @@ const $81ffdad4556cbf55$export$f922ebe57f2c36e8 = (xs, chunkSize = 5)=>xs.reduce
 
 
 
+/**
+ * domain related
+ */ const $6790e4d8d7342a47$export$b56cc0ee0a85f41e = (url, width, name)=>`https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/${url}/width=${width},optimized=true/${name ?? ""}`;
+const $6790e4d8d7342a47$export$b3bdca59378516d4 = (url)=>url.replace(/width=(\d*)/, `width=$1,optimized=true`);
+const $6790e4d8d7342a47$export$e8d0c38aad57b50f = (url)=>url.replace(",optimized=true", "");
+const $6790e4d8d7342a47$export$1f977c13d93a3bf8 = (nextData)=>nextData.props.pageProps.trpcState.json.queries[0] || {};
+const $6790e4d8d7342a47$export$446f1005883b7406 = (nextData)=>nextData.props.pageProps?.trpcState?.json?.queries[0]?.state?.data?.meta || {};
+
+
 const $c3454b9ab01d445e$var$extractFilebasenameFromImageUrl = (url)=>{
     const filename = url.split("/").slice(-1)[0];
     return filename.split(".")[0];
@@ -12638,13 +12647,12 @@ const $c3454b9ab01d445e$export$2ab75dd31a3868f2 = async (url)=>{
             contentType: contentType
         };
     } catch (error) {
-        if (url.includes("image.civitai.com")) return $c3454b9ab01d445e$export$2ab75dd31a3868f2(url.replace(",optimized=true", ""));
+        if (url.includes("image.civitai.com")) return $c3454b9ab01d445e$export$2ab75dd31a3868f2((0, $6790e4d8d7342a47$export$e8d0c38aad57b50f)(url));
         throw error;
     }
 };
 const $c3454b9ab01d445e$export$e9e7897c93aa9943 = (zipWriter, addedNames)=>async (imgInfo)=>await Promise.all(imgInfo.map(async (x)=>{
-            const optimizedUrl = x.url.replace(/width=\d*/, `width=${x.width},optimized=true`);
-            const response = await $c3454b9ab01d445e$export$2ab75dd31a3868f2(optimizedUrl);
+            const response = await $c3454b9ab01d445e$export$2ab75dd31a3868f2((0, $6790e4d8d7342a47$export$b3bdca59378516d4)(x.url));
             if (!response) throw new Error(`response is null: ${x.url}`);
             const { blob: blob , contentType: contentType  } = response;
             let name = $c3454b9ab01d445e$var$extractFilebasenameFromImageUrl(x.url) || x.hash.replace(/[;:?*.]/g, "_");
@@ -12868,12 +12876,6 @@ const $98f6748fc1e9fd4e$export$70d1bf7729efff40 = ()=>document.title;
 
 
 
-/**
- * domain related
- */ const $6790e4d8d7342a47$export$b56cc0ee0a85f41e = (url, width, name)=>`https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/${url}/width=${width},optimized=true/${name ?? ""}`;
-const $6790e4d8d7342a47$export$1f977c13d93a3bf8 = (nextData)=>nextData.props.pageProps.trpcState.json.queries[0] || {};
-const $6790e4d8d7342a47$export$446f1005883b7406 = (nextData)=>nextData.props.pageProps?.trpcState?.json?.queries[0]?.state?.data?.meta || {};
-
 
 /**
  * api responses
@@ -13003,8 +13005,7 @@ const $e7c35bcf17ffba9d$export$8b03a564a450b487 = async (href)=>{
 const $d19ac646c457e538$var$BUTTON_ID = "download-all-gallery-images-and-prompts";
 const $d19ac646c457e538$var$downloadGalleryImagesAndPrompts = (buttonIdSelector, modelId, postId, modelName, onFinishFn)=>async ()=>{
         try {
-            // 2023.07.15 try to pass null as modelId to avoid 500 Internal Error
-            const imgList = await (0, $c3454b9ab01d445e$export$c6ace8a485846f08)(null, postId);
+            const imgList = await (0, $c3454b9ab01d445e$export$c6ace8a485846f08)(modelId, postId);
             const button = await (0, $06cbd27ebbbf5f2a$export$1a1c301579a08d1e)(buttonIdSelector);
             if (!button) return;
             button.setAttribute("data-state", "in-progress");
@@ -13101,7 +13102,7 @@ const $d19ac646c457e538$export$5fd187c0d03a79e = async (href)=>{
     }
     if ((0, $2e4159cc418f5166$export$44487a86467333c3)("galleryAutoDownload") && button.getAttribute("data-state") === (0, $c08fa57dad1b6e82$export$5d7ba7f5550f99d1).ready) setTimeout(()=>{
         button.click();
-    }, 0);
+    }, 500);
 };
 
 
