@@ -32,8 +32,7 @@ const downloadGalleryImagesAndPrompts =
   ) =>
   async () => {
     try {
-      // 2023.07.15 try to pass null as modelId to avoid 500 Internal Error
-      const imgList = await fetchGalleryData(null, postId);
+      const imgList = await fetchGalleryData(modelId, postId);
 
       const button = await waitForElement(buttonIdSelector);
       if (!button) {
@@ -208,6 +207,6 @@ export const addGalleryDownloadButton = async (href: string) => {
   ) {
     setTimeout(() => {
       button.click();
-    }, 0);
+    }, 500);
   }
 };
