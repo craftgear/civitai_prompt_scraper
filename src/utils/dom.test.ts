@@ -1,5 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it, Mock, vi } from 'vitest';
-import { parseNextData, waitForElement } from './dom';
+import { /* parseModelMetaFromSingleImageNextData, parseModelMetaFromGalleryNextData, */ waitForElement } from './dom';
 
 import { selector } from '../infra/dom';
 vi.mock('../infra/dom', () => ({
@@ -30,6 +30,7 @@ describe('waitForElement', () => {
   });
 });
 
-describe('parseNextData', () => {
-  it('');
+describe.todo('parseNextData', () => {
+  it('parseModelMetaFromGalleryNextData')
+  it('parseModelMetaFromSingleImageNextData');
 });

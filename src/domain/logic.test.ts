@@ -1,9 +1,9 @@
-import { describe, expect, test } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
-import { buildImgUrl } from './logic';
+import { buildImgUrl, optimizeUrl, unoptimizeUrl } from './logic';
 
 describe(' buildImgUrl ', () => {
-  test('with name', () => {
+  it('builds a imgUrl with a name', () => {
     const result = buildImgUrl('url', 800, 'name');
 
     expect(result).eq(
@@ -11,7 +11,7 @@ describe(' buildImgUrl ', () => {
     );
   });
 
-  test('without name', () => {
+  it('builds a imgUrl without a name', () => {
     const result = buildImgUrl('url', 800);
 
     expect(result).eq(
@@ -19,3 +19,16 @@ describe(' buildImgUrl ', () => {
     );
   });
 });
+
+describe('optimize and unoptimize a Url', () => {
+  it('optimizes a url', () => {
+    const result = optimizeUrl('http://hoge.com/width=980/aaaa');
+    expect(result).toEqual('http://hoge.com/width=980,optimized=true/aaaa')
+  })
+
+  it('unoptimizes a url', () => {
+
+    const result = unoptimizeUrl('http://hoge.com/width=980,optimized=true/aaaa');
+    expect(result).toEqual('http://hoge.com/width=980/aaaa')
+  })
+})

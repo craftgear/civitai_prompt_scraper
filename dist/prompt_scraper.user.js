@@ -12620,12 +12620,7 @@ const $c3454b9ab01d445e$export$c6ace8a485846f08 = async (modelId, postId, modelV
     });
     if (response.status >= 400) throw new Error(` ${response.status} ${response.statusText}`);
     const data = await response.json();
-    return data.items.map((x)=>{
-        return {
-            ...x,
-            url: x.url.replace(/width=\d*/, `width=${x.width},optimized=true`)
-        };
-    });
+    return data.items;
 };
 const $c3454b9ab01d445e$export$2ab75dd31a3868f2 = async (url)=>{
     try {
@@ -12648,7 +12643,8 @@ const $c3454b9ab01d445e$export$2ab75dd31a3868f2 = async (url)=>{
     }
 };
 const $c3454b9ab01d445e$export$e9e7897c93aa9943 = (zipWriter, addedNames)=>async (imgInfo)=>await Promise.all(imgInfo.map(async (x)=>{
-            const response = await $c3454b9ab01d445e$export$2ab75dd31a3868f2(x.url);
+            const optimizedUrl = x.url.replace(/width=\d*/, `width=${x.width},optimized=true`);
+            const response = await $c3454b9ab01d445e$export$2ab75dd31a3868f2(optimizedUrl);
             if (!response) throw new Error(`response is null: ${x.url}`);
             const { blob: blob , contentType: contentType  } = response;
             let name = $c3454b9ab01d445e$var$extractFilebasenameFromImageUrl(x.url) || x.hash.replace(/[;:?*.]/g, "_");
@@ -12972,10 +12968,7 @@ const $e7c35bcf17ffba9d$export$53039d7a8d9d297e = (buttonIdSelector, location)=>
             const { modelId: modelId , modelName: modelName , imageList: imageList , modelVersionId: modelVersionId , modelVersionName: modelVersionName , modelInfo: modelInfo  } = await $e7c35bcf17ffba9d$var$getModeInfoAndImageList(location);
             const filenameFormat = (0, $2e4159cc418f5166$export$44487a86467333c3)("modelPreviewFilenameFormat");
             const filename = filenameFormat.replace("{modelId}", `${modelId ?? ""}`).replace("{modelName}", modelName).replace("{modelVersionId}", `${modelVersionId}`).replace("{modelVersionName}", modelVersionName);
-            await (0, $c5da2b8a14082d8b$export$b6bc24646229cedd)((0, $06cbd27ebbbf5f2a$export$bb64a7e3f0f28938)(button))(filename, modelInfo)(imageList.map((x)=>({
-                    ...x,
-                    url: x.url.replace(/width=\d*/, `width=${x.width},optimized=true`)
-                })));
+            await (0, $c5da2b8a14082d8b$export$b6bc24646229cedd)((0, $06cbd27ebbbf5f2a$export$bb64a7e3f0f28938)(button))(filename, modelInfo)(imageList);
             (0, $06cbd27ebbbf5f2a$export$92ecf871022de94d)(button, ` ${imageList.length} / ${imageList.length} ${(0, $3a42d740ecc81982$export$4d9f09007b08c03d)()}`);
             return {
                 imageList: imageList,
@@ -13010,6 +13003,7 @@ const $e7c35bcf17ffba9d$export$8b03a564a450b487 = async (href)=>{
 const $d19ac646c457e538$var$BUTTON_ID = "download-all-gallery-images-and-prompts";
 const $d19ac646c457e538$var$downloadGalleryImagesAndPrompts = (buttonIdSelector, modelId, postId, modelName, onFinishFn)=>async ()=>{
         try {
+            // 2023.07.15 try to pass null as modelId to avoid 500 Internal Error
             const imgList = await (0, $c3454b9ab01d445e$export$c6ace8a485846f08)(null, postId);
             const button = await (0, $06cbd27ebbbf5f2a$export$1a1c301579a08d1e)(buttonIdSelector);
             if (!button) return;
