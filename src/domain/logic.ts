@@ -11,9 +11,9 @@ export const unoptimizeUrl = (url: string) => url.replace(',optimized=true', '')
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const extractModelMetaFromSingleImageNextData = (nextData: any) =>
-  nextData.props.pageProps.trpcState.json.queries[0] || {};
+  nextData.props?.pageProps?.trpcState?.json?.queries[0] || {};
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const extractModelMetaFromGalleryNextData = (nextData: any) =>
-  nextData.props.pageProps?.trpcState?.json?.queries[0]?.state?.data?.meta ||
+  nextData.props?.pageProps?.trpcState?.json?.queries[0]?.state?.data?.meta ||
   {};
