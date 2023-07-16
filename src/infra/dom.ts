@@ -13,12 +13,7 @@ export const selectorAll: SelectorAll = (selector) =>
   document.querySelectorAll(selector);
 
 export const createDiv: CreateDiv = () => document.createElement('div');
-export const createLink: CreateLink = (
-  id: string,
-  style: string,
-  label: string,
-  clickHandler: () => void
-) => {
+export const createLink: CreateLink = (id, style, label, clickHandler) => {
   const link = document.createElement('a');
   link.id = id;
   link.setAttribute('style', style);

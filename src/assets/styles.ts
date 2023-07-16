@@ -66,5 +66,12 @@ export const downloadAllButtonStyle = buttonStyle;
 export const buttonContainerStyle = `
   display: flex;
   flex-direction: row;
-  gap: 0.7rem
+  gap: 0.7rem;
+`;
+
+export const toggleGalleryStyle = `
+  border: 1px solid silver;
+  color: silver;
+  font-weight: bold;
+  padding: 0 8px;
 `;

@@ -87,7 +87,6 @@ export default async function () {
 
   if (window.location.href.match(/\/models\/\d*/)) {
     await addModelPreviewDownloadButton();
-
   } else if (window.location.href.match(/\/images\/\d*/)) {
     await addGalleryImageDownloadButton();
   }

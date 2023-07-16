@@ -3,7 +3,7 @@ import {
   getButtonLabel,
   getI18nLabel,
 } from '../assets/lang';
-import { buttonStyle } from '../assets/styles';
+import { buttonStyle, toggleGalleryStyle } from '../assets/styles';
 
 import { getConfig } from '../infra/config_panel';
 import { createLink, selector } from '../infra/dom';
@@ -150,8 +150,8 @@ export const addModelImagesDownloadButton = async (href: string) => {
   if (!selector('#hide-gallery')) {
     const xGallery = createLink(
       'hide-gallery',
-      'background-color: silver; border: 1px solid gray;',
-      'x',
+      toggleGalleryStyle,
+      '-',
       toggleGallery
     );
     const h2 = selector('#gallery h2');
