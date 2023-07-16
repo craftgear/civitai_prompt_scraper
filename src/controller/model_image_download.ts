@@ -150,7 +150,7 @@ export const addModelImagesDownloadButton = async (href: string) => {
   if (!selector('#hide-gallery')) {
     const xGallery = createLink(
       'hide-gallery',
-      'background-color: silver; border: 1px solid gray;',
+      'background-color: #e8e8e8; border: 1px solid silver; color: silver; padding 0 8px; font-weight: bold',
       'x',
       toggleGallery
     );
