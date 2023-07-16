@@ -86,7 +86,7 @@ const observer = new MutationObserver(async () => {
   }
 });
 
-export default async function() {
+export default async function () {
   prevHref = window.location.href;
 
   log('start');
@@ -104,7 +104,6 @@ export default async function() {
   if (window.location.href.match(/\/models\/\d*/)) {
     await addModelPreviewDownloadButton();
     await addDownloadAllButton();
-
   } else if (window.location.href.match(/\/images\/\d*/)) {
     await addGalleryImageDownloadButton();
     return;

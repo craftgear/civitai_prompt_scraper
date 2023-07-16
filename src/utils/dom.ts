@@ -28,7 +28,7 @@ export const waitForElement = async (
 };
 
 const parseNextData = () => {
-  const nextData: NextData = (selector('#__NEXT_DATA__') as HTMLElement);
+  const nextData: NextData = selector('#__NEXT_DATA__') as HTMLElement;
   const data = nextData ? JSON.parse(nextData.innerText) : {};
   return data;
 };
@@ -73,8 +73,9 @@ export const getButtonContainerNode = async () => {
   return waitForElement(`#${BUTTON_CONTAINER_ID}`);
 };
 
-const GALLERY_HIDDEN_HIGHT = '300px';
-export const toggleGallery = () => {
+const GALLERY_HIDDEN_HIGHT = '100px';
+export const toggleGallery = (e: unknown) => {
+  const el = (e as PointerEvent).target as HTMLElement;
   const g: HTMLElement | null = selector('#gallery');
   if (!g) {
     return;
@@ -82,8 +83,10 @@ export const toggleGallery = () => {
   g.style.overflow = 'hidden';
   if (g.style.height === GALLERY_HIDDEN_HIGHT) {
     g.style.height = 'auto';
+    el.innerText = '-';
     return;
   }
+  el.innerText = '+';
   g.style.height = GALLERY_HIDDEN_HIGHT;
 };
 
