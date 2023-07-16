@@ -187,7 +187,11 @@ export enum ButtonState {
 export type Selector = (x: string) => HTMLElement | null;
 export type SelectorAll = (x: string) => NodeList;
 export type CreateDiv = () => HTMLDivElement;
-export type CreateButton = () => HTMLButtonElement;
-export type CreateLink = () => HTMLAnchorElement;
+export type CreateLink = (
+  id: string,
+  style: string,
+  label: string,
+  clickHandler: () => void
+) => HTMLAnchorElement;
 export type SetTitle = (x: string) => void;
 export type GetTitle = () => string;

@@ -19,7 +19,7 @@ export const configPanelStyle = `
 export const buttonStyle = `
   display: flex;
   flex: fit-content;
-  min-height: 36px;
+  min-height: 34px;
   justify-content: center;
   align-items: center;
   color: white;
@@ -43,24 +43,22 @@ export const disabledButtonStyle = `
 
 export const downloadAllGalleryButtonStyle = `
   ${buttonStyle}
-  height: 36px;
   flex: none;
 `;
 
 export const downloadAllGalleryDisabledButtonStyle = `
   ${disabledButtonStyle}
-  height: 36px;
   flex: none;
   `;
 
 export const galleryButtonStyle = `
   ${buttonStyle}
-  width: 100%;
+  width: auto;
 `;
 
 export const galleryDisabledButtonStyle = `
   ${disabledButtonStyle}
-  width: 100%;
+  width: auto;
 `;
 
 export const downloadAllButtonStyle = buttonStyle;

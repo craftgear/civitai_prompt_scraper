@@ -181,7 +181,7 @@ const $b7e86ce3c5d2c83d$export$2c795915441ef547 = `
 const $b7e86ce3c5d2c83d$export$fd4d27a26b4854f3 = `
   display: flex;
   flex: fit-content;
-  min-height: 36px;
+  min-height: 34px;
   justify-content: center;
   align-items: center;
   color: white;
@@ -203,21 +203,19 @@ const $b7e86ce3c5d2c83d$export$dbe9a8011f5e5b2d = `
 `;
 const $b7e86ce3c5d2c83d$export$ef377faaa0db520 = `
   ${$b7e86ce3c5d2c83d$export$fd4d27a26b4854f3}
-  height: 36px;
   flex: none;
 `;
 const $b7e86ce3c5d2c83d$export$21cd342fafb0108a = `
   ${$b7e86ce3c5d2c83d$export$dbe9a8011f5e5b2d}
-  height: 36px;
   flex: none;
   `;
 const $b7e86ce3c5d2c83d$export$f272ae7639e11e3 = `
   ${$b7e86ce3c5d2c83d$export$fd4d27a26b4854f3}
-  width: 100%;
+  width: auto;
 `;
 const $b7e86ce3c5d2c83d$export$18f0fed469926683 = `
   ${$b7e86ce3c5d2c83d$export$dbe9a8011f5e5b2d}
-  width: 100%;
+  width: auto;
 `;
 const $b7e86ce3c5d2c83d$export$7ec3146dae3421e3 = $b7e86ce3c5d2c83d$export$fd4d27a26b4854f3;
 const $b7e86ce3c5d2c83d$export$b0c8f381295da638 = `
@@ -12576,8 +12574,8 @@ const $81ffdad4556cbf55$export$f922ebe57f2c36e8 = (xs, chunkSize = 5)=>xs.reduce
  */ const $6790e4d8d7342a47$export$b56cc0ee0a85f41e = (url, width, name)=>`https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/${url}/width=${width},optimized=true/${name ?? ""}`;
 const $6790e4d8d7342a47$export$b3bdca59378516d4 = (url)=>url.replace(/width=(\d*)/, `width=$1,optimized=true`);
 const $6790e4d8d7342a47$export$e8d0c38aad57b50f = (url)=>url.replace(",optimized=true", "");
-const $6790e4d8d7342a47$export$1f977c13d93a3bf8 = (nextData)=>nextData.props.pageProps.trpcState.json.queries[0] || {};
-const $6790e4d8d7342a47$export$446f1005883b7406 = (nextData)=>nextData.props.pageProps?.trpcState?.json?.queries[0]?.state?.data?.meta || {};
+const $6790e4d8d7342a47$export$1f977c13d93a3bf8 = (nextData)=>nextData.props?.pageProps?.trpcState?.json?.queries[0] || {};
+const $6790e4d8d7342a47$export$446f1005883b7406 = (nextData)=>nextData.props?.pageProps?.trpcState?.json?.queries[0]?.state?.data?.meta || {};
 
 
 const $c3454b9ab01d445e$var$extractFilebasenameFromImageUrl = (url)=>{
@@ -12865,8 +12863,14 @@ const $2e4159cc418f5166$export$44487a86467333c3 = (fieldName)=>{
 const $98f6748fc1e9fd4e$export$aea217a45095ce11 = (selector)=>document.querySelector(selector);
 const $98f6748fc1e9fd4e$export$2917eca99ebef21a = (selector)=>document.querySelectorAll(selector);
 const $98f6748fc1e9fd4e$export$331ff980f0d45cff = ()=>document.createElement("div");
-const $98f6748fc1e9fd4e$export$9b6d6ca62970729f = ()=>document.createElement("button");
-const $98f6748fc1e9fd4e$export$cdda5b1be25f9499 = ()=>document.createElement("a");
+const $98f6748fc1e9fd4e$export$cdda5b1be25f9499 = (id, style, label, clickHandler)=>{
+    const link = document.createElement("a");
+    link.id = id;
+    link.setAttribute("style", style);
+    link.innerText = label;
+    link.addEventListener("click", clickHandler);
+    return link;
+};
 const $98f6748fc1e9fd4e$export$420a7f2fd9cad6f6 = (x)=>{
     document.title = x;
 };
@@ -12898,10 +12902,8 @@ const $06cbd27ebbbf5f2a$export$1a1c301579a08d1e = async (descriptor, retryLimit 
     } else return element;
 };
 const $06cbd27ebbbf5f2a$var$parseNextData = ()=>{
-    const nextData = (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)("#__NEXT_DATA__") || {
-        innerText: ""
-    };
-    const data = JSON.parse(nextData.innerText);
+    const nextData = (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)("#__NEXT_DATA__");
+    const data = nextData ? JSON.parse(nextData.innerText) : {};
     return data;
 };
 const $06cbd27ebbbf5f2a$export$3f424da2b61cf569 = ()=>(0, $6790e4d8d7342a47$export$1f977c13d93a3bf8)($06cbd27ebbbf5f2a$var$parseNextData());
@@ -12929,6 +12931,17 @@ const $06cbd27ebbbf5f2a$export$3d6ebb5b74790dc2 = async ()=>{
 };
 const $06cbd27ebbbf5f2a$export$4a2d37b006372286 = async ()=>{
     return $06cbd27ebbbf5f2a$export$1a1c301579a08d1e(`#${$06cbd27ebbbf5f2a$var$BUTTON_CONTAINER_ID}`);
+};
+const $06cbd27ebbbf5f2a$var$GALLERY_HIDDEN_HIGHT = "300px";
+const $06cbd27ebbbf5f2a$export$3ff3f28c173b1fa2 = ()=>{
+    const g = (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)("#gallery");
+    if (!g) return;
+    g.style.overflow = "hidden";
+    if (g.style.height === $06cbd27ebbbf5f2a$var$GALLERY_HIDDEN_HIGHT) {
+        g.style.height = "auto";
+        return;
+    }
+    g.style.height = $06cbd27ebbbf5f2a$var$GALLERY_HIDDEN_HIGHT;
 };
 
 
@@ -12984,14 +12997,16 @@ const $e7c35bcf17ffba9d$export$8b03a564a450b487 = async (href)=>{
     const container = await (0, $06cbd27ebbbf5f2a$export$4a2d37b006372286)();
     const buttonIdSelector = `#${$e7c35bcf17ffba9d$var$BUTTON_ID}`;
     (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)(buttonIdSelector)?.remove();
-    const button = (0, $98f6748fc1e9fd4e$export$cdda5b1be25f9499)();
-    button.addEventListener("click", $e7c35bcf17ffba9d$export$53039d7a8d9d297e(buttonIdSelector, href));
-    button.id = $e7c35bcf17ffba9d$var$BUTTON_ID;
-    button.innerText = (0, $3a42d740ecc81982$export$d397f86d22f413e8)();
-    button.setAttribute("style", (0, $b7e86ce3c5d2c83d$export$fd4d27a26b4854f3));
+    const button = (0, $98f6748fc1e9fd4e$export$cdda5b1be25f9499)($e7c35bcf17ffba9d$var$BUTTON_ID, (0, $b7e86ce3c5d2c83d$export$fd4d27a26b4854f3), (0, $3a42d740ecc81982$export$d397f86d22f413e8)(), $e7c35bcf17ffba9d$export$53039d7a8d9d297e(buttonIdSelector, href));
     if ((0, $2e4159cc418f5166$export$44487a86467333c3)("downloadModelAsWell")) // start downloading a model
     button.addEventListener("click", $e7c35bcf17ffba9d$var$startModelDownload);
     container?.appendChild(button);
+    // show/hide gallery button
+    if (!(0, $98f6748fc1e9fd4e$export$aea217a45095ce11)("#hide-gallery")) {
+        const xGallery = (0, $98f6748fc1e9fd4e$export$cdda5b1be25f9499)("hide-gallery", "background-color: silver; border: 1px solid gray;", "x", (0, $06cbd27ebbbf5f2a$export$3ff3f28c173b1fa2));
+        const h2 = (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)("#gallery h2");
+        if (h2) h2.parentNode?.appendChild(xGallery);
+    }
 };
 
 
@@ -13066,6 +13081,13 @@ const $d19ac646c457e538$var$extractModelNameFromNextData = ()=>{
     const keys = Object.keys(metaData).filter((x)=>x.startsWith('"'));
     return keys.length > 0 ? keys.map((x)=>x.replace('"', "")).join(",") : "undefined";
 };
+const $d19ac646c457e538$var$extractModelName = (metaData)=>{
+    const modelName = metaData?.Model ?? "undefined";
+    if ((0, $2e4159cc418f5166$export$44487a86467333c3)("preferModelNameToLoRAName")) return modelName;
+    // Apparently a key starts with double quotation(") is a LoRA name.
+    const keys = Object.keys(metaData).filter((x)=>x.startsWith('"'));
+    return keys.length > 0 ? keys.map((x)=>x.replace('"', "")).join(",") : "undefined";
+};
 const $d19ac646c457e538$export$5fd187c0d03a79e = async (href)=>{
     const buttonIdSelector = `#${$d19ac646c457e538$var$BUTTON_ID}`;
     const _button = (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)(buttonIdSelector);
@@ -13073,7 +13095,6 @@ const $d19ac646c457e538$export$5fd187c0d03a79e = async (href)=>{
     _button?.remove();
     const { modelVersionId: modelVersionId , prioritizedUserId: prioritizedUserId , modelId: modelId , postId: postId , imageId: imageId  } = $d19ac646c457e538$var$extractIdsFromUrl(href);
     const modelName = $d19ac646c457e538$var$extractModelNameFromNextData();
-    const button = (0, $98f6748fc1e9fd4e$export$9b6d6ca62970729f)();
     const onFinishFn = ()=>{
         if ((0, $2e4159cc418f5166$export$44487a86467333c3)("galleryAutoDownload")) (0, $98f6748fc1e9fd4e$export$420a7f2fd9cad6f6)("✅ " + (0, $98f6748fc1e9fd4e$export$70d1bf7729efff40)());
     };
@@ -13088,10 +13109,7 @@ const $d19ac646c457e538$export$5fd187c0d03a79e = async (href)=>{
         return null;
     })();
     if (!eventListener) throw new Error("No necessary parameters found");
-    button.addEventListener("click", eventListener);
-    button.id = $d19ac646c457e538$var$BUTTON_ID;
-    button.innerText = (0, $3a42d740ecc81982$export$d397f86d22f413e8)();
-    button.setAttribute("style", (0, $b7e86ce3c5d2c83d$export$f272ae7639e11e3));
+    const button = (0, $98f6748fc1e9fd4e$export$cdda5b1be25f9499)($d19ac646c457e538$var$BUTTON_ID, (0, $b7e86ce3c5d2c83d$export$f272ae7639e11e3), (0, $3a42d740ecc81982$export$d397f86d22f413e8)(), eventListener);
     button.setAttribute("data-state", (0, $c08fa57dad1b6e82$export$5d7ba7f5550f99d1).ready);
     if ((0, $98f6748fc1e9fd4e$export$aea217a45095ce11)(".mantine-Modal-modal")) {
         const parentNode = await (0, $06cbd27ebbbf5f2a$export$1a1c301579a08d1e)(".mantine-Modal-modal .mantine-Card-cardSection");
@@ -13118,6 +13136,7 @@ const $ca465a359cd2bf87$var$addModelPreviewDownloadButton = async ()=>{
         await (0, $81ffdad4556cbf55$export$e772c8ff12451969)(2000);
         if (!href.match(/\/models\/\d*/)) return;
         (0, $81ffdad4556cbf55$export$bef1f36f5486a6a3)("model");
+        if ((0, $2e4159cc418f5166$export$44487a86467333c3)("openShowMore")) $ca465a359cd2bf87$var$openShowMore(30);
         await (0, $06cbd27ebbbf5f2a$export$3d6ebb5b74790dc2)();
         await (0, $e7c35bcf17ffba9d$export$8b03a564a450b487)(href);
     } catch (error) {
@@ -13148,7 +13167,7 @@ const $ca465a359cd2bf87$var$openShowMore = (retry = 5)=>{
     }, 1000);
 };
 let $ca465a359cd2bf87$var$prevHref = "";
-const $ca465a359cd2bf87$var$observer = new MutationObserver(async (_mutationList)=>{
+const $ca465a359cd2bf87$var$observer = new MutationObserver(async ()=>{
     const href = window.location.href;
     if ($ca465a359cd2bf87$var$prevHref !== href) {
         $ca465a359cd2bf87$var$prevHref = href;
@@ -13168,10 +13187,8 @@ async function $ca465a359cd2bf87$export$2e2bcd8739ae039() {
         });
         (0, $2e4159cc418f5166$export$3a5abe5201fb331)();
     }
-    if (window.location.href.match(/\/models\/\d*/)) {
-        await $ca465a359cd2bf87$var$addModelPreviewDownloadButton();
-        if ((0, $2e4159cc418f5166$export$44487a86467333c3)("openShowMore")) $ca465a359cd2bf87$var$openShowMore(30);
-    } else if (window.location.href.match(/\/images\/\d*/)) await $ca465a359cd2bf87$var$addGalleryImageDownloadButton();
+    if (window.location.href.match(/\/models\/\d*/)) await $ca465a359cd2bf87$var$addModelPreviewDownloadButton();
+    else if (window.location.href.match(/\/images\/\d*/)) await $ca465a359cd2bf87$var$addGalleryImageDownloadButton();
     (0, $81ffdad4556cbf55$export$bef1f36f5486a6a3)("done");
 }
 

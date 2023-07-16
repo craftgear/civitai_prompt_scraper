@@ -9,7 +9,7 @@ import { buildImgUrl } from '../domain/logic';
 import { ButtonState } from '../domain/types';
 
 import { getConfig } from '../infra/config_panel';
-import { createButton, getTitle, selector, setTitle } from '../infra/dom';
+import { createLink, getTitle, selector, setTitle } from '../infra/dom';
 import { createZip } from '../infra/file';
 import { fetchGalleryData } from '../infra/req';
 import {
@@ -129,6 +129,21 @@ const extractModelNameFromNextData = () => {
     : 'undefined';
 };
 
+const extractModelName = (metaData: any) => {
+  const modelName = metaData?.Model ?? 'undefined';
+
+  if (getConfig('preferModelNameToLoRAName')) {
+    return modelName;
+  }
+
+  // Apparently a key starts with double quotation(") is a LoRA name.
+  const keys = Object.keys(metaData).filter((x) => x.startsWith('"'));
+
+  return keys.length > 0
+    ? keys.map((x) => x.replace('"', '')).join(',')
+    : 'undefined';
+};
+
 export const addGalleryDownloadButton = async (href: string) => {
   const buttonIdSelector = `#${BUTTON_ID}`;
   const _button = selector(buttonIdSelector);
@@ -141,8 +156,6 @@ export const addGalleryDownloadButton = async (href: string) => {
     extractIdsFromUrl(href);
 
   const modelName = extractModelNameFromNextData();
-
-  const button = createButton();
 
   const onFinishFn = () => {
     if (getConfig('galleryAutoDownload')) {
@@ -185,11 +198,12 @@ export const addGalleryDownloadButton = async (href: string) => {
     throw new Error('No necessary parameters found');
   }
 
-  button.addEventListener('click', eventListener);
-
-  button.id = BUTTON_ID;
-  button.innerText = getButtonLabel();
-  button.setAttribute('style', galleryButtonStyle);
+  const button = createLink(
+    BUTTON_ID,
+    galleryButtonStyle,
+    getButtonLabel(),
+    eventListener
+  );
   button.setAttribute('data-state', ButtonState.ready);
   if (selector('.mantine-Modal-modal')) {
     const parentNode = await waitForElement(
