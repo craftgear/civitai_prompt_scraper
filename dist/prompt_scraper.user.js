@@ -226,10 +226,6 @@ const $b7e86ce3c5d2c83d$export$7ec3146dae3421e3 = `
 const $b7e86ce3c5d2c83d$export$b0c8f381295da638 = `
   display: flex;
   flex-direction: row;
-<<<<<<< HEAD
-
-  gap: 0.7rem
-=======
   gap: 0.7rem;
 `;
 const $b7e86ce3c5d2c83d$export$99a814b73a1b2d0f = `
@@ -237,7 +233,6 @@ const $b7e86ce3c5d2c83d$export$99a814b73a1b2d0f = `
   color: silver;
   font-weight: bold;
   padding: 0 8px;
->>>>>>> main
 `;
 
 
