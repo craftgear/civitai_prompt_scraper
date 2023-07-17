@@ -162,7 +162,7 @@ const $3a42d740ecc81982$export$4d9f09007b08c03d = ()=>$3a42d740ecc81982$export$7
 
 
 const $b7e86ce3c5d2c83d$export$2c795915441ef547 = `
-  z-index: 100;
+  z-index: 1000;
   position: fixed;
   top: 2rem;
   right: 2rem;
@@ -12938,7 +12938,7 @@ const $06cbd27ebbbf5f2a$export$3d6ebb5b74790dc2 = async ()=>{
 const $06cbd27ebbbf5f2a$export$4a2d37b006372286 = async ()=>{
     return $06cbd27ebbbf5f2a$export$1a1c301579a08d1e(`#${$06cbd27ebbbf5f2a$var$BUTTON_CONTAINER_ID}`);
 };
-const $06cbd27ebbbf5f2a$var$GALLERY_HIDDEN_HIGHT = "150px";
+const $06cbd27ebbbf5f2a$var$GALLERY_HIDDEN_HIGHT = "100px";
 const $06cbd27ebbbf5f2a$export$3ff3f28c173b1fa2 = (e)=>{
     const el = e.target;
     const g = (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)("#gallery");
