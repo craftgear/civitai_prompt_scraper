@@ -53,11 +53,13 @@ export const downloadAllGalleryDisabledButtonStyle = `
 
 export const galleryButtonStyle = `
   ${buttonStyle}
+  margin: 0 12px;
   width: auto;
 `;
 
 export const galleryDisabledButtonStyle = `
   ${disabledButtonStyle}
+  margin: 0 12px;
   width: auto;
 `;
 
