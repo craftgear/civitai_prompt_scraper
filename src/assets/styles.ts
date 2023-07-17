@@ -1,5 +1,5 @@
 export const configPanelStyle = `
-  z-index: 100;
+  z-index: 1000;
   position: fixed;
   top: 2rem;
   right: 2rem;
@@ -53,11 +53,13 @@ export const downloadAllGalleryDisabledButtonStyle = `
 
 export const galleryButtonStyle = `
   ${buttonStyle}
+  margin: 0 12px;
   width: auto;
 `;
 
 export const galleryDisabledButtonStyle = `
   ${disabledButtonStyle}
+  margin: 0 12px;
   width: auto;
 `;
 

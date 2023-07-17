@@ -162,7 +162,7 @@ const $3a42d740ecc81982$export$4d9f09007b08c03d = ()=>$3a42d740ecc81982$export$7
 
 
 const $b7e86ce3c5d2c83d$export$2c795915441ef547 = `
-  z-index: 100;
+  z-index: 1000;
   position: fixed;
   top: 2rem;
   right: 2rem;
@@ -211,10 +211,12 @@ const $b7e86ce3c5d2c83d$export$21cd342fafb0108a = `
   `;
 const $b7e86ce3c5d2c83d$export$f272ae7639e11e3 = `
   ${$b7e86ce3c5d2c83d$export$fd4d27a26b4854f3}
+  margin: 0 12px;
   width: auto;
 `;
 const $b7e86ce3c5d2c83d$export$18f0fed469926683 = `
   ${$b7e86ce3c5d2c83d$export$dbe9a8011f5e5b2d}
+  margin: 0 12px;
   width: auto;
 `;
 const $b7e86ce3c5d2c83d$export$7ec3146dae3421e3 = `
