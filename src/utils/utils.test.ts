@@ -33,7 +33,7 @@ describe('chunkArray', () => {
   const arg = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
 
   it('splits an array into sub arrays with 5 items each', () => {
-    const result = chunkArray(arg);
+    const result = chunkArray(arg, 5);
     expect(result).toEqual([
       [1, 2, 3, 4, 5],
       [6, 7, 8, 9, 0],
