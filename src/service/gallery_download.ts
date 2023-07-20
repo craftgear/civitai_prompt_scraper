@@ -4,9 +4,9 @@ import {
   getI18nLabel,
 } from '../assets/lang';
 import { galleryButtonStyle } from '../assets/styles';
-import { downloadImagesAndPrompts } from '../controller/model_image_download';
 import { buildImgUrl } from '../domain/logic';
 import { ButtonState } from '../domain/types';
+import { downloadImagesAndPrompts } from '../service/model_image_download';
 
 import { getConfig } from '../infra/config_panel';
 import { createLink, getTitle, selector, setTitle } from '../infra/dom';

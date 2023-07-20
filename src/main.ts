@@ -1,6 +1,6 @@
-import { addGalleryDownloadButton } from './controller/gallery_download';
-import { addModelImagesDownloadButton } from './controller/model_image_download';
 import { getConfig, initConfigPanel } from './infra/config_panel';
+import { addGalleryDownloadButton } from './service/gallery_download';
+import { addModelImagesDownloadButton } from './service/model_image_download';
 
 import { addButtonContainer } from './utils/dom';
 import { log, sleep } from './utils/utils';

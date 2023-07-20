@@ -27,6 +27,7 @@ typeof globalThis !== 'undefined'
 function $parcel$interopDefault(a) {
   return a && a.__esModule ? a.default : a;
 }
+// eslint-disable-next-line
 const $3a42d740ecc81982$var$i18n = {
     buttonLabel: {
         en: "Download images with JSON",
@@ -231,11 +232,6 @@ const $b7e86ce3c5d2c83d$export$99a814b73a1b2d0f = `
   font-weight: bold;
   padding: 0 8px;
 `;
-
-
-
-
-// eslint-disable-next-line
 
 
 /// <reference types="./index.d.ts" />
@@ -12548,7 +12544,7 @@ var $b9a27db92abc3f0f$exports = {};
 
 
 var $39e7bd012fbaed99$exports = {};
-$39e7bd012fbaed99$exports = JSON.parse('{"name":"civitai_prompt_scraper","browserslist":"> 5%, last 1 versions, not dead","version":"1.2.15","description":"","source":"src/prompt_scraper.user.ts","browser ":"dist/prompt_scraper.user.js","targets":{"default":{"context":"browser","sourceMap":false,"includeNodeModules":true,"optimize":true}},"scripts":{"type-check":"tsc --noEmit","lint":"eslint","format":"prettier --write .","watch":"parcel watch","build":"rm -rf .parcel-cache/*; parcel build; zip -v -j ./dist/prompt_scraper.zip ./dist/prompt_scraper.user.js","clean":"rm ./dist/*","test":"vitest --dom","check":"tsc --noEmit"},"author":"Watanabe, Shunsuke","license":"MIT","devDependencies":{"@damoclark/parcel-optimizer-userscript":"^0.0.2","@parcel/packager-ts":"^2.8.3","@parcel/transformer-typescript-types":"^2.8.3","@tsconfig/recommended":"^1.0.2","@types/file-saver":"^2.0.5","@types/lodash":"^4.14.191","@typescript-eslint/eslint-plugin":"^5.52.0","@typescript-eslint/parser":"^5.52.0","@violentmonkey/types":"^0.1.5","eslint":"^8.34.0","eslint-config-standard-with-typescript":"^34.0.0","eslint-plugin-import":"^2.27.5","eslint-plugin-n":"^15.6.1","eslint-plugin-promise":"^6.1.1","happy-dom":"^10.3.2","parcel":"^2.8.3","prettier":"^2.8.4","prettier-plugin-organize-imports":"^3.2.2","rollup-plugin-cleanup":"^3.2.1","typescript":"^4.9.5","vitest":"^0.33.0"},"dependencies":{"@violentmonkey/url":"^0.1.0","@zip.js/zip.js":"^2.6.63","file-saver":"^2.0.5","html2canvas":"^1.4.1","lodash":"^4.17.21","wazip":"^0.1.0"}}');
+$39e7bd012fbaed99$exports = JSON.parse('{"name":"civitai_prompt_scraper","browserslist":"> 5%, last 1 versions, not dead","version":"1.2.15","description":"","source":"src/prompt_scraper.user.ts","browser ":"dist/prompt_scraper.user.js","targets":{"default":{"context":"browser","sourceMap":false,"includeNodeModules":true,"optimize":true}},"scripts":{"type-check":"tsc --noEmit","lint":"eslint","format":"prettier --write .","watch":"parcel watch","build":"rm -rf .parcel-cache/*; parcel build; zip -v -j ./dist/prompt_scraper.zip ./dist/prompt_scraper.user.js","clean":"rm ./dist/*","test":"vitest --dom","coverage":"vitest --coverage","check":"tsc --noEmit"},"author":"Watanabe, Shunsuke","license":"MIT","devDependencies":{"@damoclark/parcel-optimizer-userscript":"^0.0.2","@parcel/packager-ts":"^2.8.3","@parcel/transformer-typescript-types":"^2.8.3","@tsconfig/recommended":"^1.0.2","@types/file-saver":"^2.0.5","@types/lodash":"^4.14.191","@typescript-eslint/eslint-plugin":"^5.52.0","@typescript-eslint/parser":"^5.52.0","@violentmonkey/types":"^0.1.5","@vitest/coverage-v8":"^0.33.0","eslint":"^8.34.0","eslint-config-standard-with-typescript":"^34.0.0","eslint-plugin-import":"^2.27.5","eslint-plugin-n":"^15.6.1","eslint-plugin-promise":"^6.1.1","happy-dom":"^10.3.2","parcel":"^2.8.3","prettier":"^2.8.4","prettier-plugin-organize-imports":"^3.2.2","rollup-plugin-cleanup":"^3.2.1","typescript":"^4.9.5","vitest":"^0.33.0"},"dependencies":{"@violentmonkey/url":"^0.1.0","@zip.js/zip.js":"^2.6.63","file-saver":"^2.0.5","html2canvas":"^1.4.1","lodash":"^4.17.21","wazip":"^0.1.0"}}');
 
 
 const $81ffdad4556cbf55$export$bef1f36f5486a6a3 = (...xs)=>{
@@ -12868,6 +12864,22 @@ const $2e4159cc418f5166$export$44487a86467333c3 = (fieldName)=>{
 };
 
 
+
+
+
+/**
+ * api responses
+ */ let $c08fa57dad1b6e82$export$5d7ba7f5550f99d1;
+(function(ButtonState) {
+    ButtonState["ready"] = "ready";
+    ButtonState["inProgress"] = "in-progress";
+    ButtonState["done"] = "done";
+})($c08fa57dad1b6e82$export$5d7ba7f5550f99d1 || ($c08fa57dad1b6e82$export$5d7ba7f5550f99d1 = {}));
+
+
+
+
+
 const $98f6748fc1e9fd4e$export$aea217a45095ce11 = (selector)=>document.querySelector(selector);
 const $98f6748fc1e9fd4e$export$2917eca99ebef21a = (selector)=>document.querySelectorAll(selector);
 const $98f6748fc1e9fd4e$export$331ff980f0d45cff = ()=>document.createElement("div");
@@ -12888,15 +12900,6 @@ const $98f6748fc1e9fd4e$export$70d1bf7729efff40 = ()=>document.title;
 
 
 
-
-/**
- * api responses
- */ let $c08fa57dad1b6e82$export$5d7ba7f5550f99d1;
-(function(ButtonState) {
-    ButtonState["ready"] = "ready";
-    ButtonState["inProgress"] = "in-progress";
-    ButtonState["done"] = "done";
-})($c08fa57dad1b6e82$export$5d7ba7f5550f99d1 || ($c08fa57dad1b6e82$export$5d7ba7f5550f99d1 = {}));
 
 
 
@@ -12956,9 +12959,9 @@ const $06cbd27ebbbf5f2a$export$3ff3f28c173b1fa2 = (e)=>{
 };
 
 
-const $e7c35bcf17ffba9d$var$BUTTON_ID = "download-all-images-and-prompts";
-const $e7c35bcf17ffba9d$var$downloadButtonSelector = "a[href^='/api/download/models/']";
-const $e7c35bcf17ffba9d$var$getModeInfoAndImageList = async (href)=>{
+const $90c9ab75e73296e8$var$BUTTON_ID = "download-all-images-and-prompts";
+const $90c9ab75e73296e8$var$downloadButtonSelector = "a[href^='/api/download/models/']";
+const $90c9ab75e73296e8$var$getModeInfoAndImageList = async (href)=>{
     const hrefModelId = href.match(/\/models\/(?<modelId>\d*)/)?.groups?.modelId ?? href.match(/modelId=(?<modelId>\d*)/)?.groups?.modelId;
     const hrefModelVersionId = href.match(/modelVersionId=(?<modelVersionId>\d*)/)?.groups?.modelVersionId;
     const modelInfo = await (0, $c3454b9ab01d445e$export$769102d94f147e19)(hrefModelId, hrefModelVersionId);
@@ -12981,17 +12984,17 @@ const $e7c35bcf17ffba9d$var$getModeInfoAndImageList = async (href)=>{
         modelInfo: modelInfo
     };
 };
-const $e7c35bcf17ffba9d$var$startModelDownload = async ()=>{
-    await (0, $06cbd27ebbbf5f2a$export$1a1c301579a08d1e)($e7c35bcf17ffba9d$var$downloadButtonSelector);
-    const modelDownloadUrl = document.querySelector($e7c35bcf17ffba9d$var$downloadButtonSelector)?.getAttribute("href");
+const $90c9ab75e73296e8$var$startModelDownload = async ()=>{
+    await (0, $06cbd27ebbbf5f2a$export$1a1c301579a08d1e)($90c9ab75e73296e8$var$downloadButtonSelector);
+    const modelDownloadUrl = document.querySelector($90c9ab75e73296e8$var$downloadButtonSelector)?.getAttribute("href");
     if (modelDownloadUrl) window.open(modelDownloadUrl, "_blank");
 };
-const $e7c35bcf17ffba9d$export$53039d7a8d9d297e = (buttonIdSelector, location)=>async ()=>{
+const $90c9ab75e73296e8$export$53039d7a8d9d297e = (buttonIdSelector, location)=>async ()=>{
         try {
             const button = await (0, $06cbd27ebbbf5f2a$export$1a1c301579a08d1e)(buttonIdSelector);
             if (!button) return;
             button.innerText = (0, $3a42d740ecc81982$export$731a191155ffa90a)("startingDownload");
-            const { modelId: modelId , modelName: modelName , imageList: imageList , modelVersionId: modelVersionId , modelVersionName: modelVersionName , modelInfo: modelInfo  } = await $e7c35bcf17ffba9d$var$getModeInfoAndImageList(location);
+            const { modelId: modelId , modelName: modelName , imageList: imageList , modelVersionId: modelVersionId , modelVersionName: modelVersionName , modelInfo: modelInfo  } = await $90c9ab75e73296e8$var$getModeInfoAndImageList(location);
             const filenameFormat = (0, $2e4159cc418f5166$export$44487a86467333c3)("modelPreviewFilenameFormat");
             const filename = filenameFormat.replace("{modelId}", `${modelId ?? ""}`).replace("{modelName}", modelName).replace("{modelVersionId}", `${modelVersionId}`).replace("{modelVersionName}", modelVersionName);
             await (0, $c5da2b8a14082d8b$export$b6bc24646229cedd)((0, $06cbd27ebbbf5f2a$export$bb64a7e3f0f28938)(button))(filename, modelInfo)(imageList);
@@ -13004,13 +13007,13 @@ const $e7c35bcf17ffba9d$export$53039d7a8d9d297e = (buttonIdSelector, location)=>
             alert(error.message);
         }
     };
-const $e7c35bcf17ffba9d$export$8b03a564a450b487 = async (href)=>{
+const $90c9ab75e73296e8$export$8b03a564a450b487 = async (href)=>{
     const container = await (0, $06cbd27ebbbf5f2a$export$4a2d37b006372286)();
-    const buttonIdSelector = `#${$e7c35bcf17ffba9d$var$BUTTON_ID}`;
+    const buttonIdSelector = `#${$90c9ab75e73296e8$var$BUTTON_ID}`;
     (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)(buttonIdSelector)?.remove();
-    const button = (0, $98f6748fc1e9fd4e$export$cdda5b1be25f9499)($e7c35bcf17ffba9d$var$BUTTON_ID, (0, $b7e86ce3c5d2c83d$export$fd4d27a26b4854f3), (0, $3a42d740ecc81982$export$d397f86d22f413e8)(), $e7c35bcf17ffba9d$export$53039d7a8d9d297e(buttonIdSelector, href));
+    const button = (0, $98f6748fc1e9fd4e$export$cdda5b1be25f9499)($90c9ab75e73296e8$var$BUTTON_ID, (0, $b7e86ce3c5d2c83d$export$fd4d27a26b4854f3), (0, $3a42d740ecc81982$export$d397f86d22f413e8)(), $90c9ab75e73296e8$export$53039d7a8d9d297e(buttonIdSelector, href));
     if ((0, $2e4159cc418f5166$export$44487a86467333c3)("downloadModelAsWell")) // start downloading a model
-    button.addEventListener("click", $e7c35bcf17ffba9d$var$startModelDownload);
+    button.addEventListener("click", $90c9ab75e73296e8$var$startModelDownload);
     container?.appendChild(button);
     // show/hide gallery button
     if (!(0, $98f6748fc1e9fd4e$export$aea217a45095ce11)("#hide-gallery")) {
@@ -13026,10 +13029,8 @@ const $e7c35bcf17ffba9d$export$8b03a564a450b487 = async (href)=>{
 
 
 
-
-
-const $d19ac646c457e538$var$BUTTON_ID = "download-all-gallery-images-and-prompts";
-const $d19ac646c457e538$var$downloadGalleryImagesAndPrompts = (buttonIdSelector, modelId, postId, modelName, onFinishFn)=>async ()=>{
+const $32b5bff137232fe2$var$BUTTON_ID = "download-all-gallery-images-and-prompts";
+const $32b5bff137232fe2$var$downloadGalleryImagesAndPrompts = (buttonIdSelector, modelId, postId, modelName, onFinishFn)=>async ()=>{
         try {
             const imgList = await (0, $c3454b9ab01d445e$export$c6ace8a485846f08)(modelId, postId);
             const button = await (0, $06cbd27ebbbf5f2a$export$1a1c301579a08d1e)(buttonIdSelector);
@@ -13045,7 +13046,7 @@ const $d19ac646c457e538$var$downloadGalleryImagesAndPrompts = (buttonIdSelector,
             alert(error.message);
         }
     };
-const $d19ac646c457e538$var$downloadSingleImagesAndPrompts = (buttonIdSelector)=>async ()=>{
+const $32b5bff137232fe2$var$downloadSingleImagesAndPrompts = (buttonIdSelector)=>async ()=>{
         try {
             const model = (0, $06cbd27ebbbf5f2a$export$3f424da2b61cf569)();
             const { id: id , url: url , meta: meta , width: width , name: name , hash: hash  } = model.state.data;
@@ -13065,7 +13066,7 @@ const $d19ac646c457e538$var$downloadSingleImagesAndPrompts = (buttonIdSelector)=
             alert(error.message);
         }
     };
-const $d19ac646c457e538$var$extractIdsFromUrl = (href)=>{
+const $32b5bff137232fe2$var$extractIdsFromUrl = (href)=>{
     const matchedModel = href.match(/modelId=(?<modelId>\d*)/);
     const modelId = matchedModel?.groups?.modelId || null;
     const matchedModelVersion = href.match(/modelVersionId=(?<modelVersionId>\d*)/);
@@ -13084,7 +13085,7 @@ const $d19ac646c457e538$var$extractIdsFromUrl = (href)=>{
         imageId: imageId
     };
 };
-const $d19ac646c457e538$var$extractModelNameFromNextData = ()=>{
+const $32b5bff137232fe2$var$extractModelNameFromNextData = ()=>{
     const metaData = (0, $06cbd27ebbbf5f2a$export$c6edc740badbb62e)();
     const modelName = metaData?.Model ?? "undefined";
     if ((0, $2e4159cc418f5166$export$44487a86467333c3)("preferModelNameToLoRAName")) return modelName;
@@ -13092,35 +13093,35 @@ const $d19ac646c457e538$var$extractModelNameFromNextData = ()=>{
     const keys = Object.keys(metaData).filter((x)=>x.startsWith('"'));
     return keys.length > 0 ? keys.map((x)=>x.replace('"', "")).join(",") : "undefined";
 };
-const $d19ac646c457e538$var$extractModelName = (metaData)=>{
+const $32b5bff137232fe2$var$extractModelName = (metaData)=>{
     const modelName = metaData?.Model ?? "undefined";
     if ((0, $2e4159cc418f5166$export$44487a86467333c3)("preferModelNameToLoRAName")) return modelName;
     // Apparently a key starts with double quotation(") is a LoRA name.
     const keys = Object.keys(metaData).filter((x)=>x.startsWith('"'));
     return keys.length > 0 ? keys.map((x)=>x.replace('"', "")).join(",") : "undefined";
 };
-const $d19ac646c457e538$export$5fd187c0d03a79e = async (href)=>{
-    const buttonIdSelector = `#${$d19ac646c457e538$var$BUTTON_ID}`;
+const $32b5bff137232fe2$export$5fd187c0d03a79e = async (href)=>{
+    const buttonIdSelector = `#${$32b5bff137232fe2$var$BUTTON_ID}`;
     const _button = (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)(buttonIdSelector);
     if (_button && _button.getAttribute("data-state") !== (0, $c08fa57dad1b6e82$export$5d7ba7f5550f99d1).ready) return;
     _button?.remove();
-    const { modelVersionId: modelVersionId , prioritizedUserId: prioritizedUserId , modelId: modelId , postId: postId , imageId: imageId  } = $d19ac646c457e538$var$extractIdsFromUrl(href);
-    const modelName = $d19ac646c457e538$var$extractModelNameFromNextData();
+    const { modelVersionId: modelVersionId , prioritizedUserId: prioritizedUserId , modelId: modelId , postId: postId , imageId: imageId  } = $32b5bff137232fe2$var$extractIdsFromUrl(href);
+    const modelName = $32b5bff137232fe2$var$extractModelNameFromNextData();
     const onFinishFn = ()=>{
         if ((0, $2e4159cc418f5166$export$44487a86467333c3)("galleryAutoDownload")) (0, $98f6748fc1e9fd4e$export$420a7f2fd9cad6f6)("✅ " + (0, $98f6748fc1e9fd4e$export$70d1bf7729efff40)());
     };
     const eventListener = (()=>{
         // open gallery from model preview images
-        if (modelVersionId && prioritizedUserId) return (0, $e7c35bcf17ffba9d$export$53039d7a8d9d297e)(buttonIdSelector, href);
+        if (modelVersionId && prioritizedUserId) return (0, $90c9ab75e73296e8$export$53039d7a8d9d297e)(buttonIdSelector, href);
         // open gallery from model gallery areas
-        if (modelId && postId) return $d19ac646c457e538$var$downloadGalleryImagesAndPrompts(buttonIdSelector, modelId, postId, modelName, onFinishFn);
+        if (modelId && postId) return $32b5bff137232fe2$var$downloadGalleryImagesAndPrompts(buttonIdSelector, modelId, postId, modelName, onFinishFn);
         // open gallery from post pages
-        if (postId) return $d19ac646c457e538$var$downloadGalleryImagesAndPrompts(buttonIdSelector, null, postId, modelName, onFinishFn);
-        if (imageId) return $d19ac646c457e538$var$downloadSingleImagesAndPrompts(buttonIdSelector);
+        if (postId) return $32b5bff137232fe2$var$downloadGalleryImagesAndPrompts(buttonIdSelector, null, postId, modelName, onFinishFn);
+        if (imageId) return $32b5bff137232fe2$var$downloadSingleImagesAndPrompts(buttonIdSelector);
         return null;
     })();
     if (!eventListener) throw new Error("No necessary parameters found");
-    const button = (0, $98f6748fc1e9fd4e$export$cdda5b1be25f9499)($d19ac646c457e538$var$BUTTON_ID, (0, $b7e86ce3c5d2c83d$export$f272ae7639e11e3), (0, $3a42d740ecc81982$export$d397f86d22f413e8)(), eventListener);
+    const button = (0, $98f6748fc1e9fd4e$export$cdda5b1be25f9499)($32b5bff137232fe2$var$BUTTON_ID, (0, $b7e86ce3c5d2c83d$export$f272ae7639e11e3), (0, $3a42d740ecc81982$export$d397f86d22f413e8)(), eventListener);
     button.setAttribute("data-state", (0, $c08fa57dad1b6e82$export$5d7ba7f5550f99d1).ready);
     if ((0, $98f6748fc1e9fd4e$export$aea217a45095ce11)(".mantine-Modal-modal")) {
         const parentNode = await (0, $06cbd27ebbbf5f2a$export$1a1c301579a08d1e)(".mantine-Modal-modal .mantine-Card-cardSection");
@@ -13138,7 +13139,6 @@ const $d19ac646c457e538$export$5fd187c0d03a79e = async (href)=>{
 
 
 
-
 const $ca465a359cd2bf87$var$addModelPreviewDownloadButton = async ()=>{
     const href = window.location.href;
     try {
@@ -13149,7 +13149,7 @@ const $ca465a359cd2bf87$var$addModelPreviewDownloadButton = async ()=>{
         (0, $81ffdad4556cbf55$export$bef1f36f5486a6a3)("model");
         if ((0, $2e4159cc418f5166$export$44487a86467333c3)("openShowMore")) $ca465a359cd2bf87$var$openShowMore(30);
         await (0, $06cbd27ebbbf5f2a$export$3d6ebb5b74790dc2)();
-        await (0, $e7c35bcf17ffba9d$export$8b03a564a450b487)(href);
+        await (0, $90c9ab75e73296e8$export$8b03a564a450b487)(href);
     } catch (error) {
         alert(error.message);
     }
@@ -13162,7 +13162,7 @@ const $ca465a359cd2bf87$var$addGalleryImageDownloadButton = async ()=>{
         await (0, $81ffdad4556cbf55$export$e772c8ff12451969)(2000);
         if (!href.match(/\/images\/\d*/)) return;
         (0, $81ffdad4556cbf55$export$bef1f36f5486a6a3)("gallery");
-        await (0, $d19ac646c457e538$export$5fd187c0d03a79e)(href);
+        await (0, $32b5bff137232fe2$export$5fd187c0d03a79e)(href);
     } catch (error) {
         alert(error.message);
     }
