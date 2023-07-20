@@ -2,7 +2,7 @@
 
 Thi is an userscript to download images and metadata as a zip file.
 
-This works for ViolentMokey in both Chrome and Firefox.
+This works for ViolentMokey both in Chrome and Firefox.
 
   <br/>
 
