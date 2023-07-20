@@ -21,6 +21,7 @@
     "build": "rm -rf .parcel-cache/*; parcel build; zip -v -j ./dist/prompt_scraper.zip ./dist/prompt_scraper.user.js",
     "clean": "rm ./dist/*",
     "test": "vitest --dom",
+    "coverage": "vitest --coverage",
     "check": "tsc --noEmit"
   },
   "author": "Watanabe, Shunsuke",
