@@ -93,14 +93,25 @@ describe('updateButtonText', () => {
 
 describe('replaceWithDisabledButton', () => {
   it('replace a button with a disabled one', () => {
+    const buttonId = 'button-id';
+    const disabledText = 'hoge';
     const button = {
-      id: 'button-id',
+      id: buttonId,
       parentNode: {
-        replaceChild: () => null,
+        replaceChild: vi.fn(),
       },
     };
-    const spy = vi.spyOn(button.parentNode, 'replaceChild');
-    replaceWithDisabledButton(button as unknown as HTMLElement, 'hoge');
-    expect(spy).toHaveBeenCalledWith({});
+
+    replaceWithDisabledButton(button as unknown as HTMLElement, disabledText);
+
+    expect(button.parentNode.replaceChild.mock.lastCall[0].id).toEqual(
+      buttonId
+    );
+    expect(button.parentNode.replaceChild.mock.lastCall[0].innerText).toEqual(
+      disabledText
+    );
+    expect(button.parentNode.replaceChild.mock.lastCall[1].id).toEqual(
+      buttonId
+    );
   });
 });
