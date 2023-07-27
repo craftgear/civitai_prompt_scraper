@@ -62,7 +62,12 @@ const downloadGalleryImagesAndPrompts =
   };
 
 const downloadSingleImagesAndPrompts =
-  (buttonIdSelector: string) => async () => {
+  (
+    buttonIdSelector: string,
+
+    onFinishFn?: () => void
+  ) =>
+  async () => {
     try {
       const model = parseModelMetaFromSingleImageNextData();
       const { id, url, meta, width, name, hash } = model.state.data;
@@ -82,6 +87,9 @@ const downloadSingleImagesAndPrompts =
         { url: imgUrl, hash, meta },
       ]);
 
+      if (onFinishFn) {
+        onFinishFn();
+      }
       replaceWithDisabledButton(button, getButtonCompleteLabel());
     } catch (error: unknown) {
       alert((error as Error).message);
@@ -189,7 +197,7 @@ export const addGalleryDownloadButton = async (href: string) => {
       );
     }
     if (imageId) {
-      return downloadSingleImagesAndPrompts(buttonIdSelector);
+      return downloadSingleImagesAndPrompts(buttonIdSelector, onFinishFn);
     }
     return null;
   })();
