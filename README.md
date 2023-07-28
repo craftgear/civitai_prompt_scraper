@@ -2,7 +2,7 @@
 
 Thi is an userscript to download images and metadata as a zip file.
 
-This works for ViolentMokey in both Chrome and Firefox.
+This works for ViolentMokey both in Chrome and Firefox.
 
   <br/>
 
@@ -40,7 +40,7 @@ Access config panel from Violentmonkey.
 ## ⚠️Caveats
 
 - You need to wait for a few seconds to see a button.
-- It is slow as it downloads files one by one.
+- It might be slow as it downloads 5 files at a time.
 - A tab downloading in progress should remain open, or downloading fails.
 - It prioritizes downloading avif/webp.
 
