@@ -180,7 +180,7 @@ export const addGalleryDownloadButton = async (href: string) => {
     if (modelId && postId) {
       return downloadGalleryImagesAndPrompts(
         buttonIdSelector,
-        modelId,
+        null,
         postId,
         modelName,
         onFinishFn
