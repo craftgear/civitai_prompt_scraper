@@ -1,14 +1,11 @@
 import { BlobReader, TextReader, ZipWriter } from '@zip.js/zip.js';
 import { getI18nLabel } from '../assets/lang';
+import { optimizeUrl, unoptimizeUrl } from '../domain/logic';
 import {
   GalleryImagesResponse,
   ModelResponse,
   ModelVersionResponse,
 } from '../domain/types';
-import {
-  optimizeUrl,
-  unoptimizeUrl
-} from '../domain/logic';
 
 const extractFilebasenameFromImageUrl = (url: string) => {
   const filename = url.split('/').slice(-1)[0];
@@ -53,8 +50,8 @@ export const fetchModelInfoByModleIdOrModelVersionId = async (
   const id = modelId
     ? modelId
     : modelVersionId
-      ? (await fetchModelVersionData(modelVersionId)).modelId.toString()
-      : '';
+    ? (await fetchModelVersionData(modelVersionId)).modelId.toString()
+    : '';
 
   if (!id) {
     throw new Error(getI18nLabel('modelIdNotFoundError'));
@@ -77,7 +74,7 @@ export const fetchGalleryData = async (
     params.push(`postId=${postId}`);
   }
   if (modelId) {
-    params.push(`modelId=${modelId}`);
+    // params.push(`modelId=${modelId}`);
   }
   if (modelVersionId) {
     params.push(`modelVersionId=${modelVersionId}`);
@@ -130,35 +127,35 @@ export const fetchImg = async (
 
 export const fetchImgs =
   (zipWriter: ZipWriter<Blob>, addedNames: Set<string>) =>
-    async (imgInfo: { url: string; hash: string; meta: unknown }[]) =>
-      await Promise.all(
-        imgInfo.map(async (x) => {
-          const response = await fetchImg(optimizeUrl(x.url));
-          if (!response) {
-            throw new Error(`response is null: ${x.url}`);
-          }
-          const { blob, contentType } = response;
+  async (imgInfo: { url: string; hash: string; meta: unknown }[]) =>
+    await Promise.all(
+      imgInfo.map(async (x) => {
+        const response = await fetchImg(optimizeUrl(x.url));
+        if (!response) {
+          throw new Error(`response is null: ${x.url}`);
+        }
+        const { blob, contentType } = response;
 
-          let name =
-            extractFilebasenameFromImageUrl(x.url) ||
-            x.hash.replace(/[;:?*.]/g, '_');
-          while (addedNames.has(name)) {
-            name += '_';
-          }
+        let name =
+          extractFilebasenameFromImageUrl(x.url) ||
+          x.hash.replace(/[;:?*.]/g, '_');
+        while (addedNames.has(name)) {
+          name += '_';
+        }
 
-          const filename =
-            (contentType && `${name}.${contentType.split('/')[1]}`) ||
-            `${name}.png`;
+        const filename =
+          (contentType && `${name}.${contentType.split('/')[1]}`) ||
+          `${name}.png`;
 
-          await zipWriter.add(filename, new BlobReader(blob));
-          addedNames.add(name);
+        await zipWriter.add(filename, new BlobReader(blob));
+        addedNames.add(name);
 
-          if (x.meta) {
-            const jsonFilename = name + '.json';
-            await zipWriter.add(
-              jsonFilename,
-              new TextReader(JSON.stringify(x.meta, null, '\t'))
-            );
-          }
-        })
-      );
+        if (x.meta) {
+          const jsonFilename = name + '.json';
+          await zipWriter.add(
+            jsonFilename,
+            new TextReader(JSON.stringify(x.meta, null, '\t'))
+          );
+        }
+      })
+    );
