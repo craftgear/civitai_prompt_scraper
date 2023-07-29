@@ -20,6 +20,21 @@ const addDownloadAllButton = async () => {
   }
 };
 
+const openShowMore = (retry = 10) => {
+  const showMoreButton = Array.from(document.querySelectorAll('button')).filter(
+    (x: HTMLElement) => x.innerHTML.includes('Show More')
+  )[0];
+  if (showMoreButton) {
+    showMoreButton.click();
+    return;
+  }
+  if (retry > 0) {
+    setTimeout(() => {
+      openShowMore(retry - 1);
+    }, 200);
+  }
+};
+
 const addModelPreviewDownloadButton = async () => {
   const href = window.location.href;
   try {
@@ -32,7 +47,8 @@ const addModelPreviewDownloadButton = async () => {
     log('model');
 
     if (getConfig('openShowMore')) {
-      openShowMore(30);
+      openShowMore();
+      document.addEventListener('focus', () => openShowMore());
     }
 
     await addButtonContainer();
@@ -55,21 +71,6 @@ const addGalleryImageDownloadButton = async () => {
     await addGalleryDownloadButton(href);
   } catch (error: unknown) {
     alert((error as Error).message);
-  }
-};
-
-const openShowMore = (retry = 5) => {
-  const showMoreButton = Array.from(document.querySelectorAll('button')).filter(
-    (x: HTMLElement) => x.innerHTML.includes('Show More')
-  )[0];
-  if (showMoreButton) {
-    showMoreButton.click();
-    return;
-  }
-  if (retry > 0) {
-    setTimeout(() => {
-      openShowMore(retry - 1);
-    }, 1000);
   }
 };
 
