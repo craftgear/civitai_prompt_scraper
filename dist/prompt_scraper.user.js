@@ -13115,7 +13115,7 @@ const $32b5bff137232fe2$export$5fd187c0d03a79e = async (href)=>{
         // open gallery from model preview images
         if (modelVersionId && prioritizedUserId) return (0, $90c9ab75e73296e8$export$53039d7a8d9d297e)(buttonIdSelector, href);
         // open gallery from model gallery areas
-        if (modelId && postId) return $32b5bff137232fe2$var$downloadGalleryImagesAndPrompts(buttonIdSelector, null, postId, modelName, onFinishFn);
+        if (modelId && postId) return $32b5bff137232fe2$var$downloadGalleryImagesAndPrompts(buttonIdSelector, modelId, postId, modelName, onFinishFn);
         // open gallery from post pages
         if (postId) return $32b5bff137232fe2$var$downloadGalleryImagesAndPrompts(buttonIdSelector, null, postId, modelName, onFinishFn);
         if (imageId) return $32b5bff137232fe2$var$downloadSingleImagesAndPrompts(buttonIdSelector, onFinishFn);
