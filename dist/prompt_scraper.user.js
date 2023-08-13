@@ -12656,7 +12656,7 @@ const $c3454b9ab01d445e$export$2ab75dd31a3868f2 = async (url)=>{
             contentType: contentType
         };
     } catch (error) {
-        if (url.includes("image.civitai.com") && !error.message.includes("The operation timed out")) return $c3454b9ab01d445e$export$2ab75dd31a3868f2((0, $6790e4d8d7342a47$export$e8d0c38aad57b50f)(url));
+        if (url.includes("optimized=true")) return $c3454b9ab01d445e$export$2ab75dd31a3868f2((0, $6790e4d8d7342a47$export$e8d0c38aad57b50f)(url));
         throw error;
     }
 };
