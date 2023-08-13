@@ -120,10 +120,7 @@ export const fetchImg = async (
       contentType,
     };
   } catch (error) {
-    if (
-      url.includes('image.civitai.com') &&
-      !(error as Error).message.includes('The operation timed out')
-    ) {
+    if (url.includes('optimized=true')) {
       return fetchImg(unoptimizeUrl(url));
     }
     throw error;
