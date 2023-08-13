@@ -64,7 +64,7 @@ const addGalleryImageDownloadButton = async () => {
     // await waitForElement('.mantine-RichTextEditor-root');
     // FIXME: adhoc: wait for Nextjs rendering finish
     await sleep(2000);
-    if (!href.match(/\/images\/\d*/)) {
+    if (!href.match(/\/images\/\d*/) || href.match(/\/user/)) {
       return;
     }
     log('gallery');

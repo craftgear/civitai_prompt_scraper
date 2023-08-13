@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        Prompt Scraper - civitai.com
-// @version     1.2.19
+// @version     1.2.20
 // @namespace   https://github.com/craftgear/civitai_prompt_scraper
 // @description download images and prompts as a zip file
 // @license     MIT
@@ -12549,7 +12549,7 @@ var $b9a27db92abc3f0f$exports = {};
 
 
 var $39e7bd012fbaed99$exports = {};
-$39e7bd012fbaed99$exports = JSON.parse('{"name":"civitai_prompt_scraper","browserslist":"> 5%, last 1 versions, not dead","version":"1.2.19","description":"","source":"src/prompt_scraper.user.ts","browser ":"dist/prompt_scraper.user.js","targets":{"default":{"context":"browser","sourceMap":false,"includeNodeModules":true,"optimize":true}},"scripts":{"type-check":"tsc --noEmit","lint":"eslint","format":"prettier --write .","watch":"parcel watch","build":"rm -rf .parcel-cache/*; parcel build; zip -v -j ./dist/prompt_scraper.zip ./dist/prompt_scraper.user.js","clean":"rm ./dist/*","test":"vitest --dom","coverage":"vitest --coverage --run","check":"tsc --noEmit"},"author":"Watanabe, Shunsuke","license":"MIT","devDependencies":{"@damoclark/parcel-optimizer-userscript":"^0.0.2","@parcel/packager-ts":"^2.8.3","@parcel/transformer-typescript-types":"^2.8.3","@tsconfig/recommended":"^1.0.2","@types/file-saver":"^2.0.5","@types/lodash":"^4.14.191","@typescript-eslint/eslint-plugin":"^5.52.0","@typescript-eslint/parser":"^5.52.0","@violentmonkey/types":"^0.1.5","@vitest/coverage-v8":"^0.33.0","eslint":"^8.34.0","eslint-config-standard-with-typescript":"^34.0.0","eslint-plugin-import":"^2.27.5","eslint-plugin-n":"^15.6.1","eslint-plugin-promise":"^6.1.1","happy-dom":"^10.3.2","parcel":"^2.8.3","prettier":"^2.8.4","prettier-plugin-organize-imports":"^3.2.2","rollup-plugin-cleanup":"^3.2.1","typescript":"^4.9.5","vitest":"^0.33.0"},"dependencies":{"@violentmonkey/url":"^0.1.0","@zip.js/zip.js":"^2.6.63","file-saver":"^2.0.5","html2canvas":"^1.4.1","lodash":"^4.17.21","wazip":"^0.1.0"}}');
+$39e7bd012fbaed99$exports = JSON.parse('{"name":"civitai_prompt_scraper","browserslist":"> 5%, last 1 versions, not dead","version":"1.2.20","description":"","source":"src/prompt_scraper.user.ts","browser ":"dist/prompt_scraper.user.js","targets":{"default":{"context":"browser","sourceMap":false,"includeNodeModules":true,"optimize":true}},"scripts":{"type-check":"tsc --noEmit","lint":"eslint","format":"prettier --write .","watch":"parcel watch","build":"rm -rf .parcel-cache/*; parcel build; zip -v -j ./dist/prompt_scraper.zip ./dist/prompt_scraper.user.js","clean":"rm ./dist/*","test":"vitest --dom","coverage":"vitest --coverage --run","check":"tsc --noEmit"},"author":"Watanabe, Shunsuke","license":"MIT","devDependencies":{"@damoclark/parcel-optimizer-userscript":"^0.0.2","@parcel/packager-ts":"^2.8.3","@parcel/transformer-typescript-types":"^2.8.3","@tsconfig/recommended":"^1.0.2","@types/file-saver":"^2.0.5","@types/lodash":"^4.14.191","@typescript-eslint/eslint-plugin":"^5.52.0","@typescript-eslint/parser":"^5.52.0","@violentmonkey/types":"^0.1.5","@vitest/coverage-v8":"^0.33.0","eslint":"^8.34.0","eslint-config-standard-with-typescript":"^34.0.0","eslint-plugin-import":"^2.27.5","eslint-plugin-n":"^15.6.1","eslint-plugin-promise":"^6.1.1","happy-dom":"^10.3.2","parcel":"^2.8.3","prettier":"^2.8.4","prettier-plugin-organize-imports":"^3.2.2","rollup-plugin-cleanup":"^3.2.1","typescript":"^4.9.5","vitest":"^0.33.0"},"dependencies":{"@violentmonkey/url":"^0.1.0","@zip.js/zip.js":"^2.6.63","file-saver":"^2.0.5","html2canvas":"^1.4.1","lodash":"^4.17.21","wazip":"^0.1.0"}}');
 
 
 const $81ffdad4556cbf55$export$bef1f36f5486a6a3 = (...xs)=>{
@@ -12573,6 +12573,7 @@ const $81ffdad4556cbf55$export$f922ebe57f2c36e8 = (xs, chunkSize = 10)=>xs.reduc
             ]
         ];
     }, []);
+
 
 
 
@@ -12645,7 +12646,8 @@ const $c3454b9ab01d445e$export$2ab75dd31a3868f2 = async (url)=>{
             headers: {
                 Accept: "image/webp,image/jpeg,image/avif;q=0.9,image/apng;q=0.8,image/*;q=0.7",
                 ...$c3454b9ab01d445e$var$HEADERS
-            }
+            },
+            signal: AbortSignal.timeout(5000)
         });
         const contentType = response.headers.get("content-type") || "";
         const blob = await response.blob();
@@ -12654,22 +12656,30 @@ const $c3454b9ab01d445e$export$2ab75dd31a3868f2 = async (url)=>{
             contentType: contentType
         };
     } catch (error) {
-        if (url.includes("image.civitai.com")) return $c3454b9ab01d445e$export$2ab75dd31a3868f2((0, $6790e4d8d7342a47$export$e8d0c38aad57b50f)(url));
+        if (url.includes("image.civitai.com") && !error.message.includes("The operation timed out")) return $c3454b9ab01d445e$export$2ab75dd31a3868f2((0, $6790e4d8d7342a47$export$e8d0c38aad57b50f)(url));
         throw error;
     }
 };
 const $c3454b9ab01d445e$export$e9e7897c93aa9943 = (zipWriter, addedNames)=>async (imgInfo)=>await Promise.all(imgInfo.map(async (x)=>{
-            const response = await $c3454b9ab01d445e$export$2ab75dd31a3868f2((0, $6790e4d8d7342a47$export$b3bdca59378516d4)(x.url));
-            if (!response) throw new Error(`response is null: ${x.url}`);
-            const { blob: blob , contentType: contentType  } = response;
-            let name = $c3454b9ab01d445e$var$extractFilebasenameFromImageUrl(x.url) || x.hash.replace(/[;:?*.]/g, "_");
-            while(addedNames.has(name))name += "_";
-            const filename = contentType && `${name}.${contentType.split("/")[1]}` || `${name}.png`;
-            await zipWriter.add(filename, new (0, $53e25169918aa98b$export$aa5015be25fe7f79)(blob));
-            addedNames.add(name);
-            if (x.meta) {
-                const jsonFilename = name + ".json";
-                await zipWriter.add(jsonFilename, new (0, $53e25169918aa98b$export$43d3fd7deddee00)(JSON.stringify(x.meta, null, "	")));
+            try {
+                const response = await $c3454b9ab01d445e$export$2ab75dd31a3868f2((0, $6790e4d8d7342a47$export$b3bdca59378516d4)(x.url));
+                if (!response) throw new Error(`response is null: ${x.url}`);
+                const { blob: blob , contentType: contentType  } = response;
+                let name = $c3454b9ab01d445e$var$extractFilebasenameFromImageUrl(x.url) || x.hash.replace(/[;:?*.]/g, "_");
+                while(addedNames.has(name))name += "_";
+                const filename = contentType && `${name}.${contentType.split("/")[1]}` || `${name}.png`;
+                await zipWriter.add(filename, new (0, $53e25169918aa98b$export$aa5015be25fe7f79)(blob));
+                addedNames.add(name);
+                if (x.meta) {
+                    const jsonFilename = name + ".json";
+                    await zipWriter.add(jsonFilename, new (0, $53e25169918aa98b$export$43d3fd7deddee00)(JSON.stringify(x.meta, null, "	")));
+                }
+            } catch (e) {
+                if ((0, $2e4159cc418f5166$export$44487a86467333c3)("continueWithFetchError")) {
+                    console.log("fetchImg throws an error: ", e);
+                    return;
+                }
+                throw e;
             }
         }));
 
@@ -13342,7 +13352,7 @@ const $ca465a359cd2bf87$var$addGalleryImageDownloadButton = async ()=>{
         // await waitForElement('.mantine-RichTextEditor-root');
         // FIXME: adhoc: wait for Nextjs rendering finish
         await (0, $81ffdad4556cbf55$export$e772c8ff12451969)(2000);
-        if (!href.match(/\/images\/\d*/)) return;
+        if (!href.match(/\/images\/\d*/) || href.match(/\/user/)) return;
         (0, $81ffdad4556cbf55$export$bef1f36f5486a6a3)("gallery");
         await (0, $32b5bff137232fe2$export$5fd187c0d03a79e)(href);
     } catch (error) {
