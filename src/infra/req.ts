@@ -1,5 +1,6 @@
 import { BlobReader, TextReader, ZipWriter } from '@zip.js/zip.js';
 import { getI18nLabel } from '../assets/lang';
+import { getConfig } from './config_panel';
 import { optimizeUrl, unoptimizeUrl } from '../domain/logic';
 import {
   GalleryImagesResponse,
@@ -109,6 +110,7 @@ export const fetchImg = async (
           'image/webp,image/jpeg,image/avif;q=0.9,image/apng;q=0.8,image/*;q=0.7',
         ...HEADERS,
       },
+      signal: AbortSignal.timeout(5000),
     });
     const contentType = response.headers.get('content-type') || '';
     const blob = await response.blob();
@@ -118,7 +120,10 @@ export const fetchImg = async (
       contentType,
     };
   } catch (error) {
-    if (url.includes('image.civitai.com')) {
+    if (
+      url.includes('image.civitai.com') &&
+      !(error as Error).message.includes('The operation timed out')
+    ) {
       return fetchImg(unoptimizeUrl(url));
     }
     throw error;
@@ -130,32 +135,40 @@ export const fetchImgs =
   async (imgInfo: { url: string; hash: string; meta: unknown }[]) =>
     await Promise.all(
       imgInfo.map(async (x) => {
-        const response = await fetchImg(optimizeUrl(x.url));
-        if (!response) {
-          throw new Error(`response is null: ${x.url}`);
-        }
-        const { blob, contentType } = response;
+        try {
+          const response = await fetchImg(optimizeUrl(x.url));
+          if (!response) {
+            throw new Error(`response is null: ${x.url}`);
+          }
+          const { blob, contentType } = response;
 
-        let name =
-          extractFilebasenameFromImageUrl(x.url) ||
-          x.hash.replace(/[;:?*.]/g, '_');
-        while (addedNames.has(name)) {
-          name += '_';
-        }
+          let name =
+            extractFilebasenameFromImageUrl(x.url) ||
+            x.hash.replace(/[;:?*.]/g, '_');
+          while (addedNames.has(name)) {
+            name += '_';
+          }
 
-        const filename =
-          (contentType && `${name}.${contentType.split('/')[1]}`) ||
-          `${name}.png`;
+          const filename =
+            (contentType && `${name}.${contentType.split('/')[1]}`) ||
+            `${name}.png`;
 
-        await zipWriter.add(filename, new BlobReader(blob));
-        addedNames.add(name);
+          await zipWriter.add(filename, new BlobReader(blob));
+          addedNames.add(name);
 
-        if (x.meta) {
-          const jsonFilename = name + '.json';
-          await zipWriter.add(
-            jsonFilename,
-            new TextReader(JSON.stringify(x.meta, null, '\t'))
-          );
+          if (x.meta) {
+            const jsonFilename = name + '.json';
+            await zipWriter.add(
+              jsonFilename,
+              new TextReader(JSON.stringify(x.meta, null, '\t'))
+            );
+          }
+        } catch (e) {
+          if (getConfig('continueWithFetchError')) {
+            console.log('fetchImg throws an error: ', e);
+            return;
+          }
+          throw e;
         }
       })
     );
