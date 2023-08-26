@@ -107,7 +107,7 @@ const downloadAllModelRelatedFiles = (buttonIdSelector: string) => async () => {
   );
 
   setTimeout(() => {
-    alert('done');
+    alert('✅ done');
   }, 100);
   console.warn('##### done #####');
   return;
