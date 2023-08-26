@@ -1,4 +1,5 @@
 import { getConfig, initConfigPanel } from './infra/config_panel';
+import { alertError } from './infra/dom';
 import { addGalleryDownloadButton } from './service/gallery_download';
 import { addModelDownloadAllButton } from './service/model_download_all';
 import { addModelImagesDownloadButton } from './service/model_image_download';
@@ -54,7 +55,7 @@ const addModelPreviewDownloadButton = async () => {
     await addButtonContainer();
     await addModelImagesDownloadButton(href);
   } catch (error: unknown) {
-    alert((error as Error).message);
+    alertError((error as Error).message);
   }
 };
 
@@ -70,7 +71,7 @@ const addGalleryImageDownloadButton = async () => {
     log('gallery');
     await addGalleryDownloadButton(href);
   } catch (error: unknown) {
-    alert((error as Error).message);
+    alertError((error as Error).message);
   }
 };
 

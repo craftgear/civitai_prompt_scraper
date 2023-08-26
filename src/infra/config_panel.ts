@@ -5,7 +5,18 @@ import { configPanelStyle } from '../assets/styles';
 import { Config, ConfigKey, InputField } from '../domain/types';
 import { loadConfig, saveConfig } from '../infra/file';
 
-const fields = [
+const fields: InputField[] = [
+  {
+    type: 'number',
+    name: 'networkRequestTimeout',
+    label: getI18nLabel('networkRequestTimeout'),
+    value: '10',
+    min: '5',
+    max: '300',
+    desc: '',
+    style:
+      ' padding-top: 0.5rem; border-bottom: 1px solid #ededef; margin-top: 0.5rem; ',
+  },
   {
     type: 'checkbox',
     name: 'downloadModelAsWell',
@@ -71,7 +82,7 @@ const fields = [
 ];
 
 const addInputs = (parent: HTMLElement, fields: InputField[]) => {
-  fields.forEach(({ type, name, label, value, desc, style }) => {
+  fields.forEach(({ type, name, label, value, desc, style, ...rest }) => {
     const div = document.createElement('div');
     const inputEl = document.createElement('input');
     inputEl.type = type;
@@ -113,6 +124,25 @@ const addInputs = (parent: HTMLElement, fields: InputField[]) => {
           `
         );
         inputEl.value = value as string;
+        div.appendChild(labelEl);
+        div.appendChild(descEl);
+        div.appendChild(inputEl);
+        break;
+      }
+      case 'number': {
+        div.setAttribute(
+          'style',
+          `display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+         ${style}
+          `
+        );
+        inputEl.type = 'number';
+        inputEl.value = value as string;
+        inputEl.setAttribute('required', '');
+        inputEl.setAttribute('min', rest.min ?? '5');
+        inputEl.setAttribute('max', rest.max ?? '300');
         div.appendChild(labelEl);
         div.appendChild(descEl);
         div.appendChild(inputEl);
@@ -208,7 +238,7 @@ export function initConfigPanel() {
   });
 }
 
-export const getConfig = (fieldName: string): string | boolean => {
+export const getConfig = (fieldName: string): string | boolean | number => {
   const localConfigValues = loadConfig();
   if (
     localConfigValues !== undefined &&

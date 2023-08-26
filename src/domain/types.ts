@@ -167,6 +167,8 @@ export type InputField = {
   value: boolean | string | number;
   desc: string;
   style: string;
+  min?: string;
+  max?: string;
 };
 
 export type Config = {
@@ -197,3 +199,4 @@ export type CreateLink = (
 ) => HTMLAnchorElement;
 export type SetTitle = (x: string) => void;
 export type GetTitle = () => string;
+export type AlertError = (x: string) => void;

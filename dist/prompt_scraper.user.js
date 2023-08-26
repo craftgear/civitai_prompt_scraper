@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        Prompt Scraper - civitai.com
-// @version     1.2.21
+// @version     1.2.22
 // @namespace   https://github.com/craftgear/civitai_prompt_scraper
 // @description download images and prompts as a zip file
 // @license     MIT
@@ -29,6 +29,12 @@ function $parcel$interopDefault(a) {
 }
 // eslint-disable-next-line
 const $3a42d740ecc81982$var$i18n = {
+    networkRequestTimeout: {
+        en: "Time until network timeout (in seconds)",
+        ja: "ネットワークタイムアウトまでの時間（秒）",
+        "zh-CN": "网络超时前的时间（秒）",
+        "zh-TW": "網絡超時前的時間（秒）"
+    },
     buttonLabel: {
         en: "Download images with JSON",
         ja: "画像&JSONダウンロード",
@@ -12549,14 +12555,14 @@ var $b9a27db92abc3f0f$exports = {};
 
 
 var $39e7bd012fbaed99$exports = {};
-$39e7bd012fbaed99$exports = JSON.parse('{"name":"civitai_prompt_scraper","browserslist":"> 5%, last 1 versions, not dead","version":"1.2.21","description":"","source":"src/prompt_scraper.user.ts","browser ":"dist/prompt_scraper.user.js","targets":{"default":{"context":"browser","sourceMap":false,"includeNodeModules":true,"optimize":true}},"scripts":{"type-check":"tsc --noEmit","lint":"eslint","format":"prettier --write .","watch":"parcel watch","build":"rm -rf .parcel-cache/*; parcel build; zip -v -j ./dist/prompt_scraper.zip ./dist/prompt_scraper.user.js","clean":"rm ./dist/*","test":"vitest --dom","coverage":"vitest --coverage --run","check":"tsc --noEmit"},"author":"Watanabe, Shunsuke","license":"MIT","devDependencies":{"@damoclark/parcel-optimizer-userscript":"^0.0.2","@parcel/packager-ts":"^2.8.3","@parcel/transformer-typescript-types":"^2.8.3","@tsconfig/recommended":"^1.0.2","@types/file-saver":"^2.0.5","@types/lodash":"^4.14.191","@typescript-eslint/eslint-plugin":"^5.52.0","@typescript-eslint/parser":"^5.52.0","@violentmonkey/types":"^0.1.5","@vitest/coverage-v8":"^0.33.0","eslint":"^8.34.0","eslint-config-standard-with-typescript":"^34.0.0","eslint-plugin-import":"^2.27.5","eslint-plugin-n":"^15.6.1","eslint-plugin-promise":"^6.1.1","happy-dom":"^10.3.2","parcel":"^2.8.3","prettier":"^2.8.4","prettier-plugin-organize-imports":"^3.2.2","rollup-plugin-cleanup":"^3.2.1","typescript":"^4.9.5","vitest":"^0.33.0"},"dependencies":{"@violentmonkey/url":"^0.1.0","@zip.js/zip.js":"^2.6.63","file-saver":"^2.0.5","html2canvas":"^1.4.1","lodash":"^4.17.21","wazip":"^0.1.0"}}');
+$39e7bd012fbaed99$exports = JSON.parse('{"name":"civitai_prompt_scraper","browserslist":"> 5%, last 1 versions, not dead","version":"1.2.22","description":"","source":"src/prompt_scraper.user.ts","browser ":"dist/prompt_scraper.user.js","targets":{"default":{"context":"browser","sourceMap":false,"includeNodeModules":true,"optimize":true}},"scripts":{"type-check":"tsc --noEmit","lint":"eslint","format":"prettier --write .","watch":"parcel watch","build":"rm -rf .parcel-cache/*; parcel build; zip -v -j ./dist/prompt_scraper.zip ./dist/prompt_scraper.user.js","clean":"rm ./dist/*","test":"vitest --dom","coverage":"vitest --coverage --run","check":"tsc --noEmit"},"author":"Watanabe, Shunsuke","license":"MIT","devDependencies":{"@damoclark/parcel-optimizer-userscript":"^0.0.2","@parcel/packager-ts":"^2.8.3","@parcel/transformer-typescript-types":"^2.8.3","@tsconfig/recommended":"^1.0.2","@types/file-saver":"^2.0.5","@types/lodash":"^4.14.191","@typescript-eslint/eslint-plugin":"^5.52.0","@typescript-eslint/parser":"^5.52.0","@violentmonkey/types":"^0.1.5","@vitest/coverage-v8":"^0.33.0","eslint":"^8.34.0","eslint-config-standard-with-typescript":"^34.0.0","eslint-plugin-import":"^2.27.5","eslint-plugin-n":"^15.6.1","eslint-plugin-promise":"^6.1.1","happy-dom":"^10.3.2","parcel":"^2.8.3","prettier":"^2.8.4","prettier-plugin-organize-imports":"^3.2.2","rollup-plugin-cleanup":"^3.2.1","typescript":"^4.9.5","vitest":"^0.33.0"},"dependencies":{"@violentmonkey/url":"^0.1.0","@zip.js/zip.js":"^2.6.63","file-saver":"^2.0.5","html2canvas":"^1.4.1","lodash":"^4.17.21","wazip":"^0.1.0"}}');
 
 
 const $81ffdad4556cbf55$export$bef1f36f5486a6a3 = (...xs)=>{
     console.log(`${(0, (/*@__PURE__*/$parcel$interopDefault($39e7bd012fbaed99$exports))).name}:`, ...xs);
 };
 const $81ffdad4556cbf55$export$e772c8ff12451969 = (ms = 1000)=>new Promise((resolve)=>setTimeout(()=>resolve(true), ms));
-const $81ffdad4556cbf55$export$f922ebe57f2c36e8 = (xs, chunkSize = 5)=>xs.reduce((acc, curr)=>{
+const $81ffdad4556cbf55$export$f922ebe57f2c36e8 = (xs, chunkSize = 10)=>xs.reduce((acc, curr)=>{
         const tail = acc.pop() ?? [];
         if (tail.length < chunkSize) {
             tail.push(curr);
@@ -12640,6 +12646,8 @@ const $c3454b9ab01d445e$export$c6ace8a485846f08 = async (modelId, postId, modelV
     return data.items;
 };
 const $c3454b9ab01d445e$export$2ab75dd31a3868f2 = async (url)=>{
+    const parsedNum = Number((0, $2e4159cc418f5166$export$44487a86467333c3)("networkRequestTimeout")) ?? 10;
+    const timeoutInSecs = Number.isNaN(parsedNum) ? 10 : parsedNum;
     try {
         const response = await fetch(url, {
             method: "GET",
@@ -12647,7 +12655,7 @@ const $c3454b9ab01d445e$export$2ab75dd31a3868f2 = async (url)=>{
                 Accept: "image/webp,image/jpeg,image/avif;q=0.9,image/apng;q=0.8,image/*;q=0.7",
                 ...$c3454b9ab01d445e$var$HEADERS
             },
-            signal: AbortSignal.timeout(10000)
+            signal: AbortSignal.timeout(timeoutInSecs * 1000)
         });
         const contentType = response.headers.get("content-type") || "";
         const blob = await response.blob();
@@ -12719,6 +12727,16 @@ const $c5da2b8a14082d8b$export$c1a4367d4847eb06 = ()=>{
 
 const $2e4159cc418f5166$var$fields = [
     {
+        type: "number",
+        name: "networkRequestTimeout",
+        label: (0, $3a42d740ecc81982$export$731a191155ffa90a)("networkRequestTimeout"),
+        value: "10",
+        min: "5",
+        max: "300",
+        desc: "",
+        style: " padding-top: 0.5rem; border-bottom: 1px solid #ededef; margin-top: 0.5rem; "
+    },
+    {
         type: "checkbox",
         name: "downloadModelAsWell",
         label: (0, $3a42d740ecc81982$export$731a191155ffa90a)("downloadModelAsWell"),
@@ -12776,7 +12794,7 @@ const $2e4159cc418f5166$var$fields = [
     }
 ];
 const $2e4159cc418f5166$var$addInputs = (parent, fields)=>{
-    fields.forEach(({ type: type , name: name , label: label , value: value , desc: desc , style: style  })=>{
+    fields.forEach(({ type: type , name: name , label: label , value: value , desc: desc , style: style , ...rest })=>{
         const div = document.createElement("div");
         const inputEl = document.createElement("input");
         inputEl.type = type;
@@ -12802,6 +12820,21 @@ const $2e4159cc418f5166$var$addInputs = (parent, fields)=>{
          ${style}
           `);
                 inputEl.value = value;
+                div.appendChild(labelEl);
+                div.appendChild(descEl);
+                div.appendChild(inputEl);
+                break;
+            case "number":
+                div.setAttribute("style", `display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+         ${style}
+          `);
+                inputEl.type = "number";
+                inputEl.value = value;
+                inputEl.setAttribute("required", "");
+                inputEl.setAttribute("min", rest.min ?? "5");
+                inputEl.setAttribute("max", rest.max ?? "300");
                 div.appendChild(labelEl);
                 div.appendChild(descEl);
                 div.appendChild(inputEl);
@@ -12879,22 +12912,6 @@ const $2e4159cc418f5166$export$44487a86467333c3 = (fieldName)=>{
 };
 
 
-
-
-
-/**
- * api responses
- */ let $c08fa57dad1b6e82$export$5d7ba7f5550f99d1;
-(function(ButtonState) {
-    ButtonState["ready"] = "ready";
-    ButtonState["inProgress"] = "in-progress";
-    ButtonState["done"] = "done";
-})($c08fa57dad1b6e82$export$5d7ba7f5550f99d1 || ($c08fa57dad1b6e82$export$5d7ba7f5550f99d1 = {}));
-
-
-
-
-
 const $98f6748fc1e9fd4e$export$aea217a45095ce11 = (selector)=>document.querySelector(selector);
 const $98f6748fc1e9fd4e$export$2917eca99ebef21a = (selector)=>document.querySelectorAll(selector);
 const $98f6748fc1e9fd4e$export$331ff980f0d45cff = ()=>document.createElement("div");
@@ -12910,6 +12927,26 @@ const $98f6748fc1e9fd4e$export$420a7f2fd9cad6f6 = (x)=>{
     document.title = x;
 };
 const $98f6748fc1e9fd4e$export$70d1bf7729efff40 = ()=>document.title;
+const $98f6748fc1e9fd4e$export$ac4c88d4d5b56a92 = (message)=>{
+    alert(`⚠️  ${message}`);
+};
+
+
+
+
+
+/**
+ * api responses
+ */ let $c08fa57dad1b6e82$export$5d7ba7f5550f99d1;
+(function(ButtonState) {
+    ButtonState["ready"] = "ready";
+    ButtonState["inProgress"] = "in-progress";
+    ButtonState["done"] = "done";
+})($c08fa57dad1b6e82$export$5d7ba7f5550f99d1 || ($c08fa57dad1b6e82$export$5d7ba7f5550f99d1 = {}));
+
+
+
+
 
 
 
@@ -13075,7 +13112,7 @@ const $90c9ab75e73296e8$export$53039d7a8d9d297e = (buttonIdSelector, location)=>
                 modelName: modelName
             };
         } catch (error) {
-            alert(error.message);
+            (0, $98f6748fc1e9fd4e$export$ac4c88d4d5b56a92)(error.message);
         }
     };
 const $90c9ab75e73296e8$export$8b03a564a450b487 = async (href)=>{
@@ -13117,7 +13154,7 @@ const $32b5bff137232fe2$export$9473b35530fb3701 = (buttonIdSelector, modelId, po
             if (onFinishFn) onFinishFn();
             (0, $06cbd27ebbbf5f2a$export$92ecf871022de94d)(button, ` ${imgList.length} / ${imgList.length} ${(0, $3a42d740ecc81982$export$4d9f09007b08c03d)()}`);
         } catch (error) {
-            alert(error.message);
+            (0, $98f6748fc1e9fd4e$export$ac4c88d4d5b56a92)(error.message);
         }
     };
 const $32b5bff137232fe2$var$downloadSingleImagesAndPrompts = (buttonIdSelector, onFinishFn)=>async ()=>{
@@ -13138,7 +13175,7 @@ const $32b5bff137232fe2$var$downloadSingleImagesAndPrompts = (buttonIdSelector, 
             if (onFinishFn) onFinishFn();
             (0, $06cbd27ebbbf5f2a$export$92ecf871022de94d)(button, (0, $3a42d740ecc81982$export$4d9f09007b08c03d)());
         } catch (error) {
-            alert(error.message);
+            (0, $98f6748fc1e9fd4e$export$ac4c88d4d5b56a92)(error.message);
         }
     };
 const $32b5bff137232fe2$var$extractIdsFromUrl = (href)=>{
@@ -13343,7 +13380,7 @@ const $ca465a359cd2bf87$var$addModelPreviewDownloadButton = async ()=>{
         await (0, $06cbd27ebbbf5f2a$export$3d6ebb5b74790dc2)();
         await (0, $90c9ab75e73296e8$export$8b03a564a450b487)(href);
     } catch (error) {
-        alert(error.message);
+        (0, $98f6748fc1e9fd4e$export$ac4c88d4d5b56a92)(error.message);
     }
 };
 const $ca465a359cd2bf87$var$addGalleryImageDownloadButton = async ()=>{
@@ -13356,7 +13393,7 @@ const $ca465a359cd2bf87$var$addGalleryImageDownloadButton = async ()=>{
         (0, $81ffdad4556cbf55$export$bef1f36f5486a6a3)("gallery");
         await (0, $32b5bff137232fe2$export$5fd187c0d03a79e)(href);
     } catch (error) {
-        alert(error.message);
+        (0, $98f6748fc1e9fd4e$export$ac4c88d4d5b56a92)(error.message);
     }
 };
 let $ca465a359cd2bf87$var$prevHref = "";

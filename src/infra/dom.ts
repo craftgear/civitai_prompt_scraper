@@ -1,4 +1,5 @@
 import {
+  AlertError,
   CreateDiv,
   CreateLink,
   GetTitle,
@@ -26,3 +27,7 @@ export const setTitle: SetTitle = (x) => {
   document.title = x;
 };
 export const getTitle: GetTitle = () => document.title;
+
+export const alertError: AlertError = (message: string) => {
+  alert(`⚠️  ${message}`);
+};

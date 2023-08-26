@@ -9,7 +9,13 @@ import { ButtonState } from '../domain/types';
 import { downloadImagesAndPrompts } from '../service/model_image_download';
 
 import { getConfig } from '../infra/config_panel';
-import { createLink, getTitle, selector, setTitle } from '../infra/dom';
+import {
+  alertError,
+  createLink,
+  getTitle,
+  selector,
+  setTitle,
+} from '../infra/dom';
 import { createZip } from '../infra/file';
 import { fetchGalleryData } from '../infra/req';
 import {
@@ -68,7 +74,7 @@ export const downloadGalleryImagesAndPrompts =
         ` ${imgList.length} / ${imgList.length} ${getButtonCompleteLabel()}`
       );
     } catch (error: unknown) {
-      alert((error as Error).message);
+      alertError((error as Error).message);
     }
   };
 
@@ -103,7 +109,7 @@ const downloadSingleImagesAndPrompts =
       }
       replaceWithDisabledButton(button, getButtonCompleteLabel());
     } catch (error: unknown) {
-      alert((error as Error).message);
+      alertError((error as Error).message);
     }
   };
 
