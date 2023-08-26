@@ -14,8 +14,7 @@ const fields: InputField[] = [
     min: '5',
     max: '300',
     desc: '',
-    style:
-      ' padding-top: 0.5rem; border-bottom: 1px solid #ededef; margin-top: 0.5rem; ',
+    style: 'padding-bottom: 0.5rem;',
   },
   {
     type: 'checkbox',
@@ -140,6 +139,7 @@ const addInputs = (parent: HTMLElement, fields: InputField[]) => {
         );
         inputEl.type = 'number';
         inputEl.value = value as string;
+        inputEl.setAttribute('style', 'max-width: 6rem;');
         inputEl.setAttribute('required', '');
         inputEl.setAttribute('min', rest.min ?? '5');
         inputEl.setAttribute('max', rest.max ?? '300');
