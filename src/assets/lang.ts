@@ -1,6 +1,12 @@
 const i18n: {
   [id: string]: { [locale: string]: string };
 } = {
+  networkRequestTimeout: {
+    en: 'Time until network timeout (in seconds)',
+    ja: 'ネットワークタイムアウトまでの時間（秒）',
+    'zh-CN': '网络超时前的时间（秒）',
+    'zh-TW': '網絡超時前的時間（秒）',
+  },
   buttonLabel: {
     en: 'Download images with JSON',
     ja: '画像＆JSONダウンロード',

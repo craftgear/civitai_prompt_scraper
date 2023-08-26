@@ -6,7 +6,7 @@ import {
 import { buttonStyle, toggleGalleryStyle } from '../assets/styles';
 
 import { getConfig } from '../infra/config_panel';
-import { createLink, selector } from '../infra/dom';
+import { alertError, createLink, selector } from '../infra/dom';
 import { createZip } from '../infra/file';
 import {
   fetchGalleryData,
@@ -123,7 +123,7 @@ export const downloadImagesAndPrompts =
 
       return { imageList, modelName };
     } catch (error: unknown) {
-      alert((error as Error).message);
+      alertError((error as Error).message);
     }
   };
 

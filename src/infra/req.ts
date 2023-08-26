@@ -102,6 +102,8 @@ export const fetchGalleryData = async (
 export const fetchImg = async (
   url: string
 ): Promise<{ blob: Blob; contentType: string } | null> => {
+  const parsedNum = Number(getConfig('networkRequestTimeout')) ?? 10;
+  const timeoutInSecs = Number.isNaN(parsedNum) ? 10 : parsedNum;
   try {
     const response = await fetch(url, {
       method: 'GET',
@@ -110,7 +112,7 @@ export const fetchImg = async (
           'image/webp,image/jpeg,image/avif;q=0.9,image/apng;q=0.8,image/*;q=0.7',
         ...HEADERS,
       },
-      signal: AbortSignal.timeout(5000),
+      signal: AbortSignal.timeout(timeoutInSecs * 1000),
     });
     const contentType = response.headers.get('content-type') || '';
     const blob = await response.blob();
