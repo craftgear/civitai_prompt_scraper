@@ -12556,7 +12556,7 @@ const $81ffdad4556cbf55$export$bef1f36f5486a6a3 = (...xs)=>{
     console.log(`${(0, (/*@__PURE__*/$parcel$interopDefault($39e7bd012fbaed99$exports))).name}:`, ...xs);
 };
 const $81ffdad4556cbf55$export$e772c8ff12451969 = (ms = 1000)=>new Promise((resolve)=>setTimeout(()=>resolve(true), ms));
-const $81ffdad4556cbf55$export$f922ebe57f2c36e8 = (xs, chunkSize = 10)=>xs.reduce((acc, curr)=>{
+const $81ffdad4556cbf55$export$f922ebe57f2c36e8 = (xs, chunkSize = 5)=>xs.reduce((acc, curr)=>{
         const tail = acc.pop() ?? [];
         if (tail.length < chunkSize) {
             tail.push(curr);
@@ -12647,7 +12647,7 @@ const $c3454b9ab01d445e$export$2ab75dd31a3868f2 = async (url)=>{
                 Accept: "image/webp,image/jpeg,image/avif;q=0.9,image/apng;q=0.8,image/*;q=0.7",
                 ...$c3454b9ab01d445e$var$HEADERS
             },
-            signal: AbortSignal.timeout(5000)
+            signal: AbortSignal.timeout(10000)
         });
         const contentType = response.headers.get("content-type") || "";
         const blob = await response.blob();
