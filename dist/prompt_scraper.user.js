@@ -13037,8 +13037,10 @@ const $06cbd27ebbbf5f2a$export$5bc69941fea37f21 = ()=>{
     });
 };
 const $06cbd27ebbbf5f2a$export$d450a001006e5818 = ()=>{
-    const createButton = Array.from(document.querySelectorAll("button")).filter((x)=>x.innerHTML.includes("Create"))[0];
-    if (createButton) createButton.style.display = "none";
+    const createButtons = Array.from(document.querySelectorAll("button")).filter((x)=>x.innerHTML.includes("Create"));
+    if (createButtons.length > 0) createButtons.forEach((x)=>{
+        x.style.display = "none";
+    });
 };
 const $06cbd27ebbbf5f2a$export$5ffcb0107c13639c = (retry = 5)=>{
     const el = Array.from(document.querySelectorAll(".mantine-Container-root h2")).filter((x)=>x.innerHTML.includes("Suggested Resources"))[0];
@@ -13308,7 +13310,7 @@ const $f2fb5610d10943f7$var$downloadAllModelRelatedFiles = (buttonIdSelector)=>a
             return (0, $32b5bff137232fe2$export$9473b35530fb3701)(`#${$f2fb5610d10943f7$var$BUTTON_ID}_${i}`, modelId, postId, modelName ?? "", onFinishFn, previewImageList)();
         }));
         setTimeout(()=>{
-            alert("done");
+            alert("✅ done");
         }, 100);
         console.warn("##### done #####");
         return;

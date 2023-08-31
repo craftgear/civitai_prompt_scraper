@@ -109,7 +109,6 @@ export const hideGallery = () => {
   return;
 };
 
-
 export const darkenTextColor = () => {
   Array.from(document.querySelectorAll('.mantine-Spoiler-root span')).forEach(
     (x) => {
@@ -131,11 +130,13 @@ export const darkenTextColor = () => {
 };
 
 export const deleteCreateButton = () => {
-  const createButton = Array.from(document.querySelectorAll('button')).filter(
+  const createButtons = Array.from(document.querySelectorAll('button')).filter(
     (x: HTMLElement) => x.innerHTML.includes('Create')
-  )[0];
-  if (createButton) {
-    createButton.style.display = 'none';
+  );
+  if (createButtons.length > 0) {
+    createButtons.forEach((x) => {
+      x.style.display = 'none';
+    });
   }
 };
 
@@ -143,7 +144,8 @@ export const deleteSuggestedResources = (retry = 5) => {
   const el = Array.from(
     document.querySelectorAll('.mantine-Container-root h2')
   ).filter((x: Element) => x.innerHTML.includes('Suggested Resources'))[0];
-  const targetEl = el?.parentElement?.parentElement?.parentElement?.parentElement;
+  const targetEl =
+    el?.parentElement?.parentElement?.parentElement?.parentElement;
   if (targetEl) {
     targetEl.style.display = 'none';
   } else {
@@ -157,7 +159,8 @@ export const deleteDiscussion = (retry = 5) => {
   const el = Array.from(
     document.querySelectorAll('.mantine-Container-root h2')
   ).filter((x: Element) => x.innerHTML.includes('Discussion'))[0];
-  const targetEl = el?.parentElement?.parentElement?.parentElement?.parentElement;
+  const targetEl =
+    el?.parentElement?.parentElement?.parentElement?.parentElement;
   if (targetEl) {
     targetEl.style.display = 'none';
   } else {
@@ -177,4 +180,3 @@ export const deleteMainPaddingBottom = (retry = 5) => {
   }
   el.style.paddingBottom = '0';
 };
-
