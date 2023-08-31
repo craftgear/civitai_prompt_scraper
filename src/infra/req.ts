@@ -147,13 +147,13 @@ export const fetchImgs =
           while (addedNames.has(name)) {
             name += '_';
           }
+          addedNames.add(name);
 
           const filename =
             (contentType && `${name}.${contentType.split('/')[1]}`) ||
             `${name}.png`;
 
           await zipWriter.add(filename, new BlobReader(blob));
-          addedNames.add(name);
 
           if (x.meta) {
             const jsonFilename = name + '.json';
