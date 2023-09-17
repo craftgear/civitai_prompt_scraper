@@ -72,7 +72,7 @@ const observer = new MutationObserver(async () => {
   }
 });
 
-export default async function () {
+export default async function() {
   prevHref = window.location.href;
 
   log('start');
