@@ -105,15 +105,18 @@ export const fetchImg = async (
   const parsedNum = Number(getConfig('networkRequestTimeout')) ?? 10;
   const timeoutInSecs = Number.isNaN(parsedNum) ? 10 : parsedNum;
   try {
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        Accept:
-          'image/webp,image/jpeg,image/avif;q=0.9,image/apng;q=0.8,image/*;q=0.7',
-        ...HEADERS,
-      },
-      signal: AbortSignal.timeout(timeoutInSecs * 1000),
-    });
+    const response = await fetch(
+      getConfig('preferOptimizedImages') ? optimizeUrl(url) : url,
+      {
+        method: 'GET',
+        headers: {
+          Accept:
+            'image/webp,image/jpeg,image/avif;q=0.9,image/apng;q=0.8,image/*;q=0.7',
+          ...HEADERS,
+        },
+        signal: AbortSignal.timeout(timeoutInSecs * 1000),
+      }
+    );
     const contentType = response.headers.get('content-type') || '';
     const blob = await response.blob();
 
@@ -135,7 +138,8 @@ export const fetchImgs =
     await Promise.all(
       imgInfo.map(async (x) => {
         try {
-          const response = await fetchImg(optimizeUrl(x.url));
+          // const response = await fetchImg(optimizeUrl(x.url));
+          const response = await fetchImg(x.url);
           if (!response) {
             throw new Error(`response is null: ${x.url}`);
           }
@@ -170,4 +174,4 @@ export const fetchImgs =
           throw e;
         }
       })
-    );
+            );

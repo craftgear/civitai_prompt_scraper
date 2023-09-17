@@ -12,7 +12,8 @@ export const createZip =
   (buttnTextUpdateFn: (text: string) => void | null) =>
   (zipFilename: string, modelInfo?: unknown) =>
   async (
-    imgInfo: { url: string; hash: string; meta: unknown }[]
+    imgInfo: { url: string; hash: string; meta: unknown }[],
+    chunkSize = 10
   ): Promise<void> => {
     if (!modelInfo && imgInfo.length === 0) {
       return;
@@ -30,7 +31,7 @@ export const createZip =
     const addedNames = new Set<string>();
     const predicate = fetchImgs(zipWriter, addedNames);
     let counter = 0;
-    for (const xs of chunkArray(imgInfo)) {
+    for (const xs of chunkArray(imgInfo, chunkSize)) {
       counter += xs.length;
       if (buttnTextUpdateFn) {
         buttnTextUpdateFn(

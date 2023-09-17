@@ -49,6 +49,14 @@ const fields: InputField[] = [
     style: 'gap: 0.5rem;',
   },
   {
+    type: 'checkbox',
+    name: 'preferOptimizedImages',
+    label: getI18nLabel('preferOptimizedImages'),
+    value: true,
+    desc: '',
+    style: 'gap: 0.5rem;',
+  },
+  {
     type: 'text',
     name: 'modelPreviewFilenameFormat',
     label: getI18nLabel('modelPreviewFilenameFormat'),

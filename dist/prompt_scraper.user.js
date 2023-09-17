@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        Prompt Scraper - civitai.com
-// @version     1.2.24
+// @version     1.2.25
 // @namespace   https://github.com/craftgear/civitai_prompt_scraper
 // @description download images and prompts as a zip file
 // @license     MIT
@@ -154,6 +154,12 @@ const $3a42d740ecc81982$var$i18n = {
         ja: "{modelName}の値としてLoRA名よりモデル名を優先する",
         "zh-CN": "优先选择模型名称而不是 LoRA 名称作为 {modelName} 的值",
         "zh-TW": "優先選擇模型名稱而不是 LoRA 名稱作為 {modelName} 的值"
+    },
+    preferOptimizedImages: {
+        en: "prefer dowloading optimized images",
+        ja: "最適化された画像を優先してダウンロードする",
+        "zh-CN": "更喜欢下载优化的图像",
+        "zh-TW": "更喜歡下載優化的圖像"
     }
 };
 const $3a42d740ecc81982$var$getLocale = ()=>{
@@ -12550,7 +12556,7 @@ var $b9a27db92abc3f0f$exports = {};
 
 
 var $39e7bd012fbaed99$exports = {};
-$39e7bd012fbaed99$exports = JSON.parse('{"name":"civitai_prompt_scraper","browserslist":"> 5%, last 1 versions, not dead","version":"1.2.24","description":"","source":"src/prompt_scraper.user.ts","browser ":"dist/prompt_scraper.user.js","targets":{"default":{"context":"browser","sourceMap":false,"includeNodeModules":true,"optimize":true}},"scripts":{"type-check":"tsc --noEmit","lint":"eslint","format":"prettier --write .","watch":"parcel watch","build":"rm -rf .parcel-cache/*; parcel build; zip -v -j ./dist/prompt_scraper.zip ./dist/prompt_scraper.user.js","clean":"rm ./dist/*","test":"vitest --dom","coverage":"vitest --coverage --run","check":"tsc --noEmit"},"author":"Watanabe, Shunsuke","license":"MIT","devDependencies":{"@damoclark/parcel-optimizer-userscript":"^0.0.2","@parcel/packager-ts":"^2.8.3","@parcel/transformer-typescript-types":"^2.8.3","@tsconfig/recommended":"^1.0.2","@types/file-saver":"^2.0.5","@types/lodash":"^4.14.191","@typescript-eslint/eslint-plugin":"^5.52.0","@typescript-eslint/parser":"^5.52.0","@violentmonkey/types":"^0.1.5","@vitest/coverage-v8":"^0.33.0","eslint":"^8.34.0","eslint-config-standard-with-typescript":"^34.0.0","eslint-plugin-import":"^2.27.5","eslint-plugin-n":"^15.6.1","eslint-plugin-promise":"^6.1.1","happy-dom":"^10.3.2","parcel":"^2.8.3","prettier":"^2.8.4","prettier-plugin-organize-imports":"^3.2.2","rollup-plugin-cleanup":"^3.2.1","typescript":"^4.9.5","vitest":"^0.33.0"},"dependencies":{"@violentmonkey/url":"^0.1.0","@zip.js/zip.js":"^2.6.63","file-saver":"^2.0.5","html2canvas":"^1.4.1","lodash":"^4.17.21","wazip":"^0.1.0"}}');
+$39e7bd012fbaed99$exports = JSON.parse('{"name":"civitai_prompt_scraper","browserslist":"> 5%, last 1 versions, not dead","version":"1.2.25","description":"","source":"src/prompt_scraper.user.ts","browser ":"dist/prompt_scraper.user.js","targets":{"default":{"context":"browser","sourceMap":false,"includeNodeModules":true,"optimize":true}},"scripts":{"type-check":"tsc --noEmit","lint":"eslint","format":"prettier --write .","watch":"parcel watch","build":"rm -rf .parcel-cache/*; parcel build; zip -v -j ./dist/prompt_scraper.zip ./dist/prompt_scraper.user.js","clean":"rm ./dist/*","test":"vitest --dom","coverage":"vitest --coverage --run","check":"tsc --noEmit"},"author":"Watanabe, Shunsuke","license":"MIT","devDependencies":{"@damoclark/parcel-optimizer-userscript":"^0.0.2","@parcel/packager-ts":"^2.8.3","@parcel/transformer-typescript-types":"^2.8.3","@tsconfig/recommended":"^1.0.2","@types/file-saver":"^2.0.5","@types/lodash":"^4.14.191","@typescript-eslint/eslint-plugin":"^5.52.0","@typescript-eslint/parser":"^5.52.0","@violentmonkey/types":"^0.1.5","@vitest/coverage-v8":"^0.33.0","eslint":"^8.34.0","eslint-config-standard-with-typescript":"^34.0.0","eslint-plugin-import":"^2.27.5","eslint-plugin-n":"^15.6.1","eslint-plugin-promise":"^6.1.1","happy-dom":"^10.3.2","parcel":"^2.8.3","prettier":"^2.8.4","prettier-plugin-organize-imports":"^3.2.2","rollup-plugin-cleanup":"^3.2.1","typescript":"^4.9.5","vitest":"^0.33.0"},"dependencies":{"@violentmonkey/url":"^0.1.0","@zip.js/zip.js":"^2.6.63","file-saver":"^2.0.5","html2canvas":"^1.4.1","lodash":"^4.17.21","wazip":"^0.1.0"}}');
 
 
 const $81ffdad4556cbf55$export$bef1f36f5486a6a3 = (...xs)=>{
@@ -12584,7 +12590,7 @@ const $81ffdad4556cbf55$export$f922ebe57f2c36e8 = (xs, chunkSize = 5)=>xs.reduce
  * domain related
  */ const $6790e4d8d7342a47$export$b56cc0ee0a85f41e = (url, width, name)=>`https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/${url}/width=${width},optimized=true/${name ?? ""}`;
 const $6790e4d8d7342a47$export$b3bdca59378516d4 = (url)=>url.replace(/width=(\d*)/, `width=$1,optimized=true`);
-const $6790e4d8d7342a47$export$e8d0c38aad57b50f = (url)=>url.replace(/\/width=\d*,optimized=true/, "");
+const $6790e4d8d7342a47$export$e8d0c38aad57b50f = (url)=>url.replace(/\/width=(\d*),optimized=true/, "width=$1");
 const $6790e4d8d7342a47$export$1f977c13d93a3bf8 = (nextData)=>nextData.props?.pageProps?.trpcState?.json?.queries[0] || {};
 const $6790e4d8d7342a47$export$446f1005883b7406 = (nextData)=>nextData.props?.pageProps?.trpcState?.json?.queries[0]?.state?.data?.meta || {};
 
@@ -12644,7 +12650,7 @@ const $c3454b9ab01d445e$export$2ab75dd31a3868f2 = async (url)=>{
     const parsedNum = Number((0, $2e4159cc418f5166$export$44487a86467333c3)("networkRequestTimeout")) ?? 10;
     const timeoutInSecs = Number.isNaN(parsedNum) ? 10 : parsedNum;
     try {
-        const response = await fetch(url, {
+        const response = await fetch((0, $2e4159cc418f5166$export$44487a86467333c3)("preferOptimizedImages") ? (0, $6790e4d8d7342a47$export$b3bdca59378516d4)(url) : url, {
             method: "GET",
             headers: {
                 Accept: "image/webp,image/jpeg,image/avif;q=0.9,image/apng;q=0.8,image/*;q=0.7",
@@ -12665,7 +12671,8 @@ const $c3454b9ab01d445e$export$2ab75dd31a3868f2 = async (url)=>{
 };
 const $c3454b9ab01d445e$export$e9e7897c93aa9943 = (zipWriter, addedNames)=>async (imgInfo)=>await Promise.all(imgInfo.map(async (x)=>{
             try {
-                const response = await $c3454b9ab01d445e$export$2ab75dd31a3868f2((0, $6790e4d8d7342a47$export$b3bdca59378516d4)(x.url));
+                // const response = await fetchImg(optimizeUrl(x.url));
+                const response = await $c3454b9ab01d445e$export$2ab75dd31a3868f2(x.url);
                 if (!response) throw new Error(`response is null: ${x.url}`);
                 const { blob: blob , contentType: contentType  } = response;
                 let name = $c3454b9ab01d445e$var$extractFilebasenameFromImageUrl(x.url) || x.hash.replace(/[;:?*.]/g, "_");
@@ -12687,7 +12694,7 @@ const $c3454b9ab01d445e$export$e9e7897c93aa9943 = (zipWriter, addedNames)=>async
         }));
 
 
-const $c5da2b8a14082d8b$export$b6bc24646229cedd = (buttnTextUpdateFn)=>(zipFilename, modelInfo)=>async (imgInfo)=>{
+const $c5da2b8a14082d8b$export$b6bc24646229cedd = (buttnTextUpdateFn)=>(zipFilename, modelInfo)=>async (imgInfo, chunkSize = 10)=>{
             if (!modelInfo && imgInfo.length === 0) return;
             const blobWriter = new (0, $53e25169918aa98b$export$b1948fceba813858)(`application/zip`);
             const zipWriter = new (0, $183a0115a003f583$export$50f5658480930b4c)(blobWriter);
@@ -12695,7 +12702,7 @@ const $c5da2b8a14082d8b$export$b6bc24646229cedd = (buttnTextUpdateFn)=>(zipFilen
             const addedNames = new Set();
             const predicate = (0, $c3454b9ab01d445e$export$e9e7897c93aa9943)(zipWriter, addedNames);
             let counter = 0;
-            for (const xs of (0, $81ffdad4556cbf55$export$f922ebe57f2c36e8)(imgInfo)){
+            for (const xs of (0, $81ffdad4556cbf55$export$f922ebe57f2c36e8)(imgInfo, chunkSize)){
                 counter += xs.length;
                 if (buttnTextUpdateFn) buttnTextUpdateFn(`${counter} / ${imgInfo.length} ${(0, $3a42d740ecc81982$export$ccac0588af5e2fe6)()}`);
                 try {
@@ -12759,6 +12766,14 @@ const $2e4159cc418f5166$var$fields = [
         type: "checkbox",
         name: "galleryAutoDownload",
         label: (0, $3a42d740ecc81982$export$731a191155ffa90a)("galleryAutoDownload"),
+        value: true,
+        desc: "",
+        style: "gap: 0.5rem;"
+    },
+    {
+        type: "checkbox",
+        name: "preferOptimizedImages",
+        label: (0, $3a42d740ecc81982$export$731a191155ffa90a)("preferOptimizedImages"),
         value: true,
         desc: "",
         style: "gap: 0.5rem;"
