@@ -127,6 +127,12 @@ const i18n: {
     'zh-CN': '优先选择模型名称而不是 LoRA 名称作为 {modelName} 的值',
     'zh-TW': '優先選擇模型名稱而不是 LoRA 名稱作為 {modelName} 的值',
   },
+  preferOptimizedImages: {
+    en: 'prefer dowloading optimized images',
+    ja: '最適化された画像を優先してダウンロードする',
+    'zh-CN': '更喜欢下载优化的图像',
+    'zh-TW': '更喜歡下載優化的圖像',
+  },
 };
 
 const getLocale = () => {

@@ -9,7 +9,7 @@ export const buildImgUrl = (url: string, width: number, name?: string) =>
 export const optimizeUrl = (url: string) =>
   url.replace(/width=(\d*)/, `width=$1,optimized=true`);
 export const unoptimizeUrl = (url: string) =>
-  url.replace(/\/width=\d*,optimized=true/, '');
+  url.replace(/\/width=(\d*),optimized=true/, 'width=$1');
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const extractModelMetaFromSingleImageNextData = (nextData: any) =>
