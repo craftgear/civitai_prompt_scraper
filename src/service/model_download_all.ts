@@ -101,7 +101,8 @@ const downloadAllModelRelatedFiles = (buttonIdSelector: string) => async () => {
             postId,
             modelName ?? '',
             onFinishFn,
-            previewImageList
+            previewImageList,
+            postIds.length
           )();
         })
   );

@@ -37,7 +37,8 @@ export const downloadGalleryImagesAndPrompts =
     postId: string,
     modelName: string | null,
     onFinishFn?: () => void,
-    downLoadedImgList?: GalleryImage[]
+    downLoadedImgList?: GalleryImage[],
+    totalGalleryPostsCount?: number
   ) =>
   async () => {
     try {
@@ -63,7 +64,12 @@ export const downloadGalleryImagesAndPrompts =
         .replace('{modelName}', modelName ?? '')
         .replace('{postId}', postId);
 
-      await createZip(updateButtonText(button))(filename)(imgList);
+      await createZip(updateButtonText(button))(filename)(
+        imgList,
+        totalGalleryPostsCount
+          ? Math.ceil(imgList.length / totalGalleryPostsCount)
+          : undefined
+      );
 
       if (onFinishFn) {
         onFinishFn();
