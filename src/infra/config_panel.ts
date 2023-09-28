@@ -216,6 +216,8 @@ const buildSettingsPanel = (localConfigValues: Config) => {
   );
   panel.appendChild(title);
 
+  addButtons(panel);
+
   addInputs(
     panel,
     fields.map(function (x) {
@@ -228,8 +230,6 @@ const buildSettingsPanel = (localConfigValues: Config) => {
       };
     })
   );
-
-  addButtons(panel);
 
   return panel;
 };
