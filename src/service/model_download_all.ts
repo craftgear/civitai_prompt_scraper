@@ -53,7 +53,7 @@ const downloadAllModelRelatedFiles = (buttonIdSelector: string) => async () => {
   }
   const galleryElementSelector = '#gallery a[href^="/images/"]';
   await waitForElement(galleryElementSelector);
-  await sleep(1000);
+  await sleep(3000);
 
   const galleryLinks = document.querySelectorAll(galleryElementSelector);
   const postIds = (() => {
@@ -82,29 +82,29 @@ const downloadAllModelRelatedFiles = (buttonIdSelector: string) => async () => {
     postIds.length === 1
       ? []
       : postIds.map(async ({ modelId, postId, x }, i: number) => {
-          const button = document.createElement('div');
-          button.id = `${BUTTON_ID}_${i}`;
-          button.innerText = `${modelId}_${postId}`;
-          button.setAttribute('style', downloadAllGalleryButtonStyle);
-          x.parentNode?.parentNode?.appendChild(button);
+        const button = document.createElement('div');
+        button.id = `${BUTTON_ID}_${i}`;
+        button.innerText = `${modelId}_${postId}`;
+        button.setAttribute('style', downloadAllGalleryButtonStyle);
+        x.parentNode?.parentNode?.appendChild(button);
 
-          const onFinishFn = () => {
-            replaceWithDisabledButton(
-              button,
-              `${postId} ${getButtonCompleteLabel()}`,
-              downloadAllGalleryDisabledButtonStyle
-            );
-          };
-          return downloadGalleryImagesAndPrompts(
-            `#${BUTTON_ID}_${i}`,
-            modelId,
-            postId,
-            modelName ?? '',
-            onFinishFn,
-            previewImageList,
-            postIds.length
-          )();
-        })
+        const onFinishFn = () => {
+          replaceWithDisabledButton(
+            button,
+            `${postId} ${getButtonCompleteLabel()}`,
+            downloadAllGalleryDisabledButtonStyle
+          );
+        };
+        return downloadGalleryImagesAndPrompts(
+          `#${BUTTON_ID}_${i}`,
+          modelId,
+          postId,
+          modelName ?? '',
+          onFinishFn,
+          previewImageList,
+          postIds.length
+        )();
+      })
   );
 
   setTimeout(() => {
