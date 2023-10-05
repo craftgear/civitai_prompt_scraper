@@ -108,7 +108,22 @@ const downloadAllModelRelatedFiles = (buttonIdSelector: string) => async () => {
   );
 
   setTimeout(() => {
-    alert('✅ done');
+    const panel = document.createElement('div');
+
+    panel.setAttribute(
+      'style',
+      `
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index:1000;
+      height: 100%;
+      width: 100%;
+      color: black;
+      opacity: 0.5;
+    `
+    );
+    document?.querySelector('body')?.appendChild(panel);
   }, 100);
   console.warn('##### done #####');
   return;

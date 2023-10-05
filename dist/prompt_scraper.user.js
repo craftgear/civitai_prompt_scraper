@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        Prompt Scraper - civitai.com
-// @version     1.2.28
+// @version     1.2.29
 // @namespace   https://github.com/craftgear/civitai_prompt_scraper
 // @description download images and prompts as a zip file
 // @license     MIT
@@ -12563,7 +12563,7 @@ var $b9a27db92abc3f0f$exports = {};
 
 
 var $39e7bd012fbaed99$exports = {};
-$39e7bd012fbaed99$exports = JSON.parse('{"name":"civitai_prompt_scraper","browserslist":"> 5%, last 1 versions, not dead","version":"1.2.28","description":"","source":"src/prompt_scraper.user.ts","browser ":"dist/prompt_scraper.user.js","targets":{"default":{"context":"browser","sourceMap":false,"includeNodeModules":true,"optimize":true}},"scripts":{"type-check":"tsc --noEmit","lint":"eslint","format":"prettier --write .","watch":"parcel watch","build":"rm -rf .parcel-cache/*; parcel build; zip -v -j ./dist/prompt_scraper.zip ./dist/prompt_scraper.user.js","clean":"rm ./dist/*","test":"vitest --dom","coverage":"vitest --coverage --run","check":"tsc --noEmit"},"author":"Watanabe, Shunsuke","license":"MIT","devDependencies":{"@damoclark/parcel-optimizer-userscript":"^0.0.2","@parcel/packager-ts":"^2.8.3","@parcel/transformer-typescript-types":"^2.8.3","@tsconfig/recommended":"^1.0.2","@types/file-saver":"^2.0.5","@types/lodash":"^4.14.191","@typescript-eslint/eslint-plugin":"^5.52.0","@typescript-eslint/parser":"^5.52.0","@violentmonkey/types":"^0.1.5","@vitest/coverage-v8":"^0.33.0","eslint":"^8.34.0","eslint-config-standard-with-typescript":"^34.0.0","eslint-plugin-import":"^2.27.5","eslint-plugin-n":"^15.6.1","eslint-plugin-promise":"^6.1.1","happy-dom":"^10.3.2","parcel":"^2.8.3","prettier":"^2.8.4","prettier-plugin-organize-imports":"^3.2.2","rollup-plugin-cleanup":"^3.2.1","typescript":"^4.9.5","vitest":"^0.33.0"},"dependencies":{"@violentmonkey/url":"^0.1.0","@zip.js/zip.js":"^2.6.63","file-saver":"^2.0.5","html2canvas":"^1.4.1","lodash":"^4.17.21","wazip":"^0.1.0"}}');
+$39e7bd012fbaed99$exports = JSON.parse('{"name":"civitai_prompt_scraper","browserslist":"> 5%, last 1 versions, not dead","version":"1.2.29","description":"","source":"src/prompt_scraper.user.ts","browser ":"dist/prompt_scraper.user.js","targets":{"default":{"context":"browser","sourceMap":false,"includeNodeModules":true,"optimize":true}},"scripts":{"type-check":"tsc --noEmit","lint":"eslint","format":"prettier --write .","watch":"parcel watch","build":"rm -rf .parcel-cache/*; parcel build; zip -v -j ./dist/prompt_scraper.zip ./dist/prompt_scraper.user.js","clean":"rm ./dist/*","test":"vitest --dom","coverage":"vitest --coverage --run","check":"tsc --noEmit"},"author":"Watanabe, Shunsuke","license":"MIT","devDependencies":{"@damoclark/parcel-optimizer-userscript":"^0.0.2","@parcel/packager-ts":"^2.8.3","@parcel/transformer-typescript-types":"^2.8.3","@tsconfig/recommended":"^1.0.2","@types/file-saver":"^2.0.5","@types/lodash":"^4.14.191","@typescript-eslint/eslint-plugin":"^5.52.0","@typescript-eslint/parser":"^5.52.0","@violentmonkey/types":"^0.1.5","@vitest/coverage-v8":"^0.33.0","eslint":"^8.34.0","eslint-config-standard-with-typescript":"^34.0.0","eslint-plugin-import":"^2.27.5","eslint-plugin-n":"^15.6.1","eslint-plugin-promise":"^6.1.1","happy-dom":"^10.3.2","parcel":"^2.8.3","prettier":"^2.8.4","prettier-plugin-organize-imports":"^3.2.2","rollup-plugin-cleanup":"^3.2.1","typescript":"^4.9.5","vitest":"^0.33.0"},"dependencies":{"@violentmonkey/url":"^0.1.0","@zip.js/zip.js":"^2.6.63","file-saver":"^2.0.5","html2canvas":"^1.4.1","lodash":"^4.17.21","wazip":"^0.1.0"}}');
 
 
 const $81ffdad4556cbf55$export$bef1f36f5486a6a3 = (...xs)=>{
@@ -13158,7 +13158,7 @@ const $90c9ab75e73296e8$export$8b03a564a450b487 = async (href)=>{
 
 
 const $32b5bff137232fe2$var$BUTTON_ID = "download-all-gallery-images-and-prompts";
-const $32b5bff137232fe2$export$9473b35530fb3701 = (buttonIdSelector, modelId, postId, modelName, onFinishFn, downLoadedImgList)=>async ()=>{
+const $32b5bff137232fe2$export$9473b35530fb3701 = (buttonIdSelector, modelId, postId, modelName, onFinishFn, downLoadedImgList, totalGalleryPostsCount)=>async ()=>{
         try {
             const _imgList = await (0, $c3454b9ab01d445e$export$c6ace8a485846f08)(modelId, postId);
             // exclude downloaded images
@@ -13170,7 +13170,7 @@ const $32b5bff137232fe2$export$9473b35530fb3701 = (buttonIdSelector, modelId, po
             button.innerText = (0, $3a42d740ecc81982$export$731a191155ffa90a)("startingDownload");
             const filenameFormat = (0, $2e4159cc418f5166$export$44487a86467333c3)("galleryFilenameFormat");
             const filename = filenameFormat.replace("{modelId}", modelId ?? "").replace("{modelName}", modelName ?? "").replace("{postId}", postId);
-            await (0, $c5da2b8a14082d8b$export$b6bc24646229cedd)((0, $06cbd27ebbbf5f2a$export$bb64a7e3f0f28938)(button))(filename)(imgList);
+            await (0, $c5da2b8a14082d8b$export$b6bc24646229cedd)((0, $06cbd27ebbbf5f2a$export$bb64a7e3f0f28938)(button))(filename)(imgList, totalGalleryPostsCount ? Math.ceil(imgList.length / totalGalleryPostsCount) : undefined);
             if (onFinishFn) onFinishFn();
             (0, $06cbd27ebbbf5f2a$export$92ecf871022de94d)(button, ` ${imgList.length} / ${imgList.length} ${(0, $3a42d740ecc81982$export$4d9f09007b08c03d)()}`);
         } catch (error) {
@@ -13294,7 +13294,7 @@ const $f2fb5610d10943f7$var$downloadAllModelRelatedFiles = (buttonIdSelector)=>a
         else document.querySelector("#gallery")?.scrollIntoView();
         const galleryElementSelector = '#gallery a[href^="/images/"]';
         await (0, $06cbd27ebbbf5f2a$export$1a1c301579a08d1e)(galleryElementSelector);
-        await (0, $81ffdad4556cbf55$export$e772c8ff12451969)(1000);
+        await (0, $81ffdad4556cbf55$export$e772c8ff12451969)(3000);
         const galleryLinks = document.querySelectorAll(galleryElementSelector);
         const postIds = (()=>{
             const postIdSet = new Set();
@@ -13324,10 +13324,18 @@ const $f2fb5610d10943f7$var$downloadAllModelRelatedFiles = (buttonIdSelector)=>a
             const onFinishFn = ()=>{
                 (0, $06cbd27ebbbf5f2a$export$92ecf871022de94d)(button, `${postId} ${(0, $3a42d740ecc81982$export$4d9f09007b08c03d)()}`, (0, $b7e86ce3c5d2c83d$export$21cd342fafb0108a));
             };
-            return (0, $32b5bff137232fe2$export$9473b35530fb3701)(`#${$f2fb5610d10943f7$var$BUTTON_ID}_${i}`, modelId, postId, modelName ?? "", onFinishFn, previewImageList)();
+            return (0, $32b5bff137232fe2$export$9473b35530fb3701)(`#${$f2fb5610d10943f7$var$BUTTON_ID}_${i}`, modelId, postId, modelName ?? "", onFinishFn, previewImageList, postIds.length)();
         }));
         setTimeout(()=>{
-            alert("✅ done");
+            const panel = document.createElement("div");
+            panel.setAttribute("style", `
+      z-index:100;
+      height: 100%;
+      width: 100%;
+      color: black;
+      opacity: 0.2;
+    `);
+            document?.querySelector("body")?.appendChild(panel);
         }, 100);
         console.warn("##### done #####");
         return;
