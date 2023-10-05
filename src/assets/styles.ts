@@ -4,6 +4,8 @@ export const configPanelStyle = `
   top: 2rem;
   right: 2rem;
   width: 400px;
+  max-height: 90vh;
+  overflow: scroll;
 
   display: none;
   gap: 0.5rem;

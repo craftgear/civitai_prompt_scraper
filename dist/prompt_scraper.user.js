@@ -180,6 +180,8 @@ const $b7e86ce3c5d2c83d$export$2c795915441ef547 = `
   top: 2rem;
   right: 2rem;
   width: 400px;
+  max-height: 90vh;
+  overflow: scroll;
 
   display: none;
   gap: 0.5rem;
@@ -12888,7 +12890,7 @@ const $2e4159cc418f5166$var$addButtons = (parent)=>{
         parent.style.display = "none";
     });
     const buttonGroup = document.createElement("div");
-    buttonGroup.setAttribute("style", "display: flex; flex-direction: row; justify-content: space-between; margin-top: 1.5rem; font-size: small; ");
+    buttonGroup.setAttribute("style", "display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 1.0rem; font-size: small; ");
     buttonGroup.appendChild(saveButton);
     buttonGroup.appendChild(cancelButton);
     parent.appendChild(buttonGroup);
@@ -12899,7 +12901,7 @@ const $2e4159cc418f5166$var$buildSettingsPanel = (localConfigValues)=>{
     panel.setAttribute("style", (0, $b7e86ce3c5d2c83d$export$2c795915441ef547));
     const title = document.createElement("h6");
     title.textContent = (0, $3a42d740ecc81982$export$731a191155ffa90a)("configPanelTitle");
-    title.setAttribute("style", "margin-top: 0; margin-bottom: 0.5rem; border-bottom: 1px solid silver;");
+    title.setAttribute("style", "margin-top: 0; margin-bottom: 0.5rem; border-bottom: 1px solid silver; max-height: 90vh;");
     panel.appendChild(title);
     $2e4159cc418f5166$var$addButtons(panel);
     $2e4159cc418f5166$var$addInputs(panel, $2e4159cc418f5166$var$fields.map(function(x) {
