@@ -30,6 +30,43 @@ import { GalleryImage } from '../domain/types';
 
 const BUTTON_ID = 'download-all-gallery-images-and-prompts';
 
+export const download200GalleryImagesAndPrompts =
+  (
+    modelId: string,
+    modelVersionId: string,
+    modelName: string,
+    limit = 200,
+    downLoadedImgList?: GalleryImage[],
+    onProgressFn?: () => void
+  ) =>
+  async () => {
+    try {
+      const _imgList = await fetchGalleryData(
+        modelId,
+        null,
+        modelVersionId,
+        null,
+        limit
+      );
+
+      // exclude downloaded images
+      const downloadedImgIds = downLoadedImgList?.map(({ id }) => id) ?? [];
+      const imgList = _imgList.filter(
+        ({ id }) => !downloadedImgIds.includes(id)
+      );
+
+      const filenameFormat = getConfig('galleryFilenameFormat');
+      const filename = (filenameFormat as string)
+        .replace('{modelId}', modelId ?? '')
+        .replace('{modelName}', modelName ?? '')
+        .replace('{modelVersionId}', modelVersionId ?? '');
+
+      await createZip(onProgressFn)(filename)(imgList, 5);
+    } catch (error: unknown) {
+      alertError((error as Error).message);
+    }
+  };
+
 export const downloadGalleryImagesAndPrompts =
   (
     buttonIdSelector: string,

@@ -71,7 +71,7 @@ const fields: InputField[] = [
     type: 'text',
     name: 'galleryFilenameFormat',
     label: getI18nLabel('galleryFilenameFormat'),
-    value: '{modelName}-modelId_{modelId}-postId_{postId}.zip',
+    value: '{modelName}-gallery_[{modelId}]-[{modelVersionId}].zip',
     desc: `${getI18nLabel(
       'availableVariables'
     )} {modelName}, {modelId}, {postId}`,
@@ -162,7 +162,7 @@ const addInputs = (parent: HTMLElement, fields: InputField[]) => {
 };
 
 const getValuesOfInputs = (fields: InputField[]) => {
-  return fields.reduce(function(acc, cur) {
+  return fields.reduce(function (acc, cur) {
     const el = document.querySelector('#' + cur.name);
     if (cur.type === 'checkbox') {
       return { ...acc, [cur.name]: (el as HTMLInputElement).checked };
@@ -178,7 +178,7 @@ const addButtons = (parent: HTMLDivElement) => {
     'style',
     'color: white; background: #228be6; padding: 0.5rem 2rem;'
   );
-  saveButton.addEventListener('click', function() {
+  saveButton.addEventListener('click', function () {
     const values = getValuesOfInputs(fields) as Config;
     saveConfig(values);
     parent.style.display = 'none';
@@ -187,7 +187,7 @@ const addButtons = (parent: HTMLDivElement) => {
   const cancelButton = document.createElement('button');
   cancelButton.textContent = getI18nLabel('cancelConfig');
   cancelButton.setAttribute('style', 'padding: 0.5rem 0.5rem;');
-  cancelButton.addEventListener('click', function() {
+  cancelButton.addEventListener('click', function () {
     parent.style.display = 'none';
   });
 
@@ -220,7 +220,7 @@ const buildSettingsPanel = (localConfigValues: Config) => {
 
   addInputs(
     panel,
-    fields.map(function(x) {
+    fields.map(function (x) {
       return {
         ...x,
         value:
@@ -241,7 +241,7 @@ export function initConfigPanel() {
   document?.querySelector('body')?.appendChild(panel);
 
   // register a menu command
-  GM_registerMenuCommand(getI18nLabel('configPanelMenu'), function() {
+  GM_registerMenuCommand(getI18nLabel('configPanelMenu'), function () {
     panel.style.display = 'flex';
   });
 }

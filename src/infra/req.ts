@@ -66,16 +66,20 @@ export const fetchGalleryData = async (
   modelId?: string | null,
   postId?: string | null,
   modelVersionId?: string | null,
-  username?: string | null
+  username?: string | null,
+  limit?: number
 ) => {
   let url = `${API_URL}/images`;
-  const params = ['limit=20'];
+  const params = ['sort=Most%20Reactions'];
 
+  if (limit) {
+    params.push(`limit=${limit}`);
+  }
   if (postId) {
     params.push(`postId=${postId}`);
   }
   if (modelId) {
-    // params.push(`modelId=${modelId}`);
+    params.push(`modelId=${modelId}`);
   }
   if (modelVersionId) {
     params.push(`modelVersionId=${modelVersionId}`);

@@ -39,8 +39,10 @@ export const parseModelMetaFromSingleImageNextData = () =>
 export const parseModelMetaFromGalleryNextData = () =>
   extractModelMetaFromGalleryNextData(parseNextData());
 
-export const updateButtonText = (button: HTMLElement) => (text: string) => {
-  button.innerText = text;
+export const updateButtonText = (button?: HTMLElement) => (text: string) => {
+  if (button) {
+    button.innerText = text;
+  }
 };
 
 export const replaceWithDisabledButton = (

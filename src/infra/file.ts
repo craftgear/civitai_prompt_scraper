@@ -9,7 +9,7 @@ import { getConfig } from './config_panel';
 import { fetchImgs } from './req';
 
 export const createZip =
-  (buttnTextUpdateFn: (text: string) => void | null) =>
+  (buttnTextUpdateFn?: (text: string) => void | null) =>
   (zipFilename: string, modelInfo?: unknown) =>
   async (
     imgInfo: { url: string; hash: string; meta: unknown }[],
