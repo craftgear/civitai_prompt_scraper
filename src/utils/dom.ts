@@ -182,3 +182,25 @@ export const deleteMainPaddingBottom = (retry = 5) => {
   }
   el.style.paddingBottom = '0';
 };
+
+export const enableFullScreenCapture = () => {
+  const modifyHeight = () => {
+    const highestElement = selector('main > div > div');
+    if (highestElement) {
+      const newHeight = highestElement.clientHeight + 300;
+      selector('body')?.setAttribute(
+        'style',
+        `height: ${newHeight}px; max-width:1320px;`
+      );
+      selector('main > div')?.setAttribute('style', 'overflow: hidden;');
+      selector('html')?.setAttribute(
+        'style',
+        'overflow-y: auto; overflow-x: hidden;'
+      );
+    }
+  };
+  document.addEventListener('focus', () => {
+    modifyHeight();
+  });
+  modifyHeight();
+};

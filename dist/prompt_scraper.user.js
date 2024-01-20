@@ -13288,7 +13288,7 @@ const $32b5bff137232fe2$export$5fd187c0d03a79e = async (href)=>{
 
 
 
-// import { sleep } from '../utils/utils';
+
 const $f2fb5610d10943f7$var$BUTTON_ID = "download-all-model-related-files";
 const $f2fb5610d10943f7$var$downloadButtonSelector = "a[href^='/api/download/models/']";
 const $f2fb5610d10943f7$var$downloadAll = (buttonIdSelector)=>async ()=>{
@@ -13316,15 +13316,141 @@ const $f2fb5610d10943f7$var$downloadAll = (buttonIdSelector)=>async ()=>{
         console.warn("##### done #####");
         return;
     };
+// const getGalleryModelIdAndPostId = (href: string) => {
+//   const hrefModelId = href.match(/modelId=(?<modelId>\d*)/)?.groups?.modelId;
+//   const hrefPostId = href.match(/postId=(?<postId>\d*)/)?.groups?.postId;
+//   if (!hrefModelId || !hrefPostId) {
+//     throw new Error('Either modelId or postId found');
+//   }
+//
+//   return {
+//     modelId: hrefModelId,
+//     postId: hrefPostId,
+//   };
+// };
+//
+// const downloadAllModelRelatedFiles = (buttonIdSelector: string) => async () => {
+//   // save previews as a zip file
+//   const {
+//     imageList: previewImageList,
+//     modelName,
+//     modelId,
+//     modelVersionId,
+//   } = (await downloadImagesAndPrompts(
+//     buttonIdSelector,
+//     window.location.href
+//   )()) ?? {};
+//
+//   // save galleries as zip files
+//   const clientHeight = document.querySelector('body')?.clientHeight;
+//   if (clientHeight) {
+//     window.scrollTo(0, clientHeight);
+//   } else {
+//     document.querySelector('#gallery')?.scrollIntoView();
+//   }
+//   const galleryElementSelector = '#gallery a[href^="/images/"]';
+//   await waitForElement(galleryElementSelector);
+//   await sleep(3000);
+//
+//   const galleryLinks = document.querySelectorAll(galleryElementSelector);
+//   const postIds = (() => {
+//     const postIdSet = new Set();
+//     return Array.from(galleryLinks).reduce(
+//       (acc: { modelId: string; postId: string; x: Element }[], x: Element) => {
+//         const href = x.getAttribute('href');
+//         if (!href) {
+//           return acc;
+//         }
+//         const { modelId, postId } = getGalleryModelIdAndPostId(href);
+//         if (!postId) {
+//           return acc;
+//         }
+//         if (postIdSet.has(postId)) {
+//           return acc;
+//         }
+//         postIdSet.add(postId);
+//         return [...acc, { modelId, postId, x }];
+//       },
+//       []
+//     );
+//   })();
+//
+//   await Promise.all(
+//     postIds.length === 1
+//       ? []
+//       : postIds.map(async ({ modelId, postId, x }, i: number) => {
+//           const button = document.createElement('div');
+//           button.id = `${BUTTON_ID}_${i}`;
+//           button.innerText = `${modelId}_${postId}`;
+//           button.setAttribute('style', downloadAllGalleryButtonStyle);
+//           x.parentNode?.parentNode?.appendChild(button);
+//
+//           const onFinishFn = () => {
+//             replaceWithDisabledButton(
+//               button,
+//               `${postId} ${getButtonCompleteLabel()}`,
+//               downloadAllGalleryDisabledButtonStyle
+//             );
+//           };
+//           return downloadGalleryImagesAndPrompts(
+//             `#${BUTTON_ID}_${i}`,
+//             modelId,
+//             postId,
+//             modelName ?? '',
+//             onFinishFn,
+//             previewImageList,
+//             postIds.length
+//           )();
+//         })
+//   );
+//
+//   setTimeout(() => {
+//     const panel = document.createElement('div');
+//
+//     panel.setAttribute(
+//       'style',
+//       `
+//       position: absolute;
+//       top: 0;
+//       left: 0;
+//       z-index:1000;
+//       height: 100%;
+//       width: 100%;
+//       color: black;
+//       opacity: 0.5;
+//     $
+//     );
+//     document?.querySelector('body')?.appendChild(panel);
+//   }, 100);
+//   console.warn('##### done #####');
+//   return;
+// };
+//
+const $f2fb5610d10943f7$var$enableFullScreenCapture = ()=>{
+    const modifyHeight = ()=>{
+        const highestElement = (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)("main > div > div");
+        if (highestElement) {
+            const newHeight = highestElement.clientHeight + 300;
+            (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)("body")?.setAttribute("style", `height: ${newHeight}px; max-width:1320px;`);
+            (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)("main > div")?.setAttribute("style", "overflow: hidden;");
+            (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)("html")?.setAttribute("style", "overflow-y: auto; overflow-x: hidden;");
+        }
+    };
+    document.addEventListener("focus", ()=>{
+        modifyHeight();
+    });
+    modifyHeight();
+};
 const $f2fb5610d10943f7$export$264fba47316a17c2 = async (href)=>{
     (0, $06cbd27ebbbf5f2a$export$2da3e68033eaa011)();
+    (0, $06cbd27ebbbf5f2a$export$260b7aeca61b2fed)();
     (0, $06cbd27ebbbf5f2a$export$5bc69941fea37f21)();
     (0, $06cbd27ebbbf5f2a$export$d450a001006e5818)();
     (0, $06cbd27ebbbf5f2a$export$5ffcb0107c13639c)();
     // deleteMainPaddingBottom();
-    (0, $06cbd27ebbbf5f2a$export$260b7aeca61b2fed)();
+    $f2fb5610d10943f7$var$enableFullScreenCapture();
     const parentNode = await (0, $06cbd27ebbbf5f2a$export$4a2d37b006372286)();
-    const buttonIdSelector = `#${$f2fb5610d10943f7$var$BUTTON_ID}`;
+    const buttonIdSelector = `${$f2fb5610d10943f7$var$BUTTON_ID}`;
     document.querySelector(buttonIdSelector)?.remove();
     const button = document.createElement("a");
     button.addEventListener("click", // downloadAllModelRelatedFiles(buttonIdSelector)

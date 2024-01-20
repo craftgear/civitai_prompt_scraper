@@ -14,6 +14,7 @@ import {
   openGallery,
   // replaceWithDisabledButton,
   waitForElement,
+  enableFullScreenCapture,
 } from '../utils/dom';
 // import { sleep } from '../utils/utils';
 
@@ -175,25 +176,27 @@ const downloadAll = (buttonIdSelector: string) => async () => {
 //       width: 100%;
 //       color: black;
 //       opacity: 0.5;
-//     `
+//     $
 //     );
 //     document?.querySelector('body')?.appendChild(panel);
 //   }, 100);
 //   console.warn('##### done #####');
 //   return;
 // };
+//
 
 export const addModelDownloadAllButton = async (href: string) => {
   hideGallery();
+  deleteDiscussion();
   darkenTextColor();
   deleteCreateButton();
   deleteSuggestedResources();
   // deleteMainPaddingBottom();
-  deleteDiscussion();
+  enableFullScreenCapture();
 
   const parentNode = await getButtonContainerNode();
 
-  const buttonIdSelector = `#${BUTTON_ID}`;
+  const buttonIdSelector = `${BUTTON_ID}`;
   document.querySelector(buttonIdSelector)?.remove();
 
   const button = document.createElement('a');
