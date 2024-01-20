@@ -93,6 +93,7 @@ export const downloadImagesAndPrompts =
       const button = await waitForElement(buttonIdSelector);
 
       if (!button) {
+        throw new Error('downloadImagesAndPrompts: button not found');
         return;
       }
 
