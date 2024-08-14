@@ -19,7 +19,12 @@ export const createLink: CreateLink = (id, style, label, clickHandler) => {
   link.id = id;
   link.setAttribute('style', style);
   link.innerText = label;
-  link.addEventListener('click', clickHandler);
+  if (clickHandler) {
+    link.addEventListener('click', (e: MouseEvent) => {
+      e.preventDefault();
+      clickHandler(e);
+    });
+  }
   return link;
 };
 

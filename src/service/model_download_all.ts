@@ -1,33 +1,25 @@
-import { getButtonCompleteLabel } from '../assets/lang';
+import { downloadAllButtonStyle } from '../assets/styles';
 import {
-  downloadAllButtonStyle,
-  // downloadAllGalleryButtonStyle,
-  // downloadAllGalleryDisabledButtonStyle,
-} from '../assets/styles';
-import {
+  addButtonContainer,
   darkenTextColor,
   deleteCreateButton,
   deleteDiscussion,
+  deleteMainPaddingBottom,
   deleteSuggestedResources,
-  getButtonContainerNode,
-  hideGallery,
-  openGallery,
-  // replaceWithDisabledButton,
-  waitForElement,
   enableFullScreenCapture,
+  getDownloadATag,
+  removeButtonContainer,
+  // openGallery,
+  scrollIntoView,
 } from '../utils/dom';
-// import { sleep } from '../utils/utils';
 
 const BUTTON_ID = 'download-all-model-related-files';
-const downloadButtonSelector = "a[href^='/api/download/models/']";
 
-import {
-  download200GalleryImagesAndPrompts,
-  // downloadGalleryImagesAndPrompts,
-} from './gallery_download';
+import { download200GalleryImagesAndPrompts } from './gallery_download';
 import { downloadImagesAndPrompts } from './model_image_download';
 
 const downloadAll = (buttonIdSelector: string) => async () => {
+  console.log('downloadAll: start');
   // save previews as a zip file
   const {
     imageList: previewImageList,
@@ -40,20 +32,38 @@ const downloadAll = (buttonIdSelector: string) => async () => {
   )()) ?? {};
 
   if (!modelId || !modelVersionId) {
-    alert('modelId or modelVersionId not found');
+    alert('downloadAll: modelId or modelVersionId not found');
     return;
   }
 
-  await download200GalleryImagesAndPrompts(
-    modelId.toString(),
-    modelVersionId as string,
-    modelName ?? '',
-    200,
-    previewImageList
-  )();
+  const galleryDownloadProgressText = document.createElement('div');
+  const GalleryDownloadProgressTextId = 'gallery-download-progress-text';
+  galleryDownloadProgressText.id = GalleryDownloadProgressTextId;
+  galleryDownloadProgressText.setAttribute(
+    'style',
+    `
+      position: fixed;
+      top: 50px;
+      right: 50px;
+      z-index:1000;
+      background-color: black;
+      color: white;
+      opacity: 0.8;
+      width: fit-content;
+      padding: 1rem 2rem;
+    `
+  );
+  document?.querySelector('body')?.appendChild(galleryDownloadProgressText);
 
-  setTimeout(() => {
+  const progressFn = (progressMsg: string) => {
+    galleryDownloadProgressText.innerText = progressMsg;
+  };
+
+  const finishFn = () => {
     const panel = document.createElement('div');
+    panel.onclick = () => {
+      panel.remove();
+    };
 
     panel.setAttribute(
       'style',
@@ -64,58 +74,68 @@ const downloadAll = (buttonIdSelector: string) => async () => {
       z-index:1000;
       height: 100%;
       width: 100%;
-      color: black;
+      background-color: black;
       opacity: 0.5;
     `
     );
-    document?.querySelector('body')?.appendChild(panel);
-  }, 100);
+    document?.querySelector('#main')?.appendChild(panel);
+    document.querySelector(`#${GalleryDownloadProgressTextId}`)?.remove();
+
+    scrollIntoView('#gallery');
+    // openGallery(); // galleryを開くと、ダウンロードが遅くなる
+    console.log('download200GalleryImagesAndPrompts: done');
+  };
+
+  await download200GalleryImagesAndPrompts(
+    modelId.toString(),
+    modelVersionId as string,
+    modelName ?? '',
+    200,
+    previewImageList,
+    progressFn,
+    finishFn
+  )();
+
   console.warn('##### done #####');
+
   return;
 };
 
-export const addModelDownloadAllButton = async (href: string) => {
-  hideGallery();
+export const addModelDownloadAllButton = async () => {
   deleteDiscussion();
   darkenTextColor();
   deleteCreateButton();
   deleteSuggestedResources();
-  // deleteMainPaddingBottom();
   enableFullScreenCapture();
+  deleteMainPaddingBottom();
 
-  const parentNode = await getButtonContainerNode();
+  removeButtonContainer();
+  const parentNode = await addButtonContainer();
 
   const buttonIdSelector = `#${BUTTON_ID}`;
-  document.querySelector(buttonIdSelector)?.remove();
-
   const button = document.createElement('a');
-  button.addEventListener(
-    'click',
-    // downloadAllModelRelatedFiles(buttonIdSelector)
-    downloadAll(buttonIdSelector)
-  );
+  button.addEventListener('click', (e) => {
+    e.preventDefault();
+    setTimeout(async () => {
+      await downloadAll(buttonIdSelector)();
+    }, 1000);
+  });
   button.id = BUTTON_ID;
   button.innerText = '⇣'; //getButtonLabel();
   button.setAttribute('style', downloadAllButtonStyle);
 
   // start downloading a model
-  button.addEventListener('click', async () => {
-    openGallery();
-    await waitForElement(downloadButtonSelector);
-    const modelDownloadUrl = document
-      .querySelector(downloadButtonSelector)
-      ?.getAttribute('href');
+  button.addEventListener('click', async (e) => {
+    e.preventDefault();
+    const aTag = await getDownloadATag();
 
-    const fileSizeText =
-      document.querySelector(downloadButtonSelector)?.innerHTML ?? '';
+    const fileSizeText = (aTag as HTMLElement).innerHTML ?? '';
     if (
-      modelDownloadUrl &&
+      aTag &&
       // モデルの場合はダウンロードしない
       !fileSizeText.includes(' GB)')
     ) {
-      setTimeout(() => {
-        window.open(modelDownloadUrl, '_blank');
-      }, 0);
+      aTag.dispatchEvent(new MouseEvent('click', { bubbles: true }));
     }
   });
 

@@ -13,7 +13,7 @@ export const createZip =
   (zipFilename: string, modelInfo?: unknown) =>
   async (
     imgInfo: { url: string; hash: string; meta: unknown }[],
-    chunkSize?: number
+    chunkSize = 10
   ): Promise<void> => {
     if (!modelInfo && imgInfo.length === 0) {
       return;

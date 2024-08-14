@@ -20,7 +20,7 @@ export const configPanelStyle = `
 
 export const buttonStyle = `
   display: flex;
-  flex: fit-content;
+  flex-grow: 1;
   min-height: 34px;
   justify-content: center;
   align-items: center;
@@ -69,12 +69,13 @@ export const downloadAllButtonStyle = `
   ${buttonStyle}
   padding: 0;
   fontWeight: bold;
-  background-color: #868e96;
+  background-color: #228be6;
 `;
 
 export const buttonContainerStyle = `
   display: flex;
   flex-direction: row;
+  width: 100%;
   gap: 0.7rem;
 `;
 

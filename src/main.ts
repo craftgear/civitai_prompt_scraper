@@ -1,25 +1,10 @@
-import { getConfig, initConfigPanel } from './infra/config_panel';
+import { initConfigPanel } from './infra/config_panel';
 import { alertError } from './infra/dom';
 import { addGalleryDownloadButton } from './service/gallery_download';
+import { hideAndToggleGallery } from './service/hide_gallery';
 import { addModelDownloadAllButton } from './service/model_download_all';
-import { addModelImagesDownloadButton } from './service/model_image_download';
 
-import { addButtonContainer } from './utils/dom';
 import { log, sleep } from './utils/utils';
-
-const addDownloadAllButton = async () => {
-  const href = window.location.href;
-  try {
-    if (!href.match(/\/models\/\d*/)) {
-      return;
-    }
-    log('download all');
-
-    await addModelDownloadAllButton(href);
-  } catch (error: unknown) {
-    alert((error as Error).message);
-  }
-};
 
 const openShowMore = (retry = 10) => {
   const showMoreButton = Array.from(document.querySelectorAll('button')).filter(
@@ -36,36 +21,51 @@ const openShowMore = (retry = 10) => {
   }
 };
 
-const addModelPreviewDownloadButton = async () => {
+const addDownloadAllButton = async () => {
   const href = window.location.href;
+  // FIXME: adhoc: wait for Nextjs rendering finish
+  await sleep(1000);
   try {
-    // await waitForElement('#gallery a[href^="/images"]');
-    // FIXME: adhoc: wait for Nextjs rendering finish
-    await sleep(2000);
     if (!href.match(/\/models\/\d*/)) {
+      setTimeout(addDownloadAllButton, 100);
       return;
     }
-    log('model');
+    log('download all');
 
-    if (getConfig('openShowMore')) {
-      openShowMore();
-      document.addEventListener('focus', () => openShowMore());
-    }
-
-    await addButtonContainer();
-    await addModelImagesDownloadButton(href);
+    await addModelDownloadAllButton();
   } catch (error: unknown) {
-    alertError((error as Error).message);
+    alert((error as Error).message);
   }
 };
+
+// const addModelPreviewDownloadButton = async () => {
+//   const href = window.location.href;
+//   try {
+//     // await waitForElement('#gallery a[href^="/images"]');
+//     // FIXME: adhoc: wait for Nextjs rendering finish
+//     await sleep(2000);
+//     if (!href.match(/\/models\/\d*/)) {
+//       return;
+//     }
+//     log('model');
+//
+//     if (getConfig('openShowMore')) {
+//       openShowMore();
+//       document.addEventListener('focus', () => openShowMore());
+//     }
+//
+//     // await addModelImagesDownloadButton(href);
+//   } catch (error: unknown) {
+//     alertError((error as Error).message);
+//   }
+// };
 
 const addGalleryImageDownloadButton = async () => {
   const href = window.location.href;
   try {
     // await waitForElement('.mantine-RichTextEditor-root');
-    // FIXME: adhoc: wait for Nextjs rendering finish
-    await sleep(2000);
-    if (!href.match(/\/images\/\d*/) || href.match(/\/user/)) {
+    if (!href.match(/\/models\/\d*/)) {
+      setTimeout(addGalleryImageDownloadButton, 100);
       return;
     }
     log('gallery');
@@ -82,11 +82,17 @@ const observer = new MutationObserver(async () => {
   if (prevHref !== href) {
     prevHref = href;
 
-    await addModelPreviewDownloadButton();
-    await addGalleryImageDownloadButton();
-    await addDownloadAllButton();
+    await run();
   }
 });
+
+const run = async () => {
+  hideAndToggleGallery();
+  // await addModelPreviewDownloadButton();
+  await addGalleryImageDownloadButton();
+  await addDownloadAllButton();
+  openShowMore();
+};
 
 export default async function () {
   prevHref = window.location.href;
@@ -104,11 +110,7 @@ export default async function () {
   }
 
   if (window.location.href.match(/\/models\/\d*/)) {
-    await addModelPreviewDownloadButton();
-    await addDownloadAllButton();
-  } else if (window.location.href.match(/\/images\/\d*/)) {
-    await addGalleryImageDownloadButton();
-    return;
+    await run();
   }
 
   log('done');

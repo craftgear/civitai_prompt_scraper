@@ -44,7 +44,7 @@ type ImageMetaData = {
   hashes?: { model: string };
 };
 
-type ModelImage = {
+export type ModelImage = {
   url: string;
   nsfw: string;
   width: number;
@@ -195,7 +195,7 @@ export type CreateLink = (
   id: string,
   style: string,
   label: string,
-  clickHandler: () => void
+  clickHandler?: (e?: MouseEvent) => void
 ) => HTMLAnchorElement;
 export type SetTitle = (x: string) => void;
 export type GetTitle = () => string;

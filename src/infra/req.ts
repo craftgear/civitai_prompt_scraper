@@ -1,12 +1,12 @@
 import { BlobReader, TextReader, ZipWriter } from '@zip.js/zip.js';
 import { getI18nLabel } from '../assets/lang';
-import { getConfig } from './config_panel';
 import { optimizeUrl, unoptimizeUrl } from '../domain/logic';
 import {
   GalleryImagesResponse,
   ModelResponse,
   ModelVersionResponse,
 } from '../domain/types';
+import { getConfig } from './config_panel';
 
 const extractFilebasenameFromImageUrl = (url: string) => {
   const filename = url.split('/').slice(-1)[0];
@@ -19,7 +19,7 @@ const HEADERS = {
   'Accept-Encoding': 'gzip, deflate, br',
   Origin: 'https://civitai.com',
   Referer: 'https://civitai.com/',
-  Cookie: document.cookie,
+  // Cookie: document.cookie,
 };
 
 export const fetchModelData = async (modelId: string) => {
@@ -66,11 +66,10 @@ export const fetchGalleryData = async (
   modelId?: string | null,
   postId?: string | null,
   modelVersionId?: string | null,
-  username?: string | null,
   limit?: number
 ) => {
   let url = `${API_URL}/images`;
-  const params = ['sort=Most%20Reactions'];
+  const params = ['sort=Most%20Reactions&nsfw=X&withMeta=true'];
 
   if (limit) {
     params.push(`limit=${limit}`);
@@ -84,9 +83,10 @@ export const fetchGalleryData = async (
   if (modelVersionId) {
     params.push(`modelVersionId=${modelVersionId}`);
   }
-  if (username) {
-    params.push(`username=${username}`);
-  }
+  // 2024.07.09 usernameをつけるとエラーになるのでコメントアウト
+  // if (username) {
+  //   params.push(`username=${username}`);
+  // }
 
   if (params.length > 0) {
     url = `${url}?${params.join('&')}`;
@@ -104,9 +104,10 @@ export const fetchGalleryData = async (
 };
 
 export const fetchImg = async (
-  url: string
+  url: string,
+  retried = 0
 ): Promise<{ blob: Blob; contentType: string } | null> => {
-  const parsedNum = Number(getConfig('networkRequestTimeout')) ?? 10;
+  const parsedNum = Number(getConfig('networkRequestTimeout')) && 10;
   const timeoutInSecs = Number.isNaN(parsedNum) ? 10 : parsedNum;
   try {
     const response = await fetch(url, {
@@ -126,8 +127,11 @@ export const fetchImg = async (
       contentType,
     };
   } catch (error) {
+    if (retried < 5) {
+      return fetchImg(url, retried + 1);
+    }
     if (url.includes('optimized=true')) {
-      return fetchImg(unoptimizeUrl(url));
+      return fetchImg(unoptimizeUrl(url), retried + 1);
     }
     throw error;
   }
@@ -139,7 +143,6 @@ export const fetchImgs =
     await Promise.all(
       imgInfo.map(async (x) => {
         try {
-          // const response = await fetchImg(optimizeUrl(x.url));
           const response = await fetchImg(
             getConfig('preferOptimizedImages') ? optimizeUrl(x.url) : x.url
           );
@@ -171,7 +174,7 @@ export const fetchImgs =
           }
         } catch (e) {
           if (getConfig('continueWithFetchError')) {
-            console.log('fetchImg throws an error: ', e);
+            console.log('fetchImgs throws an error: ', e);
             return;
           }
           throw e;

@@ -178,7 +178,8 @@ const addButtons = (parent: HTMLDivElement) => {
     'style',
     'color: white; background: #228be6; padding: 0.5rem 2rem;'
   );
-  saveButton.addEventListener('click', function () {
+  saveButton.addEventListener('click', function (e: MouseEvent) {
+    e.preventDefault();
     const values = getValuesOfInputs(fields) as Config;
     saveConfig(values);
     parent.style.display = 'none';
@@ -187,7 +188,8 @@ const addButtons = (parent: HTMLDivElement) => {
   const cancelButton = document.createElement('button');
   cancelButton.textContent = getI18nLabel('cancelConfig');
   cancelButton.setAttribute('style', 'padding: 0.5rem 0.5rem;');
-  cancelButton.addEventListener('click', function () {
+  cancelButton.addEventListener('click', function (e: MouseEvent) {
+    e.preventDefault();
     parent.style.display = 'none';
   });
 

@@ -59,16 +59,33 @@ export const replaceWithDisabledButton = (
 };
 
 const BUTTON_CONTAINER_ID = 'civitai_prompt_scraper';
+const downloadButtonSVGSelector = 'main a svg[class*="tabler-icon-download"]';
+const CREATE_BUTTON_SVG_SELECTOR =
+  'main svg[class*="tabler-icon tabler-icon-player-play"]';
+
+export const getDownloadATag = async () => {
+  const buttonSVG = await waitForElement(downloadButtonSVGSelector);
+
+  return buttonSVG?.parentNode?.parentNode?.parentNode?.parentNode;
+};
+
 export const addButtonContainer = async () => {
-  const downloadButtonSelector = "a[href^='/api/download/models/']";
-  const buttonParent = await waitForElement(downloadButtonSelector);
+  const buttonSVG = await waitForElement(CREATE_BUTTON_SVG_SELECTOR);
+
+  const aTag = buttonSVG?.parentNode?.parentNode?.parentNode?.parentNode;
 
   const container = createDiv();
   container.id = BUTTON_CONTAINER_ID;
   container.setAttribute('style', buttonContainerStyle);
 
-  buttonParent?.parentNode?.parentNode?.appendChild(container);
+  aTag?.parentNode?.appendChild(container);
+
   return container;
+};
+
+export const removeButtonContainer = () => {
+  const container = selector(`#${BUTTON_CONTAINER_ID}`);
+  container?.remove();
 };
 
 export const getButtonContainerNode = async () => {
@@ -104,11 +121,11 @@ export const openGallery = () => {
 export const hideGallery = () => {
   const g: HTMLElement | null = selector('#gallery');
   if (!g) {
-    return;
+    return false;
   }
   g.style.overflow = 'hidden';
   g.style.height = GALLERY_HIDDEN_HIGHT;
-  return;
+  return true;
 };
 
 export const darkenTextColor = () => {
@@ -124,7 +141,7 @@ export const darkenTextColor = () => {
         return;
       }
       const colorNumber = new Number(`0x${colorValue.slice(1)}`);
-      if (colorNumber > 10000000) {
+      if (colorNumber.valueOf() > 10000000) {
         x.setAttribute('style', `${x.getAttribute('style')} color: black;`);
       }
     }
@@ -144,7 +161,7 @@ export const deleteCreateButton = () => {
 
 export const deleteSuggestedResources = (retry = 5) => {
   const el = Array.from(
-    document.querySelectorAll('.mantine-Container-root h2')
+    document.querySelectorAll('.mantine-Stack-root h2')
   ).filter((x: Element) => x.innerHTML.includes('Suggested Resources'))[0];
   const targetEl =
     el?.parentElement?.parentElement?.parentElement?.parentElement;
@@ -173,34 +190,42 @@ export const deleteDiscussion = (retry = 5) => {
 };
 
 export const deleteMainPaddingBottom = (retry = 5) => {
-  const el: HTMLElement | null = document.querySelector('main');
-  if (!el) {
+  const main: HTMLElement | null = document.querySelector('main');
+  if (!main) {
     setTimeout(() => {
       deleteMainPaddingBottom(retry - 1);
     }, 1000);
     return;
   }
-  el.style.paddingBottom = '0';
+  const el = main.children?.item(0) as HTMLElement;
+  if (el) {
+    el.style.paddingBottom = '0';
+  }
 };
 
 export const enableFullScreenCapture = () => {
   const modifyHeight = () => {
     const highestElement = selector('main > div > div');
     if (highestElement) {
-      const newHeight = highestElement.clientHeight + 300;
-      selector('body')?.setAttribute(
-        'style',
-        `height: ${newHeight}px; max-width:1320px;`
-      );
-      selector('main > div')?.setAttribute('style', 'overflow: hidden;');
+      // const newHeight = highestElement.clientHeight + 300;
       selector('html')?.setAttribute(
         'style',
         'overflow-y: auto; overflow-x: hidden;'
       );
+      selector('body')?.setAttribute(
+        'style',
+        // `height: ${newHeight}px; max-width:1320px;`
+        `height: auto;`
+      );
+      selector('main > div')?.setAttribute('style', 'overflow: hidden;');
     }
   };
   document.addEventListener('focus', () => {
     modifyHeight();
   });
   modifyHeight();
+};
+
+export const scrollIntoView = (cssSelector: string) => {
+  selector(cssSelector)?.scrollIntoView({ behavior: 'smooth' });
 };

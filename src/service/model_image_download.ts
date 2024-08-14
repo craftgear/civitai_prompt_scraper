@@ -3,7 +3,7 @@ import {
   getButtonLabel,
   getI18nLabel,
 } from '../assets/lang';
-import { buttonStyle, toggleGalleryStyle } from '../assets/styles';
+import { buttonStyle } from '../assets/styles';
 
 import { getConfig } from '../infra/config_panel';
 import { alertError, createLink, selector } from '../infra/dom';
@@ -14,16 +14,15 @@ import {
 } from '../infra/req';
 import {
   getButtonContainerNode,
+  getDownloadATag,
   replaceWithDisabledButton,
-  toggleGallery,
   updateButtonText,
   waitForElement,
 } from '../utils/dom';
 
 const BUTTON_ID = 'download-all-images-and-prompts';
-const downloadButtonSelector = "a[href^='/api/download/models/']";
 
-const getModeInfoAndImageList = async (href: string) => {
+export const getModeInfoAndImageList = async (href: string) => {
   const hrefModelId =
     href.match(/\/models\/(?<modelId>\d*)/)?.groups?.modelId ??
     href.match(/modelId=(?<modelId>\d*)/)?.groups?.modelId;
@@ -35,11 +34,14 @@ const getModeInfoAndImageList = async (href: string) => {
     hrefModelVersionId
   );
 
-  const {
-    id: modelId,
-    name: modelName,
-    creator: { username: username },
-  } = modelInfo;
+  const { id: modelId, name: modelName, modelVersions } = modelInfo;
+
+  const modelVersion =
+    modelVersions.length === 1
+      ? modelVersions[0]
+      : modelVersions?.find((x) => x.id.toString() === hrefModelVersionId);
+  // NOTE: modelVersion.imagesにはimage.metaがない
+  const modelImages = modelVersion?.images ?? [];
 
   if (!modelId) {
     throw new Error(getI18nLabel('modelIdNotFoundError'));
@@ -58,14 +60,22 @@ const getModeInfoAndImageList = async (href: string) => {
       return `${x.id}` === `${modelVersionId}`;
     })?.name || 'no_version_name';
 
-  // use fetchGalleryData instead of fetchModelVersionData,
-  // due to modelVersion api returns only first 10 images of preview.
-  const imageList = await fetchGalleryData(
+  const galleryImageList = await fetchGalleryData(
     `${modelId}`,
     null,
-    `${modelVersionId}`,
-    `${username}`
+    `${modelVersionId}`
   );
+
+  // NOTE: 通常プレビュー画像もギャラリーに含まれているので、
+  // 画像のダウンロードはギャラリー画像を優先する。
+  // (modelVersion.imagesにはmetaがないので、ギャラリーデータがある場合はそちらのほうがよい
+  // まれにギャラリー画像がないモデルがあるので、その場合はmodelVersion.imagesをダウンロードする
+  const imageList =
+    galleryImageList.length > 0
+      ? galleryImageList.length < modelImages.length
+        ? [...galleryImageList, ...modelImages]
+        : galleryImageList
+      : modelImages;
   return {
     modelId,
     modelName,
@@ -76,14 +86,12 @@ const getModeInfoAndImageList = async (href: string) => {
   };
 };
 
-const startModelDownload = async () => {
-  await waitForElement(downloadButtonSelector);
-  const modelDownloadUrl = document
-    .querySelector(downloadButtonSelector)
-    ?.getAttribute('href');
+const startModelDownload = async (e: MouseEvent) => {
+  e.preventDefault();
+  const aTag = await getDownloadATag();
 
-  if (modelDownloadUrl) {
-    window.open(modelDownloadUrl, '_blank');
+  if (aTag) {
+    aTag.dispatchEvent(new Event('click'));
   }
 };
 
@@ -94,7 +102,6 @@ export const downloadImagesAndPrompts =
 
       if (!button) {
         throw new Error('downloadImagesAndPrompts: button not found');
-        return;
       }
 
       button.innerText = getI18nLabel('startingDownload');
@@ -146,18 +153,4 @@ export const addModelImagesDownloadButton = async (href: string) => {
   }
 
   container?.appendChild(button);
-
-  // show/hide gallery button
-  if (!selector('#hide-gallery')) {
-    const xGallery = createLink(
-      'hide-gallery',
-      toggleGalleryStyle,
-      '-',
-      toggleGallery
-    );
-    const h2 = selector('#gallery h2');
-    if (h2) {
-      h2.parentNode?.appendChild(xGallery);
-    }
-  }
 };
