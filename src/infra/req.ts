@@ -127,11 +127,11 @@ export const fetchImg = async (
       contentType,
     };
   } catch (error) {
-    if (retried < 5) {
-      return fetchImg(url, retried + 1);
-    }
     if (url.includes('optimized=true')) {
       return fetchImg(unoptimizeUrl(url), retried + 1);
+    }
+    if (retried < 5) {
+      return fetchImg(url, retried + 1);
     }
     throw error;
   }
