@@ -72,15 +72,6 @@ export const addGalleryDownloadButton = async (href: string) => {
     return;
   }
 
-  const buttonIdSelector = `#${BUTTON_ID}`;
-  const _button = selector(buttonIdSelector);
-  if (_button && _button.getAttribute('data-state') !== ButtonState.ready) {
-    return;
-  }
-  if (_button) {
-    _button?.remove();
-  }
-
   const {
     modelId,
     modelName,
@@ -129,6 +120,10 @@ export const addGalleryDownloadButton = async (href: string) => {
 
   const h2 = selector('#gallery h2');
   if (h2) {
+    const oldButton = selector(`#${BUTTON_ID}`);
+    if (oldButton) {
+      oldButton.remove();
+    }
     h2.parentNode?.appendChild(button);
   }
   if (

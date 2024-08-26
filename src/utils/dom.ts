@@ -60,8 +60,8 @@ export const replaceWithDisabledButton = (
 
 const BUTTON_CONTAINER_ID = 'civitai_prompt_scraper';
 const downloadButtonSVGSelector = 'main a svg[class*="tabler-icon-download"]';
-const CREATE_BUTTON_SVG_SELECTOR =
-  'main svg[class*="tabler-icon tabler-icon-player-play"]';
+const SHARE_BUTTON_SVG_SELECTOR =
+  'main svg[class*="tabler-icon tabler-icon-share-3"]';
 
 export const getDownloadATag = async () => {
   const buttonSVG = await waitForElement(downloadButtonSVGSelector);
@@ -70,9 +70,10 @@ export const getDownloadATag = async () => {
 };
 
 export const addButtonContainer = async () => {
-  const buttonSVG = await waitForElement(CREATE_BUTTON_SVG_SELECTOR);
+  const buttonSVG = await waitForElement(SHARE_BUTTON_SVG_SELECTOR);
 
-  const aTag = buttonSVG?.parentNode?.parentNode?.parentNode?.parentNode;
+  const aTag =
+    buttonSVG?.parentNode?.parentNode?.parentNode?.parentNode?.parentNode;
 
   const container = createDiv();
   container.id = BUTTON_CONTAINER_ID;
@@ -137,12 +138,12 @@ export const darkenTextColor = () => {
         return;
       }
       if (colorValue.startsWith('rgb')) {
-        x.setAttribute('style', `${x.getAttribute('style')} color: black;`);
+        x.setAttribute('style', `${x.getAttribute('style')}; color: black;`);
         return;
       }
       const colorNumber = new Number(`0x${colorValue.slice(1)}`);
       if (colorNumber.valueOf() > 10000000) {
-        x.setAttribute('style', `${x.getAttribute('style')} color: black;`);
+        x.setAttribute('style', `${x.getAttribute('style')}; color: black;`);
       }
     }
   );

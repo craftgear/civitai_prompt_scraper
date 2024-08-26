@@ -12922,7 +12922,8 @@ const $c3454b9ab01d445e$var$API_URL = "https://civitai.com/api/v1";
 const $c3454b9ab01d445e$var$HEADERS = {
     "Accept-Encoding": "gzip, deflate, br",
     Origin: "https://civitai.com",
-    Referer: "https://civitai.com/"
+    Referer: "https://civitai.com/",
+    Cookie: document.cookie
 };
 const $c3454b9ab01d445e$export$998f418383804028 = async (modelId)=>{
     const response = await fetch(`${$c3454b9ab01d445e$var$API_URL}/models/${modelId}`, {
@@ -12987,8 +12988,8 @@ const $c3454b9ab01d445e$export$2ab75dd31a3868f2 = async (url, retried = 0)=>{
             contentType: contentType
         };
     } catch (error) {
-        if (retried < 5) return $c3454b9ab01d445e$export$2ab75dd31a3868f2(url, retried + 1);
         if (url.includes("optimized=true")) return $c3454b9ab01d445e$export$2ab75dd31a3868f2((0, $6790e4d8d7342a47$export$e8d0c38aad57b50f)(url), retried + 1);
+        if (retried < 10) return $c3454b9ab01d445e$export$2ab75dd31a3868f2(url, retried + 1);
         throw error;
     }
 };
@@ -13321,14 +13322,14 @@ const $06cbd27ebbbf5f2a$export$92ecf871022de94d = (button, text, style)=>{
 };
 const $06cbd27ebbbf5f2a$var$BUTTON_CONTAINER_ID = "civitai_prompt_scraper";
 const $06cbd27ebbbf5f2a$var$downloadButtonSVGSelector = 'main a svg[class*="tabler-icon-download"]';
-const $06cbd27ebbbf5f2a$var$CREATE_BUTTON_SVG_SELECTOR = 'main svg[class*="tabler-icon tabler-icon-player-play"]';
+const $06cbd27ebbbf5f2a$var$SHARE_BUTTON_SVG_SELECTOR = 'main svg[class*="tabler-icon tabler-icon-share-3"]';
 const $06cbd27ebbbf5f2a$export$3065315f1141c0d0 = async ()=>{
     const buttonSVG = await $06cbd27ebbbf5f2a$export$1a1c301579a08d1e($06cbd27ebbbf5f2a$var$downloadButtonSVGSelector);
     return buttonSVG?.parentNode?.parentNode?.parentNode?.parentNode;
 };
 const $06cbd27ebbbf5f2a$export$3d6ebb5b74790dc2 = async ()=>{
-    const buttonSVG = await $06cbd27ebbbf5f2a$export$1a1c301579a08d1e($06cbd27ebbbf5f2a$var$CREATE_BUTTON_SVG_SELECTOR);
-    const aTag = buttonSVG?.parentNode?.parentNode?.parentNode?.parentNode;
+    const buttonSVG = await $06cbd27ebbbf5f2a$export$1a1c301579a08d1e($06cbd27ebbbf5f2a$var$SHARE_BUTTON_SVG_SELECTOR);
+    const aTag = buttonSVG?.parentNode?.parentNode?.parentNode?.parentNode?.parentNode;
     const container = (0, $98f6748fc1e9fd4e$export$331ff980f0d45cff)();
     container.id = $06cbd27ebbbf5f2a$var$BUTTON_CONTAINER_ID;
     container.setAttribute("style", (0, $b7e86ce3c5d2c83d$export$b0c8f381295da638));
@@ -13375,11 +13376,11 @@ const $06cbd27ebbbf5f2a$export$5bc69941fea37f21 = ()=>{
         const colorValue = (style?.match(/color:\s*(.*);?/) ?? [])[1];
         if (!colorValue) return;
         if (colorValue.startsWith("rgb")) {
-            x.setAttribute("style", `${x.getAttribute("style")} color: black;`);
+            x.setAttribute("style", `${x.getAttribute("style")}; color: black;`);
             return;
         }
         const colorNumber = new Number(`0x${colorValue.slice(1)}`);
-        if (colorNumber.valueOf() > 10000000) x.setAttribute("style", `${x.getAttribute("style")} color: black;`);
+        if (colorNumber.valueOf() > 10000000) x.setAttribute("style", `${x.getAttribute("style")}; color: black;`);
     });
 };
 const $06cbd27ebbbf5f2a$export$d450a001006e5818 = ()=>{
@@ -13532,10 +13533,6 @@ const $32b5bff137232fe2$export$8de192c3bf30e00f = (modelId, modelVersionId, mode
 const $32b5bff137232fe2$export$5fd187c0d03a79e = async (href)=>{
     if (!(0, $98f6748fc1e9fd4e$export$aea217a45095ce11)("#gallery")) // throw new Error('#gallery not found');
     return;
-    const buttonIdSelector = `#${$32b5bff137232fe2$var$BUTTON_ID}`;
-    const _button = (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)(buttonIdSelector);
-    if (_button && _button.getAttribute("data-state") !== (0, $c08fa57dad1b6e82$export$5d7ba7f5550f99d1).ready) return;
-    if (_button) _button?.remove();
     const { modelId: modelId, modelName: modelName, modelVersionId: // imageList,
     modelVersionId } = await (0, $90c9ab75e73296e8$export$b19b7d9a3c3e0ab8)(href);
     const button = (0, $98f6748fc1e9fd4e$export$cdda5b1be25f9499)($32b5bff137232fe2$var$BUTTON_ID, (0, $b7e86ce3c5d2c83d$export$f272ae7639e11e3), (0, $3a42d740ecc81982$export$d397f86d22f413e8)());
@@ -13552,7 +13549,11 @@ const $32b5bff137232fe2$export$5fd187c0d03a79e = async (href)=>{
     if (!eventListener) throw new Error("No necessary parameters found");
     button.addEventListener("click", eventListener);
     const h2 = (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)("#gallery h2");
-    if (h2) h2.parentNode?.appendChild(button);
+    if (h2) {
+        const oldButton = (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)(`#${$32b5bff137232fe2$var$BUTTON_ID}`);
+        if (oldButton) oldButton.remove();
+        h2.parentNode?.appendChild(button);
+    }
     if ((0, $2e4159cc418f5166$export$44487a86467333c3)("galleryAutoDownload") && button.getAttribute("data-state") === (0, $c08fa57dad1b6e82$export$5d7ba7f5550f99d1).ready) setTimeout(()=>{
         button.click();
     }, 500);
@@ -13670,7 +13671,7 @@ const $f2fb5610d10943f7$export$264fba47316a17c2 = async ()=>{
 
 
 
-const $ca465a359cd2bf87$var$openShowMore = (retry = 10)=>{
+const $ca465a359cd2bf87$var$openShowMore = (retry = 50)=>{
     const showMoreButton = Array.from(document.querySelectorAll("button")).filter((x)=>x.innerHTML.includes("Show More"))[0];
     if (showMoreButton) {
         showMoreButton.click();
@@ -13678,7 +13679,7 @@ const $ca465a359cd2bf87$var$openShowMore = (retry = 10)=>{
     }
     if (retry > 0) setTimeout(()=>{
         $ca465a359cd2bf87$var$openShowMore(retry - 1);
-    }, 200);
+    }, 500);
 };
 const $ca465a359cd2bf87$var$addDownloadAllButton = async ()=>{
     const href = window.location.href;

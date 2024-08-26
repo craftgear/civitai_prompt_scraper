@@ -6,7 +6,7 @@ import { addModelDownloadAllButton } from './service/model_download_all';
 
 import { log, sleep } from './utils/utils';
 
-const openShowMore = (retry = 10) => {
+const openShowMore = (retry = 50) => {
   const showMoreButton = Array.from(document.querySelectorAll('button')).filter(
     (x: HTMLElement) => x.innerHTML.includes('Show More')
   )[0];
@@ -17,7 +17,7 @@ const openShowMore = (retry = 10) => {
   if (retry > 0) {
     setTimeout(() => {
       openShowMore(retry - 1);
-    }, 200);
+    }, 500);
   }
 };
 
@@ -37,28 +37,6 @@ const addDownloadAllButton = async () => {
     alert((error as Error).message);
   }
 };
-
-// const addModelPreviewDownloadButton = async () => {
-//   const href = window.location.href;
-//   try {
-//     // await waitForElement('#gallery a[href^="/images"]');
-//     // FIXME: adhoc: wait for Nextjs rendering finish
-//     await sleep(2000);
-//     if (!href.match(/\/models\/\d*/)) {
-//       return;
-//     }
-//     log('model');
-//
-//     if (getConfig('openShowMore')) {
-//       openShowMore();
-//       document.addEventListener('focus', () => openShowMore());
-//     }
-//
-//     // await addModelImagesDownloadButton(href);
-//   } catch (error: unknown) {
-//     alertError((error as Error).message);
-//   }
-// };
 
 const addGalleryImageDownloadButton = async () => {
   const href = window.location.href;

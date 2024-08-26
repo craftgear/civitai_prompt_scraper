@@ -19,7 +19,7 @@ const HEADERS = {
   'Accept-Encoding': 'gzip, deflate, br',
   Origin: 'https://civitai.com',
   Referer: 'https://civitai.com/',
-  // Cookie: document.cookie,
+  Cookie: document.cookie,
 };
 
 export const fetchModelData = async (modelId: string) => {
@@ -130,7 +130,7 @@ export const fetchImg = async (
     if (url.includes('optimized=true')) {
       return fetchImg(unoptimizeUrl(url), retried + 1);
     }
-    if (retried < 5) {
+    if (retried < 10) {
       return fetchImg(url, retried + 1);
     }
     throw error;
