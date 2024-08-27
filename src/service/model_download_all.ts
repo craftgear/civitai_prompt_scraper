@@ -102,12 +102,7 @@ const downloadAll = (buttonIdSelector: string) => async () => {
 };
 
 export const addModelDownloadAllButton = async () => {
-  deleteDiscussion();
-  darkenTextColor();
-  deleteCreateButton();
-  deleteSuggestedResources();
   enableFullScreenCapture();
-  deleteMainPaddingBottom();
 
   removeButtonContainer();
   const parentNode = await addButtonContainer();

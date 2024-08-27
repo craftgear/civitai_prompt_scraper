@@ -10611,6 +10611,10 @@ const $49205c704188ee40$export$19d79b7c5d3cd2e = "internalFileAttribute";
 const $49205c704188ee40$export$628e45477de4f0a9 = "externalFileAttribute";
 const $49205c704188ee40$export$786cfe936e151722 = "msDosCompatible";
 const $49205c704188ee40$export$22d1400c63f09fcb = "zip64";
+const $49205c704188ee40$export$6b7ad29058c49e62 = "encrypted";
+const $49205c704188ee40$export$6e676a52b7ac0349 = "version";
+const $49205c704188ee40$export$18d4cadf88287e2 = "versionMadeBy";
+const $49205c704188ee40$export$3fdbc399da2efbbc = "zipCrypto";
 const $49205c704188ee40$var$PROPERTY_NAMES = [
     $49205c704188ee40$export$7cb34c0446d5e73c,
     $49205c704188ee40$export$8af9d1148acf11c9,
@@ -10629,15 +10633,16 @@ const $49205c704188ee40$var$PROPERTY_NAMES = [
     $49205c704188ee40$export$628e45477de4f0a9,
     $49205c704188ee40$export$786cfe936e151722,
     $49205c704188ee40$export$22d1400c63f09fcb,
+    $49205c704188ee40$export$6b7ad29058c49e62,
+    $49205c704188ee40$export$6e676a52b7ac0349,
+    $49205c704188ee40$export$18d4cadf88287e2,
+    $49205c704188ee40$export$3fdbc399da2efbbc,
     "directory",
     "bitFlag",
-    "encrypted",
     "signature",
     "filenameUTF8",
     "commentUTF8",
     "compressionMethod",
-    "version",
-    "versionMadeBy",
     "extraField",
     "rawExtraField",
     "extraFieldZip64",
@@ -10832,6 +10837,7 @@ class $8800f6a9ee230af8$export$25e4af3b2af7fc76 {
             });
             startOffset = Math.max(offsetFileEntry, startOffset);
             await $8800f6a9ee230af8$var$readCommonFooter(fileEntry, fileEntry, directoryView, offset + 6);
+            fileEntry.zipCrypto = fileEntry.encrypted && !fileEntry.extraFieldAES;
             const entry = new (0, $49205c704188ee40$export$3bb977b3ba9d3b59)(fileEntry);
             entry.getData = (writer, options)=>fileEntry.getData(writer, entry, options);
             offset = endOffset;
@@ -10912,8 +10918,10 @@ class $8800f6a9ee230af8$var$ZipEntry {
             lastAccessDate: localDirectory.lastAccessDate,
             creationDate: localDirectory.creationDate
         });
-        const encrypted = zipEntry.encrypted && localDirectory.encrypted;
+        const passThrough = $8800f6a9ee230af8$var$getOptionValue(zipEntry, options, "passThrough");
+        const encrypted = zipEntry.encrypted && localDirectory.encrypted && !passThrough;
         const zipCrypto = encrypted && !extraFieldAES;
+        if (!passThrough) fileEntry.zipCrypto = zipCrypto;
         if (encrypted) {
             if (!zipCrypto && extraFieldAES.strength === (0, $cb6f24583fb9d4f7$export$a43287864529b8fd)) throw new Error($8800f6a9ee230af8$export$dfb2271b2ffc772d);
             else if (!password && !rawPassword) throw new Error($8800f6a9ee230af8$export$812ffdea842816a5);
@@ -10940,11 +10948,11 @@ class $8800f6a9ee230af8$var$ZipEntry {
                 rawPassword: rawPassword,
                 zipCrypto: zipCrypto,
                 encryptionStrength: extraFieldAES && extraFieldAES.strength,
-                signed: $8800f6a9ee230af8$var$getOptionValue(zipEntry, options, "checkSignature"),
+                signed: $8800f6a9ee230af8$var$getOptionValue(zipEntry, options, "checkSignature") && !passThrough,
                 passwordVerification: zipCrypto && (bitFlag.dataDescriptor ? rawLastModDate >>> 8 & 0xFF : signature >>> 24 & 0xFF),
                 signature: signature,
-                compressed: compressionMethod != 0,
-                encrypted: encrypted,
+                compressed: compressionMethod != 0 && !passThrough,
+                encrypted: zipEntry.encrypted && !passThrough,
                 useWebWorkers: $8800f6a9ee230af8$var$getOptionValue(zipEntry, options, "useWebWorkers"),
                 useCompressionStream: $8800f6a9ee230af8$var$getOptionValue(zipEntry, options, "useCompressionStream"),
                 transferStreams: $8800f6a9ee230af8$var$getOptionValue(zipEntry, options, "transferStreams"),
@@ -11258,6 +11266,7 @@ const $183a0115a003f583$export$a52a97f6f11df530 = "The strength must equal 1, 2,
 const $183a0115a003f583$export$84caeb3441d47629 = "Extra field type exceeds 65535";
 const $183a0115a003f583$export$ca2bf648520d566 = "Extra field data exceeds 64KB";
 const $183a0115a003f583$export$2866c0d2403d5bac = "Zip64 is not supported (make sure 'keepOrder' is set to 'true')";
+const $183a0115a003f583$export$48d50c7bfb18170d = "Undefined uncompressed size";
 const $183a0115a003f583$var$EXTRAFIELD_DATA_AES = new Uint8Array([
     0x07,
     0x00,
@@ -11282,7 +11291,7 @@ class $183a0115a003f583$export$50f5658480930b4c {
             config: (0, $efd91934aae95642$export$3de01744a82b21a4)(),
             files: new Map(),
             filenames: new Set(),
-            offset: writer.writable.size,
+            offset: options.offset === (0, $cb6f24583fb9d4f7$export$a43287864529b8fd) ? writer.writable.size : options.offset,
             pendingEntriesSize: 0,
             pendingAddFileCalls: new Set(),
             bufferedWrites: 0
@@ -11361,9 +11370,9 @@ async function $183a0115a003f583$var$addFile(zipWriter, name, reader, options) {
     let rawComment = encode(comment);
     if (rawComment === (0, $cb6f24583fb9d4f7$export$a43287864529b8fd)) rawComment = (0, $26c9c6b6bd48ee69$export$7d0d7672e8a1c5cf)(comment);
     if ($183a0115a003f583$var$getLength(rawComment) > (0, $cb6f24583fb9d4f7$export$4164cee1a26178fd)) throw new Error($183a0115a003f583$export$c5631773b8d6c9e2);
-    const version = $183a0115a003f583$var$getOptionValue(zipWriter, options, "version", (0, $cb6f24583fb9d4f7$export$e0f048be47b3707));
+    const version = $183a0115a003f583$var$getOptionValue(zipWriter, options, (0, $49205c704188ee40$export$6e676a52b7ac0349), (0, $cb6f24583fb9d4f7$export$e0f048be47b3707));
     if (version > (0, $cb6f24583fb9d4f7$export$4164cee1a26178fd)) throw new Error($183a0115a003f583$export$6a674c09fe1f3dec);
-    const versionMadeBy = $183a0115a003f583$var$getOptionValue(zipWriter, options, "versionMadeBy", 20);
+    const versionMadeBy = $183a0115a003f583$var$getOptionValue(zipWriter, options, (0, $49205c704188ee40$export$18d4cadf88287e2), 20);
     if (versionMadeBy > (0, $cb6f24583fb9d4f7$export$4164cee1a26178fd)) throw new Error($183a0115a003f583$export$6a674c09fe1f3dec);
     const lastModDate = $183a0115a003f583$var$getOptionValue(zipWriter, options, (0, $49205c704188ee40$export$b5975be130cdee5a), new Date());
     const lastAccessDate = $183a0115a003f583$var$getOptionValue(zipWriter, options, (0, $49205c704188ee40$export$38536c34bf195762));
@@ -11371,10 +11380,14 @@ async function $183a0115a003f583$var$addFile(zipWriter, name, reader, options) {
     const msDosCompatible = $183a0115a003f583$var$getOptionValue(zipWriter, options, (0, $49205c704188ee40$export$786cfe936e151722), true);
     const internalFileAttribute = $183a0115a003f583$var$getOptionValue(zipWriter, options, (0, $49205c704188ee40$export$19d79b7c5d3cd2e), 0);
     const externalFileAttribute = $183a0115a003f583$var$getOptionValue(zipWriter, options, (0, $49205c704188ee40$export$628e45477de4f0a9), 0);
-    const password = $183a0115a003f583$var$getOptionValue(zipWriter, options, "password");
-    const rawPassword = $183a0115a003f583$var$getOptionValue(zipWriter, options, "rawPassword");
+    const passThrough = $183a0115a003f583$var$getOptionValue(zipWriter, options, "passThrough");
+    let password, rawPassword;
+    if (!passThrough) {
+        password = $183a0115a003f583$var$getOptionValue(zipWriter, options, "password");
+        rawPassword = $183a0115a003f583$var$getOptionValue(zipWriter, options, "rawPassword");
+    }
     const encryptionStrength = $183a0115a003f583$var$getOptionValue(zipWriter, options, "encryptionStrength", 3);
-    const zipCrypto = $183a0115a003f583$var$getOptionValue(zipWriter, options, "zipCrypto");
+    const zipCrypto = $183a0115a003f583$var$getOptionValue(zipWriter, options, (0, $49205c704188ee40$export$3fdbc399da2efbbc));
     const extendedTimestamp = $183a0115a003f583$var$getOptionValue(zipWriter, options, "extendedTimestamp", true);
     const keepOrder = $183a0115a003f583$var$getOptionValue(zipWriter, options, "keepOrder", true);
     const level = $183a0115a003f583$var$getOptionValue(zipWriter, options, "level");
@@ -11386,7 +11399,7 @@ async function $183a0115a003f583$var$addFile(zipWriter, name, reader, options) {
     const useCompressionStream = $183a0115a003f583$var$getOptionValue(zipWriter, options, "useCompressionStream");
     let dataDescriptor = $183a0115a003f583$var$getOptionValue(zipWriter, options, "dataDescriptor", true);
     let zip64 = $183a0115a003f583$var$getOptionValue(zipWriter, options, (0, $49205c704188ee40$export$22d1400c63f09fcb));
-    if (password !== (0, $cb6f24583fb9d4f7$export$a43287864529b8fd) && encryptionStrength !== (0, $cb6f24583fb9d4f7$export$a43287864529b8fd) && (encryptionStrength < 1 || encryptionStrength > 3)) throw new Error($183a0115a003f583$export$a52a97f6f11df530);
+    if (!zipCrypto && (password !== (0, $cb6f24583fb9d4f7$export$a43287864529b8fd) || rawPassword !== (0, $cb6f24583fb9d4f7$export$a43287864529b8fd)) && !(encryptionStrength >= 1 && encryptionStrength <= 3)) throw new Error($183a0115a003f583$export$a52a97f6f11df530);
     let rawExtraField = new Uint8Array();
     const { extraField: extraField } = options;
     if (extraField) {
@@ -11410,20 +11423,26 @@ async function $183a0115a003f583$var$addFile(zipWriter, name, reader, options) {
     let maximumCompressedSize = 0;
     let maximumEntrySize = 0;
     let uncompressedSize = 0;
+    if (passThrough) {
+        ({ uncompressedSize: uncompressedSize } = options);
+        if (uncompressedSize === (0, $cb6f24583fb9d4f7$export$a43287864529b8fd)) throw new Error($183a0115a003f583$export$48d50c7bfb18170d);
+    }
     const zip64Enabled = zip64 === true;
     if (reader) {
         reader = (0, $53e25169918aa98b$export$f1859256e2c1b583)(reader);
         await (0, $53e25169918aa98b$export$a0b98872cda67175)(reader);
-        if (reader.size === (0, $cb6f24583fb9d4f7$export$a43287864529b8fd)) {
-            dataDescriptor = true;
-            if (zip64 || zip64 === (0, $cb6f24583fb9d4f7$export$a43287864529b8fd)) {
-                zip64 = true;
-                uncompressedSize = maximumCompressedSize = (0, $cb6f24583fb9d4f7$export$dbfc2ae0cf3df69a) + 1;
+        if (!passThrough) {
+            if (reader.size === (0, $cb6f24583fb9d4f7$export$a43287864529b8fd)) {
+                dataDescriptor = true;
+                if (zip64 || zip64 === (0, $cb6f24583fb9d4f7$export$a43287864529b8fd)) {
+                    zip64 = true;
+                    uncompressedSize = maximumCompressedSize = (0, $cb6f24583fb9d4f7$export$dbfc2ae0cf3df69a) + 1;
+                }
+            } else {
+                uncompressedSize = reader.size;
+                maximumCompressedSize = $183a0115a003f583$var$getMaximumCompressedSize(uncompressedSize);
             }
-        } else {
-            uncompressedSize = reader.size;
-            maximumCompressedSize = $183a0115a003f583$var$getMaximumCompressedSize(uncompressedSize);
-        }
+        } else maximumCompressedSize = $183a0115a003f583$var$getMaximumCompressedSize(uncompressedSize);
     }
     const { diskOffset: diskOffset, diskNumber: diskNumber, maxSize: maxSize } = zipWriter.writer;
     const zip64UncompressedSize = zip64Enabled || uncompressedSize > (0, $cb6f24583fb9d4f7$export$dbfc2ae0cf3df69a);
@@ -11436,6 +11455,8 @@ async function $183a0115a003f583$var$addFile(zipWriter, name, reader, options) {
         else zip64 = true;
     }
     zip64 = zip64 || false;
+    const encrypted = $183a0115a003f583$var$getOptionValue(zipWriter, options, (0, $49205c704188ee40$export$6b7ad29058c49e62));
+    const { signature: signature } = options;
     options = Object.assign({}, options, {
         rawFilename: rawFilename,
         rawComment: rawComment,
@@ -11466,7 +11487,10 @@ async function $183a0115a003f583$var$addFile(zipWriter, name, reader, options) {
         msDosCompatible: msDosCompatible,
         internalFileAttribute: internalFileAttribute,
         externalFileAttribute: externalFileAttribute,
-        useCompressionStream: useCompressionStream
+        useCompressionStream: useCompressionStream,
+        passThrough: passThrough,
+        encrypted: Boolean(password && $183a0115a003f583$var$getLength(password) || rawPassword && $183a0115a003f583$var$getLength(rawPassword)) || passThrough && encrypted,
+        signature: signature
     });
     const headerInfo = $183a0115a003f583$var$getHeaderInfo(options);
     const dataDescriptorInfo = $183a0115a003f583$var$getDataDescriptorInfo(options);
@@ -11610,7 +11634,7 @@ async function $183a0115a003f583$var$createFileEntry(reader, writer, { diskNumbe
     const { headerInfo: headerInfo, dataDescriptorInfo: dataDescriptorInfo, metadataSize: metadataSize } = entryInfo;
     const { localHeaderArray: localHeaderArray, headerArray: headerArray, lastModDate: lastModDate, rawLastModDate: rawLastModDate, encrypted: encrypted, compressed: compressed, version: version, compressionMethod: compressionMethod, rawExtraFieldExtendedTimestamp: rawExtraFieldExtendedTimestamp, extraFieldExtendedTimestampFlag: extraFieldExtendedTimestampFlag, rawExtraFieldNTFS: rawExtraFieldNTFS, rawExtraFieldAES: rawExtraFieldAES } = headerInfo;
     const { dataDescriptorArray: dataDescriptorArray } = dataDescriptorInfo;
-    const { rawFilename: rawFilename, lastAccessDate: lastAccessDate, creationDate: creationDate, password: password, rawPassword: rawPassword, level: level, zip64: zip64, zip64UncompressedSize: zip64UncompressedSize, zip64CompressedSize: zip64CompressedSize, zip64Offset: zip64Offset, zip64DiskNumberStart: zip64DiskNumberStart, zipCrypto: zipCrypto, dataDescriptor: dataDescriptor, directory: directory, versionMadeBy: versionMadeBy, rawComment: rawComment, rawExtraField: rawExtraField, useWebWorkers: useWebWorkers, onstart: onstart, onprogress: onprogress, onend: onend, signal: signal, encryptionStrength: encryptionStrength, extendedTimestamp: extendedTimestamp, msDosCompatible: msDosCompatible, internalFileAttribute: internalFileAttribute, externalFileAttribute: externalFileAttribute, useCompressionStream: useCompressionStream } = options;
+    const { rawFilename: rawFilename, lastAccessDate: lastAccessDate, creationDate: creationDate, password: password, rawPassword: rawPassword, level: level, zip64: zip64, zip64UncompressedSize: zip64UncompressedSize, zip64CompressedSize: zip64CompressedSize, zip64Offset: zip64Offset, zip64DiskNumberStart: zip64DiskNumberStart, zipCrypto: zipCrypto, dataDescriptor: dataDescriptor, directory: directory, versionMadeBy: versionMadeBy, rawComment: rawComment, rawExtraField: rawExtraField, useWebWorkers: useWebWorkers, onstart: onstart, onprogress: onprogress, onend: onend, signal: signal, encryptionStrength: encryptionStrength, extendedTimestamp: extendedTimestamp, msDosCompatible: msDosCompatible, internalFileAttribute: internalFileAttribute, externalFileAttribute: externalFileAttribute, useCompressionStream: useCompressionStream, passThrough: passThrough } = options;
     const fileEntry = {
         lock: lock,
         versionMadeBy: versionMadeBy,
@@ -11630,9 +11654,9 @@ async function $183a0115a003f583$var$createFileEntry(reader, writer, { diskNumbe
         externalFileAttribute: externalFileAttribute,
         diskNumberStart: diskNumberStart
     };
+    let { signature: signature, uncompressedSize: uncompressedSize } = options;
     let compressedSize = 0;
-    let uncompressedSize = 0;
-    let signature;
+    if (!passThrough) uncompressedSize = 0;
     const { writable: writable } = writer;
     if (reader) {
         reader.chunkSize = (0, $efd91934aae95642$export$f0bad416b890a4ec)(config);
@@ -11648,9 +11672,9 @@ async function $183a0115a003f583$var$createFileEntry(reader, writer, { diskNumbe
                 encryptionStrength: encryptionStrength,
                 zipCrypto: encrypted && zipCrypto,
                 passwordVerification: encrypted && zipCrypto && rawLastModDate >> 8 & 0xFF,
-                signed: true,
-                compressed: compressed,
-                encrypted: encrypted,
+                signed: !passThrough,
+                compressed: compressed && !passThrough,
+                encrypted: encrypted && !passThrough,
                 useWebWorkers: useWebWorkers,
                 useCompressionStream: useCompressionStream,
                 transferStreams: false
@@ -11668,9 +11692,11 @@ async function $183a0115a003f583$var$createFileEntry(reader, writer, { diskNumbe
             readable: readable,
             writable: writable
         }, workerOptions);
-        uncompressedSize = result.inputSize;
         compressedSize = result.outputSize;
-        signature = result.signature;
+        if (!passThrough) {
+            uncompressedSize = result.inputSize;
+            signature = result.signature;
+        }
         writable.size += uncompressedSize;
     } else await $183a0115a003f583$var$writeData(writable, localHeaderArray);
     let rawExtraFieldZip64;
@@ -11699,6 +11725,7 @@ async function $183a0115a003f583$var$createFileEntry(reader, writer, { diskNumbe
         creationDate: creationDate,
         lastAccessDate: lastAccessDate,
         encrypted: encrypted,
+        zipCrypto: zipCrypto,
         size: metadataSize + compressedSize,
         compressionMethod: compressionMethod,
         version: version,
@@ -11714,9 +11741,8 @@ async function $183a0115a003f583$var$createFileEntry(reader, writer, { diskNumbe
     return fileEntry;
 }
 function $183a0115a003f583$var$getHeaderInfo(options) {
-    const { rawFilename: rawFilename, lastModDate: lastModDate, lastAccessDate: lastAccessDate, creationDate: creationDate, rawPassword: rawPassword, password: password, level: level, zip64: zip64, zipCrypto: zipCrypto, useUnicodeFileNames: useUnicodeFileNames, dataDescriptor: dataDescriptor, directory: directory, rawExtraField: rawExtraField, encryptionStrength: encryptionStrength, extendedTimestamp: extendedTimestamp } = options;
+    const { rawFilename: rawFilename, lastModDate: lastModDate, lastAccessDate: lastAccessDate, creationDate: creationDate, level: level, zip64: zip64, zipCrypto: zipCrypto, useUnicodeFileNames: useUnicodeFileNames, dataDescriptor: dataDescriptor, directory: directory, rawExtraField: rawExtraField, encryptionStrength: encryptionStrength, extendedTimestamp: extendedTimestamp, encrypted: encrypted } = options;
     const compressed = level !== 0 && !directory;
-    const encrypted = Boolean(password && $183a0115a003f583$var$getLength(password) || rawPassword && $183a0115a003f583$var$getLength(rawPassword));
     let version = options.version;
     let rawExtraFieldAES;
     if (encrypted && !zipCrypto) {
@@ -11763,7 +11789,12 @@ function $183a0115a003f583$var$getHeaderInfo(options) {
     if (useUnicodeFileNames) bitFlag = bitFlag | (0, $cb6f24583fb9d4f7$export$fb6e9f896320db55);
     if (dataDescriptor) bitFlag = bitFlag | (0, $cb6f24583fb9d4f7$export$3ec1d940e3bc0a58);
     let compressionMethod = (0, $cb6f24583fb9d4f7$export$6135a805f19e5577);
-    if (compressed) compressionMethod = (0, $cb6f24583fb9d4f7$export$2cf0a12381b29e07);
+    if (compressed) {
+        compressionMethod = (0, $cb6f24583fb9d4f7$export$2cf0a12381b29e07);
+        if (level >= 1 && level < 3) bitFlag = bitFlag | 6;
+        if (level >= 3 && level < 5) bitFlag = bitFlag | 1;
+        if (level === 9) bitFlag = bitFlag | 2;
+    }
     if (zip64) version = version > (0, $cb6f24583fb9d4f7$export$c695aaa0200b0023) ? version : (0, $cb6f24583fb9d4f7$export$c695aaa0200b0023);
     if (encrypted) {
         bitFlag = bitFlag | (0, $cb6f24583fb9d4f7$export$7db0c075c39cb343);
@@ -11984,7 +12015,7 @@ async function $183a0115a003f583$var$closeFile(zipWriter, comment, options) {
     let lastDiskNumber = writer.diskNumber;
     const { availableSize: availableSize } = writer;
     if (availableSize < (0, $cb6f24583fb9d4f7$export$6383d4b2e2323b68)) lastDiskNumber++;
-    let zip64 = $183a0115a003f583$var$getOptionValue(zipWriter, options, "zip64");
+    let zip64 = $183a0115a003f583$var$getOptionValue(zipWriter, options, (0, $49205c704188ee40$export$22d1400c63f09fcb));
     if (directoryOffset > (0, $cb6f24583fb9d4f7$export$dbfc2ae0cf3df69a) || directoryDataLength > (0, $cb6f24583fb9d4f7$export$dbfc2ae0cf3df69a) || filesLength > (0, $cb6f24583fb9d4f7$export$4164cee1a26178fd) || lastDiskNumber > (0, $cb6f24583fb9d4f7$export$4164cee1a26178fd)) {
         if (zip64 === false) throw new Error($183a0115a003f583$export$2866c0d2403d5bac);
         else zip64 = true;
@@ -12121,7 +12152,8 @@ class $0218ca92e030fc58$var$ZipEntry {
             id: fs.entries.length,
             parent: parent,
             children: [],
-            uncompressedSize: params.uncompressedSize || 0
+            uncompressedSize: params.uncompressedSize || 0,
+            passThrough: params.passThrough
         });
         fs.entries.push(zipEntry);
         if (parent) zipEntry.parent.children.push(zipEntry);
@@ -12421,7 +12453,8 @@ class $0218ca92e030fc58$var$ZipDirectoryEntry extends $0218ca92e030fc58$var$ZipE
                 if (!entry.directory) importedEntries.push($0218ca92e030fc58$var$addChild(parent, name, {
                     data: entry,
                     Reader: $0218ca92e030fc58$var$getZipBlobReader(Object.assign({}, options)),
-                    uncompressedSize: entry.uncompressedSize
+                    uncompressedSize: entry.uncompressedSize,
+                    passThrough: options.passThrough
                 }));
             } catch (error) {
                 try {
@@ -12663,7 +12696,10 @@ async function $0218ca92e030fc58$var$exportZip(zipWriter, entry, totalSize, opti
             let childOptions = child.options || {};
             let zipEntryOptions = {};
             if (child.data instanceof (0, $49205c704188ee40$export$3bb977b3ba9d3b59)) {
-                const { externalFileAttribute: externalFileAttribute, versionMadeBy: versionMadeBy, comment: comment, lastModDate: lastModDate, creationDate: creationDate, lastAccessDate: lastAccessDate } = child.data;
+                const { externalFileAttribute: externalFileAttribute, versionMadeBy: versionMadeBy, comment: comment, lastModDate: lastModDate, creationDate: creationDate, lastAccessDate: lastAccessDate, uncompressedSize: uncompressedSize, encrypted: encrypted, zipCrypto: zipCrypto, signature: signature, compressionMethod: compressionMethod, extraFieldAES: extraFieldAES } = child.data;
+                let level, encryptionStrength;
+                if (compressionMethod === 0) level = 0;
+                if (extraFieldAES) encryptionStrength = extraFieldAES.strength;
                 zipEntryOptions = {
                     externalFileAttribute: externalFileAttribute,
                     versionMadeBy: versionMadeBy,
@@ -12672,6 +12708,15 @@ async function $0218ca92e030fc58$var$exportZip(zipWriter, entry, totalSize, opti
                     creationDate: creationDate,
                     lastAccessDate: lastAccessDate
                 };
+                if (child.passThrough) zipEntryOptions = Object.assign(zipEntryOptions, {
+                    passThrough: true,
+                    encrypted: encrypted,
+                    zipCrypto: zipCrypto,
+                    signature: signature,
+                    uncompressedSize: uncompressedSize,
+                    level: level,
+                    encryptionStrength: encryptionStrength
+                });
             }
             await zipWriter.add(name, child.reader, Object.assign({
                 directory: child.directory
@@ -13637,12 +13682,7 @@ const $f2fb5610d10943f7$var$downloadAll = (buttonIdSelector)=>async ()=>{
         return;
     };
 const $f2fb5610d10943f7$export$264fba47316a17c2 = async ()=>{
-    (0, $06cbd27ebbbf5f2a$export$260b7aeca61b2fed)();
-    (0, $06cbd27ebbbf5f2a$export$5bc69941fea37f21)();
-    (0, $06cbd27ebbbf5f2a$export$d450a001006e5818)();
-    (0, $06cbd27ebbbf5f2a$export$5ffcb0107c13639c)();
     (0, $06cbd27ebbbf5f2a$export$a31cd1b3c2b6ea3b)();
-    (0, $06cbd27ebbbf5f2a$export$980dc319601fa7a6)();
     (0, $06cbd27ebbbf5f2a$export$28c3d59206bcbe2d)();
     const parentNode = await (0, $06cbd27ebbbf5f2a$export$3d6ebb5b74790dc2)();
     const buttonIdSelector = `#${$f2fb5610d10943f7$var$BUTTON_ID}`;
@@ -13696,27 +13736,6 @@ const $ca465a359cd2bf87$var$addDownloadAllButton = async ()=>{
         alert(error.message);
     }
 };
-// const addModelPreviewDownloadButton = async () => {
-//   const href = window.location.href;
-//   try {
-//     // await waitForElement('#gallery a[href^="/images"]');
-//     // FIXME: adhoc: wait for Nextjs rendering finish
-//     await sleep(2000);
-//     if (!href.match(/\/models\/\d*/)) {
-//       return;
-//     }
-//     log('model');
-//
-//     if (getConfig('openShowMore')) {
-//       openShowMore();
-//       document.addEventListener('focus', () => openShowMore());
-//     }
-//
-//     // await addModelImagesDownloadButton(href);
-//   } catch (error: unknown) {
-//     alertError((error as Error).message);
-//   }
-// };
 const $ca465a359cd2bf87$var$addGalleryImageDownloadButton = async ()=>{
     const href = window.location.href;
     try {
