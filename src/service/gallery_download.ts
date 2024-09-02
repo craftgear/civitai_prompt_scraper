@@ -96,10 +96,10 @@ export const addGalleryDownloadButton = async (href: string) => {
     }
   };
 
-  const eventListener = (e: MouseEvent) => {
+  const eventListener = async (e: MouseEvent) => {
     e.preventDefault();
     if (modelId && modelVersionId) {
-      return download200GalleryImagesAndPrompts(
+      return await download200GalleryImagesAndPrompts(
         modelId.toString(),
         modelVersionId.toString(),
         modelName,
@@ -107,7 +107,7 @@ export const addGalleryDownloadButton = async (href: string) => {
         [],
         updateButtonText(button),
         onFinishFn(button)
-      );
+      )();
     }
     return null;
   };
