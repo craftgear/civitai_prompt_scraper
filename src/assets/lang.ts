@@ -133,6 +133,12 @@ const i18n: {
     'zh-CN': '更喜欢下载优化的图像',
     'zh-TW': '更喜歡下載優化的圖像',
   },
+  doNotDownloadLargeModels: {
+    en: 'do not download models over 1GB',
+    ja: '1GBを超えるモデルをダウンロードしない',
+    'zh-CN': '不下载超过1GB的模型',
+    'zh-TW': '不下載超過1GB的模型',
+  },
 };
 
 const getLocale = () => {

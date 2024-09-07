@@ -26,6 +26,14 @@ const fields: InputField[] = [
   },
   {
     type: 'checkbox',
+    name: 'doNotDownloadLargeModels',
+    label: getI18nLabel('doNotDownloadLargeModels'),
+    value: true,
+    desc: '',
+    style: 'gap: 0.5rem;',
+  },
+  {
+    type: 'checkbox',
     name: 'openShowMore',
     label: getI18nLabel('openShowMore'),
     value: true,
