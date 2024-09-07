@@ -162,6 +162,12 @@ const $3a42d740ecc81982$var$i18n = {
         ja: "\u6700\u9069\u5316\u3055\u308C\u305F\u753B\u50CF\u3092\u512A\u5148\u3057\u3066\u30C0\u30A6\u30F3\u30ED\u30FC\u30C9\u3059\u308B",
         "zh-CN": "\u66F4\u559C\u6B22\u4E0B\u8F7D\u4F18\u5316\u7684\u56FE\u50CF",
         "zh-TW": "\u66F4\u559C\u6B61\u4E0B\u8F09\u512A\u5316\u7684\u5716\u50CF"
+    },
+    doNotDownloadLargeModels: {
+        en: "do not download models over 1GB",
+        ja: "1GB\u3092\u8D85\u3048\u308B\u30E2\u30C7\u30EB\u3092\u30C0\u30A6\u30F3\u30ED\u30FC\u30C9\u3057\u306A\u3044",
+        "zh-CN": "\u4E0D\u4E0B\u8F7D\u8D85\u8FC71GB\u7684\u6A21\u578B",
+        "zh-TW": "\u4E0D\u4E0B\u8F09\u8D85\u904E1GB\u7684\u6A21\u578B"
     }
 };
 const $3a42d740ecc81982$var$getLocale = ()=>{
@@ -13116,6 +13122,14 @@ const $2e4159cc418f5166$var$fields = [
     },
     {
         type: "checkbox",
+        name: "doNotDownloadLargeModels",
+        label: (0, $3a42d740ecc81982$export$731a191155ffa90a)("doNotDownloadLargeModels"),
+        value: true,
+        desc: "",
+        style: "gap: 0.5rem;"
+    },
+    {
+        type: "checkbox",
         name: "openShowMore",
         label: (0, $3a42d740ecc81982$export$731a191155ffa90a)("openShowMore"),
         value: true,
@@ -13629,6 +13643,7 @@ const $6123356ea5e91e3d$export$335d1054b4853621 = ()=>{
 
 
 
+
 const $f2fb5610d10943f7$var$BUTTON_ID = "download-all-model-related-files";
 const $f2fb5610d10943f7$var$downloadAll = (buttonIdSelector)=>async ()=>{
         console.log("downloadAll: start");
@@ -13702,7 +13717,7 @@ const $f2fb5610d10943f7$export$264fba47316a17c2 = async ()=>{
         const aTag = await (0, $06cbd27ebbbf5f2a$export$3065315f1141c0d0)();
         const fileSizeText = aTag.innerHTML ?? "";
         if (aTag && // モデルの場合はダウンロードしない
-        !fileSizeText.includes(" GB)")) aTag.dispatchEvent(new MouseEvent("click", {
+        !fileSizeText.includes(" GB)") && (0, $2e4159cc418f5166$export$44487a86467333c3)("doNotDownloadLargeModels")) aTag.dispatchEvent(new MouseEvent("click", {
             bubbles: true
         }));
     });

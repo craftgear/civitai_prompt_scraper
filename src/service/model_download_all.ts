@@ -1,11 +1,12 @@
 import { downloadAllButtonStyle } from '../assets/styles';
+import { getConfig } from '../infra/config_panel';
 import {
   addButtonContainer,
-  darkenTextColor,
-  deleteCreateButton,
-  deleteDiscussion,
-  deleteMainPaddingBottom,
-  deleteSuggestedResources,
+  // darkenTextColor,
+  // deleteCreateButton,
+  // deleteDiscussion,
+  // deleteMainPaddingBottom,
+  // deleteSuggestedResources,
   enableFullScreenCapture,
   getDownloadATag,
   removeButtonContainer,
@@ -128,7 +129,8 @@ export const addModelDownloadAllButton = async () => {
     if (
       aTag &&
       // モデルの場合はダウンロードしない
-      !fileSizeText.includes(' GB)')
+      !fileSizeText.includes(' GB)') &&
+      getConfig('doNotDownloadLargeModels')
     ) {
       aTag.dispatchEvent(new MouseEvent('click', { bubbles: true }));
     }
