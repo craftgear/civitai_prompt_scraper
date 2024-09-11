@@ -13698,6 +13698,11 @@ const $f2fb5610d10943f7$var$downloadAll = (buttonIdSelector)=>async ()=>{
     };
 const $f2fb5610d10943f7$export$264fba47316a17c2 = async ()=>{
     (0, $06cbd27ebbbf5f2a$export$a31cd1b3c2b6ea3b)();
+    darkenTextColor();
+    deleteCreateButton();
+    deleteDiscussion();
+    deleteMainPaddingBottom();
+    deleteSuggestedResources();
     (0, $06cbd27ebbbf5f2a$export$28c3d59206bcbe2d)();
     const parentNode = await (0, $06cbd27ebbbf5f2a$export$3d6ebb5b74790dc2)();
     const buttonIdSelector = `#${$f2fb5610d10943f7$var$BUTTON_ID}`;

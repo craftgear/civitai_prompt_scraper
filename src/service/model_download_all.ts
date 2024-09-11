@@ -2,11 +2,11 @@ import { downloadAllButtonStyle } from '../assets/styles';
 import { getConfig } from '../infra/config_panel';
 import {
   addButtonContainer,
-  // darkenTextColor,
-  // deleteCreateButton,
-  // deleteDiscussion,
-  // deleteMainPaddingBottom,
-  // deleteSuggestedResources,
+  darkenTextColor,
+  deleteCreateButton,
+  deleteDiscussion,
+  deleteMainPaddingBottom,
+  deleteSuggestedResources,
   enableFullScreenCapture,
   getDownloadATag,
   removeButtonContainer,
