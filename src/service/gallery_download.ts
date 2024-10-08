@@ -13,7 +13,11 @@ import {
 } from '../infra/dom';
 import { createZip } from '../infra/file';
 import { fetchGalleryData } from '../infra/req';
-import { replaceWithDisabledButton, updateButtonText } from '../utils/dom';
+import {
+  replaceWithDisabledButton,
+  updateButtonText,
+  waitForElement,
+} from '../utils/dom';
 
 const BUTTON_ID = 'download-all-gallery-images-and-prompts';
 
@@ -118,9 +122,9 @@ export const addGalleryDownloadButton = async (href: string) => {
 
   button.addEventListener('click', eventListener);
 
-  const h2 = selector('#gallery h2');
+  const h2 = await waitForElement('#gallery h2');
   if (h2) {
-    const oldButton = selector(`#${BUTTON_ID}`);
+    const oldButton = await waitForElement(`#${BUTTON_ID}`);
     if (oldButton) {
       oldButton.remove();
     }

@@ -12926,7 +12926,7 @@ var $b9a27db92abc3f0f$exports = {};
 
 
 var $39e7bd012fbaed99$exports = {};
-$39e7bd012fbaed99$exports = JSON.parse('{"name":"civitai_prompt_scraper","browserslist":"> 5%, last 1 versions, not dead","version":"1.2.30","description":"","source":"src/prompt_scraper.user.ts","browser ":"dist/prompt_scraper.user.js","targets":{"default":{"context":"browser","sourceMap":false,"includeNodeModules":true,"optimize":true}},"scripts":{"type-check":"tsc --noEmit","lint":"eslint","format":"prettier --write .","watch":"parcel watch","build":"rm -rf .parcel-cache/*; parcel build; zip -v -j ./dist/prompt_scraper.zip ./dist/prompt_scraper.user.js","clean":"rm ./dist/*","test":"vitest --dom","coverage":"vitest --coverage --run","check":"tsc --noEmit"},"author":"Watanabe, Shunsuke","license":"MIT","devDependencies":{"@damoclark/parcel-optimizer-userscript":"^0.0.2","@eslint/js":"^9.8.0","@parcel/packager-ts":"^2.8.3","@parcel/transformer-typescript-types":"^2.8.3","@tsconfig/recommended":"^1.0.2","@types/file-saver":"^2.0.5","@types/lodash":"^4.14.191","@typescript-eslint/eslint-plugin":"^8.0.0","@typescript-eslint/parser":"^8.0.0","@violentmonkey/types":"^0.1.5","@vitest/coverage-v8":"^2.0.5","eslint":"^9.8.0","eslint-plugin-n":"^17.10.1","eslint-plugin-promise":"^7.0.0","globals":"^15.9.0","happy-dom":"^10.3.2","parcel":"^2.8.3","prettier":"^2.8.4","prettier-plugin-organize-imports":"^3.2.2","rollup-plugin-cleanup":"^3.2.1","typescript":"^4.9.5","typescript-eslint":"^8.0.0","vitest":"^2.0.5"},"dependencies":{"@violentmonkey/url":"^0.1.0","@zip.js/zip.js":"^2.6.63","file-saver":"^2.0.5","html2canvas":"^1.4.1","lodash":"^4.17.21","wazip":"^0.1.0"}}');
+$39e7bd012fbaed99$exports = JSON.parse('{"name":"civitai_prompt_scraper","browserslist":"> 5%, last 1 versions, not dead","version":"1.2.30","description":"","source":"src/prompt_scraper.user.ts","browser ":"dist/prompt_scraper.user.js","targets":{"default":{"context":"browser","sourceMap":false,"includeNodeModules":true,"optimize":true}},"scripts":{"type-check":"tsc --noEmit","lint":"eslint","format":"prettier --write .","watch":"parcel watch","build":"rm -rf .parcel-cache/*; parcel build; zip -v -j ./dist/prompt_scraper.zip ./dist/prompt_scraper.user.js","clean":"rm ./dist/*","test":"vitest --dom","coverage":"vitest --coverage --run","check":"tsc --noEmit"},"author":"Watanabe, Shunsuke","license":"MIT","devDependencies":{"@damoclark/parcel-optimizer-userscript":"^0.0.2","@eslint/js":"^9.8.0","@parcel/packager-ts":"^2.8.3","@parcel/transformer-typescript-types":"^2.8.3","@tsconfig/recommended":"^1.0.2","@types/file-saver":"^2.0.5","@types/lodash":"^4.14.191","@types/node":"^22.7.4","@typescript-eslint/eslint-plugin":"^8.0.0","@typescript-eslint/parser":"^8.0.0","@violentmonkey/types":"^0.1.5","@vitest/coverage-v8":"^2.0.5","eslint":"^9.8.0","eslint-plugin-n":"^17.10.1","eslint-plugin-promise":"^7.0.0","globals":"^15.9.0","happy-dom":"^10.3.2","parcel":"^2.8.3","prettier":"^2.8.4","prettier-plugin-organize-imports":"^3.2.2","rollup-plugin-cleanup":"^3.2.1","typescript":"^4.9.5","typescript-eslint":"^8.0.0","vitest":"^2.0.5"},"dependencies":{"@violentmonkey/url":"^0.1.0","@zip.js/zip.js":"^2.6.63","file-saver":"^2.0.5","html2canvas":"^1.4.1","lodash":"^4.17.21","ts-brand":"^0.2.0","wazip":"^0.1.0","zod":"^3.23.8"}}');
 
 
 const $81ffdad4556cbf55$export$bef1f36f5486a6a3 = (...xs)=>{
@@ -13607,9 +13607,9 @@ const $32b5bff137232fe2$export$5fd187c0d03a79e = async (href)=>{
     };
     if (!eventListener) throw new Error("No necessary parameters found");
     button.addEventListener("click", eventListener);
-    const h2 = (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)("#gallery h2");
+    const h2 = await (0, $06cbd27ebbbf5f2a$export$1a1c301579a08d1e)("#gallery h2");
     if (h2) {
-        const oldButton = (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)(`#${$32b5bff137232fe2$var$BUTTON_ID}`);
+        const oldButton = await (0, $06cbd27ebbbf5f2a$export$1a1c301579a08d1e)(`#${$32b5bff137232fe2$var$BUTTON_ID}`);
         if (oldButton) oldButton.remove();
         h2.parentNode?.appendChild(button);
     }
@@ -13698,11 +13698,11 @@ const $f2fb5610d10943f7$var$downloadAll = (buttonIdSelector)=>async ()=>{
     };
 const $f2fb5610d10943f7$export$264fba47316a17c2 = async ()=>{
     (0, $06cbd27ebbbf5f2a$export$a31cd1b3c2b6ea3b)();
-    darkenTextColor();
-    deleteCreateButton();
-    deleteDiscussion();
-    deleteMainPaddingBottom();
-    deleteSuggestedResources();
+    (0, $06cbd27ebbbf5f2a$export$5bc69941fea37f21)();
+    (0, $06cbd27ebbbf5f2a$export$d450a001006e5818)();
+    (0, $06cbd27ebbbf5f2a$export$260b7aeca61b2fed)();
+    (0, $06cbd27ebbbf5f2a$export$980dc319601fa7a6)();
+    (0, $06cbd27ebbbf5f2a$export$5ffcb0107c13639c)();
     (0, $06cbd27ebbbf5f2a$export$28c3d59206bcbe2d)();
     const parentNode = await (0, $06cbd27ebbbf5f2a$export$3d6ebb5b74790dc2)();
     const buttonIdSelector = `#${$f2fb5610d10943f7$var$BUTTON_ID}`;

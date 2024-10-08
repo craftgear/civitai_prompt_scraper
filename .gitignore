@@ -1,4 +1,5 @@
 dist/*
+test.ts
 
 # Logs
 logs
