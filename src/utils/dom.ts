@@ -219,6 +219,7 @@ export const enableFullScreenCapture = () => {
         `height: auto;`
       );
       selector('main > div')?.setAttribute('style', 'overflow: hidden;');
+      selector('.mantine-Container-root')?.setAttribute('style', 'margin: 0;');
     }
   };
   document.addEventListener('focus', () => {

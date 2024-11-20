@@ -13484,6 +13484,7 @@ const $06cbd27ebbbf5f2a$export$a31cd1b3c2b6ea3b = ()=>{
             (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)("body")?.setAttribute("style", // `height: ${newHeight}px; max-width:1320px;`
             `height: auto;`);
             (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)("main > div")?.setAttribute("style", "overflow: hidden;");
+            (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)(".mantine-Container-root")?.setAttribute("style", "margin: 0;");
         }
     };
     document.addEventListener("focus", ()=>{
@@ -13780,10 +13781,10 @@ const $ca465a359cd2bf87$var$observer = new MutationObserver(async ()=>{
 });
 const $ca465a359cd2bf87$var$run = async ()=>{
     (0, $6123356ea5e91e3d$export$335d1054b4853621)();
+    $ca465a359cd2bf87$var$openShowMore();
+    await $ca465a359cd2bf87$var$addDownloadAllButton();
     // await addModelPreviewDownloadButton();
     await $ca465a359cd2bf87$var$addGalleryImageDownloadButton();
-    await $ca465a359cd2bf87$var$addDownloadAllButton();
-    $ca465a359cd2bf87$var$openShowMore();
 };
 async function $ca465a359cd2bf87$export$2e2bcd8739ae039() {
     $ca465a359cd2bf87$var$prevHref = window.location.href;
