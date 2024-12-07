@@ -9,6 +9,7 @@ import {
   deleteSuggestedResources,
   enableFullScreenCapture,
   getDownloadATag,
+  hideHeader,
   removeButtonContainer,
   // openGallery,
   scrollIntoView,
@@ -109,6 +110,7 @@ export const addModelDownloadAllButton = async () => {
   deleteDiscussion();
   deleteMainPaddingBottom();
   deleteSuggestedResources();
+  hideHeader();
 
   removeButtonContainer();
   const parentNode = await addButtonContainer();

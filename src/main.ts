@@ -4,6 +4,7 @@ import { addGalleryDownloadButton } from './service/gallery_download';
 import { hideAndToggleGallery } from './service/hide_gallery';
 import { addModelDownloadAllButton } from './service/model_download_all';
 
+import { hideHeader } from './utils/dom';
 import { log, sleep } from './utils/utils';
 
 const openShowMore = (retry = 50) => {
@@ -89,6 +90,10 @@ export default async function () {
 
   if (window.location.href.match(/\/models\/\d*/)) {
     await run();
+  }
+
+  if (window.location.href.endsWith('models')) {
+    hideHeader();
   }
 
   log('done');

@@ -231,3 +231,8 @@ export const enableFullScreenCapture = () => {
 export const scrollIntoView = (cssSelector: string) => {
   selector(cssSelector)?.scrollIntoView({ behavior: 'smooth' });
 };
+
+export const hideHeader = () => {
+  selector('header')?.setAttribute('style', 'display: none;');
+  selector('main')?.setAttribute('style', 'padding-top: 1rem;');
+};
