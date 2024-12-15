@@ -13498,8 +13498,10 @@ const $06cbd27ebbbf5f2a$export$53a0910f038337bd = (cssSelector)=>{
     });
 };
 const $06cbd27ebbbf5f2a$export$c74cb29a962d147f = ()=>{
-    (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)("header")?.setAttribute("style", "display: none;");
-    (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)("main")?.setAttribute("style", "padding-top: 1rem;");
+    setTimeout(()=>{
+        (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)("header")?.setAttribute("style", "display: none;");
+        (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)("#main")?.setAttribute("style", "padding-top: 1rem;");
+    }, 1000);
 };
 
 
@@ -13708,7 +13710,7 @@ const $f2fb5610d10943f7$export$264fba47316a17c2 = async ()=>{
     (0, $06cbd27ebbbf5f2a$export$260b7aeca61b2fed)();
     (0, $06cbd27ebbbf5f2a$export$980dc319601fa7a6)();
     (0, $06cbd27ebbbf5f2a$export$5ffcb0107c13639c)();
-    (0, $06cbd27ebbbf5f2a$export$c74cb29a962d147f)();
+    // hideHeader();
     (0, $06cbd27ebbbf5f2a$export$28c3d59206bcbe2d)();
     const parentNode = await (0, $06cbd27ebbbf5f2a$export$3d6ebb5b74790dc2)();
     const buttonIdSelector = `#${$f2fb5610d10943f7$var$BUTTON_ID}`;
@@ -13738,6 +13740,8 @@ const $f2fb5610d10943f7$export$264fba47316a17c2 = async ()=>{
 
 
 const $ca465a359cd2bf87$var$openShowMore = (retry = 50)=>{
+    const isOpenShowMore = (0, $2e4159cc418f5166$export$44487a86467333c3)("openShowMore");
+    if (!isOpenShowMore) return;
     const showMoreButton = Array.from(document.querySelectorAll("button")).filter((x)=>x.innerHTML.includes("Show More"))[0];
     if (showMoreButton) {
         showMoreButton.click();
@@ -13804,6 +13808,7 @@ async function $ca465a359cd2bf87$export$2e2bcd8739ae039() {
         (0, $2e4159cc418f5166$export$3a5abe5201fb331)();
     }
     if (window.location.href.match(/\/models\/\d*/)) await $ca465a359cd2bf87$var$run();
+    if (window.location.href.endsWith("models")) console.log("window.location.href", window.location.href);
     (0, $81ffdad4556cbf55$export$bef1f36f5486a6a3)("done");
 }
 

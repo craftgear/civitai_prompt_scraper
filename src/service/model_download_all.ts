@@ -110,7 +110,7 @@ export const addModelDownloadAllButton = async () => {
   deleteDiscussion();
   deleteMainPaddingBottom();
   deleteSuggestedResources();
-  hideHeader();
+  // hideHeader();
 
   removeButtonContainer();
   const parentNode = await addButtonContainer();

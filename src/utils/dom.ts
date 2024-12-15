@@ -233,6 +233,8 @@ export const scrollIntoView = (cssSelector: string) => {
 };
 
 export const hideHeader = () => {
-  selector('header')?.setAttribute('style', 'display: none;');
-  selector('main')?.setAttribute('style', 'padding-top: 1rem;');
+  setTimeout(() => {
+    selector('header')?.setAttribute('style', 'display: none;');
+    selector('#main')?.setAttribute('style', 'padding-top: 1rem;');
+  }, 1000);
 };

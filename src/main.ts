@@ -1,13 +1,17 @@
-import { initConfigPanel } from './infra/config_panel';
+import { getConfig, initConfigPanel } from './infra/config_panel';
 import { alertError } from './infra/dom';
 import { addGalleryDownloadButton } from './service/gallery_download';
 import { hideAndToggleGallery } from './service/hide_gallery';
 import { addModelDownloadAllButton } from './service/model_download_all';
 
-import { hideHeader } from './utils/dom';
+// import { hideHeader } from './utils/dom';
 import { log, sleep } from './utils/utils';
 
 const openShowMore = (retry = 50) => {
+  const isOpenShowMore = getConfig('openShowMore');
+  if (!isOpenShowMore) {
+    return;
+  }
   const showMoreButton = Array.from(document.querySelectorAll('button')).filter(
     (x: HTMLElement) => x.innerHTML.includes('Show More')
   )[0];
@@ -93,7 +97,9 @@ export default async function () {
   }
 
   if (window.location.href.endsWith('models')) {
-    hideHeader();
+    console.log('window.location.href', window.location.href);
+
+    // hideHeader();
   }
 
   log('done');
