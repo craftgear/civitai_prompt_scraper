@@ -9,7 +9,7 @@ import {
   deleteSuggestedResources,
   enableFullScreenCapture,
   getDownloadATag,
-  hideHeader,
+  // hideHeader,
   removeButtonContainer,
   // openGallery,
   scrollIntoView,

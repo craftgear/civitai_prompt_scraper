@@ -6,6 +6,7 @@ import {
   ModelResponse,
   ModelVersionResponse,
 } from '../domain/types';
+import { sleep } from '../utils/utils';
 import { getConfig } from './config_panel';
 
 const extractFilebasenameFromImageUrl = (url: string) => {
@@ -66,7 +67,8 @@ export const fetchGalleryData = async (
   modelId?: string | null,
   postId?: string | null,
   modelVersionId?: string | null,
-  limit?: number
+  limit?: number,
+  retry = 0
 ) => {
   let url = `${API_URL}/images`;
   const params = ['sort=Most%20Reactions&nsfw=X&withMeta=true'];
@@ -97,6 +99,16 @@ export const fetchGalleryData = async (
     headers: HEADERS,
   });
   if (response.status >= 400) {
+    if (retry < 10) {
+      sleep(1000);
+      return fetchGalleryData(
+        modelId,
+        postId,
+        modelVersionId,
+        limit,
+        retry + 1
+      );
+    }
     throw new Error(` ${response.status} ${response.statusText}`);
   }
   const data = (await response.json()) as GalleryImagesResponse;
