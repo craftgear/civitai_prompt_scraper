@@ -23,12 +23,19 @@ const HEADERS = {
   Cookie: document.cookie,
 };
 
-export const fetchModelData = async (modelId: string) => {
+export const fetchModelData = async (
+  modelId: string,
+  retry = 0
+): Promise<ModelResponse> => {
   const response = await fetch(`${API_URL}/models/${modelId}`, {
     method: 'GET',
     headers: HEADERS,
   });
   if (response.status >= 400) {
+    if (retry < 10) {
+      sleep(1000);
+      return fetchModelData(modelId, retry + 1);
+    }
     throw new Error(` ${response.status} ${response.statusText}`);
   }
   return (await response.json()) as ModelResponse;
@@ -69,7 +76,7 @@ export const fetchGalleryData = async (
   modelVersionId?: string | null,
   limit?: number,
   retry = 0
-) => {
+): Promise<GalleryImagesResponse['items']> => {
   let url = `${API_URL}/images`;
   const params = ['sort=Most%20Reactions&nsfw=X&withMeta=true'];
 
@@ -112,7 +119,7 @@ export const fetchGalleryData = async (
     throw new Error(` ${response.status} ${response.statusText}`);
   }
   const data = (await response.json()) as GalleryImagesResponse;
-  return data.items as GalleryImagesResponse['items'];
+  return data.items;
 };
 
 export const fetchImg = async (

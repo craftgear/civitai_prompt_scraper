@@ -3,7 +3,6 @@ import { alertError } from './infra/dom';
 import { addGalleryDownloadButton } from './service/gallery_download';
 import { hideAndToggleGallery } from './service/hide_gallery';
 import { addModelDownloadAllButton } from './service/model_download_all';
-
 // import { hideHeader } from './utils/dom';
 import { log, sleep } from './utils/utils';
 
@@ -70,11 +69,11 @@ const observer = new MutationObserver(async () => {
 });
 
 const run = async () => {
-  hideAndToggleGallery();
-  openShowMore();
   await addDownloadAllButton();
   // await addModelPreviewDownloadButton();
   await addGalleryImageDownloadButton();
+  hideAndToggleGallery();
+  openShowMore();
 };
 
 export default async function () {

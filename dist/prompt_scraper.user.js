@@ -12977,12 +12977,18 @@ const $c3454b9ab01d445e$var$HEADERS = {
     Referer: "https://civitai.com/",
     Cookie: document.cookie
 };
-const $c3454b9ab01d445e$export$998f418383804028 = async (modelId)=>{
+const $c3454b9ab01d445e$export$998f418383804028 = async (modelId, retry = 0)=>{
     const response = await fetch(`${$c3454b9ab01d445e$var$API_URL}/models/${modelId}`, {
         method: "GET",
         headers: $c3454b9ab01d445e$var$HEADERS
     });
-    if (response.status >= 400) throw new Error(` ${response.status} ${response.statusText}`);
+    if (response.status >= 400) {
+        if (retry < 10) {
+            (0, $81ffdad4556cbf55$export$e772c8ff12451969)(1000);
+            return $c3454b9ab01d445e$export$998f418383804028(modelId, retry + 1);
+        }
+        throw new Error(` ${response.status} ${response.statusText}`);
+    }
     return await response.json();
 };
 const $c3454b9ab01d445e$export$426617fe0a326605 = async (modelVersionId)=>{
@@ -13636,12 +13642,17 @@ const $32b5bff137232fe2$export$5fd187c0d03a79e = async (href)=>{
 
 
 
-const $6123356ea5e91e3d$export$335d1054b4853621 = ()=>{
+const $6123356ea5e91e3d$export$335d1054b4853621 = (retry = 1)=>{
     const result = (0, $06cbd27ebbbf5f2a$export$2da3e68033eaa011)();
+    console.log("hideAndToggleGallery----- result", result);
+    if (retry > 10) {
+        console.info("no gallery found");
+        return;
+    }
     if (!result) {
         setTimeout(()=>{
-            $6123356ea5e91e3d$export$335d1054b4853621();
-        }, 100);
+            $6123356ea5e91e3d$export$335d1054b4853621(retry + 1);
+        }, 1000);
         return;
     }
     // show/hide gallery button
@@ -13796,11 +13807,12 @@ const $ca465a359cd2bf87$var$observer = new MutationObserver(async ()=>{
     }
 });
 const $ca465a359cd2bf87$var$run = async ()=>{
-    (0, $6123356ea5e91e3d$export$335d1054b4853621)();
-    $ca465a359cd2bf87$var$openShowMore();
+    console.warn("run!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     await $ca465a359cd2bf87$var$addDownloadAllButton();
     // await addModelPreviewDownloadButton();
     await $ca465a359cd2bf87$var$addGalleryImageDownloadButton();
+    (0, $6123356ea5e91e3d$export$335d1054b4853621)();
+    $ca465a359cd2bf87$var$openShowMore();
 };
 async function $ca465a359cd2bf87$export$2e2bcd8739ae039() {
     $ca465a359cd2bf87$var$prevHref = window.location.href;
