@@ -73,7 +73,10 @@ export const getModeInfoAndImageList = async (href: string) => {
   const imageList =
     galleryImageList.length > 0
       ? galleryImageList.length < modelImages.length
-        ? [...galleryImageList, ...modelImages]
+        ? [
+            ...galleryImageList.filter((x) => !x.url.endsWith('mp4')),
+            ...modelImages.filter((x) => !x.url.endsWith('mp4')),
+          ]
         : galleryImageList
       : modelImages;
   return {

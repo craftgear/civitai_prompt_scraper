@@ -160,43 +160,46 @@ export const fetchImgs =
   (zipWriter: ZipWriter<Blob>, addedNames: Set<string>) =>
   async (imgInfo: { url: string; hash: string; meta: unknown }[]) =>
     await Promise.all(
-      imgInfo.map(async (x) => {
-        try {
-          const response = await fetchImg(
-            getConfig('preferOptimizedImages') ? optimizeUrl(x.url) : x.url
-          );
-          if (!response) {
-            throw new Error(`response is null: ${x.url}`);
-          }
-          const { blob, contentType } = response;
-
-          let name =
-            extractFilebasenameFromImageUrl(x.url) ||
-            x.hash.replace(/[;:?*.]/g, '_');
-          while (addedNames.has(name)) {
-            name += '_';
-          }
-          addedNames.add(name);
-
-          const filename =
-            (contentType && `${name}.${contentType.split('/')[1]}`) ||
-            `${name}.png`;
-
-          await zipWriter.add(filename, new BlobReader(blob));
-
-          if (x.meta) {
-            const jsonFilename = name + '.json';
-            await zipWriter.add(
-              jsonFilename,
-              new TextReader(JSON.stringify(x.meta, null, '\t'))
+      imgInfo
+        // do not download mp4
+        .filter((x) => !x.url.endsWith('mp4'))
+        .map(async (x) => {
+          try {
+            const response = await fetchImg(
+              getConfig('preferOptimizedImages') ? optimizeUrl(x.url) : x.url
             );
+            if (!response) {
+              throw new Error(`response is null: ${x.url}`);
+            }
+            const { blob, contentType } = response;
+
+            let name =
+              extractFilebasenameFromImageUrl(x.url) ||
+              x.hash.replace(/[;:?*.]/g, '_');
+            while (addedNames.has(name)) {
+              name += '_';
+            }
+            addedNames.add(name);
+
+            const filename =
+              (contentType && `${name}.${contentType.split('/')[1]}`) ||
+              `${name}.png`;
+
+            await zipWriter.add(filename, new BlobReader(blob));
+
+            if (x.meta) {
+              const jsonFilename = name + '.json';
+              await zipWriter.add(
+                jsonFilename,
+                new TextReader(JSON.stringify(x.meta, null, '\t'))
+              );
+            }
+          } catch (e) {
+            if (getConfig('continueWithFetchError')) {
+              console.log('fetchImgs throws an error: ', e);
+              return;
+            }
+            throw e;
           }
-        } catch (e) {
-          if (getConfig('continueWithFetchError')) {
-            console.log('fetchImgs throws an error: ', e);
-            return;
-          }
-          throw e;
-        }
-      })
+        })
     );

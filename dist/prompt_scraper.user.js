@@ -13057,7 +13057,8 @@ const $c3454b9ab01d445e$export$2ab75dd31a3868f2 = async (url, retried = 0)=>{
         throw error;
     }
 };
-const $c3454b9ab01d445e$export$e9e7897c93aa9943 = (zipWriter, addedNames)=>async (imgInfo)=>await Promise.all(imgInfo.map(async (x)=>{
+const $c3454b9ab01d445e$export$e9e7897c93aa9943 = (zipWriter, addedNames)=>async (imgInfo)=>await Promise.all(imgInfo// do not download mp4
+        .filter((x)=>!x.url.endsWith("mp4")).map(async (x)=>{
             try {
                 const response = await $c3454b9ab01d445e$export$2ab75dd31a3868f2((0, $2e4159cc418f5166$export$44487a86467333c3)("preferOptimizedImages") ? (0, $6790e4d8d7342a47$export$b3bdca59378516d4)(x.url) : x.url);
                 if (!response) throw new Error(`response is null: ${x.url}`);
@@ -13539,8 +13540,8 @@ const $90c9ab75e73296e8$export$b19b7d9a3c3e0ab8 = async (href)=>{
     // (modelVersion.imagesにはmetaがないので、ギャラリーデータがある場合はそちらのほうがよい
     // まれにギャラリー画像がないモデルがあるので、その場合はmodelVersion.imagesをダウンロードする
     const imageList = galleryImageList.length > 0 ? galleryImageList.length < modelImages.length ? [
-        ...galleryImageList,
-        ...modelImages
+        ...galleryImageList.filter((x)=>!x.url.endsWith("mp4")),
+        ...modelImages.filter((x)=>!x.url.endsWith("mp4"))
     ] : galleryImageList : modelImages;
     return {
         modelId: modelId,
@@ -13642,17 +13643,16 @@ const $32b5bff137232fe2$export$5fd187c0d03a79e = async (href)=>{
 
 
 
-const $6123356ea5e91e3d$export$335d1054b4853621 = (retry = 1)=>{
+const $6123356ea5e91e3d$export$335d1054b4853621 = (retry = 200)=>{
     const result = (0, $06cbd27ebbbf5f2a$export$2da3e68033eaa011)();
-    console.log("hideAndToggleGallery----- result", result);
-    if (retry > 10) {
+    if (retry === 0) {
         console.info("no gallery found");
         return;
     }
     if (!result) {
         setTimeout(()=>{
-            $6123356ea5e91e3d$export$335d1054b4853621(retry + 1);
-        }, 1000);
+            $6123356ea5e91e3d$export$335d1054b4853621(retry - 1);
+        }, 100);
         return;
     }
     // show/hide gallery button
@@ -13757,7 +13757,7 @@ const $f2fb5610d10943f7$export$264fba47316a17c2 = async ()=>{
 
 
 
-const $ca465a359cd2bf87$var$openShowMore = (retry = 50)=>{
+const $ca465a359cd2bf87$var$openShowMore = (retry = 200)=>{
     const isOpenShowMore = (0, $2e4159cc418f5166$export$44487a86467333c3)("openShowMore");
     if (!isOpenShowMore) return;
     const showMoreButton = Array.from(document.querySelectorAll("button")).filter((x)=>x.innerHTML.includes("Show More"))[0];
@@ -13767,7 +13767,7 @@ const $ca465a359cd2bf87$var$openShowMore = (retry = 50)=>{
     }
     if (retry > 0) setTimeout(()=>{
         $ca465a359cd2bf87$var$openShowMore(retry - 1);
-    }, 500);
+    }, 100);
 };
 const $ca465a359cd2bf87$var$addDownloadAllButton = async ()=>{
     const href = window.location.href;
@@ -13803,30 +13803,33 @@ const $ca465a359cd2bf87$var$observer = new MutationObserver(async ()=>{
     const href = window.location.href;
     if ($ca465a359cd2bf87$var$prevHref !== href) {
         $ca465a359cd2bf87$var$prevHref = href;
+        console.log("----- observer run");
         await $ca465a359cd2bf87$var$run();
     }
 });
 const $ca465a359cd2bf87$var$run = async ()=>{
-    console.warn("run!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    (0, $6123356ea5e91e3d$export$335d1054b4853621)();
+    $ca465a359cd2bf87$var$openShowMore();
     await $ca465a359cd2bf87$var$addDownloadAllButton();
     // await addModelPreviewDownloadButton();
     await $ca465a359cd2bf87$var$addGalleryImageDownloadButton();
-    (0, $6123356ea5e91e3d$export$335d1054b4853621)();
-    $ca465a359cd2bf87$var$openShowMore();
 };
 async function $ca465a359cd2bf87$export$2e2bcd8739ae039() {
     $ca465a359cd2bf87$var$prevHref = window.location.href;
     (0, $81ffdad4556cbf55$export$bef1f36f5486a6a3)("start");
     const html = document.querySelector("html");
     if (html) {
+        (0, $2e4159cc418f5166$export$3a5abe5201fb331)();
         $ca465a359cd2bf87$var$observer.observe(html, {
             attributes: true,
             childList: true,
             subtree: true
         });
-        (0, $2e4159cc418f5166$export$3a5abe5201fb331)();
     }
-    if (window.location.href.match(/\/models\/\d*/)) await $ca465a359cd2bf87$var$run();
+    if (window.location.href.match(/\/models\/\d*/)) {
+        console.log("----- first run");
+        await $ca465a359cd2bf87$var$run();
+    }
     if (window.location.href.endsWith("models")) console.log("window.location.href", window.location.href);
     (0, $81ffdad4556cbf55$export$bef1f36f5486a6a3)("done");
 }

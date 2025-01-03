@@ -6,7 +6,7 @@ import { addModelDownloadAllButton } from './service/model_download_all';
 // import { hideHeader } from './utils/dom';
 import { log, sleep } from './utils/utils';
 
-const openShowMore = (retry = 50) => {
+const openShowMore = (retry = 200) => {
   const isOpenShowMore = getConfig('openShowMore');
   if (!isOpenShowMore) {
     return;
@@ -21,7 +21,7 @@ const openShowMore = (retry = 50) => {
   if (retry > 0) {
     setTimeout(() => {
       openShowMore(retry - 1);
-    }, 500);
+    }, 100);
   }
 };
 
@@ -64,16 +64,17 @@ const observer = new MutationObserver(async () => {
   if (prevHref !== href) {
     prevHref = href;
 
+    console.log('----- observer run');
     await run();
   }
 });
 
 const run = async () => {
+  hideAndToggleGallery();
+  openShowMore();
   await addDownloadAllButton();
   // await addModelPreviewDownloadButton();
   await addGalleryImageDownloadButton();
-  hideAndToggleGallery();
-  openShowMore();
 };
 
 export default async function () {
@@ -83,15 +84,16 @@ export default async function () {
 
   const html = document.querySelector('html');
   if (html) {
+    initConfigPanel();
     observer.observe(html, {
       attributes: true,
       childList: true,
       subtree: true,
     });
-    initConfigPanel();
   }
 
   if (window.location.href.match(/\/models\/\d*/)) {
+    console.log('----- first run');
     await run();
   }
 

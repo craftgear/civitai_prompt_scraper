@@ -3,17 +3,17 @@ import { hideGallery, toggleGallery } from '../utils/dom';
 
 import { createLink, selector } from '../infra/dom';
 
-export const hideAndToggleGallery = (retry = 1) => {
+export const hideAndToggleGallery = (retry = 200) => {
   const result = hideGallery();
 
-  if (retry > 10) {
+  if (retry === 0) {
     console.info('no gallery found');
     return;
   }
   if (!result) {
     setTimeout(() => {
-      hideAndToggleGallery(retry + 1);
-    }, 1000);
+      hideAndToggleGallery(retry - 1);
+    }, 100);
     return;
   }
 
