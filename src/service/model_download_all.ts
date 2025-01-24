@@ -1,11 +1,6 @@
 import { downloadAllButtonStyle } from '../assets/styles';
 import {
   addButtonContainer,
-  darkenTextColor,
-  deleteCreateButton,
-  deleteDiscussion,
-  deleteMainPaddingBottom,
-  deleteSuggestedResources,
   enableFullScreenCapture,
   getDownloadATag,
   removeButtonContainer,

@@ -13366,11 +13366,15 @@ const $06cbd27ebbbf5f2a$export$92ecf871022de94d = (button, text, style)=>{
     button.parentNode?.replaceChild(disabledButton, button);
 };
 const $06cbd27ebbbf5f2a$var$BUTTON_CONTAINER_ID = "civitai_prompt_scraper";
-const $06cbd27ebbbf5f2a$var$downloadButtonSVGSelector = 'main a svg[class*="tabler-icon-download"]';
+const $06cbd27ebbbf5f2a$var$downloadButtonSelector = 'a[type="button"][href^="/api"]';
 const $06cbd27ebbbf5f2a$var$SHARE_BUTTON_SVG_SELECTOR = 'main svg[class*="tabler-icon tabler-icon-share-3"]';
+const $06cbd27ebbbf5f2a$export$82e56ed69919a9ea = ()=>{
+    const buttons = (0, $98f6748fc1e9fd4e$export$2917eca99ebef21a)($06cbd27ebbbf5f2a$var$downloadButtonSelector);
+    return Array.from(buttons).filter((x)=>x.textContent?.includes("Download"))[0].textContent ?? "";
+};
 const $06cbd27ebbbf5f2a$export$3065315f1141c0d0 = async ()=>{
-    const buttonSVG = await $06cbd27ebbbf5f2a$export$1a1c301579a08d1e($06cbd27ebbbf5f2a$var$downloadButtonSVGSelector);
-    return buttonSVG?.parentNode?.parentNode?.parentNode?.parentNode;
+    const button = await $06cbd27ebbbf5f2a$export$1a1c301579a08d1e($06cbd27ebbbf5f2a$var$downloadButtonSelector);
+    return button;
 };
 const $06cbd27ebbbf5f2a$export$3d6ebb5b74790dc2 = async ()=>{
     const buttonSVG = await $06cbd27ebbbf5f2a$export$1a1c301579a08d1e($06cbd27ebbbf5f2a$var$SHARE_BUTTON_SVG_SELECTOR);
