@@ -63,7 +63,8 @@ const downloadButtonSelector = 'a[type="button"][href^="/api"]';
 const SHARE_BUTTON_SVG_SELECTOR =
   'main svg[class*="tabler-icon tabler-icon-share-3"]';
 
-export const getFileSizeText = () => {
+export const getFileSizeText = async () => {
+  await waitForElement(downloadButtonSelector);
   const buttons = selectorAll(downloadButtonSelector);
   return (
     Array.from(buttons).filter((x) => x.textContent?.includes('Download'))[0]

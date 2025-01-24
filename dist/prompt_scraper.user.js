@@ -13740,7 +13740,6 @@ const $f2fb5610d10943f7$export$264fba47316a17c2 = async ()=>{
     const parentNode = await (0, $06cbd27ebbbf5f2a$export$3d6ebb5b74790dc2)();
     const fileSizeText = (0, $06cbd27ebbbf5f2a$export$82e56ed69919a9ea)();
     const doNotDownloadLargeModels = fileSizeText.includes(" GB)") && (0, $2e4159cc418f5166$export$44487a86467333c3)("doNotDownloadLargeModels");
-    // モデルの場合はダウンロードしない
     const buttonIdSelector = `#${$f2fb5610d10943f7$var$BUTTON_ID}`;
     const button = document.createElement("a");
     button.addEventListener("click", (e)=>{

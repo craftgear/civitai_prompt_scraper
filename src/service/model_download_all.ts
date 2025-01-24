@@ -121,7 +121,6 @@ export const addModelDownloadAllButton = async () => {
   const fileSizeText = getFileSizeText();
   const doNotDownloadLargeModels =
     fileSizeText.includes(' GB)') && getConfig('doNotDownloadLargeModels');
-  // モデルの場合はダウンロードしない
 
   const buttonIdSelector = `#${BUTTON_ID}`;
   const button = document.createElement('a');
