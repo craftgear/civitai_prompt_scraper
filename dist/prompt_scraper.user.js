@@ -13397,7 +13397,8 @@ const $06cbd27ebbbf5f2a$export$92ecf871022de94d = (button, text, style)=>{
 const $06cbd27ebbbf5f2a$var$BUTTON_CONTAINER_ID = "civitai_prompt_scraper";
 const $06cbd27ebbbf5f2a$var$downloadButtonSelector = 'a[type="button"][href^="/api"]';
 const $06cbd27ebbbf5f2a$var$SHARE_BUTTON_SVG_SELECTOR = 'main svg[class*="tabler-icon tabler-icon-share-3"]';
-const $06cbd27ebbbf5f2a$export$82e56ed69919a9ea = ()=>{
+const $06cbd27ebbbf5f2a$export$82e56ed69919a9ea = async ()=>{
+    await $06cbd27ebbbf5f2a$export$1a1c301579a08d1e($06cbd27ebbbf5f2a$var$downloadButtonSelector);
     const buttons = (0, $98f6748fc1e9fd4e$export$2917eca99ebef21a)($06cbd27ebbbf5f2a$var$downloadButtonSelector);
     return Array.from(buttons).filter((x)=>x.textContent?.includes("Download"))[0].textContent ?? "";
 };
@@ -13738,7 +13739,7 @@ const $f2fb5610d10943f7$export$264fba47316a17c2 = async ()=>{
     // hideHeader();
     (0, $06cbd27ebbbf5f2a$export$28c3d59206bcbe2d)();
     const parentNode = await (0, $06cbd27ebbbf5f2a$export$3d6ebb5b74790dc2)();
-    const fileSizeText = (0, $06cbd27ebbbf5f2a$export$82e56ed69919a9ea)();
+    const fileSizeText = await (0, $06cbd27ebbbf5f2a$export$82e56ed69919a9ea)();
     const doNotDownloadLargeModels = fileSizeText.includes(" GB)") && (0, $2e4159cc418f5166$export$44487a86467333c3)("doNotDownloadLargeModels");
     const buttonIdSelector = `#${$f2fb5610d10943f7$var$BUTTON_ID}`;
     const button = document.createElement("a");
