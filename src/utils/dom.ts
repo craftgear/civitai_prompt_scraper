@@ -4,7 +4,7 @@ import {
   extractModelMetaFromSingleImageNextData,
 } from '../domain/logic';
 import { ButtonState, NextData } from '../domain/types';
-import { createDiv, selector } from '../infra/dom';
+import { createDiv, selector, selectorAll } from '../infra/dom';
 
 import { sleep } from './utils';
 
@@ -59,14 +59,21 @@ export const replaceWithDisabledButton = (
 };
 
 const BUTTON_CONTAINER_ID = 'civitai_prompt_scraper';
-const downloadButtonSVGSelector = 'main a svg[class*="tabler-icon-download"]';
+const downloadButtonSelector = 'a[type="button"][href^="/api"]';
 const SHARE_BUTTON_SVG_SELECTOR =
   'main svg[class*="tabler-icon tabler-icon-share-3"]';
 
-export const getDownloadATag = async () => {
-  const buttonSVG = await waitForElement(downloadButtonSVGSelector);
+export const getFileSizeText = () => {
+  const buttons = selectorAll(downloadButtonSelector);
+  return (
+    Array.from(buttons).filter((x) => x.textContent?.includes('Download'))[0]
+      .textContent ?? ''
+  );
+};
 
-  return buttonSVG?.parentNode?.parentNode?.parentNode?.parentNode;
+export const getDownloadATag = async () => {
+  const button = await waitForElement(downloadButtonSelector);
+  return button;
 };
 
 export const addButtonContainer = async () => {

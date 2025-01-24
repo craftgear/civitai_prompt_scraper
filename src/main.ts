@@ -64,7 +64,6 @@ const observer = new MutationObserver(async () => {
   if (prevHref !== href) {
     prevHref = href;
 
-    console.log('----- observer run');
     await run();
   }
 });
@@ -93,7 +92,6 @@ export default async function () {
   }
 
   if (window.location.href.match(/\/models\/\d*/)) {
-    console.log('----- first run');
     await run();
   }
 

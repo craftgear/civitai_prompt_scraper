@@ -1,5 +1,6 @@
 import { downloadAllButtonStyle } from '../assets/styles';
 import { getConfig } from '../infra/config_panel';
+import { getTitle, setTitle } from '../infra/dom';
 import {
   addButtonContainer,
   darkenTextColor,
@@ -9,6 +10,7 @@ import {
   deleteSuggestedResources,
   enableFullScreenCapture,
   getDownloadATag,
+  getFileSizeText,
   // hideHeader,
   removeButtonContainer,
   // openGallery,
@@ -20,8 +22,8 @@ const BUTTON_ID = 'download-all-model-related-files';
 import { download200GalleryImagesAndPrompts } from './gallery_download';
 import { downloadImagesAndPrompts } from './model_image_download';
 
-const downloadAll = (buttonIdSelector: string) => async () => {
-  console.log('downloadAll: start');
+const downloadAllImages = (buttonIdSelector: string) => async () => {
+  console.log('downloadAllImages: start');
   // save previews as a zip file
   const {
     imageList: previewImageList,
@@ -82,6 +84,7 @@ const downloadAll = (buttonIdSelector: string) => async () => {
     );
     document?.querySelector('#main')?.appendChild(panel);
     document.querySelector(`#${GalleryDownloadProgressTextId}`)?.remove();
+    setTitle('✅ ' + getTitle());
 
     scrollIntoView('#gallery');
     // openGallery(); // galleryを開くと、ダウンロードが遅くなる
@@ -115,12 +118,20 @@ export const addModelDownloadAllButton = async () => {
   removeButtonContainer();
   const parentNode = await addButtonContainer();
 
+  const fileSizeText = getFileSizeText();
+  const doNotDownloadLargeModels =
+    fileSizeText.includes(' GB)') && getConfig('doNotDownloadLargeModels');
+  // モデルの場合はダウンロードしない
+
   const buttonIdSelector = `#${BUTTON_ID}`;
   const button = document.createElement('a');
   button.addEventListener('click', (e) => {
     e.preventDefault();
     setTimeout(async () => {
-      await downloadAll(buttonIdSelector)();
+      if (doNotDownloadLargeModels) {
+        return;
+      }
+      await downloadAllImages(buttonIdSelector)();
     }, 1000);
   });
   button.id = BUTTON_ID;
@@ -130,15 +141,13 @@ export const addModelDownloadAllButton = async () => {
   // start downloading a model
   button.addEventListener('click', async (e) => {
     e.preventDefault();
-    const aTag = await getDownloadATag();
+    if (doNotDownloadLargeModels) {
+      alert('this is a checkpoint model. Not downloading.');
+      return;
+    }
 
-    const fileSizeText = (aTag as HTMLElement).innerHTML ?? '';
-    if (
-      aTag &&
-      // モデルの場合はダウンロードしない
-      !fileSizeText.includes(' GB)') &&
-      getConfig('doNotDownloadLargeModels')
-    ) {
+    const aTag = await getDownloadATag();
+    if (aTag) {
       aTag.dispatchEvent(new MouseEvent('click', { bubbles: true }));
     }
   });

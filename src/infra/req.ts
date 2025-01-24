@@ -162,7 +162,7 @@ export const fetchImgs =
     await Promise.all(
       imgInfo
         // do not download mp4
-        .filter((x) => !x.url.endsWith('mp4'))
+        // .filter((x) => !x.url.endsWith('mp4'))
         .map(async (x) => {
           try {
             const response = await fetchImg(

@@ -13058,7 +13058,8 @@ const $c3454b9ab01d445e$export$2ab75dd31a3868f2 = async (url, retried = 0)=>{
     }
 };
 const $c3454b9ab01d445e$export$e9e7897c93aa9943 = (zipWriter, addedNames)=>async (imgInfo)=>await Promise.all(imgInfo// do not download mp4
-        .filter((x)=>!x.url.endsWith("mp4")).map(async (x)=>{
+        // .filter((x) => !x.url.endsWith('mp4'))
+        .map(async (x)=>{
             try {
                 const response = await $c3454b9ab01d445e$export$2ab75dd31a3868f2((0, $2e4159cc418f5166$export$44487a86467333c3)("preferOptimizedImages") ? (0, $6790e4d8d7342a47$export$b3bdca59378516d4)(x.url) : x.url);
                 if (!response) throw new Error(`response is null: ${x.url}`);
@@ -13394,11 +13395,15 @@ const $06cbd27ebbbf5f2a$export$92ecf871022de94d = (button, text, style)=>{
     button.parentNode?.replaceChild(disabledButton, button);
 };
 const $06cbd27ebbbf5f2a$var$BUTTON_CONTAINER_ID = "civitai_prompt_scraper";
-const $06cbd27ebbbf5f2a$var$downloadButtonSVGSelector = 'main a svg[class*="tabler-icon-download"]';
+const $06cbd27ebbbf5f2a$var$downloadButtonSelector = 'a[type="button"][href^="/api"]';
 const $06cbd27ebbbf5f2a$var$SHARE_BUTTON_SVG_SELECTOR = 'main svg[class*="tabler-icon tabler-icon-share-3"]';
+const $06cbd27ebbbf5f2a$export$82e56ed69919a9ea = ()=>{
+    const buttons = (0, $98f6748fc1e9fd4e$export$2917eca99ebef21a)($06cbd27ebbbf5f2a$var$downloadButtonSelector);
+    return Array.from(buttons).filter((x)=>x.textContent?.includes("Download"))[0].textContent ?? "";
+};
 const $06cbd27ebbbf5f2a$export$3065315f1141c0d0 = async ()=>{
-    const buttonSVG = await $06cbd27ebbbf5f2a$export$1a1c301579a08d1e($06cbd27ebbbf5f2a$var$downloadButtonSVGSelector);
-    return buttonSVG?.parentNode?.parentNode?.parentNode?.parentNode;
+    const button = await $06cbd27ebbbf5f2a$export$1a1c301579a08d1e($06cbd27ebbbf5f2a$var$downloadButtonSelector);
+    return button;
 };
 const $06cbd27ebbbf5f2a$export$3d6ebb5b74790dc2 = async ()=>{
     const buttonSVG = await $06cbd27ebbbf5f2a$export$1a1c301579a08d1e($06cbd27ebbbf5f2a$var$SHARE_BUTTON_SVG_SELECTOR);
@@ -13669,9 +13674,10 @@ const $6123356ea5e91e3d$export$335d1054b4853621 = (retry = 200)=>{
 
 
 
+
 const $f2fb5610d10943f7$var$BUTTON_ID = "download-all-model-related-files";
-const $f2fb5610d10943f7$var$downloadAll = (buttonIdSelector)=>async ()=>{
-        console.log("downloadAll: start");
+const $f2fb5610d10943f7$var$downloadAllImages = (buttonIdSelector)=>async ()=>{
+        console.log("downloadAllImages: start");
         // save previews as a zip file
         const { imageList: previewImageList, modelName: modelName, modelId: modelId, modelVersionId: modelVersionId } = await (0, $90c9ab75e73296e8$export$53039d7a8d9d297e)(buttonIdSelector, window.location.href)() ?? {};
         if (!modelId || !modelVersionId) {
@@ -13713,6 +13719,7 @@ const $f2fb5610d10943f7$var$downloadAll = (buttonIdSelector)=>async ()=>{
     `);
             document?.querySelector("#main")?.appendChild(panel);
             document.querySelector(`#${GalleryDownloadProgressTextId}`)?.remove();
+            (0, $98f6748fc1e9fd4e$export$420a7f2fd9cad6f6)("\u2705 " + (0, $98f6748fc1e9fd4e$export$70d1bf7729efff40)());
             (0, $06cbd27ebbbf5f2a$export$53a0910f038337bd)("#gallery");
             // openGallery(); // galleryを開くと、ダウンロードが遅くなる
             console.log("download200GalleryImagesAndPrompts: done");
@@ -13731,12 +13738,16 @@ const $f2fb5610d10943f7$export$264fba47316a17c2 = async ()=>{
     // hideHeader();
     (0, $06cbd27ebbbf5f2a$export$28c3d59206bcbe2d)();
     const parentNode = await (0, $06cbd27ebbbf5f2a$export$3d6ebb5b74790dc2)();
+    const fileSizeText = (0, $06cbd27ebbbf5f2a$export$82e56ed69919a9ea)();
+    const doNotDownloadLargeModels = fileSizeText.includes(" GB)") && (0, $2e4159cc418f5166$export$44487a86467333c3)("doNotDownloadLargeModels");
+    // モデルの場合はダウンロードしない
     const buttonIdSelector = `#${$f2fb5610d10943f7$var$BUTTON_ID}`;
     const button = document.createElement("a");
     button.addEventListener("click", (e)=>{
         e.preventDefault();
         setTimeout(async ()=>{
-            await $f2fb5610d10943f7$var$downloadAll(buttonIdSelector)();
+            if (doNotDownloadLargeModels) return;
+            await $f2fb5610d10943f7$var$downloadAllImages(buttonIdSelector)();
         }, 1000);
     });
     button.id = $f2fb5610d10943f7$var$BUTTON_ID;
@@ -13745,10 +13756,12 @@ const $f2fb5610d10943f7$export$264fba47316a17c2 = async ()=>{
     // start downloading a model
     button.addEventListener("click", async (e)=>{
         e.preventDefault();
+        if (doNotDownloadLargeModels) {
+            alert("this is a checkpoint model. Not downloading.");
+            return;
+        }
         const aTag = await (0, $06cbd27ebbbf5f2a$export$3065315f1141c0d0)();
-        const fileSizeText = aTag.innerHTML ?? "";
-        if (aTag && // モデルの場合はダウンロードしない
-        !fileSizeText.includes(" GB)") && (0, $2e4159cc418f5166$export$44487a86467333c3)("doNotDownloadLargeModels")) aTag.dispatchEvent(new MouseEvent("click", {
+        if (aTag) aTag.dispatchEvent(new MouseEvent("click", {
             bubbles: true
         }));
     });
@@ -13803,7 +13816,6 @@ const $ca465a359cd2bf87$var$observer = new MutationObserver(async ()=>{
     const href = window.location.href;
     if ($ca465a359cd2bf87$var$prevHref !== href) {
         $ca465a359cd2bf87$var$prevHref = href;
-        console.log("----- observer run");
         await $ca465a359cd2bf87$var$run();
     }
 });
@@ -13826,10 +13838,7 @@ async function $ca465a359cd2bf87$export$2e2bcd8739ae039() {
             subtree: true
         });
     }
-    if (window.location.href.match(/\/models\/\d*/)) {
-        console.log("----- first run");
-        await $ca465a359cd2bf87$var$run();
-    }
+    if (window.location.href.match(/\/models\/\d*/)) await $ca465a359cd2bf87$var$run();
     if (window.location.href.endsWith("models")) console.log("window.location.href", window.location.href);
     (0, $81ffdad4556cbf55$export$bef1f36f5486a6a3)("done");
 }
