@@ -63,7 +63,8 @@ const downloadButtonSelector = 'a[type="button"][href^="/api"]';
 const SHARE_BUTTON_SVG_SELECTOR =
   'main svg[class*="tabler-icon tabler-icon-share-3"]';
 
-export const getFileSizeText = () => {
+export const getFileSizeText = async () => {
+  await waitForElement(downloadButtonSelector);
   const buttons = selectorAll(downloadButtonSelector);
   return (
     Array.from(buttons).filter((x) => x.textContent?.includes('Download'))[0]
@@ -226,6 +227,7 @@ export const enableFullScreenCapture = () => {
         `height: auto;`
       );
       selector('main > div')?.setAttribute('style', 'overflow: hidden;');
+      selector('.mantine-Container-root')?.setAttribute('style', 'margin: 0;');
     }
   };
   document.addEventListener('focus', () => {
@@ -236,4 +238,11 @@ export const enableFullScreenCapture = () => {
 
 export const scrollIntoView = (cssSelector: string) => {
   selector(cssSelector)?.scrollIntoView({ behavior: 'smooth' });
+};
+
+export const hideHeader = () => {
+  setTimeout(() => {
+    selector('header')?.setAttribute('style', 'display: none;');
+    selector('#main')?.setAttribute('style', 'padding-top: 1rem;');
+  }, 1000);
 };
