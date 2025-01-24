@@ -102,7 +102,7 @@ export const addModelDownloadAllButton = async () => {
 
   removeButtonContainer();
   const parentNode = await addButtonContainer();
-  const fileSizeText = getFileSizeText();
+  const fileSizeText = await getFileSizeText();
   const doNotDownloadLargeModels =
     fileSizeText.includes(' GB)') && getConfig('doNotDownloadLargeModels');
 
