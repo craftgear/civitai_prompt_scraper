@@ -1,10 +1,11 @@
 import { downloadAllButtonStyle } from '../assets/styles';
+import { getConfig } from '../infra/config_panel';
 import {
   addButtonContainer,
   enableFullScreenCapture,
   getDownloadATag,
+  getFileSizeText,
   removeButtonContainer,
-  // openGallery,
   scrollIntoView,
 } from '../utils/dom';
 
@@ -101,11 +102,17 @@ export const addModelDownloadAllButton = async () => {
 
   removeButtonContainer();
   const parentNode = await addButtonContainer();
+  const fileSizeText = getFileSizeText();
+  const doNotDownloadLargeModels =
+    fileSizeText.includes(' GB)') && getConfig('doNotDownloadLargeModels');
 
   const buttonIdSelector = `#${BUTTON_ID}`;
   const button = document.createElement('a');
   button.addEventListener('click', (e) => {
     e.preventDefault();
+    if (doNotDownloadLargeModels) {
+      return;
+    }
     setTimeout(async () => {
       await downloadAll(buttonIdSelector)();
     }, 1000);
@@ -117,14 +124,13 @@ export const addModelDownloadAllButton = async () => {
   // start downloading a model
   button.addEventListener('click', async (e) => {
     e.preventDefault();
+    if (doNotDownloadLargeModels) {
+      alert('this is a checkpoint model. Not downloading.');
+      return;
+    }
     const aTag = await getDownloadATag();
 
-    const fileSizeText = (aTag as HTMLElement).innerHTML ?? '';
-    if (
-      aTag &&
-      // モデルの場合はダウンロードしない
-      !fileSizeText.includes(' GB)')
-    ) {
+    if (aTag) {
       aTag.dispatchEvent(new MouseEvent('click', { bubbles: true }));
     }
   });

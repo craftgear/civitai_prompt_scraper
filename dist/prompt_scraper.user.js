@@ -13633,6 +13633,7 @@ const $6123356ea5e91e3d$export$335d1054b4853621 = ()=>{
 
 
 
+
 const $f2fb5610d10943f7$var$BUTTON_ID = "download-all-model-related-files";
 const $f2fb5610d10943f7$var$downloadAll = (buttonIdSelector)=>async ()=>{
         console.log("downloadAll: start");
@@ -13689,10 +13690,13 @@ const $f2fb5610d10943f7$export$264fba47316a17c2 = async ()=>{
     (0, $06cbd27ebbbf5f2a$export$a31cd1b3c2b6ea3b)();
     (0, $06cbd27ebbbf5f2a$export$28c3d59206bcbe2d)();
     const parentNode = await (0, $06cbd27ebbbf5f2a$export$3d6ebb5b74790dc2)();
+    const fileSizeText = (0, $06cbd27ebbbf5f2a$export$82e56ed69919a9ea)();
+    const doNotDownloadLargeModels = fileSizeText.includes(" GB)") && (0, $2e4159cc418f5166$export$44487a86467333c3)("doNotDownloadLargeModels");
     const buttonIdSelector = `#${$f2fb5610d10943f7$var$BUTTON_ID}`;
     const button = document.createElement("a");
     button.addEventListener("click", (e)=>{
         e.preventDefault();
+        if (doNotDownloadLargeModels) return;
         setTimeout(async ()=>{
             await $f2fb5610d10943f7$var$downloadAll(buttonIdSelector)();
         }, 1000);
@@ -13703,10 +13707,12 @@ const $f2fb5610d10943f7$export$264fba47316a17c2 = async ()=>{
     // start downloading a model
     button.addEventListener("click", async (e)=>{
         e.preventDefault();
+        if (doNotDownloadLargeModels) {
+            alert("this is a checkpoint model. Not downloading.");
+            return;
+        }
         const aTag = await (0, $06cbd27ebbbf5f2a$export$3065315f1141c0d0)();
-        const fileSizeText = aTag.innerHTML ?? "";
-        if (aTag && // モデルの場合はダウンロードしない
-        !fileSizeText.includes(" GB)")) aTag.dispatchEvent(new MouseEvent("click", {
+        if (aTag) aTag.dispatchEvent(new MouseEvent("click", {
             bubbles: true
         }));
     });
