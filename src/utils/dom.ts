@@ -63,6 +63,14 @@ const downloadButtonSVGSelector = 'main a svg[class*="tabler-icon-download"]';
 const SHARE_BUTTON_SVG_SELECTOR =
   'main svg[class*="tabler-icon tabler-icon-share-3"]';
 
+export const getFileSizeText = () => {
+  const buttons = selectorAll(downloadButtonSelector);
+  return (
+    Array.from(buttons).filter((x) => x.textContent?.includes('Download'))[0]
+      .textContent ?? ''
+  );
+};
+
 export const getDownloadATag = async () => {
   const buttonSVG = await waitForElement(downloadButtonSVGSelector);
 
