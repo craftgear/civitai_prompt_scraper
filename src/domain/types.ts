@@ -189,7 +189,7 @@ export enum ButtonState {
 }
 
 export type Selector = (x: string) => HTMLElement | null;
-export type SelectorAll = (x: string) => NodeList;
+export type SelectorAll = (x: string) => NodeListOf<Element>;
 export type CreateDiv = () => HTMLDivElement;
 export type CreateLink = (
   id: string,

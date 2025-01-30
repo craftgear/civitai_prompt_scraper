@@ -11,6 +11,7 @@ import {
   enableFullScreenCapture,
   getDownloadATag,
   getFileSizeText,
+  moveFileSizePanelUp,
   // hideHeader,
   removeButtonContainer,
   // openGallery,
@@ -113,6 +114,7 @@ export const addModelDownloadAllButton = async () => {
   deleteDiscussion();
   deleteMainPaddingBottom();
   deleteSuggestedResources();
+  moveFileSizePanelUp();
   // hideHeader();
 
   removeButtonContainer();

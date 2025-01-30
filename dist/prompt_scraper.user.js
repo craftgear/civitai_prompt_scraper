@@ -13400,7 +13400,7 @@ const $06cbd27ebbbf5f2a$var$SHARE_BUTTON_SVG_SELECTOR = 'main svg[class*="tabler
 const $06cbd27ebbbf5f2a$export$82e56ed69919a9ea = async ()=>{
     await $06cbd27ebbbf5f2a$export$1a1c301579a08d1e($06cbd27ebbbf5f2a$var$downloadButtonSelector);
     const buttons = (0, $98f6748fc1e9fd4e$export$2917eca99ebef21a)($06cbd27ebbbf5f2a$var$downloadButtonSelector);
-    return Array.from(buttons).filter((x)=>x.textContent?.includes("Download"))[0].textContent ?? "";
+    return Array.from(buttons).filter((x)=>x.textContent?.includes("Download")).at(0)?.textContent ?? "";
 };
 const $06cbd27ebbbf5f2a$export$3065315f1141c0d0 = async ()=>{
     const button = await $06cbd27ebbbf5f2a$export$1a1c301579a08d1e($06cbd27ebbbf5f2a$var$downloadButtonSelector);
@@ -13523,6 +13523,17 @@ const $06cbd27ebbbf5f2a$export$c74cb29a962d147f = ()=>{
         (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)("#main")?.setAttribute("style", "padding-top: 1rem;");
     }, 1000);
 };
+function $06cbd27ebbbf5f2a$export$5dde81319358a01f() {
+    setTimeout(()=>{
+        const panel = (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)('div[id$="-panel-version-files"]');
+        const accordion = panel?.parentElement;
+        if (accordion?.parentElement?.firstChild?.isSameNode(accordion)) return;
+        accordion?.setAttribute("style", "margin: 0;");
+        accordion?.parentElement?.parentElement?.prepend(accordion);
+        const likeOrDislikePanel = (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)('svg[class*="tabler-icon-heart"]');
+        likeOrDislikePanel?.parentElement?.parentElement?.parentElement?.parentElement?.setAttribute("style", "display: none;");
+    }, 100);
+}
 
 
 const $90c9ab75e73296e8$var$BUTTON_ID = "download-all-images-and-prompts";
@@ -13736,6 +13747,7 @@ const $f2fb5610d10943f7$export$264fba47316a17c2 = async ()=>{
     (0, $06cbd27ebbbf5f2a$export$260b7aeca61b2fed)();
     (0, $06cbd27ebbbf5f2a$export$980dc319601fa7a6)();
     (0, $06cbd27ebbbf5f2a$export$5ffcb0107c13639c)();
+    (0, $06cbd27ebbbf5f2a$export$5dde81319358a01f)();
     // hideHeader();
     (0, $06cbd27ebbbf5f2a$export$28c3d59206bcbe2d)();
     const parentNode = await (0, $06cbd27ebbbf5f2a$export$3d6ebb5b74790dc2)();

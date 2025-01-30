@@ -67,8 +67,9 @@ export const getFileSizeText = async () => {
   await waitForElement(downloadButtonSelector);
   const buttons = selectorAll(downloadButtonSelector);
   return (
-    Array.from(buttons).filter((x) => x.textContent?.includes('Download'))[0]
-      .textContent ?? ''
+    Array.from(buttons)
+      .filter((x) => x.textContent?.includes('Download'))
+      .at(0)?.textContent ?? ''
   );
 };
 
@@ -246,3 +247,21 @@ export const hideHeader = () => {
     selector('#main')?.setAttribute('style', 'padding-top: 1rem;');
   }, 1000);
 };
+
+export function moveFileSizePanelUp() {
+  setTimeout(() => {
+    const panel = selector('div[id$="-panel-version-files"]');
+    const accordion = panel?.parentElement;
+    if (accordion?.parentElement?.firstChild?.isSameNode(accordion)) {
+      return;
+    }
+    accordion?.setAttribute('style', 'margin: 0;');
+    accordion?.parentElement?.parentElement?.prepend(accordion);
+
+    const likeOrDislikePanel = selector('svg[class*="tabler-icon-heart"]');
+    likeOrDislikePanel?.parentElement?.parentElement?.parentElement?.parentElement?.setAttribute(
+      'style',
+      'display: none;'
+    );
+  }, 100);
+}
