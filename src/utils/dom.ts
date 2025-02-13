@@ -275,17 +275,13 @@ export function moveFileSizePanelUp() {
 export function warnLargeModels() {
   setTimeout(() => {
     const panel = selector('div[id$="-panel-version-files"]');
-    const text = panel?.innerText;
-    const filesize = Number(
-      text
-        ?.match(/\((.*)(?:K|M|G)B\)/)
-        ?.at(1)
-        ?.trim() ?? null
-    );
+    const text = panel?.innerText?.match(/\((.*)(K|M|G)B\)/);
+    const filesize = Number(text?.at(1)?.trim() ?? null);
+    const unit = text?.at(2) ?? null;
     if (!filesize) {
       return;
     }
-    if (filesize > 300) {
+    if (filesize > 300 && (unit === 'M' || unit === 'G')) {
       addStyle(panel?.parentElement, 'background-color: moccasin;');
     } else {
       addStyle(panel?.parentElement, 'background-color: inherit;');
