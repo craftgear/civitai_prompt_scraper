@@ -137,9 +137,13 @@ export const addModelDownloadAllButton = async () => {
       await downloadAllImages(buttonIdSelector)();
     }, 1000);
 
+    if (doNotDownloadLargeModels) {
+      console.info('Model size is larger than expected, abort downloading.');
+      return;
+    }
     // start downloading a model
     const aTag = await getDownloadATag();
-    if (aTag && !doNotDownloadLargeModels) {
+    if (aTag) {
       aTag.dispatchEvent(new MouseEvent('click', { bubbles: true }));
     }
   });

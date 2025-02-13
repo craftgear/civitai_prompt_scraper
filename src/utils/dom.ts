@@ -4,7 +4,7 @@ import {
   extractModelMetaFromSingleImageNextData,
 } from '../domain/logic';
 import { ButtonState, NextData } from '../domain/types';
-import { createDiv, selector, selectorAll } from '../infra/dom';
+import { createDiv, selector } from '../infra/dom';
 
 import { sleep } from './utils';
 
@@ -73,12 +73,8 @@ const SHARE_BUTTON_SVG_SELECTOR =
 
 export const getFileSizeText = async () => {
   await waitForElement(downloadButtonSelector);
-  const buttons = selectorAll(downloadButtonSelector);
-  return (
-    Array.from(buttons)
-      .filter((x) => x.textContent?.includes('Download'))
-      .at(0)?.textContent ?? ''
-  );
+  const panel = selector('div[id$="-panel-version-files"]');
+  return panel?.textContent || '';
 };
 
 export const getDownloadATag = async () => {

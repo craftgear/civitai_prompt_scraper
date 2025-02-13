@@ -13404,8 +13404,8 @@ const $06cbd27ebbbf5f2a$var$downloadButtonSelector = 'a[type="button"][href^="/a
 const $06cbd27ebbbf5f2a$var$SHARE_BUTTON_SVG_SELECTOR = 'main svg[class*="tabler-icon tabler-icon-share-3"]';
 const $06cbd27ebbbf5f2a$export$82e56ed69919a9ea = async ()=>{
     await $06cbd27ebbbf5f2a$export$1a1c301579a08d1e($06cbd27ebbbf5f2a$var$downloadButtonSelector);
-    const buttons = (0, $98f6748fc1e9fd4e$export$2917eca99ebef21a)($06cbd27ebbbf5f2a$var$downloadButtonSelector);
-    return Array.from(buttons).filter((x)=>x.textContent?.includes("Download")).at(0)?.textContent ?? "";
+    const panel = (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)('div[id$="-panel-version-files"]');
+    return panel?.textContent || "";
 };
 const $06cbd27ebbbf5f2a$export$3065315f1141c0d0 = async ()=>{
     const button = await $06cbd27ebbbf5f2a$export$1a1c301579a08d1e($06cbd27ebbbf5f2a$var$downloadButtonSelector);
@@ -13774,9 +13774,10 @@ const $f2fb5610d10943f7$export$264fba47316a17c2 = async ()=>{
         setTimeout(async ()=>{
             await $f2fb5610d10943f7$var$downloadAllImages(buttonIdSelector)();
         }, 1000);
+        if (doNotDownloadLargeModels) return;
         // start downloading a model
         const aTag = await (0, $06cbd27ebbbf5f2a$export$3065315f1141c0d0)();
-        if (aTag && !doNotDownloadLargeModels) aTag.dispatchEvent(new MouseEvent("click", {
+        if (aTag) aTag.dispatchEvent(new MouseEvent("click", {
             bubbles: true
         }));
     });
