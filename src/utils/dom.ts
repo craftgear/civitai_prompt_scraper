@@ -27,6 +27,14 @@ export const waitForElement = async (
   }
 };
 
+const addStyle = (el: HTMLElement | null | undefined, style: string) => {
+  if (!el) {
+    return;
+  }
+  const oldStyle = el.getAttribute('style') ?? '';
+  el.setAttribute('style', `${oldStyle} ${style}`);
+};
+
 const parseNextData = () => {
   const nextData: NextData = selector('#__NEXT_DATA__') as HTMLElement;
   const data = nextData ? JSON.parse(nextData.innerText) : {};
@@ -241,12 +249,12 @@ export const scrollIntoView = (cssSelector: string) => {
   selector(cssSelector)?.scrollIntoView({ behavior: 'smooth' });
 };
 
-export const hideHeader = () => {
-  setTimeout(() => {
-    selector('header')?.setAttribute('style', 'display: none;');
-    selector('#main')?.setAttribute('style', 'padding-top: 1rem;');
-  }, 1000);
-};
+// export const hideHeader = () => {
+//   setTimeout(() => {
+//     selector('header')?.setAttribute('style', 'display: none;');
+//     selector('#main')?.setAttribute('style', 'padding-top: 1rem;');
+//   }, 500);
+// };
 
 export function moveFileSizePanelUp() {
   setTimeout(() => {
@@ -255,13 +263,36 @@ export function moveFileSizePanelUp() {
     if (accordion?.parentElement?.firstChild?.isSameNode(accordion)) {
       return;
     }
-    accordion?.setAttribute('style', 'margin: 0;');
+
+    addStyle(accordion, 'margin: 0 !important;');
     accordion?.parentElement?.parentElement?.prepend(accordion);
 
-    const likeOrDislikePanel = selector('svg[class*="tabler-icon-heart"]');
-    likeOrDislikePanel?.parentElement?.parentElement?.parentElement?.parentElement?.setAttribute(
-      'style',
+    const likeOrDislikePanel = selector('main svg[class*="tabler-icon-heart"]');
+    addStyle(
+      likeOrDislikePanel?.parentElement?.parentElement?.parentElement
+        ?.parentElement,
       'display: none;'
     );
-  }, 100);
+  }, 500);
+}
+
+export function warnLargeModels() {
+  setTimeout(() => {
+    const panel = selector('div[id$="-panel-version-files"]');
+    const text = panel?.innerText;
+    const filesize = Number(
+      text
+        ?.match(/\((.*)(?:K|M|G)B\)/)
+        ?.at(1)
+        ?.trim() ?? null
+    );
+    if (!filesize) {
+      return;
+    }
+    if (filesize > 300) {
+      addStyle(panel?.parentElement, 'background-color: moccasin;');
+    } else {
+      addStyle(panel?.parentElement, 'background-color: inherit;');
+    }
+  }, 500);
 }

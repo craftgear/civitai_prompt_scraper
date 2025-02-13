@@ -16,6 +16,7 @@ import {
   removeButtonContainer,
   // openGallery,
   scrollIntoView,
+  warnLargeModels,
 } from '../utils/dom';
 
 const BUTTON_ID = 'download-all-model-related-files';
@@ -116,6 +117,7 @@ export const addModelDownloadAllButton = async () => {
   deleteSuggestedResources();
   moveFileSizePanelUp();
   // hideHeader();
+  warnLargeModels();
 
   removeButtonContainer();
   const parentNode = await addButtonContainer();
@@ -126,29 +128,18 @@ export const addModelDownloadAllButton = async () => {
 
   const buttonIdSelector = `#${BUTTON_ID}`;
   const button = document.createElement('a');
-  button.addEventListener('click', (e) => {
-    e.preventDefault();
-    setTimeout(async () => {
-      if (doNotDownloadLargeModels) {
-        return;
-      }
-      await downloadAllImages(buttonIdSelector)();
-    }, 1000);
-  });
   button.id = BUTTON_ID;
   button.innerText = '⇣'; //getButtonLabel();
   button.setAttribute('style', downloadAllButtonStyle);
-
-  // start downloading a model
   button.addEventListener('click', async (e) => {
     e.preventDefault();
-    if (doNotDownloadLargeModels) {
-      alert('this is a checkpoint model. Not downloading.');
-      return;
-    }
+    setTimeout(async () => {
+      await downloadAllImages(buttonIdSelector)();
+    }, 1000);
 
+    // start downloading a model
     const aTag = await getDownloadATag();
-    if (aTag) {
+    if (aTag && !doNotDownloadLargeModels) {
       aTag.dispatchEvent(new MouseEvent('click', { bubbles: true }));
     }
   });

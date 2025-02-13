@@ -13376,6 +13376,11 @@ const $06cbd27ebbbf5f2a$export$1a1c301579a08d1e = async (descriptor, retryLimit 
         return await $06cbd27ebbbf5f2a$export$1a1c301579a08d1e(descriptor, retryLimit - 1);
     } else return element;
 };
+const $06cbd27ebbbf5f2a$var$addStyle = (el, style)=>{
+    if (!el) return;
+    const oldStyle = el.getAttribute("style") ?? "";
+    el.setAttribute("style", `${oldStyle} ${style}`);
+};
 const $06cbd27ebbbf5f2a$var$parseNextData = ()=>{
     const nextData = (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)("#__NEXT_DATA__");
     const data = nextData ? JSON.parse(nextData.innerText) : {};
@@ -13517,22 +13522,26 @@ const $06cbd27ebbbf5f2a$export$53a0910f038337bd = (cssSelector)=>{
         behavior: "smooth"
     });
 };
-const $06cbd27ebbbf5f2a$export$c74cb29a962d147f = ()=>{
-    setTimeout(()=>{
-        (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)("header")?.setAttribute("style", "display: none;");
-        (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)("#main")?.setAttribute("style", "padding-top: 1rem;");
-    }, 1000);
-};
 function $06cbd27ebbbf5f2a$export$5dde81319358a01f() {
     setTimeout(()=>{
         const panel = (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)('div[id$="-panel-version-files"]');
         const accordion = panel?.parentElement;
         if (accordion?.parentElement?.firstChild?.isSameNode(accordion)) return;
-        accordion?.setAttribute("style", "margin: 0;");
+        $06cbd27ebbbf5f2a$var$addStyle(accordion, "margin: 0 !important;");
         accordion?.parentElement?.parentElement?.prepend(accordion);
-        const likeOrDislikePanel = (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)('svg[class*="tabler-icon-heart"]');
-        likeOrDislikePanel?.parentElement?.parentElement?.parentElement?.parentElement?.setAttribute("style", "display: none;");
-    }, 100);
+        const likeOrDislikePanel = (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)('main svg[class*="tabler-icon-heart"]');
+        $06cbd27ebbbf5f2a$var$addStyle(likeOrDislikePanel?.parentElement?.parentElement?.parentElement?.parentElement, "display: none;");
+    }, 500);
+}
+function $06cbd27ebbbf5f2a$export$cec515250b39a76b() {
+    setTimeout(()=>{
+        const panel = (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)('div[id$="-panel-version-files"]');
+        const text = panel?.innerText;
+        const filesize = Number(text?.match(/\((.*)(?:K|M|G)B\)/)?.at(1)?.trim() ?? null);
+        if (!filesize) return;
+        if (filesize > 300) $06cbd27ebbbf5f2a$var$addStyle(panel?.parentElement, "background-color: moccasin;");
+        else $06cbd27ebbbf5f2a$var$addStyle(panel?.parentElement, "background-color: inherit;");
+    }, 500);
 }
 
 
@@ -13630,6 +13639,7 @@ const $32b5bff137232fe2$export$8de192c3bf30e00f = (modelId, modelVersionId, mode
 const $32b5bff137232fe2$export$5fd187c0d03a79e = async (href)=>{
     if (!(0, $98f6748fc1e9fd4e$export$aea217a45095ce11)("#gallery")) // throw new Error('#gallery not found');
     return;
+    if ((0, $98f6748fc1e9fd4e$export$aea217a45095ce11)($32b5bff137232fe2$var$BUTTON_ID)) return;
     const { modelId: modelId, modelName: modelName, modelVersionId: // imageList,
     modelVersionId } = await (0, $90c9ab75e73296e8$export$b19b7d9a3c3e0ab8)(href);
     const button = (0, $98f6748fc1e9fd4e$export$cdda5b1be25f9499)($32b5bff137232fe2$var$BUTTON_ID, (0, $b7e86ce3c5d2c83d$export$f272ae7639e11e3), (0, $3a42d740ecc81982$export$d397f86d22f413e8)());
@@ -13749,31 +13759,24 @@ const $f2fb5610d10943f7$export$264fba47316a17c2 = async ()=>{
     (0, $06cbd27ebbbf5f2a$export$5ffcb0107c13639c)();
     (0, $06cbd27ebbbf5f2a$export$5dde81319358a01f)();
     // hideHeader();
+    (0, $06cbd27ebbbf5f2a$export$cec515250b39a76b)();
     (0, $06cbd27ebbbf5f2a$export$28c3d59206bcbe2d)();
     const parentNode = await (0, $06cbd27ebbbf5f2a$export$3d6ebb5b74790dc2)();
     const fileSizeText = await (0, $06cbd27ebbbf5f2a$export$82e56ed69919a9ea)();
     const doNotDownloadLargeModels = fileSizeText.includes(" GB)") && (0, $2e4159cc418f5166$export$44487a86467333c3)("doNotDownloadLargeModels");
     const buttonIdSelector = `#${$f2fb5610d10943f7$var$BUTTON_ID}`;
     const button = document.createElement("a");
-    button.addEventListener("click", (e)=>{
-        e.preventDefault();
-        setTimeout(async ()=>{
-            if (doNotDownloadLargeModels) return;
-            await $f2fb5610d10943f7$var$downloadAllImages(buttonIdSelector)();
-        }, 1000);
-    });
     button.id = $f2fb5610d10943f7$var$BUTTON_ID;
     button.innerText = "\u21E3"; //getButtonLabel();
     button.setAttribute("style", (0, $b7e86ce3c5d2c83d$export$7ec3146dae3421e3));
-    // start downloading a model
     button.addEventListener("click", async (e)=>{
         e.preventDefault();
-        if (doNotDownloadLargeModels) {
-            alert("this is a checkpoint model. Not downloading.");
-            return;
-        }
+        setTimeout(async ()=>{
+            await $f2fb5610d10943f7$var$downloadAllImages(buttonIdSelector)();
+        }, 1000);
+        // start downloading a model
         const aTag = await (0, $06cbd27ebbbf5f2a$export$3065315f1141c0d0)();
-        if (aTag) aTag.dispatchEvent(new MouseEvent("click", {
+        if (aTag && !doNotDownloadLargeModels) aTag.dispatchEvent(new MouseEvent("click", {
             bubbles: true
         }));
     });

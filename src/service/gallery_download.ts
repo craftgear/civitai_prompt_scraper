@@ -75,6 +75,9 @@ export const addGalleryDownloadButton = async (href: string) => {
     // throw new Error('#gallery not found');
     return;
   }
+  if (selector(BUTTON_ID)) {
+    return;
+  }
 
   const {
     modelId,
