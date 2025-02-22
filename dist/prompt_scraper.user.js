@@ -13096,7 +13096,6 @@ const $c3454b9ab01d445e$export$e9e7897c93aa9943 = (zipWriter, addedNames)=>async
 
 
 const $c5da2b8a14082d8b$export$b6bc24646229cedd = (buttnTextUpdateFn)=>(zipFilename, modelInfo)=>async (imgInfo, chunkSize = 20)=>{
-            console.log("----- chunkSize", chunkSize);
             if (!modelInfo && imgInfo.length === 0) return;
             const blobWriter = new (0, $53e25169918aa98b$export$b1948fceba813858)(`application/zip`);
             const zipWriter = new (0, $183a0115a003f583$export$50f5658480930b4c)(blobWriter);
@@ -13663,7 +13662,12 @@ const $32b5bff137232fe2$export$8de192c3bf30e00f = (modelId, modelVersionId, mode
         }
     };
 const $32b5bff137232fe2$export$5fd187c0d03a79e = async (href)=>{
-    if (!(0, $98f6748fc1e9fd4e$export$aea217a45095ce11)("#gallery")) throw new Error("#gallery not found");
+    if (!(0, $98f6748fc1e9fd4e$export$aea217a45095ce11)("#gallery")) {
+        // throw new Error('#gallery not found');
+        console.log("#gallery not found");
+        await $32b5bff137232fe2$export$5fd187c0d03a79e(href);
+        return;
+    }
     if ((0, $98f6748fc1e9fd4e$export$aea217a45095ce11)($32b5bff137232fe2$var$BUTTON_ID)) return;
     const { modelId: modelId, modelName: modelName, modelVersionId: // imageList,
     modelVersionId } = await (0, $90c9ab75e73296e8$export$a6b8506fb01f18d6)(href);

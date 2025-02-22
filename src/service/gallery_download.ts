@@ -72,7 +72,10 @@ export const download200GalleryImagesAndPrompts =
 
 export const addGalleryDownloadButton = async (href: string) => {
   if (!selector('#gallery')) {
-    throw new Error('#gallery not found');
+    // throw new Error('#gallery not found');
+    console.log('#gallery not found');
+    await addGalleryDownloadButton(href);
+    return;
   }
   if (selector(BUTTON_ID)) {
     return;
