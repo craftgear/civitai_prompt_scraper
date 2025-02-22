@@ -13095,7 +13095,8 @@ const $c3454b9ab01d445e$export$e9e7897c93aa9943 = (zipWriter, addedNames)=>async
         }));
 
 
-const $c5da2b8a14082d8b$export$b6bc24646229cedd = (buttnTextUpdateFn)=>(zipFilename, modelInfo)=>async (imgInfo, chunkSize = 10)=>{
+const $c5da2b8a14082d8b$export$b6bc24646229cedd = (buttnTextUpdateFn)=>(zipFilename, modelInfo)=>async (imgInfo, chunkSize = 20)=>{
+            console.log("----- chunkSize", chunkSize);
             if (!modelInfo && imgInfo.length === 0) return;
             const blobWriter = new (0, $53e25169918aa98b$export$b1948fceba813858)(`application/zip`);
             const zipWriter = new (0, $183a0115a003f583$export$50f5658480930b4c)(blobWriter);
