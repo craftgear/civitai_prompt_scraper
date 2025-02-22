@@ -146,10 +146,8 @@ export type GalleryImage = {
 export type GalleryImagesResponse = {
   items: GalleryImage[];
   metadata: {
-    totalItems: number;
-    currentPage: number;
-    pageSize: number;
-    totalPages: number;
+    nextCursor: string;
+    nextPage: string;
   };
 };
 

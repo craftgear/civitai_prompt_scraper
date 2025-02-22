@@ -13005,7 +13005,15 @@ const $c3454b9ab01d445e$export$769102d94f147e19 = async (modelId, modelVersionId
     const modelInfo = await $c3454b9ab01d445e$export$998f418383804028(id);
     return modelInfo;
 };
-const $c3454b9ab01d445e$export$c6ace8a485846f08 = async (modelId, postId, modelVersionId, limit, retry = 0)=>{
+const $c3454b9ab01d445e$var$RETRY_LIMIT = 10;
+const $c3454b9ab01d445e$export$c6ace8a485846f08 = async (modelId, postId, modelVersionId, limit, nextCursor, retry = 0)=>{
+    (0, $81ffdad4556cbf55$export$e772c8ff12451969)(1000);
+    // エラーのリトライおよび、カーソルをたどるのは10回までにする
+    if (retry > $c3454b9ab01d445e$var$RETRY_LIMIT - 1) {
+        if (!nextCursor) // エラーリトライの場合はエラーをスロー
+        throw new Error(` API returns error.`);
+        return [];
+    }
     let url = `${$c3454b9ab01d445e$var$API_URL}/images`;
     const params = [
         "sort=Most%20Reactions&nsfw=X&withMeta=true"
@@ -13014,6 +13022,7 @@ const $c3454b9ab01d445e$export$c6ace8a485846f08 = async (modelId, postId, modelV
     if (postId) params.push(`postId=${postId}`);
     if (modelId) params.push(`modelId=${modelId}`);
     if (modelVersionId) params.push(`modelVersionId=${modelVersionId}`);
+    if (nextCursor) params.push(`cursor=${nextCursor}`);
     // 2024.07.09 usernameをつけるとエラーになるのでコメントアウト
     // if (username) {
     //   params.push(`username=${username}`);
@@ -13023,14 +13032,17 @@ const $c3454b9ab01d445e$export$c6ace8a485846f08 = async (modelId, postId, modelV
         method: "GET",
         headers: $c3454b9ab01d445e$var$HEADERS
     });
+    // エラーの場合はリトライ
     if (response.status >= 400) {
-        if (retry < 10) {
-            (0, $81ffdad4556cbf55$export$e772c8ff12451969)(1000);
-            return $c3454b9ab01d445e$export$c6ace8a485846f08(modelId, postId, modelVersionId, limit, retry + 1);
-        }
-        throw new Error(` ${response.status} ${response.statusText}`);
+        console.log(` ${response.status} ${response.statusText}`);
+        return $c3454b9ab01d445e$export$c6ace8a485846f08(modelId, postId, modelVersionId, limit, undefined, retry + 1);
     }
     const data = await response.json();
+    // 次ページのカーソルがある場合は再帰呼び出し
+    if (data.metadata.nextCursor) return [
+        ...data.items,
+        ...await $c3454b9ab01d445e$export$c6ace8a485846f08(modelId, postId, modelVersionId, limit, data.metadata.nextCursor, retry + 1)
+    ];
     return data.items;
 };
 const $c3454b9ab01d445e$export$2ab75dd31a3868f2 = async (url, retried = 0)=>{
@@ -13536,31 +13548,44 @@ function $06cbd27ebbbf5f2a$export$5dde81319358a01f() {
 function $06cbd27ebbbf5f2a$export$cec515250b39a76b() {
     setTimeout(()=>{
         const panel = (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)('div[id$="-panel-version-files"]');
-        const text = panel?.innerText;
-        const filesize = Number(text?.match(/\((.*)(?:K|M|G)B\)/)?.at(1)?.trim() ?? null);
+        const text = panel?.innerText?.match(/\((.*)(K|M|G)B\)/);
+        const filesize = Number(text?.at(1)?.trim() ?? null);
+        const unit = text?.at(2) ?? null;
         if (!filesize) return;
-        if (filesize > 300) $06cbd27ebbbf5f2a$var$addStyle(panel?.parentElement, "background-color: moccasin;");
+        if (filesize > 300 && (unit === "M" || unit === "G")) $06cbd27ebbbf5f2a$var$addStyle(panel?.parentElement, "background-color: moccasin;");
         else $06cbd27ebbbf5f2a$var$addStyle(panel?.parentElement, "background-color: inherit;");
     }, 500);
 }
 
 
 const $90c9ab75e73296e8$var$BUTTON_ID = "download-all-images-and-prompts";
-const $90c9ab75e73296e8$export$b19b7d9a3c3e0ab8 = async (href)=>{
+const $90c9ab75e73296e8$export$a6b8506fb01f18d6 = async (href)=>{
     const hrefModelId = href.match(/\/models\/(?<modelId>\d*)/)?.groups?.modelId ?? href.match(/modelId=(?<modelId>\d*)/)?.groups?.modelId;
     const hrefModelVersionId = href.match(/modelVersionId=(?<modelVersionId>\d*)/)?.groups?.modelVersionId;
     const modelInfo = await (0, $c3454b9ab01d445e$export$769102d94f147e19)(hrefModelId, hrefModelVersionId);
     const { id: modelId, name: modelName, modelVersions: modelVersions } = modelInfo;
-    const modelVersion = modelVersions.length === 1 ? modelVersions[0] : modelVersions?.find((x)=>x.id.toString() === hrefModelVersionId);
-    // NOTE: modelVersion.imagesにはimage.metaがない
-    const modelImages = modelVersion?.images ?? [];
     if (!modelId) throw new Error((0, $3a42d740ecc81982$export$731a191155ffa90a)("modelIdNotFoundError"));
     const modelVersionId = hrefModelVersionId ? hrefModelVersionId : modelInfo.modelVersions[0].id;
     if (!modelVersionId) throw new Error((0, $3a42d740ecc81982$export$731a191155ffa90a)("modelVersionIdNotFoundError"));
     const modelVersionName = modelInfo.modelVersions.find((x)=>{
         return `${x.id}` === `${modelVersionId}`;
     })?.name || "no_version_name";
-    const galleryImageList = await (0, $c3454b9ab01d445e$export$c6ace8a485846f08)(`${modelId}`, null, `${modelVersionId}`);
+    return {
+        modelId: modelId,
+        modelName: modelName,
+        modelVersionId: modelVersionId,
+        modelVersionName: modelVersionName,
+        modelVersions: modelVersions,
+        modelInfo: modelInfo,
+        hrefModelVersionId: hrefModelVersionId
+    };
+};
+const $90c9ab75e73296e8$export$b2255cc49c3941e4 = async (href)=>{
+    const { modelId: modelId, modelName: modelName, modelVersionId: modelVersionId, modelVersionName: modelVersionName, modelVersions: modelVersions, modelInfo: modelInfo, hrefModelVersionId: hrefModelVersionId } = await $90c9ab75e73296e8$export$a6b8506fb01f18d6(href);
+    const modelVersion = modelVersions.length === 1 ? modelVersions[0] : modelVersions?.find((x)=>x.id.toString() === hrefModelVersionId);
+    // NOTE: modelVersion.imagesにはimage.metaがない
+    const modelImages = modelVersion?.images ?? [];
+    const galleryImageList = await (0, $c3454b9ab01d445e$export$c6ace8a485846f08)(`${modelId}`, null, `${modelVersionId}`, 200);
     // NOTE: 通常プレビュー画像もギャラリーに含まれているので、
     // 画像のダウンロードはギャラリー画像を優先する。
     // (modelVersion.imagesにはmetaがないので、ギャラリーデータがある場合はそちらのほうがよい
@@ -13588,7 +13613,7 @@ const $90c9ab75e73296e8$export$53039d7a8d9d297e = (buttonIdSelector, location)=>
             const button = await (0, $06cbd27ebbbf5f2a$export$1a1c301579a08d1e)(buttonIdSelector);
             if (!button) throw new Error("downloadImagesAndPrompts: button not found");
             button.innerText = (0, $3a42d740ecc81982$export$731a191155ffa90a)("startingDownload");
-            const { modelId: modelId, modelName: modelName, imageList: imageList, modelVersionId: modelVersionId, modelVersionName: modelVersionName, modelInfo: modelInfo } = await $90c9ab75e73296e8$export$b19b7d9a3c3e0ab8(location);
+            const { modelId: modelId, modelName: modelName, imageList: imageList, modelVersionId: modelVersionId, modelVersionName: modelVersionName, modelInfo: modelInfo } = await $90c9ab75e73296e8$export$b2255cc49c3941e4(location);
             const filenameFormat = (0, $2e4159cc418f5166$export$44487a86467333c3)("modelPreviewFilenameFormat");
             const filename = filenameFormat.replace("{modelId}", `${modelId ?? ""}`).replace("{modelName}", modelName).replace("{modelVersionId}", `${modelVersionId}`).replace("{modelVersionName}", modelVersionName);
             await (0, $c5da2b8a14082d8b$export$b6bc24646229cedd)((0, $06cbd27ebbbf5f2a$export$bb64a7e3f0f28938)(button))(filename, modelInfo)(imageList);
@@ -13637,11 +13662,10 @@ const $32b5bff137232fe2$export$8de192c3bf30e00f = (modelId, modelVersionId, mode
         }
     };
 const $32b5bff137232fe2$export$5fd187c0d03a79e = async (href)=>{
-    if (!(0, $98f6748fc1e9fd4e$export$aea217a45095ce11)("#gallery")) // throw new Error('#gallery not found');
-    return;
+    if (!(0, $98f6748fc1e9fd4e$export$aea217a45095ce11)("#gallery")) throw new Error("#gallery not found");
     if ((0, $98f6748fc1e9fd4e$export$aea217a45095ce11)($32b5bff137232fe2$var$BUTTON_ID)) return;
     const { modelId: modelId, modelName: modelName, modelVersionId: // imageList,
-    modelVersionId } = await (0, $90c9ab75e73296e8$export$b19b7d9a3c3e0ab8)(href);
+    modelVersionId } = await (0, $90c9ab75e73296e8$export$a6b8506fb01f18d6)(href);
     const button = (0, $98f6748fc1e9fd4e$export$cdda5b1be25f9499)($32b5bff137232fe2$var$BUTTON_ID, (0, $b7e86ce3c5d2c83d$export$f272ae7639e11e3), (0, $3a42d740ecc81982$export$d397f86d22f413e8)());
     button.setAttribute("data-state", (0, $c08fa57dad1b6e82$export$5d7ba7f5550f99d1).ready);
     const onFinishFn = (button)=>(imgCount)=>{
@@ -13657,7 +13681,7 @@ const $32b5bff137232fe2$export$5fd187c0d03a79e = async (href)=>{
     button.addEventListener("click", eventListener);
     const h2 = await (0, $06cbd27ebbbf5f2a$export$1a1c301579a08d1e)("#gallery h2");
     if (h2) {
-        const oldButton = await (0, $06cbd27ebbbf5f2a$export$1a1c301579a08d1e)(`#${$32b5bff137232fe2$var$BUTTON_ID}`);
+        const oldButton = await (0, $06cbd27ebbbf5f2a$export$1a1c301579a08d1e)(`#${$32b5bff137232fe2$var$BUTTON_ID}`, 1);
         if (oldButton) oldButton.remove();
         h2.parentNode?.appendChild(button);
     }
@@ -13696,40 +13720,15 @@ const $6123356ea5e91e3d$export$335d1054b4853621 = (retry = 200)=>{
 
 
 
-
 const $f2fb5610d10943f7$var$BUTTON_ID = "download-all-model-related-files";
 const $f2fb5610d10943f7$var$downloadAllImages = (buttonIdSelector)=>async ()=>{
         console.log("downloadAllImages: start");
-        // save previews as a zip file
-        const { imageList: previewImageList, modelName: modelName, modelId: modelId, modelVersionId: modelVersionId } = await (0, $90c9ab75e73296e8$export$53039d7a8d9d297e)(buttonIdSelector, window.location.href)() ?? {};
-        if (!modelId || !modelVersionId) {
-            alert("downloadAll: modelId or modelVersionId not found");
-            return;
-        }
-        const galleryDownloadProgressText = document.createElement("div");
-        const GalleryDownloadProgressTextId = "gallery-download-progress-text";
-        galleryDownloadProgressText.id = GalleryDownloadProgressTextId;
-        galleryDownloadProgressText.setAttribute("style", `
-      position: fixed;
-      top: 50px;
-      right: 50px;
-      z-index:1000;
-      background-color: black;
-      color: white;
-      opacity: 0.8;
-      width: fit-content;
-      padding: 1rem 2rem;
-    `);
-        document?.querySelector("body")?.appendChild(galleryDownloadProgressText);
-        const progressFn = (progressMsg)=>{
-            galleryDownloadProgressText.innerText = progressMsg;
+        await (0, $90c9ab75e73296e8$export$53039d7a8d9d297e)(buttonIdSelector, window.location.href)();
+        const overlayPanel = document.createElement("div");
+        overlayPanel.onclick = ()=>{
+            overlayPanel.remove();
         };
-        const finishFn = ()=>{
-            const panel = document.createElement("div");
-            panel.onclick = ()=>{
-                panel.remove();
-            };
-            panel.setAttribute("style", `
+        overlayPanel.setAttribute("style", `
       position: absolute;
       top: 0;
       left: 0;
@@ -13739,14 +13738,75 @@ const $f2fb5610d10943f7$var$downloadAllImages = (buttonIdSelector)=>async ()=>{
       background-color: black;
       opacity: 0.5;
     `);
-            document?.querySelector("#main")?.appendChild(panel);
-            document.querySelector(`#${GalleryDownloadProgressTextId}`)?.remove();
-            (0, $98f6748fc1e9fd4e$export$420a7f2fd9cad6f6)("\u2705 " + (0, $98f6748fc1e9fd4e$export$70d1bf7729efff40)());
-            (0, $06cbd27ebbbf5f2a$export$53a0910f038337bd)("#gallery");
-            // openGallery(); // galleryを開くと、ダウンロードが遅くなる
-            console.log("download200GalleryImagesAndPrompts: done");
-        };
-        await (0, $32b5bff137232fe2$export$8de192c3bf30e00f)(modelId.toString(), modelVersionId, modelName ?? "", 200, previewImageList, progressFn, finishFn)();
+        document?.querySelector("#main")?.appendChild(overlayPanel);
+        (0, $98f6748fc1e9fd4e$export$420a7f2fd9cad6f6)("\u2705 " + (0, $98f6748fc1e9fd4e$export$70d1bf7729efff40)());
+        (0, $06cbd27ebbbf5f2a$export$53a0910f038337bd)("#gallery");
+        // if (!modelId || !modelVersionId) {
+        //   alert('downloadAll: modelId or modelVersionId not found');
+        //   return;
+        // }
+        //
+        // const galleryDownloadProgressText = document.createElement('div');
+        // const GalleryDownloadProgressTextId = 'gallery-download-progress-text';
+        // galleryDownloadProgressText.id = GalleryDownloadProgressTextId;
+        // galleryDownloadProgressText.setAttribute(
+        //   'style',
+        //   `
+        //     position: fixed;
+        //     top: 50px;
+        //     right: 50px;
+        //     z-index:1000;
+        //     background-color: black;
+        //     color: white;
+        //     opacity: 0.8;
+        //     width: fit-content;
+        //     padding: 1rem 2rem;
+        //   `
+        // );
+        // document?.querySelector('body')?.appendChild(galleryDownloadProgressText);
+        //
+        // // const progressFn = (progressMsg: string) => {
+        // //   galleryDownloadProgressText.innerText = progressMsg;
+        // // };
+        //
+        // const finishFn = () => {
+        //   const panel = document.createElement('div');
+        //   panel.onclick = () => {
+        //     panel.remove();
+        //   };
+        //
+        //   panel.setAttribute(
+        //     'style',
+        //     `
+        //     position: absolute;
+        //     top: 0;
+        //     left: 0;
+        //     z-index:1000;
+        //     height: 100%;
+        //     width: 100%;
+        //     background-color: black;
+        //     opacity: 0.5;
+        //   `
+        //   );
+        //   document?.querySelector('#main')?.appendChild(panel);
+        //   document.querySelector(`#${GalleryDownloadProgressTextId}`)?.remove();
+        //   setTitle('✅ ' + getTitle());
+        //
+        //   scrollIntoView('#gallery');
+        //   // openGallery(); // galleryを開くと、ダウンロードが遅くなる
+        //   console.log('download200GalleryImagesAndPrompts: done');
+        // };
+        //
+        // await download200GalleryImagesAndPrompts(
+        //   modelId.toString(),
+        //   modelVersionId as string,
+        //   modelName ?? '',
+        //   200,
+        //   previewImageList,
+        //   progressFn,
+        //   finishFn
+        // )();
+        //
         console.warn("##### done #####");
         return;
     };
@@ -13774,7 +13834,10 @@ const $f2fb5610d10943f7$export$264fba47316a17c2 = async ()=>{
         setTimeout(async ()=>{
             await $f2fb5610d10943f7$var$downloadAllImages(buttonIdSelector)();
         }, 1000);
-        if (doNotDownloadLargeModels) return;
+        if (doNotDownloadLargeModels) {
+            console.info("Model size is larger than expected, abort downloading.");
+            return;
+        }
         // start downloading a model
         const aTag = await (0, $06cbd27ebbbf5f2a$export$3065315f1141c0d0)();
         if (aTag) aTag.dispatchEvent(new MouseEvent("click", {

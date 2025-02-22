@@ -1,7 +1,7 @@
 import { getButtonCompleteLabel, getButtonLabel } from '../assets/lang';
 import { galleryButtonStyle } from '../assets/styles';
 import { ButtonState, GalleryImage, ModelImage } from '../domain/types';
-import { getModeInfoAndImageList } from '../service/model_image_download';
+import { getModelInfo } from '../service/model_image_download';
 
 import { getConfig } from '../infra/config_panel';
 import {
@@ -72,8 +72,7 @@ export const download200GalleryImagesAndPrompts =
 
 export const addGalleryDownloadButton = async (href: string) => {
   if (!selector('#gallery')) {
-    // throw new Error('#gallery not found');
-    return;
+    throw new Error('#gallery not found');
   }
   if (selector(BUTTON_ID)) {
     return;
@@ -86,7 +85,7 @@ export const addGalleryDownloadButton = async (href: string) => {
     modelVersionId,
     // modelVersionName,
     // modelInfo,
-  } = await getModeInfoAndImageList(href);
+  } = await getModelInfo(href);
 
   const button = createLink(BUTTON_ID, galleryButtonStyle, getButtonLabel());
   button.setAttribute('data-state', ButtonState.ready);
@@ -127,7 +126,7 @@ export const addGalleryDownloadButton = async (href: string) => {
 
   const h2 = await waitForElement('#gallery h2');
   if (h2) {
-    const oldButton = await waitForElement(`#${BUTTON_ID}`);
+    const oldButton = await waitForElement(`#${BUTTON_ID}`, 1);
     if (oldButton) {
       oldButton.remove();
     }

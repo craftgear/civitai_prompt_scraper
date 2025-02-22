@@ -22,7 +22,7 @@ import {
 
 const BUTTON_ID = 'download-all-images-and-prompts';
 
-export const getModeInfoAndImageList = async (href: string) => {
+export const getModelInfo = async (href: string) => {
   const hrefModelId =
     href.match(/\/models\/(?<modelId>\d*)/)?.groups?.modelId ??
     href.match(/modelId=(?<modelId>\d*)/)?.groups?.modelId;
@@ -35,13 +35,6 @@ export const getModeInfoAndImageList = async (href: string) => {
   );
 
   const { id: modelId, name: modelName, modelVersions } = modelInfo;
-
-  const modelVersion =
-    modelVersions.length === 1
-      ? modelVersions[0]
-      : modelVersions?.find((x) => x.id.toString() === hrefModelVersionId);
-  // NOTE: modelVersion.imagesにはimage.metaがない
-  const modelImages = modelVersion?.images ?? [];
 
   if (!modelId) {
     throw new Error(getI18nLabel('modelIdNotFoundError'));
@@ -60,10 +53,40 @@ export const getModeInfoAndImageList = async (href: string) => {
       return `${x.id}` === `${modelVersionId}`;
     })?.name || 'no_version_name';
 
+  return {
+    modelId,
+    modelName,
+    modelVersionId,
+    modelVersionName,
+    modelVersions,
+    modelInfo,
+    hrefModelVersionId,
+  };
+};
+
+export const getModelInfoAndImageList = async (href: string) => {
+  const {
+    modelId,
+    modelName,
+    modelVersionId,
+    modelVersionName,
+    modelVersions,
+    modelInfo,
+    hrefModelVersionId,
+  } = await getModelInfo(href);
+
+  const modelVersion =
+    modelVersions.length === 1
+      ? modelVersions[0]
+      : modelVersions?.find((x) => x.id.toString() === hrefModelVersionId);
+  // NOTE: modelVersion.imagesにはimage.metaがない
+  const modelImages = modelVersion?.images ?? [];
+
   const galleryImageList = await fetchGalleryData(
     `${modelId}`,
     null,
-    `${modelVersionId}`
+    `${modelVersionId}`,
+    200
   );
 
   // NOTE: 通常プレビュー画像もギャラリーに含まれているので、
@@ -116,7 +139,7 @@ export const downloadImagesAndPrompts =
         modelVersionId,
         modelVersionName,
         modelInfo,
-      } = await getModeInfoAndImageList(location);
+      } = await getModelInfoAndImageList(location);
 
       const filenameFormat = getConfig('modelPreviewFilenameFormat');
       const filename = (filenameFormat as string)

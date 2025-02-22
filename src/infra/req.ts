@@ -70,13 +70,25 @@ export const fetchModelInfoByModleIdOrModelVersionId = async (
   return modelInfo;
 };
 
+const RETRY_LIMIT = 10;
 export const fetchGalleryData = async (
   modelId?: string | null,
   postId?: string | null,
   modelVersionId?: string | null,
   limit?: number,
+  nextCursor?: string,
   retry = 0
 ): Promise<GalleryImagesResponse['items']> => {
+  sleep(1000);
+  // エラーのリトライおよび、カーソルをたどるのは10回までにする
+  if (retry > RETRY_LIMIT - 1) {
+    if (!nextCursor) {
+      // エラーリトライの場合はエラーをスロー
+      throw new Error(` API returns error.`);
+    }
+    return [];
+  }
+
   let url = `${API_URL}/images`;
   const params = ['sort=Most%20Reactions&nsfw=X&withMeta=true'];
 
@@ -92,6 +104,9 @@ export const fetchGalleryData = async (
   if (modelVersionId) {
     params.push(`modelVersionId=${modelVersionId}`);
   }
+  if (nextCursor) {
+    params.push(`cursor=${nextCursor}`);
+  }
   // 2024.07.09 usernameをつけるとエラーになるのでコメントアウト
   // if (username) {
   //   params.push(`username=${username}`);
@@ -105,20 +120,35 @@ export const fetchGalleryData = async (
     method: 'GET',
     headers: HEADERS,
   });
+
+  // エラーの場合はリトライ
   if (response.status >= 400) {
-    if (retry < 10) {
-      sleep(1000);
-      return fetchGalleryData(
+    console.log(` ${response.status} ${response.statusText}`);
+    return fetchGalleryData(
+      modelId,
+      postId,
+      modelVersionId,
+      limit,
+      undefined,
+      retry + 1
+    );
+  }
+
+  const data = (await response.json()) as GalleryImagesResponse;
+  // 次ページのカーソルがある場合は再帰呼び出し
+  if (data.metadata.nextCursor) {
+    return [
+      ...data.items,
+      ...(await fetchGalleryData(
         modelId,
         postId,
         modelVersionId,
         limit,
+        data.metadata.nextCursor,
         retry + 1
-      );
-    }
-    throw new Error(` ${response.status} ${response.statusText}`);
+      )),
+    ];
   }
-  const data = (await response.json()) as GalleryImagesResponse;
   return data.items;
 };
 
