@@ -64,7 +64,10 @@ export const getModelInfo = async (href: string) => {
   };
 };
 
-export const getModelInfoAndImageList = async (href: string) => {
+export const getModelInfoAndImageList = async (
+  href: string,
+  updateTextFn: (text: string) => void
+) => {
   const {
     modelId,
     modelName,
@@ -82,11 +85,10 @@ export const getModelInfoAndImageList = async (href: string) => {
   // NOTE: modelVersion.imagesにはimage.metaがない
   const modelImages = modelVersion?.images ?? [];
 
-  const galleryImageList = await fetchGalleryData(
+  const galleryImageList = await fetchGalleryData(updateTextFn)(
     `${modelId}`,
     null,
-    `${modelVersionId}`,
-    200
+    `${modelVersionId}`
   );
 
   // NOTE: 通常プレビュー画像もギャラリーに含まれているので、
@@ -139,7 +141,7 @@ export const downloadImagesAndPrompts =
         modelVersionId,
         modelVersionName,
         modelInfo,
-      } = await getModelInfoAndImageList(location);
+      } = await getModelInfoAndImageList(location, updateButtonText(button));
 
       const filenameFormat = getConfig('modelPreviewFilenameFormat');
       const filename = (filenameFormat as string)

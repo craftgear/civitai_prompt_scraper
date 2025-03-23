@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "name": "civitai_prompt_scraper",
   "browserslist": "> 5%, last 1 versions, not dead",
   "version": "1.2.30",
@@ -22,7 +23,8 @@
     "clean": "rm ./dist/*",
     "test": "vitest --dom",
     "coverage": "vitest --coverage --run",
-    "check": "tsc --noEmit"
+    "check": "tsc --noEmit",
+    "civitai": "tsx ./src/cli.ts"
   },
   "author": "Watanabe, Shunsuke",
   "license": "MIT",
@@ -31,10 +33,11 @@
     "@eslint/js": "^9.8.0",
     "@parcel/packager-ts": "^2.8.3",
     "@parcel/transformer-typescript-types": "^2.8.3",
+    "@playwright/test": "^1.51.1",
     "@tsconfig/recommended": "^1.0.2",
     "@types/file-saver": "^2.0.5",
     "@types/lodash": "^4.14.191",
-    "@types/node": "^22.7.4",
+    "@types/node": "^22.13.11",
     "@typescript-eslint/eslint-plugin": "^8.0.0",
     "@typescript-eslint/parser": "^8.0.0",
     "@violentmonkey/types": "^0.1.5",
@@ -55,10 +58,13 @@
   "dependencies": {
     "@violentmonkey/url": "^0.1.0",
     "@zip.js/zip.js": "^2.6.63",
+    "dotenv": "^16.4.7",
     "file-saver": "^2.0.5",
     "html2canvas": "^1.4.1",
     "lodash": "^4.17.21",
+    "puppeteer": "^24.4.0",
     "ts-brand": "^0.2.0",
+    "tsx": "^4.19.3",
     "wazip": "^0.1.0",
     "zod": "^3.23.8"
   }

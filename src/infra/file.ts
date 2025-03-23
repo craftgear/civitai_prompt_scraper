@@ -12,8 +12,7 @@ export const createZip =
   (buttnTextUpdateFn?: (text: string) => void | null) =>
   (zipFilename: string, modelInfo?: unknown) =>
   async (
-    imgInfo: { url: string; hash: string; meta: unknown }[],
-    chunkSize = 20
+    imgInfo: { url: string; hash: string; meta: unknown }[]
   ): Promise<void> => {
     if (!modelInfo && imgInfo.length === 0) {
       return;
@@ -26,6 +25,16 @@ export const createZip =
         'model_info.json',
         new TextReader(JSON.stringify(modelInfo, null, '\t'))
       );
+    }
+    let chunkSize = 5;
+    if (50 < imgInfo.length && imgInfo.length <= 200) {
+      chunkSize = 10;
+    }
+    if (200 < imgInfo.length && imgInfo.length <= 400) {
+      chunkSize = 20;
+    }
+    if (imgInfo.length > 400) {
+      chunkSize = 50;
     }
 
     const addedNames = new Set<string>();

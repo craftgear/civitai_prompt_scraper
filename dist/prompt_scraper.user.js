@@ -236,6 +236,7 @@ const $b7e86ce3c5d2c83d$export$f272ae7639e11e3 = `
   ${$b7e86ce3c5d2c83d$export$fd4d27a26b4854f3}
   margin: 0 12px;
   width: auto;
+  overflow:hidden;
 `;
 const $b7e86ce3c5d2c83d$export$18f0fed469926683 = `
   ${$b7e86ce3c5d2c83d$export$dbe9a8011f5e5b2d}
@@ -12926,14 +12927,14 @@ var $b9a27db92abc3f0f$exports = {};
 
 
 var $39e7bd012fbaed99$exports = {};
-$39e7bd012fbaed99$exports = JSON.parse('{"name":"civitai_prompt_scraper","browserslist":"> 5%, last 1 versions, not dead","version":"1.2.30","description":"","source":"src/prompt_scraper.user.ts","browser ":"dist/prompt_scraper.user.js","targets":{"default":{"context":"browser","sourceMap":false,"includeNodeModules":true,"optimize":true}},"scripts":{"type-check":"tsc --noEmit","lint":"eslint","format":"prettier --write .","watch":"parcel watch","build":"rm -rf .parcel-cache/*; parcel build; zip -v -j ./dist/prompt_scraper.zip ./dist/prompt_scraper.user.js","clean":"rm ./dist/*","test":"vitest --dom","coverage":"vitest --coverage --run","check":"tsc --noEmit"},"author":"Watanabe, Shunsuke","license":"MIT","devDependencies":{"@damoclark/parcel-optimizer-userscript":"^0.0.2","@eslint/js":"^9.8.0","@parcel/packager-ts":"^2.8.3","@parcel/transformer-typescript-types":"^2.8.3","@tsconfig/recommended":"^1.0.2","@types/file-saver":"^2.0.5","@types/lodash":"^4.14.191","@types/node":"^22.7.4","@typescript-eslint/eslint-plugin":"^8.0.0","@typescript-eslint/parser":"^8.0.0","@violentmonkey/types":"^0.1.5","@vitest/coverage-v8":"^2.0.5","eslint":"^9.8.0","eslint-plugin-n":"^17.10.1","eslint-plugin-promise":"^7.0.0","globals":"^15.9.0","happy-dom":"^10.3.2","parcel":"^2.8.3","prettier":"^2.8.4","prettier-plugin-organize-imports":"^3.2.2","rollup-plugin-cleanup":"^3.2.1","typescript":"^4.9.5","typescript-eslint":"^8.0.0","vitest":"^2.0.5"},"dependencies":{"@violentmonkey/url":"^0.1.0","@zip.js/zip.js":"^2.6.63","file-saver":"^2.0.5","html2canvas":"^1.4.1","lodash":"^4.17.21","ts-brand":"^0.2.0","wazip":"^0.1.0","zod":"^3.23.8"}}');
+$39e7bd012fbaed99$exports = JSON.parse('{"name":"civitai_prompt_scraper","browserslist":"> 5%, last 1 versions, not dead","version":"1.2.30","description":"","source":"src/prompt_scraper.user.ts","browser ":"dist/prompt_scraper.user.js","targets":{"default":{"context":"browser","sourceMap":false,"includeNodeModules":true,"optimize":true}},"scripts":{"type-check":"tsc --noEmit","lint":"eslint","format":"prettier --write .","watch":"parcel watch","build":"rm -rf .parcel-cache/*; parcel build; zip -v -j ./dist/prompt_scraper.zip ./dist/prompt_scraper.user.js","clean":"rm ./dist/*","test":"vitest --dom","coverage":"vitest --coverage --run","check":"tsc --noEmit","civitai":"node ./src/cli.js"},"author":"Watanabe, Shunsuke","license":"MIT","devDependencies":{"@damoclark/parcel-optimizer-userscript":"^0.0.2","@eslint/js":"^9.8.0","@parcel/packager-ts":"^2.8.3","@parcel/transformer-typescript-types":"^2.8.3","@playwright/test":"^1.51.1","@tsconfig/recommended":"^1.0.2","@types/file-saver":"^2.0.5","@types/lodash":"^4.14.191","@types/node":"^22.7.4","@typescript-eslint/eslint-plugin":"^8.0.0","@typescript-eslint/parser":"^8.0.0","@violentmonkey/types":"^0.1.5","@vitest/coverage-v8":"^2.0.5","eslint":"^9.8.0","eslint-plugin-n":"^17.10.1","eslint-plugin-promise":"^7.0.0","globals":"^15.9.0","happy-dom":"^10.3.2","parcel":"^2.8.3","prettier":"^2.8.4","prettier-plugin-organize-imports":"^3.2.2","rollup-plugin-cleanup":"^3.2.1","typescript":"^4.9.5","typescript-eslint":"^8.0.0","vitest":"^2.0.5"},"dependencies":{"@violentmonkey/url":"^0.1.0","@zip.js/zip.js":"^2.6.63","file-saver":"^2.0.5","html2canvas":"^1.4.1","lodash":"^4.17.21","puppeteer":"^24.4.0","ts-brand":"^0.2.0","tsx":"^4.19.3","wazip":"^0.1.0","zod":"^3.23.8"}}');
 
 
 const $81ffdad4556cbf55$export$bef1f36f5486a6a3 = (...xs)=>{
     console.log(`${(0, (/*@__PURE__*/$parcel$interopDefault($39e7bd012fbaed99$exports))).name}:`, ...xs);
 };
 const $81ffdad4556cbf55$export$e772c8ff12451969 = (ms = 1000)=>new Promise((resolve)=>setTimeout(()=>resolve(true), ms));
-const $81ffdad4556cbf55$export$f922ebe57f2c36e8 = (xs, chunkSize = 10)=>xs.reduce((acc, curr)=>{
+const $81ffdad4556cbf55$export$f922ebe57f2c36e8 = (xs, chunkSize = 50)=>xs.reduce((acc, curr)=>{
         const tail = acc.pop() ?? [];
         if (tail.length < chunkSize) {
             tail.push(curr);
@@ -13005,46 +13006,47 @@ const $c3454b9ab01d445e$export$769102d94f147e19 = async (modelId, modelVersionId
     const modelInfo = await $c3454b9ab01d445e$export$998f418383804028(id);
     return modelInfo;
 };
-const $c3454b9ab01d445e$var$RETRY_LIMIT = 10;
-const $c3454b9ab01d445e$export$c6ace8a485846f08 = async (modelId, postId, modelVersionId, limit, nextCursor, retry = 0)=>{
-    (0, $81ffdad4556cbf55$export$e772c8ff12451969)(1000);
-    // エラーのリトライおよび、カーソルをたどるのは10回までにする
-    if (retry > $c3454b9ab01d445e$var$RETRY_LIMIT - 1) {
-        if (!nextCursor) // エラーリトライの場合はエラーをスロー
-        throw new Error(` API returns error.`);
-        return [];
-    }
-    let url = `${$c3454b9ab01d445e$var$API_URL}/images`;
-    const params = [
-        "sort=Most%20Reactions&nsfw=X&withMeta=true"
-    ];
-    if (limit) params.push(`limit=${limit}`);
-    if (postId) params.push(`postId=${postId}`);
-    if (modelId) params.push(`modelId=${modelId}`);
-    if (modelVersionId) params.push(`modelVersionId=${modelVersionId}`);
-    if (nextCursor) params.push(`cursor=${nextCursor}`);
-    // 2024.07.09 usernameをつけるとエラーになるのでコメントアウト
-    // if (username) {
-    //   params.push(`username=${username}`);
-    // }
-    if (params.length > 0) url = `${url}?${params.join("&")}`;
-    const response = await fetch(url, {
-        method: "GET",
-        headers: $c3454b9ab01d445e$var$HEADERS
-    });
-    // エラーの場合はリトライ
-    if (response.status >= 400) {
-        console.log(` ${response.status} ${response.statusText}`);
-        return $c3454b9ab01d445e$export$c6ace8a485846f08(modelId, postId, modelVersionId, limit, undefined, retry + 1);
-    }
-    const data = await response.json();
-    // 次ページのカーソルがある場合は再帰呼び出し
-    if (data.metadata.nextCursor) return [
-        ...data.items,
-        ...await $c3454b9ab01d445e$export$c6ace8a485846f08(modelId, postId, modelVersionId, limit, data.metadata.nextCursor, retry + 1)
-    ];
-    return data.items;
-};
+const $c3454b9ab01d445e$var$RETRY_LIMIT = 100;
+const $c3454b9ab01d445e$export$c6ace8a485846f08 = (onProgressFn)=>async (modelId, postId, modelVersionId, limit = 200, nextCursor, retry = 0)=>{
+        (0, $81ffdad4556cbf55$export$e772c8ff12451969)(1000);
+        // エラーのリトライおよび、カーソルをたどるのは10回までにする
+        if (retry > $c3454b9ab01d445e$var$RETRY_LIMIT - 1) {
+            if (!nextCursor) // エラーリトライの場合はエラーをスロー
+            throw new Error(` API returns error.`);
+            return [];
+        }
+        let url = `${$c3454b9ab01d445e$var$API_URL}/images`;
+        const params = [
+            "sort=Most%20Reactions&nsfw=X&withMeta=true"
+        ];
+        if (limit) params.push(`limit=${limit}`);
+        if (postId) params.push(`postId=${postId}`);
+        if (modelId) params.push(`modelId=${modelId}`);
+        if (modelVersionId) params.push(`modelVersionId=${modelVersionId}`);
+        if (nextCursor) params.push(`cursor=${nextCursor}`);
+        // 2024.07.09 usernameをつけるとエラーになるのでコメントアウト
+        // if (username) {
+        //   params.push(`username=${username}`);
+        // }
+        if (params.length > 0) url = `${url}?${params.join("&")}`;
+        if (onProgressFn) onProgressFn(`calling API ${retry + 1} / ${$c3454b9ab01d445e$var$RETRY_LIMIT}`);
+        const response = await fetch(url, {
+            method: "GET",
+            headers: $c3454b9ab01d445e$var$HEADERS
+        });
+        // エラーの場合はリトライ
+        if (response.status >= 400) {
+            console.log(` ${response.status} ${response.statusText}`);
+            return $c3454b9ab01d445e$export$c6ace8a485846f08(onProgressFn)(modelId, postId, modelVersionId, limit, undefined, response.status > 500 ? retry : retry + 1);
+        }
+        const data = await response.json();
+        // 次ページのカーソルがある場合は再帰呼び出し
+        if (data.metadata.nextCursor) return [
+            ...data.items,
+            ...await $c3454b9ab01d445e$export$c6ace8a485846f08(onProgressFn)(modelId, postId, modelVersionId, limit, data.metadata.nextCursor, retry + 1)
+        ];
+        return data.items;
+    };
 const $c3454b9ab01d445e$export$2ab75dd31a3868f2 = async (url, retried = 0)=>{
     const parsedNum = Number((0, $2e4159cc418f5166$export$44487a86467333c3)("networkRequestTimeout")) && 10;
     const timeoutInSecs = Number.isNaN(parsedNum) ? 10 : parsedNum;
@@ -13095,11 +13097,15 @@ const $c3454b9ab01d445e$export$e9e7897c93aa9943 = (zipWriter, addedNames)=>async
         }));
 
 
-const $c5da2b8a14082d8b$export$b6bc24646229cedd = (buttnTextUpdateFn)=>(zipFilename, modelInfo)=>async (imgInfo, chunkSize = 20)=>{
+const $c5da2b8a14082d8b$export$b6bc24646229cedd = (buttnTextUpdateFn)=>(zipFilename, modelInfo)=>async (imgInfo)=>{
             if (!modelInfo && imgInfo.length === 0) return;
             const blobWriter = new (0, $53e25169918aa98b$export$b1948fceba813858)(`application/zip`);
             const zipWriter = new (0, $183a0115a003f583$export$50f5658480930b4c)(blobWriter);
             if (modelInfo) await zipWriter.add("model_info.json", new (0, $53e25169918aa98b$export$43d3fd7deddee00)(JSON.stringify(modelInfo, null, "	")));
+            let chunkSize = 5;
+            if (50 < imgInfo.length && imgInfo.length <= 200) chunkSize = 10;
+            if (200 < imgInfo.length && imgInfo.length <= 400) chunkSize = 20;
+            if (imgInfo.length > 400) chunkSize = 50;
             const addedNames = new Set();
             const predicate = (0, $c3454b9ab01d445e$export$e9e7897c93aa9943)(zipWriter, addedNames);
             let counter = 0;
@@ -13439,7 +13445,7 @@ const $06cbd27ebbbf5f2a$export$28c3d59206bcbe2d = ()=>{
 const $06cbd27ebbbf5f2a$export$4a2d37b006372286 = async ()=>{
     return $06cbd27ebbbf5f2a$export$1a1c301579a08d1e(`#${$06cbd27ebbbf5f2a$var$BUTTON_CONTAINER_ID}`);
 };
-const $06cbd27ebbbf5f2a$var$GALLERY_HIDDEN_HIGHT = "100px";
+const $06cbd27ebbbf5f2a$var$GALLERY_HIDDEN_HIGHT = "100px"; // ギャラリー最初の一列くらいを見えるようにする
 const $06cbd27ebbbf5f2a$export$3ff3f28c173b1fa2 = (e)=>{
     const el = e.target;
     const g = (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)("#gallery");
@@ -13580,12 +13586,12 @@ const $90c9ab75e73296e8$export$a6b8506fb01f18d6 = async (href)=>{
         hrefModelVersionId: hrefModelVersionId
     };
 };
-const $90c9ab75e73296e8$export$b2255cc49c3941e4 = async (href)=>{
+const $90c9ab75e73296e8$export$b2255cc49c3941e4 = async (href, updateTextFn)=>{
     const { modelId: modelId, modelName: modelName, modelVersionId: modelVersionId, modelVersionName: modelVersionName, modelVersions: modelVersions, modelInfo: modelInfo, hrefModelVersionId: hrefModelVersionId } = await $90c9ab75e73296e8$export$a6b8506fb01f18d6(href);
     const modelVersion = modelVersions.length === 1 ? modelVersions[0] : modelVersions?.find((x)=>x.id.toString() === hrefModelVersionId);
     // NOTE: modelVersion.imagesにはimage.metaがない
     const modelImages = modelVersion?.images ?? [];
-    const galleryImageList = await (0, $c3454b9ab01d445e$export$c6ace8a485846f08)(`${modelId}`, null, `${modelVersionId}`, 200);
+    const galleryImageList = await (0, $c3454b9ab01d445e$export$c6ace8a485846f08)(updateTextFn)(`${modelId}`, null, `${modelVersionId}`);
     // NOTE: 通常プレビュー画像もギャラリーに含まれているので、
     // 画像のダウンロードはギャラリー画像を優先する。
     // (modelVersion.imagesにはmetaがないので、ギャラリーデータがある場合はそちらのほうがよい
@@ -13613,7 +13619,7 @@ const $90c9ab75e73296e8$export$53039d7a8d9d297e = (buttonIdSelector, location)=>
             const button = await (0, $06cbd27ebbbf5f2a$export$1a1c301579a08d1e)(buttonIdSelector);
             if (!button) throw new Error("downloadImagesAndPrompts: button not found");
             button.innerText = (0, $3a42d740ecc81982$export$731a191155ffa90a)("startingDownload");
-            const { modelId: modelId, modelName: modelName, imageList: imageList, modelVersionId: modelVersionId, modelVersionName: modelVersionName, modelInfo: modelInfo } = await $90c9ab75e73296e8$export$b2255cc49c3941e4(location);
+            const { modelId: modelId, modelName: modelName, imageList: imageList, modelVersionId: modelVersionId, modelVersionName: modelVersionName, modelInfo: modelInfo } = await $90c9ab75e73296e8$export$b2255cc49c3941e4(location, (0, $06cbd27ebbbf5f2a$export$bb64a7e3f0f28938)(button));
             const filenameFormat = (0, $2e4159cc418f5166$export$44487a86467333c3)("modelPreviewFilenameFormat");
             const filename = filenameFormat.replace("{modelId}", `${modelId ?? ""}`).replace("{modelName}", modelName).replace("{modelVersionId}", `${modelVersionId}`).replace("{modelVersionName}", modelVersionName);
             await (0, $c5da2b8a14082d8b$export$b6bc24646229cedd)((0, $06cbd27ebbbf5f2a$export$bb64a7e3f0f28938)(button))(filename, modelInfo)(imageList);
@@ -13644,11 +13650,12 @@ const $90c9ab75e73296e8$export$8b03a564a450b487 = async (href)=>{
 
 
 
+
 const $32b5bff137232fe2$var$BUTTON_ID = "download-all-gallery-images-and-prompts";
-const $32b5bff137232fe2$export$8de192c3bf30e00f = (modelId, modelVersionId, modelName, limit = 200, downLoadedImgList, onProgressFn, onFinishFn)=>async ()=>{
-        console.log("download200GalleryImagesAndPrompts: start");
+const $32b5bff137232fe2$export$9473b35530fb3701 = (modelId, modelVersionId, modelName, downLoadedImgList, onProgressFn, onFinishFn)=>async ()=>{
+        console.log("downloadGalleryImagesAndPrompts: start");
         try {
-            const _imgList = await (0, $c3454b9ab01d445e$export$c6ace8a485846f08)(modelId, null, modelVersionId, limit);
+            const _imgList = await (0, $c3454b9ab01d445e$export$c6ace8a485846f08)(onProgressFn)(modelId, null, modelVersionId);
             // exclude downloaded images
             const downloadedImgIds = downLoadedImgList?.map((x)=>x.id ?? "modelimage does not have id") ?? [];
             const imgList = _imgList.filter(({ id: id })=>!downloadedImgIds.includes(id));
@@ -13657,18 +13664,21 @@ const $32b5bff137232fe2$export$8de192c3bf30e00f = (modelId, modelVersionId, mode
             await (0, $c5da2b8a14082d8b$export$b6bc24646229cedd)(onProgressFn ?? (()=>{
             /** noop **/ }))(filename)(imgList);
             if (onFinishFn) onFinishFn(imgList.length);
+            (0, $98f6748fc1e9fd4e$export$420a7f2fd9cad6f6)("\u2705 " + (0, $98f6748fc1e9fd4e$export$70d1bf7729efff40)());
         } catch (error) {
             (0, $98f6748fc1e9fd4e$export$ac4c88d4d5b56a92)(error.message);
         }
     };
 const $32b5bff137232fe2$export$5fd187c0d03a79e = async (href)=>{
+    const oldButton = await (0, $06cbd27ebbbf5f2a$export$1a1c301579a08d1e)(`#${$32b5bff137232fe2$var$BUTTON_ID}`, 1);
+    if (oldButton) oldButton.remove();
     if (!(0, $98f6748fc1e9fd4e$export$aea217a45095ce11)("#gallery")) {
         // throw new Error('#gallery not found');
         console.log("#gallery not found");
+        await (0, $81ffdad4556cbf55$export$e772c8ff12451969)(100);
         await $32b5bff137232fe2$export$5fd187c0d03a79e(href);
         return;
     }
-    if ((0, $98f6748fc1e9fd4e$export$aea217a45095ce11)($32b5bff137232fe2$var$BUTTON_ID)) return;
     const { modelId: modelId, modelName: modelName, modelVersionId: // imageList,
     modelVersionId } = await (0, $90c9ab75e73296e8$export$a6b8506fb01f18d6)(href);
     const button = (0, $98f6748fc1e9fd4e$export$cdda5b1be25f9499)($32b5bff137232fe2$var$BUTTON_ID, (0, $b7e86ce3c5d2c83d$export$f272ae7639e11e3), (0, $3a42d740ecc81982$export$d397f86d22f413e8)());
@@ -13679,17 +13689,13 @@ const $32b5bff137232fe2$export$5fd187c0d03a79e = async (href)=>{
         };
     const eventListener = async (e)=>{
         e.preventDefault();
-        if (modelId && modelVersionId) return await $32b5bff137232fe2$export$8de192c3bf30e00f(modelId.toString(), modelVersionId.toString(), modelName, 200, [], (0, $06cbd27ebbbf5f2a$export$bb64a7e3f0f28938)(button), onFinishFn(button))();
+        if (modelId && modelVersionId) return await $32b5bff137232fe2$export$9473b35530fb3701(modelId.toString(), modelVersionId.toString(), modelName, [], (0, $06cbd27ebbbf5f2a$export$bb64a7e3f0f28938)(button), onFinishFn(button))();
         return null;
     };
     if (!eventListener) throw new Error("No necessary parameters found");
     button.addEventListener("click", eventListener);
-    const h2 = await (0, $06cbd27ebbbf5f2a$export$1a1c301579a08d1e)("#gallery h2");
-    if (h2) {
-        const oldButton = await (0, $06cbd27ebbbf5f2a$export$1a1c301579a08d1e)(`#${$32b5bff137232fe2$var$BUTTON_ID}`, 1);
-        if (oldButton) oldButton.remove();
-        h2.parentNode?.appendChild(button);
-    }
+    const h2 = await (0, $06cbd27ebbbf5f2a$export$1a1c301579a08d1e)("#gallery h2", 1);
+    if (h2) h2.parentNode?.appendChild(button);
     if ((0, $2e4159cc418f5166$export$44487a86467333c3)("galleryAutoDownload") && button.getAttribute("data-state") === (0, $c08fa57dad1b6e82$export$5d7ba7f5550f99d1).ready) setTimeout(()=>{
         button.click();
     }, 500);
@@ -13904,11 +13910,11 @@ const $ca465a359cd2bf87$var$observer = new MutationObserver(async ()=>{
     }
 });
 const $ca465a359cd2bf87$var$run = async ()=>{
-    (0, $6123356ea5e91e3d$export$335d1054b4853621)();
     $ca465a359cd2bf87$var$openShowMore();
     await $ca465a359cd2bf87$var$addDownloadAllButton();
     // await addModelPreviewDownloadButton();
     await $ca465a359cd2bf87$var$addGalleryImageDownloadButton();
+    (0, $6123356ea5e91e3d$export$335d1054b4853621)();
 };
 async function $ca465a359cd2bf87$export$2e2bcd8739ae039() {
     $ca465a359cd2bf87$var$prevHref = window.location.href;

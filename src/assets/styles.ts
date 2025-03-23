@@ -57,6 +57,7 @@ export const galleryButtonStyle = `
   ${buttonStyle}
   margin: 0 12px;
   width: auto;
+  overflow:hidden;
 `;
 
 export const galleryDisabledButtonStyle = `

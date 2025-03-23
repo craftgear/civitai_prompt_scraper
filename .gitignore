@@ -1,5 +1,6 @@
 dist/*
 test.ts
+.env
 
 # Logs
 logs
@@ -130,3 +131,9 @@ out
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

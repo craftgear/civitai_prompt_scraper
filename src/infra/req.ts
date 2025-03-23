@@ -70,87 +70,94 @@ export const fetchModelInfoByModleIdOrModelVersionId = async (
   return modelInfo;
 };
 
-const RETRY_LIMIT = 10;
-export const fetchGalleryData = async (
-  modelId?: string | null,
-  postId?: string | null,
-  modelVersionId?: string | null,
-  limit?: number,
-  nextCursor?: string,
-  retry = 0
-): Promise<GalleryImagesResponse['items']> => {
-  sleep(1000);
-  // エラーのリトライおよび、カーソルをたどるのは10回までにする
-  if (retry > RETRY_LIMIT - 1) {
-    if (!nextCursor) {
-      // エラーリトライの場合はエラーをスロー
-      throw new Error(` API returns error.`);
+const RETRY_LIMIT = 100;
+export const fetchGalleryData =
+  (onProgressFn?: (text: string) => void) =>
+  async (
+    modelId?: string | null,
+    postId?: string | null,
+    modelVersionId?: string | null,
+    limit = 200,
+    nextCursor?: string,
+    retry = 0
+  ): Promise<GalleryImagesResponse['items']> => {
+    sleep(1000);
+    // エラーのリトライおよび、カーソルをたどるのは10回までにする
+    if (retry > RETRY_LIMIT - 1) {
+      if (!nextCursor) {
+        // エラーリトライの場合はエラーをスロー
+        throw new Error(` API returns error.`);
+      }
+      return [];
     }
-    return [];
-  }
 
-  let url = `${API_URL}/images`;
-  const params = ['sort=Most%20Reactions&nsfw=X&withMeta=true'];
+    let url = `${API_URL}/images`;
+    const params = ['sort=Most%20Reactions&nsfw=X&withMeta=true'];
 
-  if (limit) {
-    params.push(`limit=${limit}`);
-  }
-  if (postId) {
-    params.push(`postId=${postId}`);
-  }
-  if (modelId) {
-    params.push(`modelId=${modelId}`);
-  }
-  if (modelVersionId) {
-    params.push(`modelVersionId=${modelVersionId}`);
-  }
-  if (nextCursor) {
-    params.push(`cursor=${nextCursor}`);
-  }
-  // 2024.07.09 usernameをつけるとエラーになるのでコメントアウト
-  // if (username) {
-  //   params.push(`username=${username}`);
-  // }
+    if (limit) {
+      params.push(`limit=${limit}`);
+    }
+    if (postId) {
+      params.push(`postId=${postId}`);
+    }
+    if (modelId) {
+      params.push(`modelId=${modelId}`);
+    }
+    if (modelVersionId) {
+      params.push(`modelVersionId=${modelVersionId}`);
+    }
+    if (nextCursor) {
+      params.push(`cursor=${nextCursor}`);
+    }
+    // 2024.07.09 usernameをつけるとエラーになるのでコメントアウト
+    // if (username) {
+    //   params.push(`username=${username}`);
+    // }
 
-  if (params.length > 0) {
-    url = `${url}?${params.join('&')}`;
-  }
+    if (params.length > 0) {
+      url = `${url}?${params.join('&')}`;
+    }
 
-  const response = await fetch(url, {
-    method: 'GET',
-    headers: HEADERS,
-  });
+    if (onProgressFn) {
+      onProgressFn(`calling API ${retry + 1} / ${RETRY_LIMIT}`);
+    }
 
-  // エラーの場合はリトライ
-  if (response.status >= 400) {
-    console.log(` ${response.status} ${response.statusText}`);
-    return fetchGalleryData(
-      modelId,
-      postId,
-      modelVersionId,
-      limit,
-      undefined,
-      retry + 1
-    );
-  }
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: HEADERS,
+      // signal: AbortSignal.timeout(5000),
+    });
 
-  const data = (await response.json()) as GalleryImagesResponse;
-  // 次ページのカーソルがある場合は再帰呼び出し
-  if (data.metadata.nextCursor) {
-    return [
-      ...data.items,
-      ...(await fetchGalleryData(
+    // エラーの場合はリトライ
+    if (response.status >= 400) {
+      console.log(` ${response.status} ${response.statusText}`);
+      return fetchGalleryData(onProgressFn)(
         modelId,
         postId,
         modelVersionId,
         limit,
-        data.metadata.nextCursor,
-        retry + 1
-      )),
-    ];
-  }
-  return data.items;
-};
+        undefined,
+        response.status > 500 ? retry : retry + 1
+      );
+    }
+
+    const data = (await response.json()) as GalleryImagesResponse;
+    // 次ページのカーソルがある場合は再帰呼び出し
+    if (data.metadata.nextCursor) {
+      return [
+        ...data.items,
+        ...(await fetchGalleryData(onProgressFn)(
+          modelId,
+          postId,
+          modelVersionId,
+          limit,
+          data.metadata.nextCursor,
+          retry + 1
+        )),
+      ];
+    }
+    return data.items;
+  };
 
 export const fetchImg = async (
   url: string,
