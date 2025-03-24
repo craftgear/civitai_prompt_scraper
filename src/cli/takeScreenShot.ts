@@ -1,3 +1,4 @@
+import os from 'node:os';
 import path from 'node:path';
 import type { Page } from 'puppeteer';
 import puppeteer from 'puppeteer';
@@ -9,7 +10,7 @@ export const takeScreenShot = async (
 ): Promise<[string, string, string]> => {
   // Launch the browser
   const browser = await puppeteer.launch({
-    userDataDir: path.join(downloadDir, './.puppeteer_user_data'),
+    userDataDir: path.join(os.homedir(), './.puppeteer_user_data'),
   });
   try {
     const page = await browser.newPage();

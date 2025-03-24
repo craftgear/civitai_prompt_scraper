@@ -2,6 +2,7 @@ import { spawnSync } from 'node:child_process';
 
 export const downloadModel = (url: string, downloadDir: string) => {
   console.log('----- start downloading model');
+  const token = process.env.TOKEN;
   return new Promise((resolve) => {
     spawnSync(
       'wget',
@@ -13,7 +14,7 @@ export const downloadModel = (url: string, downloadDir: string) => {
         '--waitretry=60',
         '--tries=100',
         '--no-http-keep-alive',
-        `https://civitai.com${url}&token=6faaa72e4d1575ccc0e49f2f29807552`,
+        `https://civitai.com${url}&token=${token}`,
       ],
       {
         cwd: downloadDir,

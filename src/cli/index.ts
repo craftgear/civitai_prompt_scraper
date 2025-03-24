@@ -5,7 +5,6 @@
 // 5. トレーングデータダウンロード
 //
 import 'dotenv/config';
-import _ from 'lodash';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -17,7 +16,7 @@ const DOWNLOAD_DIR = path.join(os.homedir(), '/mydata/Downloads/');
 
 const main = async () => {
   const url = process.argv.pop();
-  if (!url) {
+  if (!url || !url.startsWith('https://civitai.com/models/')) {
     console.log('need one argument: a url');
     return;
   }
