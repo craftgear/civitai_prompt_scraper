@@ -1,7 +1,7 @@
 import { spawnSync } from 'node:child_process';
 
 export const downloadModel = (url: string, downloadDir: string) => {
-  console.log('----- start downloading model');
+  process.stdout.write(`* start downloading model\r`);
   const token = process.env.TOKEN;
   return new Promise((resolve) => {
     spawnSync(

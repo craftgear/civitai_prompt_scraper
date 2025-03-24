@@ -67,7 +67,7 @@ export const downloadImages = async (url: string, dir: string) => {
       );
       await predicate(xs);
     } catch (e: unknown) {
-      console.log('error: ', (e as Error).message);
+      console.error('error: ', (e as Error).message);
       throw e;
     }
     count += 1;

@@ -17,7 +17,7 @@ const DOWNLOAD_DIR = path.join(os.homedir(), '/mydata/Downloads/');
 const main = async () => {
   const url = process.argv.pop();
   if (!url || !url.startsWith('https://civitai.com/models/')) {
-    console.log('need one argument: a url');
+    console.error('need one argument: a url');
     return;
   }
   let dir = '';
@@ -33,7 +33,6 @@ const main = async () => {
       );
     }
     console.log('----- pageTitle', pageTitle);
-    console.log('----- modelDownloadHref', modelDownloadHref);
     if (!modelDownloadHref) {
       throw new Error('modelDownloadHref is not found');
     }

@@ -62,7 +62,11 @@ export const takeScreenShot = async (
       'a[type="button"][href^="/api"]',
       (el) => el[0].getAttribute('href')
     );
-    console.log('----- modelDownloadHref', modelDownloadHref);
+    if (!modelDownloadHref) {
+      throw new Error(
+        'model download href is not found, cannot download the model.'
+      );
+    }
     const pageTitle = (await page.title())
       .replaceAll('|', '-')
       .replaceAll(/[<>\\/.*?"|]/g, '')
@@ -89,7 +93,6 @@ const screenshot = async (
   const bodyHeight = await page.evaluate(() => {
     return document.body.scrollHeight;
   });
-  console.log('----- bodyHeight', bodyHeight);
   const filename = path.join(downloadDir, `${filenameBase}.jpg`);
   await page.setViewport({
     width: 1050,
@@ -197,6 +200,7 @@ const evalInsideBrowser = async () => {
   };
 
   const enableFullScreenCapture = () => {
+    // XXX: 'main > div > div' で30秒タイムアウトすることがある
     const highestElement = document.querySelector('main > div > div');
     if (highestElement) {
       document
