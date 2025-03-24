@@ -24,7 +24,7 @@
     "test": "vitest --dom",
     "coverage": "vitest --coverage --run",
     "check": "tsc --noEmit",
-    "civitai": "tsx ./src/cli.ts"
+    "civitai": "tsx ./src/cli/index.ts"
   },
   "author": "Watanabe, Shunsuke",
   "license": "MIT",

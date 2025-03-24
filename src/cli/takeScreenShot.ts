@@ -1,20 +1,113 @@
-// 1. playwrightでスクショ
-// 2. ディレクトリを作って保存
-// 3. モデルダウンロード
-// 4. 画像ダウンロード
-// 5. トレーングデータダウンロード
-//
-import 'dotenv/config';
-import os from 'node:os';
 import path from 'node:path';
 import type { Page } from 'puppeteer';
 import puppeteer from 'puppeteer';
-import { sleep } from './utils/utils';
+import { sleep } from '../utils/utils';
 
-const DOWNLOAD_DIR = path.join(os.homedir(), '/mydata/Downloads/');
+export const takeScreenShot = async (
+  downloadDir: string,
+  url: string
+): Promise<[string, string, string]> => {
+  // Launch the browser
+  const browser = await puppeteer.launch({
+    userDataDir: path.join(downloadDir, './.puppeteer_user_data'),
+  });
+  try {
+    const page = await browser.newPage();
+
+    // XXX: ログインは初回のみ必要
+    // 2. メールで受け取ったリンクを表示
+    // await page.goto( 'https://civitai.com/api/auth/callback/email?callbackUrl=https%3A%2F%2Fcivitai.com%2F&token=ee929d298251e004f6d0e9e533c8a906fe84b0d7e76e40153bbc765e18b232af&email=craftgear%40gmail.com');
+    // return;
+    //
+    // 1. ログイン実行
+    // const username = process.env.USERNAME;
+    // if (!username) {
+    //   console.log('no userename');
+    //   return;
+    // }
+    // await page.goto('https://civitai.com/login');
+    // await page.setViewport({
+    //   width: 1600,
+    //   height: 1920,
+    // });
+    // await page.locator('input[type="email"]').fill(username);
+    // const loginButton = page.locator('button[type="submit"]');
+    // await loginButton.click();
+    // return;
+
+    await page.goto(url);
+    await page.waitForSelector('main > div > div');
+
+    // NOTE:ライトモードに切り替え
+    // await page.$eval('button[aria-haspopup="dialog"] svg.tabler-icon-bolt', (el) => el.click());
+    // await page.locator('button svg.tabler-icon-sun').click();
+    // sleep();
+    // NOTE: フィルタ適用
+    // await page.$eval(
+    //   '#mantine-R1lpbaj3qb6-target',
+    //   (el) => (el.parentNode as HTMLElement).click()
+    // );
+    // await screenshot(page, 'fuga');
+    // await page.$eval(
+    //   'div.mantine-Checkbox-root:nth-child(1) > div:nth-child(1) > div:nth-child(2) > label:nth-child(1) > div:nth-child(1)',
+    //   (el) => el.click()
+    // );
+    // await page.$eval('input[type="checkbox"][]', (el) => el.click());
+    // await screenshot(page, 'fuga2');
+
+    // Evaluate JavaScript
+    await page.evaluate(evalInsideBrowser);
+    const modelDownloadHref = await page.$$eval(
+      'a[type="button"][href^="/api"]',
+      (el) => el[0].getAttribute('href')
+    );
+    console.log('----- modelDownloadHref', modelDownloadHref);
+    const pageTitle = (await page.title())
+      .replaceAll('|', '-')
+      .replaceAll(/[<>\\/.*?"|]/g, '')
+      .replace('Civitai', '')
+      .trim()
+      .slice(0, -1)
+      .trim();
+    const fullPathFilename = await screenshot(page, pageTitle, downloadDir);
+    return [pageTitle, fullPathFilename, modelDownloadHref];
+  } catch (e) {
+    console.error(e);
+    throw e;
+  } finally {
+    await browser.close();
+  }
+};
+
+const screenshot = async (
+  page: Page,
+  filenameBase: string,
+  downloadDir: string
+): Promise<string> => {
+  await sleep(1000);
+  const bodyHeight = await page.evaluate(() => {
+    return document.body.scrollHeight;
+  });
+  console.log('----- bodyHeight', bodyHeight);
+  const filename = path.join(downloadDir, `${filenameBase}.jpg`);
+  await page.setViewport({
+    width: 1050,
+    height: bodyHeight,
+    deviceScaleFactor: 2,
+  });
+  await page.screenshot({
+    path: filename,
+    type: 'jpeg',
+    fullPage: true,
+    captureBeyondViewport: true,
+    fromSurface: true,
+  });
+  return filename;
+};
 
 // NOTE: puppeteer 内のDOMで実行されるので、関数定義もすべてこの中で行う必要がある
 const evalInsideBrowser = async () => {
+  // XXX: tsxのエラー回避
   // eslint-disable-next-line
   (window as any).__name = (func: Function) => func;
 
@@ -150,103 +243,3 @@ const evalInsideBrowser = async () => {
   enableFullScreenCapture();
   darkenTextColor();
 };
-
-const screenshot = async (page: Page, filenameBase: string) => {
-  await sleep(1000);
-  const bodyHeight = await page.evaluate(() => {
-    return document.body.scrollHeight;
-  });
-  console.log('----- bodyHeight', bodyHeight);
-  await page.setViewport({
-    width: 1050,
-    height: bodyHeight,
-    deviceScaleFactor: 2,
-  });
-  await page.screenshot({
-    path: path.join(DOWNLOAD_DIR, `${filenameBase}.jpg`),
-    type: 'jpeg',
-    fullPage: true,
-    captureBeyondViewport: true,
-    fromSurface: true,
-  });
-};
-
-const takeScreenShot = async () => {
-  const url = process.argv.pop();
-  if (!url) {
-    console.log('need one argument: a url');
-    return;
-  }
-  const username = process.env.USERNAME;
-  if (!username) {
-    console.log('no userename');
-    return;
-  }
-  // Launch the browser
-  const browser = await puppeteer.launch({
-    userDataDir: path.join(DOWNLOAD_DIR, './.puppeteer_user_data'),
-  });
-  try {
-    const page = await browser.newPage();
-
-    // XXX: ログインは初回のみ必要
-    // await page.goto( 'https://civitai.com/api/auth/callback/email?callbackUrl=https%3A%2F%2Fcivitai.com%2F&token=ee929d298251e004f6d0e9e533c8a906fe84b0d7e76e40153bbc765e18b232af&email=craftgear%40gmail.com');
-    // await page.goto('https://civitai.com/login');
-    // await page.setViewport({
-    //   width: 1600,
-    //   height: 1920,
-    // });
-    // await page.locator('input[type="email"]').fill(username);
-    //
-    // const loginButton = page.locator('button[type="submit"]');
-    // await loginButton.click();
-    // return
-
-    await page.goto(url);
-    await page.waitForSelector('main > div > div');
-
-    // NOTE:ライトモードに切り替え
-    // await page.$eval('button[aria-haspopup="dialog"] svg.tabler-icon-bolt', (el) => el.click());
-    // await page.locator('button svg.tabler-icon-sun').click();
-    // sleep();
-    // NOTE: フィルタ適用
-    // await page.$eval(
-    //   '#mantine-R1lpbaj3qb6-target',
-    //   (el) => (el.parentNode as HTMLElement).click()
-    // );
-    // await screenshot(page, 'fuga');
-    // await page.$eval(
-    //   'div.mantine-Checkbox-root:nth-child(1) > div:nth-child(1) > div:nth-child(2) > label:nth-child(1) > div:nth-child(1)',
-    //   (el) => el.click()
-    // );
-    // await page.$eval('input[type="checkbox"][]', (el) => el.click());
-    // await screenshot(page, 'fuga2');
-
-    // Evaluate JavaScript
-    await page.evaluate(evalInsideBrowser);
-    const pageTitle = (await page.title())
-      .replaceAll('|', '-')
-      .replaceAll(/[<>\\/.*?"|]/g, '')
-      .replace('Civitai', '')
-      .trim();
-    await screenshot(page, pageTitle);
-    return pageTitle;
-  } catch (e) {
-    console.error(url);
-    console.error(e);
-    console.log('');
-  } finally {
-    await browser.close();
-  }
-};
-
-const main = async () => {
-  const pageTitle = await takeScreenShot();
-  console.log('----- pageTitle', pageTitle);
-  // TODO: ディレクトリ作成
-  // TODO: スクリーンショットをディレクトリに移動
-  // TODO: モデルダウンロード
-  // TODO: 画像とプロンプトダウンロード
-};
-
-main();

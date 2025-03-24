@@ -126,7 +126,9 @@ const startModelDownload = async (e: MouseEvent) => {
 export const downloadImagesAndPrompts =
   (buttonIdSelector: string, location: string) => async () => {
     try {
-      const button = await waitForElement(buttonIdSelector);
+      const button =
+        (await waitForElement(buttonIdSelector)) ??
+        document.createElement('div');
 
       if (!button) {
         throw new Error('downloadImagesAndPrompts: button not found');
