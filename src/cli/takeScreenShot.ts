@@ -39,6 +39,15 @@ export const takeScreenShot = async (
     await page.goto(url);
     await page.waitForSelector('main > div > div');
 
+    //check if 404
+    const isNotFound = await page.$eval(
+      'main > div > div  h1',
+      (el) => el.innerText
+    );
+    if (isNotFound === '404') {
+      throw new Error('404: The model was deleted.');
+    }
+
     // NOTE:ライトモードに切り替え
     // await page.$eval('button[aria-haspopup="dialog"] svg.tabler-icon-bolt', (el) => el.click());
     // await page.locator('button svg.tabler-icon-sun').click();
@@ -76,9 +85,6 @@ export const takeScreenShot = async (
       .trim();
     const fullPathFilename = await screenshot(page, pageTitle, downloadDir);
     return [pageTitle, fullPathFilename, modelDownloadHref];
-  } catch (e) {
-    console.error(e);
-    throw e;
   } finally {
     await browser.close();
   }

@@ -48,8 +48,9 @@ const main = async () => {
       await downloadTrainingData(trainingDataUrl, saveDir);
     }
   } catch (e) {
-    console.error(url);
+    console.error(styleText('red', url));
     console.error(e);
+  } finally {
     console.log('----------------------------');
   }
   if (!saveDir) {

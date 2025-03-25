@@ -28,7 +28,7 @@ export const downloadImages = async (url: string, dir: string) => {
     modelInfo,
     traningDataUrl,
   } = await getModelInfoAndImageList(url, (log: string) => {
-    console.log(log);
+    process.stdout.write(`${log}\r`);
   });
 
   const filenameFormat = '{modelName}[{modelId}]_{modelVersionId}';
@@ -61,21 +61,21 @@ export const downloadImages = async (url: string, dir: string) => {
     chunkSize = 50;
   }
 
-  let count = 1;
+  let count = 0;
   const addedNames = new Set<string>();
   const predicate = fetchImgs(zipWriter, addedNames);
   for (const xs of chunkArray(imageList, chunkSize)) {
+    count = count + xs.length;
     try {
-      console.log(`downloading ${count * xs.length}/${imageList.length}\r`);
+      process.stdout.write(`downloading ${count}/${imageList.length}\r`);
       await predicate(xs);
     } catch (e: unknown) {
       console.error('error: ', (e as Error).message);
       throw e;
     }
-    count += 1;
     await sleep(500);
   }
-  console.log('downloading images done.');
+  console.log(`downloaded ${imageList.length} images.`);
   const data = await (await zipWriter.close(undefined, {})).arrayBuffer();
   fs.writeFileSync(`${dir}/${filename}`, new Uint8Array(data));
 
