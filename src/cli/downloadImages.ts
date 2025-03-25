@@ -1,5 +1,6 @@
 import { BlobReader, BlobWriter, TextReader, ZipWriter } from '@zip.js/zip.js';
 import fs from 'node:fs';
+import { styleText } from 'node:util';
 import { optimizeUrl, unoptimizeUrl } from '../domain/logic';
 import type {
   GalleryImagesResponse,
@@ -16,6 +17,7 @@ const HEADERS = {
 };
 
 export const downloadImages = async (url: string, dir: string) => {
+  console.log(styleText('greenBright', 'start downloading images'));
   // TODO: 画像とプロンプトダウンロード
   const {
     modelId,
@@ -24,17 +26,19 @@ export const downloadImages = async (url: string, dir: string) => {
     modelVersionId,
     modelVersionName,
     modelInfo,
+    traningDataUrl,
   } = await getModelInfoAndImageList(url, (log: string) => {
     console.log(log);
   });
 
-  const filenameFormat = '{modelName}[{modelId}]_{modelVersionId}.zip';
-  const filename = (filenameFormat as string)
-    .replace('{modelId}', `${modelId ?? ''}`)
-    .replace('{modelName}', modelName)
-    .replace('{modelVersionId}', `${modelVersionId}`)
-    .replace('{modelVersionName}', modelVersionName)
-    .replaceAll(/[<>\\/.*?"|]/g, '');
+  const filenameFormat = '{modelName}[{modelId}]_{modelVersionId}';
+  const filename =
+    (filenameFormat as string)
+      .replace('{modelId}', `${modelId ?? ''}`)
+      .replace('{modelName}', modelName)
+      .replace('{modelVersionId}', `${modelVersionId}`)
+      .replace('{modelVersionName}', modelVersionName)
+      .replaceAll(/[<>\\/.*?"|]/g, '') + '.zip';
 
   const blobWriter = new BlobWriter(`application/zip`);
   const zipWriter = new ZipWriter(blobWriter);
@@ -62,9 +66,7 @@ export const downloadImages = async (url: string, dir: string) => {
   const predicate = fetchImgs(zipWriter, addedNames);
   for (const xs of chunkArray(imageList, chunkSize)) {
     try {
-      process.stdout.write(
-        `downloading ${count * xs.length}/${imageList.length}\r`
-      );
+      console.log(`downloading ${count * xs.length}/${imageList.length}\r`);
       await predicate(xs);
     } catch (e: unknown) {
       console.error('error: ', (e as Error).message);
@@ -73,10 +75,11 @@ export const downloadImages = async (url: string, dir: string) => {
     count += 1;
     await sleep(500);
   }
-
-  process.stdout.write(`\ndownloading done`);
+  console.log('downloading images done.');
   const data = await (await zipWriter.close(undefined, {})).arrayBuffer();
   fs.writeFileSync(`${dir}/${filename}`, new Uint8Array(data));
+
+  return traningDataUrl;
 };
 
 const fetchImg = async (
@@ -263,6 +266,10 @@ const getModelInfoAndImageList = async (
   // NOTE: modelVersion.imagesにはimage.metaがない
   const modelImages = modelVersion?.images ?? [];
 
+  const traningDataUrl = modelVersion?.files.find(
+    (x) => x.type === 'Training Data'
+  )?.downloadUrl;
+
   const galleryImageList = await fetchGalleryData(updateTextFn)(
     `${modelId}`,
     null,
@@ -289,6 +296,7 @@ const getModelInfoAndImageList = async (
     modelVersionName,
     imageList,
     modelInfo,
+    traningDataUrl,
   };
 };
 
