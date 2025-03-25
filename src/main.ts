@@ -69,11 +69,11 @@ const observer = new MutationObserver(async () => {
 });
 
 const run = async () => {
-  hideAndToggleGallery();
   openShowMore();
   await addDownloadAllButton();
   // await addModelPreviewDownloadButton();
   await addGalleryImageDownloadButton();
+  hideAndToggleGallery();
 };
 
 export default async function () {

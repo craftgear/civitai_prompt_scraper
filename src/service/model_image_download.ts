@@ -64,7 +64,10 @@ export const getModelInfo = async (href: string) => {
   };
 };
 
-export const getModelInfoAndImageList = async (href: string) => {
+export const getModelInfoAndImageList = async (
+  href: string,
+  updateTextFn: (text: string) => void
+) => {
   const {
     modelId,
     modelName,
@@ -82,11 +85,10 @@ export const getModelInfoAndImageList = async (href: string) => {
   // NOTE: modelVersion.imagesにはimage.metaがない
   const modelImages = modelVersion?.images ?? [];
 
-  const galleryImageList = await fetchGalleryData(
+  const galleryImageList = await fetchGalleryData(updateTextFn)(
     `${modelId}`,
     null,
-    `${modelVersionId}`,
-    200
+    `${modelVersionId}`
   );
 
   // NOTE: 通常プレビュー画像もギャラリーに含まれているので、
@@ -124,7 +126,9 @@ const startModelDownload = async (e: MouseEvent) => {
 export const downloadImagesAndPrompts =
   (buttonIdSelector: string, location: string) => async () => {
     try {
-      const button = await waitForElement(buttonIdSelector);
+      const button =
+        (await waitForElement(buttonIdSelector)) ??
+        document.createElement('div');
 
       if (!button) {
         throw new Error('downloadImagesAndPrompts: button not found');
@@ -139,7 +143,7 @@ export const downloadImagesAndPrompts =
         modelVersionId,
         modelVersionName,
         modelInfo,
-      } = await getModelInfoAndImageList(location);
+      } = await getModelInfoAndImageList(location, updateButtonText(button));
 
       const filenameFormat = getConfig('modelPreviewFilenameFormat');
       const filename = (filenameFormat as string)

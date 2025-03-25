@@ -106,7 +106,7 @@ export const getButtonContainerNode = async () => {
   return waitForElement(`#${BUTTON_CONTAINER_ID}`);
 };
 
-const GALLERY_HIDDEN_HIGHT = '100px';
+const GALLERY_HIDDEN_HIGHT = '100px'; // ギャラリー最初の一列くらいを見えるようにする
 export const toggleGallery = (e: unknown) => {
   const el = (e as PointerEvent).target as HTMLElement;
   const g: HTMLElement | null = selector('#gallery');
@@ -221,7 +221,6 @@ export const enableFullScreenCapture = () => {
   const modifyHeight = () => {
     const highestElement = selector('main > div > div');
     if (highestElement) {
-      // const newHeight = highestElement.clientHeight + 300;
       selector('html')?.setAttribute(
         'style',
         'overflow-y: auto; overflow-x: hidden;'
@@ -234,23 +233,25 @@ export const enableFullScreenCapture = () => {
       selector('main > div')?.setAttribute('style', 'overflow: hidden;');
       selector('.mantine-Container-root')?.setAttribute('style', 'margin: 0;');
     }
+    const newHeight = (highestElement?.clientHeight ?? 1920) + 300;
+    return newHeight;
   };
   document.addEventListener('focus', () => {
     modifyHeight();
   });
-  modifyHeight();
+  return modifyHeight();
 };
 
 export const scrollIntoView = (cssSelector: string) => {
   selector(cssSelector)?.scrollIntoView({ behavior: 'smooth' });
 };
 
-// export const hideHeader = () => {
-//   setTimeout(() => {
-//     selector('header')?.setAttribute('style', 'display: none;');
-//     selector('#main')?.setAttribute('style', 'padding-top: 1rem;');
-//   }, 500);
-// };
+export const hideHeader = () => {
+  setTimeout(() => {
+    selector('header')?.setAttribute('style', 'display: none;');
+    selector('#main')?.setAttribute('style', 'padding-top: 1rem;');
+  }, 500);
+};
 
 export function moveFileSizePanelUp() {
   setTimeout(() => {

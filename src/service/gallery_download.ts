@@ -2,6 +2,7 @@ import { getButtonCompleteLabel, getButtonLabel } from '../assets/lang';
 import { galleryButtonStyle } from '../assets/styles';
 import { ButtonState, GalleryImage, ModelImage } from '../domain/types';
 import { getModelInfo } from '../service/model_image_download';
+import { sleep } from '../utils/utils';
 
 import { getConfig } from '../infra/config_panel';
 import {
@@ -21,24 +22,22 @@ import {
 
 const BUTTON_ID = 'download-all-gallery-images-and-prompts';
 
-export const download200GalleryImagesAndPrompts =
+export const downloadGalleryImagesAndPrompts =
   (
     modelId: string,
     modelVersionId: string,
     modelName: string,
-    limit = 200, // API の仕様上200が上限
     downLoadedImgList?: (GalleryImage | ModelImage)[],
     onProgressFn?: (text: string) => void,
     onFinishFn?: (imgCount: number) => void
   ) =>
   async () => {
-    console.log('download200GalleryImagesAndPrompts: start');
+    console.log('downloadGalleryImagesAndPrompts: start');
     try {
-      const _imgList = await fetchGalleryData(
+      const _imgList = await fetchGalleryData(onProgressFn)(
         modelId,
         null,
-        modelVersionId,
-        limit
+        modelVersionId
       );
 
       // exclude downloaded images
@@ -65,22 +64,25 @@ export const download200GalleryImagesAndPrompts =
       if (onFinishFn) {
         onFinishFn(imgList.length);
       }
+      setTitle('✅ ' + getTitle());
     } catch (error: unknown) {
       alertError((error as Error).message);
     }
   };
 
 export const addGalleryDownloadButton = async (href: string) => {
+  const oldButton = await waitForElement(`#${BUTTON_ID}`, 1);
+  if (oldButton) {
+    oldButton.remove();
+  }
+
   if (!selector('#gallery')) {
     // throw new Error('#gallery not found');
     console.log('#gallery not found');
+    await sleep(100);
     await addGalleryDownloadButton(href);
     return;
   }
-  if (selector(BUTTON_ID)) {
-    return;
-  }
-
   const {
     modelId,
     modelName,
@@ -108,11 +110,10 @@ export const addGalleryDownloadButton = async (href: string) => {
   const eventListener = async (e: MouseEvent) => {
     e.preventDefault();
     if (modelId && modelVersionId) {
-      return await download200GalleryImagesAndPrompts(
+      return await downloadGalleryImagesAndPrompts(
         modelId.toString(),
         modelVersionId.toString(),
         modelName,
-        200,
         [],
         updateButtonText(button),
         onFinishFn(button)
@@ -127,12 +128,8 @@ export const addGalleryDownloadButton = async (href: string) => {
 
   button.addEventListener('click', eventListener);
 
-  const h2 = await waitForElement('#gallery h2');
+  const h2 = await waitForElement('#gallery h2', 1);
   if (h2) {
-    const oldButton = await waitForElement(`#${BUTTON_ID}`, 1);
-    if (oldButton) {
-      oldButton.remove();
-    }
     h2.parentNode?.appendChild(button);
   }
   if (
