@@ -282,8 +282,10 @@ export function warnLargeModels() {
     if (!filesize) {
       return;
     }
-    if (filesize > 300 && (unit === 'M' || unit === 'G')) {
+    if (filesize > 300 && unit === 'M') {
       addStyle(panel?.parentElement, 'background-color: moccasin;');
+    } else if (unit === 'G') {
+      addStyle(panel?.parentElement, 'background-color: pink;');
     } else {
       addStyle(panel?.parentElement, 'background-color: inherit;');
     }

@@ -17,7 +17,7 @@ const HEADERS = {
 };
 
 export const downloadImages = async (url: string, dir: string) => {
-  console.log(styleText('greenBright', 'start downloading images'));
+  console.log('* start downloading images');
   // TODO: 画像とプロンプトダウンロード
   const {
     modelId,
@@ -67,7 +67,9 @@ export const downloadImages = async (url: string, dir: string) => {
   for (const xs of chunkArray(imageList, chunkSize)) {
     count = count + xs.length;
     try {
-      process.stdout.write(`downloading ${count}/${imageList.length}\r`);
+      process.stdout.write(
+        `downloading ${count}/${imageList.length}                  \r`
+      );
       await predicate(xs);
     } catch (e: unknown) {
       console.error('error: ', (e as Error).message);

@@ -9,6 +9,7 @@ export const takeScreenShot = async (
   url: string
 ): Promise<[string, string, string]> => {
   // Launch the browser
+  console.log('* taking a screenshot');
   const browser = await puppeteer.launch({
     userDataDir: path.join(os.homedir(), './.puppeteer_user_data'),
   });
@@ -37,6 +38,7 @@ export const takeScreenShot = async (
     // return;
 
     await page.goto(url);
+    await sleep(3000);
     await page.waitForSelector('main > div > div');
 
     //check if 404
@@ -45,7 +47,7 @@ export const takeScreenShot = async (
       (el) => el.innerText
     );
     if (isNotFound === '404') {
-      throw new Error('404: The model was deleted.');
+      throw new Error('404: The model was not found.');
     }
 
     // NOTE:ライトモードに切り替え

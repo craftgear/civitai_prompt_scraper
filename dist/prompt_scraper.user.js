@@ -25,11 +25,7 @@
           : typeof global !== 'undefined'
           ? global
           : {};
-  
-function $parcel$interopDefault(a) {
-  return a && a.__esModule ? a.default : a;
-}
-// eslint-disable-next-line
+  // eslint-disable-next-line
 const $3a42d740ecc81982$var$i18n = {
     networkRequestTimeout: {
         en: "Time until network timeout (in seconds)",
@@ -12926,12 +12922,8 @@ var $b9a27db92abc3f0f$exports = {};
 
 
 
-var $39e7bd012fbaed99$exports = {};
-$39e7bd012fbaed99$exports = JSON.parse('{"name":"civitai_prompt_scraper","browserslist":"> 5%, last 1 versions, not dead","version":"1.2.30","description":"","source":"src/prompt_scraper.user.ts","browser ":"dist/prompt_scraper.user.js","targets":{"default":{"context":"browser","sourceMap":false,"includeNodeModules":true,"optimize":true}},"scripts":{"type-check":"tsc --noEmit","lint":"eslint","format":"prettier --write .","watch":"parcel watch","build":"rm -rf .parcel-cache/*; parcel build; zip -v -j ./dist/prompt_scraper.zip ./dist/prompt_scraper.user.js","clean":"rm ./dist/*","test":"vitest --dom","coverage":"vitest --coverage --run","check":"tsc --noEmit","civitai":"node ./src/cli.js"},"author":"Watanabe, Shunsuke","license":"MIT","devDependencies":{"@damoclark/parcel-optimizer-userscript":"^0.0.2","@eslint/js":"^9.8.0","@parcel/packager-ts":"^2.8.3","@parcel/transformer-typescript-types":"^2.8.3","@playwright/test":"^1.51.1","@tsconfig/recommended":"^1.0.2","@types/file-saver":"^2.0.5","@types/lodash":"^4.14.191","@types/node":"^22.7.4","@typescript-eslint/eslint-plugin":"^8.0.0","@typescript-eslint/parser":"^8.0.0","@violentmonkey/types":"^0.1.5","@vitest/coverage-v8":"^2.0.5","eslint":"^9.8.0","eslint-plugin-n":"^17.10.1","eslint-plugin-promise":"^7.0.0","globals":"^15.9.0","happy-dom":"^10.3.2","parcel":"^2.8.3","prettier":"^2.8.4","prettier-plugin-organize-imports":"^3.2.2","rollup-plugin-cleanup":"^3.2.1","typescript":"^4.9.5","typescript-eslint":"^8.0.0","vitest":"^2.0.5"},"dependencies":{"@violentmonkey/url":"^0.1.0","@zip.js/zip.js":"^2.6.63","file-saver":"^2.0.5","html2canvas":"^1.4.1","lodash":"^4.17.21","puppeteer":"^24.4.0","ts-brand":"^0.2.0","tsx":"^4.19.3","wazip":"^0.1.0","zod":"^3.23.8"}}');
-
-
 const $81ffdad4556cbf55$export$bef1f36f5486a6a3 = (...xs)=>{
-    console.log(`${(0, (/*@__PURE__*/$parcel$interopDefault($39e7bd012fbaed99$exports))).name}:`, ...xs);
+    console.log(`civitai_prompt_scraper:`, ...xs);
 };
 const $81ffdad4556cbf55$export$e772c8ff12451969 = (ms = 1000)=>new Promise((resolve)=>setTimeout(()=>resolve(true), ms));
 const $81ffdad4556cbf55$export$f922ebe57f2c36e8 = (xs, chunkSize = 50)=>xs.reduce((acc, curr)=>{
@@ -13522,23 +13514,30 @@ const $06cbd27ebbbf5f2a$export$a31cd1b3c2b6ea3b = ()=>{
     const modifyHeight = ()=>{
         const highestElement = (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)("main > div > div");
         if (highestElement) {
-            // const newHeight = highestElement.clientHeight + 300;
             (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)("html")?.setAttribute("style", "overflow-y: auto; overflow-x: hidden;");
             (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)("body")?.setAttribute("style", // `height: ${newHeight}px; max-width:1320px;`
             `height: auto;`);
             (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)("main > div")?.setAttribute("style", "overflow: hidden;");
             (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)(".mantine-Container-root")?.setAttribute("style", "margin: 0;");
         }
+        const newHeight = (highestElement?.clientHeight ?? 1920) + 300;
+        return newHeight;
     };
     document.addEventListener("focus", ()=>{
         modifyHeight();
     });
-    modifyHeight();
+    return modifyHeight();
 };
 const $06cbd27ebbbf5f2a$export$53a0910f038337bd = (cssSelector)=>{
     (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)(cssSelector)?.scrollIntoView({
         behavior: "smooth"
     });
+};
+const $06cbd27ebbbf5f2a$export$c74cb29a962d147f = ()=>{
+    setTimeout(()=>{
+        (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)("header")?.setAttribute("style", "display: none;");
+        (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)("#main")?.setAttribute("style", "padding-top: 1rem;");
+    }, 500);
 };
 function $06cbd27ebbbf5f2a$export$5dde81319358a01f() {
     setTimeout(()=>{
@@ -13558,7 +13557,8 @@ function $06cbd27ebbbf5f2a$export$cec515250b39a76b() {
         const filesize = Number(text?.at(1)?.trim() ?? null);
         const unit = text?.at(2) ?? null;
         if (!filesize) return;
-        if (filesize > 300 && (unit === "M" || unit === "G")) $06cbd27ebbbf5f2a$var$addStyle(panel?.parentElement, "background-color: moccasin;");
+        if (filesize > 300 && unit === "M") $06cbd27ebbbf5f2a$var$addStyle(panel?.parentElement, "background-color: moccasin;");
+        else if (unit === "G") $06cbd27ebbbf5f2a$var$addStyle(panel?.parentElement, "background-color: pink;");
         else $06cbd27ebbbf5f2a$var$addStyle(panel?.parentElement, "background-color: inherit;");
     }, 500);
 }
@@ -13616,7 +13616,7 @@ const $90c9ab75e73296e8$var$startModelDownload = async (e)=>{
 };
 const $90c9ab75e73296e8$export$53039d7a8d9d297e = (buttonIdSelector, location)=>async ()=>{
         try {
-            const button = await (0, $06cbd27ebbbf5f2a$export$1a1c301579a08d1e)(buttonIdSelector);
+            const button = await (0, $06cbd27ebbbf5f2a$export$1a1c301579a08d1e)(buttonIdSelector) ?? document.createElement("div");
             if (!button) throw new Error("downloadImagesAndPrompts: button not found");
             button.innerText = (0, $3a42d740ecc81982$export$731a191155ffa90a)("startingDownload");
             const { modelId: modelId, modelName: modelName, imageList: imageList, modelVersionId: modelVersionId, modelVersionName: modelVersionName, modelInfo: modelInfo } = await $90c9ab75e73296e8$export$b2255cc49c3941e4(location, (0, $06cbd27ebbbf5f2a$export$bb64a7e3f0f28938)(button));
