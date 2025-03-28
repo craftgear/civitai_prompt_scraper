@@ -9,27 +9,26 @@ export const downloadModel = (url: string, downloadDir: string) => {
 export const downloadTrainingData = (url: string, downloadDir: string) =>
   __wget(url, downloadDir);
 
+const DOWNLOAD_FINISHED_MESSAGE = 'へ保存完了';
+const WGET_OPTIONS = [
+  '--limit-rate=7M',
+  '--compression=gzip',
+  '--content-disposition',
+  '--retry-connrefused',
+  '--waitretry=30',
+  '--tries=100',
+  '--no-http-keep-alive',
+  '--timeout=30',
+];
+
 const __wget = (canonicalUrl: string, downloadDir: string) => {
   let isDownloadSucceeded = false;
   const token = process.env.TOKEN;
+  WGET_OPTIONS.push(`${canonicalUrl}&token=${token}`);
   return new Promise((resolve, reject) => {
-    const child = spawn(
-      'wget',
-      [
-        '--limit-rate=5M',
-        '--compression=gzip',
-        '--content-disposition',
-        '--retry-connrefused',
-        '--waitretry=30',
-        '--tries=100',
-        '--no-http-keep-alive',
-        '--timeout=30',
-        `${canonicalUrl}&token=${token}`,
-      ],
-      {
-        cwd: downloadDir,
-      }
-    );
+    const child = spawn('wget', WGET_OPTIONS, {
+      cwd: downloadDir,
+    });
     child.stderr.on('data', function (data) {
       const output = data.toString();
       const percentage = output.match(/\d*%/);
@@ -38,21 +37,17 @@ const __wget = (canonicalUrl: string, downloadDir: string) => {
           styleText('white', `downloading model: ${percentage.at(0)}\r`)
         );
       }
-      if (output && output.includes('保存完了')) {
+      if (output && output.includes(DOWNLOAD_FINISHED_MESSAGE)) {
         isDownloadSucceeded = true;
       }
     });
-
-    //     stderr: 2025-03-28 11:37:11 (4.29 MB/s) - `aziibpixelmix_v10.safetensors' へ保存完了 [2132625894/2132625894]
-    //
-    // closing code: 0
 
     child.on('close', function (code) {
       if (isDownloadSucceeded) {
         console.log(
           styleText(
             'green',
-            'downloaded the model                                    '
+            'downloaded model                                         '
           )
         );
         resolve(true);
@@ -68,20 +63,11 @@ const __wget = (canonicalUrl: string, downloadDir: string) => {
 
 // const _wget = (canonicalUrl: string, downloadDir: string) => {
 //   const token = process.env.TOKEN;
+//   WGET_OPTIONS.push(`${canonicalUrl}&token=${token}`);
 //   return new Promise((resolve, reject) => {
 //     const child = spawnSync(
 //       'wget',
-//       [
-//         '--limit-rate=5M',
-//         '--compression=gzip',
-//         '--content-disposition',
-//         '--retry-connrefused',
-//         '--waitretry=60',
-//         '--tries=100',
-//         '--no-http-keep-alive',
-//         '--timeout=30',
-//         `${canonicalUrl}&token=${token}`,
-//       ],
+//       WGET_OPTIONS,
 //       {
 //         cwd: downloadDir,
 //       }

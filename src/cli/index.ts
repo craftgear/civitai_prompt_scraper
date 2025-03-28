@@ -75,7 +75,7 @@ const downloadAll = async (url: string) => {
     if (modelId && pageTitle && modelVersionId) {
       fs.renameSync(
         saveDir,
-        path.join(DOWNLOAD_DIR, `${pageTitle}-[${modelId}]_${modelVersionId}`)
+        path.join(DOWNLOAD_DIR, `${pageTitle}[${modelId}]_${modelVersionId}`)
       );
     }
     return styleText('green', 'successfully downloaded');
