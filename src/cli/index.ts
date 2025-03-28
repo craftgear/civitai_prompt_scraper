@@ -11,16 +11,38 @@ import path from 'node:path';
 import { styleText } from 'node:util';
 import { downloadImages } from './downloadImages';
 import { downloadModel, downloadTrainingData } from './downloadModel';
+import { playSound } from './playSound';
 import { takeScreenShot } from './takeScreenShot';
 
 const DOWNLOAD_DIR = path.join(os.homedir(), '/mydata/Downloads/');
 
 const main = async () => {
-  const url = process.argv.pop();
+  const urls = process.argv
+    .pop()
+    ?.split('\n')
+    .filter((x) => !!x);
+  if (!urls || urls.length === 0) {
+    console.error('need one argument: a url');
+    return;
+  }
+  const errors = [];
+  for (const x of urls) {
+    console.log(`downloadingAll ${x}`);
+    try {
+      await downloadAll(x);
+    } catch (e) {
+      errors.push(e);
+    }
+  }
+  console.log('\n----- errors', errors);
+};
+
+const downloadAll = async (url: string) => {
   if (!url || !url.startsWith('https://civitai.com/models/')) {
     console.error('need one argument: a url');
     return;
   }
+
   const saveDir = path.join(
     DOWNLOAD_DIR,
     `選択項目から作成したフォルダ ${Date.now()}`
@@ -30,11 +52,11 @@ const main = async () => {
       await takeScreenShot(DOWNLOAD_DIR, url);
     if (!fs.existsSync(saveDir)) {
       fs.mkdirSync(saveDir);
-      fs.renameSync(
-        fullPathFilename,
-        `${saveDir}/${path.basename(fullPathFilename)}`
-      );
     }
+    fs.renameSync(
+      fullPathFilename,
+      `${saveDir}/${path.basename(fullPathFilename)}`
+    );
     console.log(styleText('cyan', `>> ${pageTitle}`));
     if (!modelDownloadHref) {
       throw new Error('modelDownloadHref is not found');
@@ -47,18 +69,15 @@ const main = async () => {
     if (trainingDataUrl) {
       await downloadTrainingData(trainingDataUrl, saveDir);
     }
+    return styleText('green', 'successfully downloaded');
   } catch (e) {
-    console.error(styleText('red', url));
-    console.error(e);
+    console.error(styleText('red', `failed to downaloadAll ${url}`));
+    throw e;
   } finally {
     console.log('----------------------------');
-  }
-  if (!saveDir) {
-    console.error(
-      styleText('red', `dir was not created. something went wrong.`)
-    );
-    return;
+    playSound();
   }
 };
 
+// main();
 main();

@@ -17,71 +17,83 @@ const HEADERS = {
 };
 
 export const downloadImages = async (url: string, dir: string) => {
-  console.log('* start downloading images');
-  // TODO: 画像とプロンプトダウンロード
-  const {
-    modelId,
-    modelName,
-    imageList,
-    modelVersionId,
-    modelVersionName,
-    modelInfo,
-    traningDataUrl,
-  } = await getModelInfoAndImageList(url, (log: string) => {
-    process.stdout.write(`${log}\r`);
-  });
+  try {
+    console.log('* start downloading images');
+    // TODO: 画像とプロンプトダウンロード
+    const {
+      modelId,
+      modelName,
+      imageList,
+      modelVersionId,
+      modelVersionName,
+      modelInfo,
+      traningDataUrl,
+    } = await getModelInfoAndImageList(url, (log: string) => {
+      process.stdout.write(`${log}\r`);
+    });
 
-  const filenameFormat = '{modelName}[{modelId}]_{modelVersionId}';
-  const filename =
-    (filenameFormat as string)
-      .replace('{modelId}', `${modelId ?? ''}`)
-      .replace('{modelName}', modelName)
-      .replace('{modelVersionId}', `${modelVersionId}`)
-      .replace('{modelVersionName}', modelVersionName)
-      .replaceAll(/[<>\\/.*?"|]/g, '') + '.zip';
+    const filenameFormat = '{modelName}[{modelId}]_{modelVersionId}';
+    const filename =
+      (filenameFormat as string)
+        .replace('{modelId}', `${modelId ?? ''}`)
+        .replace('{modelName}', modelName)
+        .replace('{modelVersionId}', `${modelVersionId}`)
+        .replace('{modelVersionName}', modelVersionName)
+        .replaceAll(/[<>\\/.*?"|]/g, '') + '.zip';
 
-  const blobWriter = new BlobWriter(`application/zip`);
-  const zipWriter = new ZipWriter(blobWriter);
+    const blobWriter = new BlobWriter(`application/zip`);
+    const zipWriter = new ZipWriter(blobWriter);
 
-  if (modelInfo) {
-    await zipWriter.add(
-      'model_info.json',
-      new TextReader(JSON.stringify(modelInfo, null, '\t'))
-    );
-  }
-
-  let chunkSize = 5;
-  if (50 < imageList.length && imageList.length <= 200) {
-    chunkSize = 10;
-  }
-  if (200 < imageList.length && imageList.length <= 400) {
-    chunkSize = 20;
-  }
-  if (imageList.length > 400) {
-    chunkSize = 50;
-  }
-
-  let count = 0;
-  const addedNames = new Set<string>();
-  const predicate = fetchImgs(zipWriter, addedNames);
-  for (const xs of chunkArray(imageList, chunkSize)) {
-    count = count + xs.length;
-    try {
-      process.stdout.write(
-        `downloading ${count}/${imageList.length}                  \r`
+    if (modelInfo) {
+      await zipWriter.add(
+        'model_info.json',
+        new TextReader(JSON.stringify(modelInfo, null, '\t'))
       );
-      await predicate(xs);
-    } catch (e: unknown) {
-      console.error('error: ', (e as Error).message);
-      throw e;
     }
-    await sleep(500);
-  }
-  console.log(`downloaded ${imageList.length} images.`);
-  const data = await (await zipWriter.close(undefined, {})).arrayBuffer();
-  fs.writeFileSync(`${dir}/${filename}`, new Uint8Array(data));
 
-  return traningDataUrl;
+    let chunkSize = 5;
+    if (50 < imageList.length && imageList.length <= 200) {
+      chunkSize = 10;
+    }
+    if (200 < imageList.length && imageList.length <= 400) {
+      chunkSize = 20;
+    }
+    if (imageList.length > 400) {
+      chunkSize = 50;
+    }
+
+    let count = 0;
+    const addedNames = new Set<string>();
+    const predicate = fetchImgs(zipWriter, addedNames);
+    for (const xs of chunkArray(imageList, chunkSize)) {
+      count = count + xs.length;
+      try {
+        process.stdout.write(
+          styleText(
+            'grey',
+            `                        , downloading images ${count}/${imageList.length}\r`
+          )
+        );
+        await predicate(xs);
+      } catch (e: unknown) {
+        console.error('error: ', (e as Error).message);
+        throw e;
+      }
+      await sleep(500);
+    }
+    console.log(
+      styleText(
+        'green',
+        `downloaded ${imageList.length} images.                                         `
+      )
+    );
+    const data = await (await zipWriter.close(undefined, {})).arrayBuffer();
+    fs.writeFileSync(`${dir}/${filename}`, new Uint8Array(data));
+
+    return traningDataUrl;
+  } catch (e) {
+    throw new Error(`downloadImages: ${(e as Error).message}`);
+  }
 };
 
 const fetchImg = async (
@@ -104,7 +116,6 @@ const fetchImg = async (
     });
     const contentType = response.headers.get('content-type') || '';
     const blob = await response.blob();
-
     return {
       blob,
       contentType,

@@ -9,7 +9,7 @@ export const takeScreenShot = async (
   url: string
 ): Promise<[string, string, string]> => {
   // Launch the browser
-  console.log('* taking a screenshot');
+  console.log('* taking a screenshot ');
   const browser = await puppeteer.launch({
     userDataDir: path.join(os.homedir(), './.puppeteer_user_data'),
   });
