@@ -11,7 +11,7 @@ import path from 'node:path';
 import { styleText } from 'node:util';
 import { downloadImages } from './downloadImages';
 import { downloadModel, downloadTrainingData } from './downloadModel';
-import { playSound } from './playSound';
+import { playErrorSound, playSuccessSound } from './playSound';
 import { takeScreenShot } from './takeScreenShot';
 
 const DOWNLOAD_DIR = path.join(os.homedir(), '/mydata/Downloads/');
@@ -27,14 +27,18 @@ const main = async () => {
   }
   const errors = [];
   for (const x of urls) {
-    console.log(`downloadingAll ${x}`);
     try {
       await downloadAll(x);
     } catch (e) {
       errors.push(e);
     }
   }
-  console.log('\n----- errors', errors);
+  if (errors.length === 0) {
+    playSuccessSound();
+  } else {
+    console.log('\n----- errors', errors);
+    playErrorSound();
+  }
 };
 
 const downloadAll = async (url: string) => {
@@ -62,12 +66,17 @@ const downloadAll = async (url: string) => {
       throw new Error('modelDownloadHref is not found');
     }
     // eslint-disable-next-line
-    const [_, trainingDataUrl] = await Promise.all([
-      downloadModel(modelDownloadHref, saveDir),
-      downloadImages(url, saveDir),
-    ]);
+    const [_, { trainingDataUrl, modelId, modelVersionId }] = await Promise.all(
+      [downloadModel(modelDownloadHref, saveDir), downloadImages(url, saveDir)]
+    );
     if (trainingDataUrl) {
       await downloadTrainingData(trainingDataUrl, saveDir);
+    }
+    if (modelId && pageTitle && modelVersionId) {
+      fs.renameSync(
+        saveDir,
+        path.join(DOWNLOAD_DIR, `${pageTitle}-[${modelId}]_${modelVersionId}`)
+      );
     }
     return styleText('green', 'successfully downloaded');
   } catch (e) {
@@ -75,9 +84,7 @@ const downloadAll = async (url: string) => {
     throw e;
   } finally {
     console.log('----------------------------');
-    playSound();
   }
 };
 
-// main();
 main();

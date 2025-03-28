@@ -18,8 +18,7 @@ const HEADERS = {
 
 export const downloadImages = async (url: string, dir: string) => {
   try {
-    console.log('* start downloading images');
-    // TODO: 画像とプロンプトダウンロード
+    // console.log('* start downloading images');
     const {
       modelId,
       modelName,
@@ -27,7 +26,7 @@ export const downloadImages = async (url: string, dir: string) => {
       modelVersionId,
       modelVersionName,
       modelInfo,
-      traningDataUrl,
+      trainingDataUrl,
     } = await getModelInfoAndImageList(url, (log: string) => {
       process.stdout.write(`${log}\r`);
     });
@@ -70,7 +69,7 @@ export const downloadImages = async (url: string, dir: string) => {
       try {
         process.stdout.write(
           styleText(
-            'grey',
+            'white',
             `                        , downloading images ${count}/${imageList.length}\r`
           )
         );
@@ -90,7 +89,7 @@ export const downloadImages = async (url: string, dir: string) => {
     const data = await (await zipWriter.close(undefined, {})).arrayBuffer();
     fs.writeFileSync(`${dir}/${filename}`, new Uint8Array(data));
 
-    return traningDataUrl;
+    return { trainingDataUrl, modelId, modelVersionId };
   } catch (e) {
     throw new Error(`downloadImages: ${(e as Error).message}`);
   }
@@ -279,7 +278,7 @@ const getModelInfoAndImageList = async (
   // NOTE: modelVersion.imagesにはimage.metaがない
   const modelImages = modelVersion?.images ?? [];
 
-  const traningDataUrl = modelVersion?.files.find(
+  const trainingDataUrl = modelVersion?.files.find(
     (x) => x.type === 'Training Data'
   )?.downloadUrl;
 
@@ -309,7 +308,7 @@ const getModelInfoAndImageList = async (
     modelVersionName,
     imageList,
     modelInfo,
-    traningDataUrl,
+    trainingDataUrl,
   };
 };
 

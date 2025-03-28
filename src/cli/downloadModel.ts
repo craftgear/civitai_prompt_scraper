@@ -2,7 +2,7 @@ import { spawn } from 'node:child_process';
 import { styleText } from 'node:util';
 
 export const downloadModel = (url: string, downloadDir: string) => {
-  console.log(`* start downloading model\r`);
+  // console.log(`* start downloading model\r`);
   return __wget(`https://civitai.com${url}`, downloadDir);
 };
 
@@ -35,7 +35,7 @@ const __wget = (canonicalUrl: string, downloadDir: string) => {
       const percentage = output.match(/\d*%/);
       if (percentage) {
         process.stdout.write(
-          styleText('grey', `downloading model: ${percentage.at(0)}\r`)
+          styleText('white', `downloading model: ${percentage.at(0)}\r`)
         );
       }
       if (output && output.includes('保存完了')) {
@@ -48,7 +48,6 @@ const __wget = (canonicalUrl: string, downloadDir: string) => {
     // closing code: 0
 
     child.on('close', function (code) {
-      console.log('code', code);
       if (isDownloadSucceeded) {
         console.log(
           styleText(
