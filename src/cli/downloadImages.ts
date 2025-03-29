@@ -361,7 +361,9 @@ const fetchGalleryData =
     }
 
     if (onProgressFn) {
-      onProgressFn(`calling API ${retry + 1} / ${RETRY_LIMIT}`);
+      onProgressFn(
+        `                        , calling API ${retry + 1} / ${RETRY_LIMIT}`
+      );
     }
 
     const response = await fetch(url, {

@@ -24,11 +24,14 @@ const WGET_OPTIONS = [
 const __wget = (canonicalUrl: string, downloadDir: string) => {
   let isDownloadSucceeded = false;
   const token = process.env.TOKEN;
-  WGET_OPTIONS.push(`${canonicalUrl}&token=${token}`);
   return new Promise((resolve, reject) => {
-    const child = spawn('wget', WGET_OPTIONS, {
-      cwd: downloadDir,
-    });
+    const child = spawn(
+      'wget',
+      [...WGET_OPTIONS, `${canonicalUrl}&token=${token}`],
+      {
+        cwd: downloadDir,
+      }
+    );
     child.stderr.on('data', function (data) {
       const output = data.toString();
       const percentage = output.match(/\d*%/);
@@ -63,11 +66,10 @@ const __wget = (canonicalUrl: string, downloadDir: string) => {
 
 // const _wget = (canonicalUrl: string, downloadDir: string) => {
 //   const token = process.env.TOKEN;
-//   WGET_OPTIONS.push(`${canonicalUrl}&token=${token}`);
 //   return new Promise((resolve, reject) => {
 //     const child = spawnSync(
 //       'wget',
-//       WGET_OPTIONS,
+// [...WGET_OPTIONS, `${canonicalUrl}&token=${token}`],
 //       {
 //         cwd: downloadDir,
 //       }

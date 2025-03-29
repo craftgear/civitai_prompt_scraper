@@ -14,7 +14,7 @@ import { downloadModel, downloadTrainingData } from './downloadModel';
 import { playErrorSound, playSuccessSound } from './playSound';
 import { takeScreenShot } from './takeScreenShot';
 
-const DOWNLOAD_DIR = path.join(os.homedir(), '/mydata/Downloads/');
+const DOWNLOAD_DIR = path.join(os.homedir(), '/mydata/Downloads/temp');
 
 const main = async () => {
   const urls = process.argv
@@ -49,7 +49,9 @@ const downloadAll = async (url: string) => {
 
   const saveDir = path.join(
     DOWNLOAD_DIR,
-    `選択項目から作成したフォルダ ${Date.now()}`
+    `選択項目から作成したフォルダ ${Date.now()}${Math.floor(
+      Math.random() * 1000
+    )}`
   );
   try {
     const [pageTitle, fullPathFilename, modelDownloadHref] =
@@ -80,8 +82,8 @@ const downloadAll = async (url: string) => {
     }
     return styleText('green', 'successfully downloaded');
   } catch (e) {
-    console.error(styleText('red', `failed to downaloadAll ${url}`));
-    throw e;
+    console.error(styleText('red', (e as Error).message));
+    throw new Error(`failed to downaloadAll ${url}`);
   } finally {
     console.log('----------------------------');
   }
