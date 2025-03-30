@@ -26,9 +26,10 @@ const main = async () => {
     return;
   }
   const errors = [];
-  for (const x of urls) {
+  for (let i = 0; i < urls.length; i++) {
     try {
-      await downloadAll(x);
+      console.log(`${i}/${urls.length}`);
+      await downloadAll(urls[i]);
     } catch (e) {
       errors.push(e);
     }
