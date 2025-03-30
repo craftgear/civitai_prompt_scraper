@@ -99,8 +99,7 @@ const fetchImg = async (
   url: string,
   retried = 0
 ): Promise<{ blob: Blob; contentType: string } | null> => {
-  const parsedNum = 10;
-  const timeoutInSecs = Number.isNaN(parsedNum) ? 10 : parsedNum;
+  const timeoutInSecs = 30;
   try {
     const response = await fetch(url, {
       method: 'GET',

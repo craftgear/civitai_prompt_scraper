@@ -37,8 +37,18 @@ const main = async () => {
   if (errors.length === 0) {
     playSuccessSound();
   } else {
-    console.log('\n----- errors', errors);
+    errors.forEach((e) => {
+      console.error(styleText('red', (e as Error).message));
+    });
     playErrorSound();
+    errors.forEach((e) =>
+      console.log(
+        (e as Error).message
+          .match(/https.*\d*\n/)
+          ?.at(0)
+          ?.trim()
+      )
+    );
   }
 };
 
@@ -84,7 +94,7 @@ const downloadAll = async (url: string) => {
     return styleText('green', 'successfully downloaded');
   } catch (e) {
     console.error(styleText('red', (e as Error).message));
-    throw new Error(`failed to downaloadAll ${url}`);
+    throw e;
   } finally {
     console.log('----------------------------');
   }
