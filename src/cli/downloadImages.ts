@@ -91,7 +91,7 @@ export const downloadImages = async (url: string, dir: string) => {
 
     return { trainingDataUrl, modelId, modelVersionId };
   } catch (e) {
-    throw new Error(`downloadImages: ${(e as Error).message}`);
+    throw new Error(`downloadImages: ${(e as Error).message} ${url}`);
   }
 };
 
@@ -99,7 +99,7 @@ const fetchImg = async (
   url: string,
   retried = 0
 ): Promise<{ blob: Blob; contentType: string } | null> => {
-  const timeoutInSecs = 30;
+  const timeoutInSecs = 60;
   try {
     const response = await fetch(url, {
       method: 'GET',
@@ -368,7 +368,7 @@ const fetchGalleryData =
     const response = await fetch(url, {
       method: 'GET',
       headers: HEADERS,
-      // signal: AbortSignal.timeout(5000),
+      signal: AbortSignal.timeout(60 * 1000),
     });
 
     // エラーの場合はリトライ

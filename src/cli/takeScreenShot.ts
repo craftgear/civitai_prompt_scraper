@@ -46,7 +46,10 @@ export const takeScreenShot = async (
       'main > div > div  h1',
       (el) => el.innerText
     );
-    if (isNotFound === '404') {
+    if (
+      isNotFound.includes('404') ||
+      isNotFound.includes('This resource has been removed by its owner')
+    ) {
       throw new Error('404: The model was not found.');
     }
 
@@ -75,7 +78,7 @@ export const takeScreenShot = async (
     );
     if (!modelDownloadHref) {
       throw new Error(
-        'model download href is not found, cannot download the model.'
+        `model download href is not found, cannot download the model.`
       );
     }
     const pageTitle = (await page.title())
@@ -87,6 +90,8 @@ export const takeScreenShot = async (
       .trim();
     const fullPathFilename = await screenshot(page, pageTitle, downloadDir);
     return [pageTitle, fullPathFilename, modelDownloadHref];
+  } catch (e) {
+    throw new Error(`${(e as Error).message} ${url}`);
   } finally {
     await browser.close();
   }

@@ -20,7 +20,9 @@ const main = async () => {
   const urls = process.argv
     .pop()
     ?.split('\n')
-    .filter((x) => !!x);
+    .filter((x) => !!x)
+    .filter((x) => x.includes('civitai'));
+
   if (!urls || urls.length === 0) {
     console.error('need one argument: a url');
     return;
@@ -28,7 +30,7 @@ const main = async () => {
   const errors = [];
   for (let i = 0; i < urls.length; i++) {
     try {
-      console.log(`${i}/${urls.length}`);
+      console.log(`${i + 1}/${urls.length}`);
       await downloadAll(urls[i]);
     } catch (e) {
       errors.push(e);
@@ -36,15 +38,17 @@ const main = async () => {
   }
   if (errors.length === 0) {
     playSuccessSound();
+    console.error(styleText('blue', 'download successfully finished'));
   } else {
     errors.forEach((e) => {
       console.error(styleText('red', (e as Error).message));
     });
     playErrorSound();
+
     errors.forEach((e) =>
       console.log(
         (e as Error).message
-          .match(/https.*\d*\n/)
+          .match(/https.*\d*/)
           ?.at(0)
           ?.trim()
       )
