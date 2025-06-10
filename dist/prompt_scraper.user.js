@@ -13558,8 +13558,10 @@ function $06cbd27ebbbf5f2a$export$cec515250b39a76b() {
         const unit = text?.at(2) ?? null;
         if (!filesize) return;
         if (filesize > 300 && unit === "M") $06cbd27ebbbf5f2a$var$addStyle(panel?.parentElement, "background-color: moccasin;");
-        else if (unit === "G") $06cbd27ebbbf5f2a$var$addStyle(panel?.parentElement, "background-color: pink;");
-        else $06cbd27ebbbf5f2a$var$addStyle(panel?.parentElement, "background-color: inherit;");
+        else if (unit === "G") {
+            (0, $98f6748fc1e9fd4e$export$420a7f2fd9cad6f6)("\u26A0\uFE0F  " + (0, $98f6748fc1e9fd4e$export$70d1bf7729efff40)());
+            $06cbd27ebbbf5f2a$var$addStyle(panel?.parentElement, "background-color: pink;");
+        } else $06cbd27ebbbf5f2a$var$addStyle(panel?.parentElement, "background-color: inherit;");
     }, 500);
 }
 
@@ -13860,6 +13862,7 @@ const $f2fb5610d10943f7$export$264fba47316a17c2 = async ()=>{
 
 
 
+
 const $ca465a359cd2bf87$var$openShowMore = (retry = 200)=>{
     const isOpenShowMore = (0, $2e4159cc418f5166$export$44487a86467333c3)("openShowMore");
     if (!isOpenShowMore) return;
@@ -13895,6 +13898,7 @@ const $ca465a359cd2bf87$var$addGalleryImageDownloadButton = async ()=>{
             setTimeout($ca465a359cd2bf87$var$addGalleryImageDownloadButton, 100);
             return;
         }
+        await (0, $90c9ab75e73296e8$export$8b03a564a450b487)(href);
         (0, $81ffdad4556cbf55$export$bef1f36f5486a6a3)("gallery");
         await (0, $32b5bff137232fe2$export$5fd187c0d03a79e)(href);
     } catch (error) {

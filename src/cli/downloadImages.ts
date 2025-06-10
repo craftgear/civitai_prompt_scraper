@@ -1,5 +1,7 @@
-import { BlobReader, BlobWriter, TextReader, ZipWriter } from '@zip.js/zip.js';
+import { BlobReader, TextReader, ZipWriter } from '@zip.js/zip.js';
 import fs from 'node:fs';
+import { WritableStream } from 'stream/web'; // Node.js 18+ のWeb Streams API対応が必要
+
 import { styleText } from 'node:util';
 import { optimizeUrl, unoptimizeUrl } from '../domain/logic';
 import type {
@@ -18,7 +20,6 @@ const HEADERS = {
 
 export const downloadImages = async (url: string, dir: string) => {
   try {
-    // console.log('* start downloading images');
     const {
       modelId,
       modelName,
@@ -40,8 +41,11 @@ export const downloadImages = async (url: string, dir: string) => {
         .replace('{modelVersionName}', modelVersionName)
         .replaceAll(/[<>\\/.*?"|]/g, '') + '.zip';
 
-    const blobWriter = new BlobWriter(`application/zip`);
-    const zipWriter = new ZipWriter(blobWriter);
+    const streamWriter = createNodeWritableStream(`${dir}/${filename}`);
+    const zipWriter = new ZipWriter<WritableStream>(streamWriter, {
+      zip64: true,
+      bufferedWrite: true,
+    });
 
     if (modelInfo) {
       await zipWriter.add(
@@ -57,13 +61,19 @@ export const downloadImages = async (url: string, dir: string) => {
     if (200 < imageList.length && imageList.length <= 400) {
       chunkSize = 20;
     }
-    if (imageList.length > 400) {
-      chunkSize = 50;
+    if (400 < imageList.length && imageList.length <= 1000) {
+      chunkSize = 40;
+    }
+    if (1000 < imageList.length && imageList.length <= 5000) {
+      chunkSize = 60;
+    }
+    if (imageList.length > 5000) {
+      chunkSize = 100;
     }
 
     let count = 0;
     const addedNames = new Set<string>();
-    const predicate = fetchImgs(zipWriter, addedNames);
+    const fetchImagesAndWriteToZip = fetchImgs(zipWriter, addedNames);
     for (const xs of chunkArray(imageList, chunkSize)) {
       count = count + xs.length;
       try {
@@ -73,7 +83,8 @@ export const downloadImages = async (url: string, dir: string) => {
             `                        , downloading images ${count}/${imageList.length}\r`
           )
         );
-        await predicate(xs);
+        // 429対策でスリープ
+        await fetchImagesAndWriteToZip(xs);
       } catch (e: unknown) {
         console.error('error: ', (e as Error).message);
         throw e;
@@ -86,12 +97,12 @@ export const downloadImages = async (url: string, dir: string) => {
         `downloaded ${imageList.length} images.                                         `
       )
     );
-    const data = await (await zipWriter.close(undefined, {})).arrayBuffer();
-    fs.writeFileSync(`${dir}/${filename}`, new Uint8Array(data));
+
+    await zipWriter.close();
 
     return { trainingDataUrl, modelId, modelVersionId };
   } catch (e) {
-    throw new Error(`downloadImages: ${(e as Error).message} ${url}`);
+    throw new Error(`downloadImages: ${(e as Error).message}\n  ${url}`);
   }
 };
 
@@ -118,13 +129,16 @@ const fetchImg = async (
       blob,
       contentType,
     };
-  } catch (error) {
-    if (url.includes('optimized=true')) {
-      return fetchImg(unoptimizeUrl(url), retried + 1);
-    }
-    if (retried < 10) {
+  } catch (error: unknown) {
+    // if (url.includes('optimized=true')) {
+    //   return fetchImg(unoptimizeUrl(url), retried + 1);
+    // }
+    if (retried < RETRY_LIMIT) {
+      await sleep(1000 * 5);
+      console.log(`fetchImg: retry ${retried} ${url}                  `);
       return fetchImg(url, retried + 1);
     }
+    console.log('fetchImg ----- e', (error as Error).message);
     throw error;
   }
 };
@@ -134,13 +148,15 @@ const extractFilebasenameFromImageUrl = (url: string) => {
   return filename.split('.')[0];
 };
 const fetchImgs =
-  (zipWriter: ZipWriter<Blob>, addedNames: Set<string>) =>
+  (zipWriter: ZipWriter<WritableStream>, addedNames: Set<string>) =>
   async (imgInfo: { url: string; hash: string; meta: unknown }[]) =>
     await Promise.all(
       imgInfo.map(async (x) => {
         const response = await fetchImg(optimizeUrl(x.url));
         if (!response) {
-          throw new Error(`response is null: ${x.url}`);
+          throw new Error(
+            `extractFilebasenameFromImageUrl response is null: ${x.url}`
+          );
         }
         const { blob, contentType } = response;
 
@@ -168,15 +184,38 @@ const fetchImgs =
       })
     );
 
-const fetchModelVersionData = async (modelVersionId: string) => {
-  const response = await fetch(`${API_URL}/model-versions/${modelVersionId}`, {
-    method: 'GET',
-    headers: HEADERS,
-  });
-  if (response.status >= 400) {
-    throw new Error(` ${response.status} ${response.statusText}`);
+const fetchModelVersionData = async (
+  modelVersionId: string,
+  retryCount = 0
+) => {
+  try {
+    const response = await fetch(
+      `${API_URL}/model-versions/${modelVersionId}`,
+      {
+        method: 'GET',
+        headers: HEADERS,
+      }
+    );
+    if (response.status >= 500 && retryCount < RETRY_LIMIT) {
+      // 500エラーはリトライする
+      console.log(
+        `fetchModelVersionData ----- response.status ${
+          response.status
+        }, retry ${retryCount + 1}                `
+      );
+      await sleep(5 * 1000);
+      return fetchModelVersionData(modelVersionId, retryCount + 1);
+    }
+    if (response.status >= 400) {
+      throw new Error(
+        `fetchModelVersionData ${response.status} ${response.statusText}`
+      );
+    }
+    return (await response.json()) as ModelVersionResponse;
+  } catch (e) {
+    console.error('fetchModelVersionData error', (e as Error).message);
+    throw e;
   }
-  return (await response.json()) as ModelVersionResponse;
 };
 
 const fetchModelInfoByModleIdOrModelVersionId = async (
@@ -190,12 +229,15 @@ const fetchModelInfoByModleIdOrModelVersionId = async (
     : '';
 
   if (!id) {
-    throw new Error('modelId is not found');
+    throw new Error(
+      'fetchModelInfoByModleIdOrModelVersionId :modelId is not found'
+    );
   }
 
   const modelInfo = await fetchModelData(id);
   return modelInfo;
 };
+
 const fetchModelData = async (
   modelId: string,
   retry = 0
@@ -204,12 +246,17 @@ const fetchModelData = async (
     method: 'GET',
     headers: HEADERS,
   });
-  if (response.status >= 400) {
-    if (retry < 10) {
-      sleep(1000);
+  if (response.status >= 500) {
+    if (retry < RETRY_LIMIT) {
+      console.log(
+        `fetchModelData ----- response.status ${response.status}, retry ${
+          retry + 1
+        }              `
+      );
+      await sleep(1000 * 30);
       return fetchModelData(modelId, retry + 1);
     }
-    throw new Error(` ${response.status} ${response.statusText}`);
+    throw new Error(`fetchModelData ${response.status} ${response.statusText}`);
   }
   return (await response.json()) as ModelResponse;
 };
@@ -229,7 +276,7 @@ const getModelInfo = async (href: string) => {
   const { id: modelId, name: modelName, modelVersions } = modelInfo;
 
   if (!modelId) {
-    throw new Error('modelId is not found');
+    throw new Error('getModelInfo modelId is not found');
   }
 
   const modelVersionId = hrefModelVersionId
@@ -237,7 +284,7 @@ const getModelInfo = async (href: string) => {
     : modelInfo.modelVersions[0].id;
 
   if (!modelVersionId) {
-    throw new Error('modelVersionId is not found');
+    throw new Error('getModelInfo modelVersionId is not found');
   }
 
   const modelVersionName =
@@ -322,12 +369,11 @@ const fetchGalleryData =
     nextCursor?: string,
     retry = 0
   ): Promise<GalleryImagesResponse['items']> => {
-    sleep(1000);
-    // エラーのリトライおよび、カーソルをたどるのは10回までにする
+    // エラーのリトライおよび、カーソルをたどるのは100回までにする
     if (retry > RETRY_LIMIT - 1) {
       if (!nextCursor) {
         // エラーリトライの場合はエラーをスロー
-        throw new Error(` API returns error.`);
+        throw new Error(`fetchGalleryData API returns error.`);
       }
       return [];
     }
@@ -365,39 +411,91 @@ const fetchGalleryData =
       );
     }
 
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: HEADERS,
-      signal: AbortSignal.timeout(60 * 1000),
-    });
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: HEADERS,
+        signal: AbortSignal.timeout(60 * 1000),
+      });
 
-    // エラーの場合はリトライ
-    if (response.status >= 400) {
-      console.log(` ${response.status} ${response.statusText}`);
-      return fetchGalleryData(onProgressFn)(
-        modelId,
-        postId,
-        modelVersionId,
-        limit,
-        undefined,
-        response.status > 500 ? retry : retry + 1
-      );
-    }
-
-    const data = (await response.json()) as GalleryImagesResponse;
-    // 次ページのカーソルがある場合は再帰呼び出し
-    if (data.metadata.nextCursor) {
-      return [
-        ...data.items,
-        ...(await fetchGalleryData(onProgressFn)(
+      // エラーの場合はリトライ
+      if (response.status >= 500 && retry < RETRY_LIMIT) {
+        console.log(
+          `fetchGalleryData ----- ${response.status} ${
+            response.statusText
+          }: retry ${retry + 1}                  `
+        );
+        await sleep(1000 * 5);
+        return fetchGalleryData(onProgressFn)(
           modelId,
           postId,
           modelVersionId,
           limit,
-          data.metadata.nextCursor,
+          undefined,
           retry + 1
-        )),
-      ];
+        );
+      }
+
+      const data = (await response.json()) as GalleryImagesResponse;
+      // 次ページのカーソルがある場合は再帰呼び出し
+      if (data.metadata.nextCursor) {
+        return [
+          ...data.items,
+          ...(await fetchGalleryData(onProgressFn)(
+            modelId,
+            postId,
+            modelVersionId,
+            limit,
+            data.metadata.nextCursor,
+            retry + 1
+          )),
+        ];
+      }
+      return data.items;
+    } catch (e: unknown) {
+      if ((e as Error).name === 'AbortError' && retry < RETRY_LIMIT) {
+        console.log(
+          `fetchGalleryData ----- AbortError: retry ${
+            retry + 1
+          }                  `
+        );
+        await sleep(1000 * 5);
+        return fetchGalleryData(onProgressFn)(
+          modelId,
+          postId,
+          modelVersionId,
+          limit,
+          nextCursor,
+          retry + 1
+        );
+      }
+      console.error('fetchGalleryData error', (e as Error).message);
+      throw e;
     }
-    return data.items;
   };
+
+function createNodeWritableStream(filePath: string) {
+  const nodeStream = fs.createWriteStream(filePath);
+  return new WritableStream({
+    write(chunk) {
+      return new Promise((resolve) => {
+        if (!nodeStream.write(Buffer.from(chunk))) {
+          nodeStream.once('drain', resolve);
+        } else {
+          resolve();
+        }
+      });
+    },
+    close() {
+      return new Promise((resolve) => {
+        nodeStream.end(resolve);
+      });
+    },
+    abort(err) {
+      return new Promise((_, reject) => {
+        nodeStream.destroy(err);
+        reject(err);
+      });
+    },
+  });
+}

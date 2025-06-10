@@ -4,7 +4,7 @@ import {
   extractModelMetaFromSingleImageNextData,
 } from '../domain/logic';
 import { ButtonState, NextData } from '../domain/types';
-import { createDiv, selector } from '../infra/dom';
+import { createDiv, getTitle, selector, setTitle } from '../infra/dom';
 
 import { sleep } from './utils';
 
@@ -285,6 +285,7 @@ export function warnLargeModels() {
     if (filesize > 300 && unit === 'M') {
       addStyle(panel?.parentElement, 'background-color: moccasin;');
     } else if (unit === 'G') {
+      setTitle('⚠️  ' + getTitle());
       addStyle(panel?.parentElement, 'background-color: pink;');
     } else {
       addStyle(panel?.parentElement, 'background-color: inherit;');

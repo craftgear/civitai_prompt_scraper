@@ -11,7 +11,7 @@ export const downloadTrainingData = (url: string, downloadDir: string) =>
 
 const DOWNLOAD_FINISHED_MESSAGE = 'へ保存完了';
 const WGET_OPTIONS = [
-  '--limit-rate=5M',
+  '--limit-rate=4M',
   '--compression=gzip',
   '--content-disposition',
   '--retry-connrefused',

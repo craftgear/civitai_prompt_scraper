@@ -3,6 +3,7 @@ import { alertError } from './infra/dom';
 import { addGalleryDownloadButton } from './service/gallery_download';
 import { hideAndToggleGallery } from './service/hide_gallery';
 import { addModelDownloadAllButton } from './service/model_download_all';
+import { addModelImagesDownloadButton } from './service/model_image_download';
 // import { hideHeader } from './utils/dom';
 import { log, sleep } from './utils/utils';
 
@@ -50,6 +51,7 @@ const addGalleryImageDownloadButton = async () => {
       setTimeout(addGalleryImageDownloadButton, 100);
       return;
     }
+    await addModelImagesDownloadButton(href);
     log('gallery');
     await addGalleryDownloadButton(href);
   } catch (error: unknown) {

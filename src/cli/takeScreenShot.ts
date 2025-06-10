@@ -43,11 +43,17 @@ export const takeScreenShot = async (
 
     //check if 404
     const isNotFound = await page.$eval(
-      'main > div > div  h1',
-      (el) => el.innerText
+      'main > div:nth-child(2) > div',
+      (el) => {
+        // if (el.textContent?.includes('404')) {
+        //   throw new Error(el.textContent);
+        // }
+        return el.textContent;
+      }
     );
     if (
-      isNotFound.includes('404') ||
+      !isNotFound ||
+      isNotFound.includes("The page you are looking for doesn't exist") ||
       isNotFound.includes('This resource has been removed by its owner')
     ) {
       throw new Error('404: The model was not found.');
