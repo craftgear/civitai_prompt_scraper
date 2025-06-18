@@ -59,7 +59,7 @@ export const replaceWithDisabledButton = (
 };
 
 const BUTTON_CONTAINER_ID = 'civitai_prompt_scraper';
-const downloadButtonSelector = 'a[type="button"][href^="/api"]';
+const downloadButtonSelector = 'a[href^="/api/download/models"]';
 const SHARE_BUTTON_SVG_SELECTOR =
   'main svg[class*="tabler-icon tabler-icon-share-3"]';
 
@@ -227,7 +227,10 @@ export const enableFullScreenCapture = () => {
         `height: auto;`
       );
       selector('main > div')?.setAttribute('style', 'overflow: hidden;');
-      selector('.mantine-Container-root')?.setAttribute('style', 'margin: 0;');
+      selector('.mantine-Container-root')?.setAttribute(
+        'style',
+        'margin: 0; max-width: 100% !important;'
+      );
     }
   };
   document.addEventListener('focus', () => {
