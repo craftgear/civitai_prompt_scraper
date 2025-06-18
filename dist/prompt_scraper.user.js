@@ -13423,7 +13423,7 @@ const $06cbd27ebbbf5f2a$export$92ecf871022de94d = (button, text, style)=>{
     button.parentNode?.replaceChild(disabledButton, button);
 };
 const $06cbd27ebbbf5f2a$var$BUTTON_CONTAINER_ID = "civitai_prompt_scraper";
-const $06cbd27ebbbf5f2a$var$downloadButtonSelector = 'a[type="button"][href^="/api"]';
+const $06cbd27ebbbf5f2a$var$downloadButtonSelector = 'a[data-tour="model:download"][href^="/api"]';
 const $06cbd27ebbbf5f2a$var$SHARE_BUTTON_SVG_SELECTOR = 'main svg[class*="tabler-icon tabler-icon-share-3"]';
 const $06cbd27ebbbf5f2a$export$82e56ed69919a9ea = async ()=>{
     await $06cbd27ebbbf5f2a$export$1a1c301579a08d1e($06cbd27ebbbf5f2a$var$downloadButtonSelector);
@@ -13531,7 +13531,7 @@ const $06cbd27ebbbf5f2a$export$a31cd1b3c2b6ea3b = ()=>{
             (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)("body")?.setAttribute("style", // `height: ${newHeight}px; max-width:1320px;`
             `height: auto;`);
             (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)("main > div")?.setAttribute("style", "overflow: hidden;");
-            (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)(".mantine-Container-root")?.setAttribute("style", "margin: 0;");
+            (0, $98f6748fc1e9fd4e$export$aea217a45095ce11)(".mantine-Container-root")?.setAttribute("style", "margin: 0; max-width: 100% !important;");
         }
         const newHeight = (highestElement?.clientHeight ?? 1920) + 300;
         return newHeight;

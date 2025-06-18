@@ -67,7 +67,6 @@ export const takeScreenShot = async (
         });
       }
     );
-    console.log(isEarlyAccess);
     if (isEarlyAccess) {
       throw new Error('Early Access.');
     }
@@ -92,7 +91,7 @@ export const takeScreenShot = async (
     // Evaluate JavaScript
     await page.evaluate(evalInsideBrowser);
     const modelDownloadHref = await page.$$eval(
-      'a[type="button"][href^="/api"]',
+      'a[data-tour="model:download"][href^="/api"]',
       (el) => el[0].getAttribute('href')
     );
     if (!modelDownloadHref) {
@@ -244,7 +243,7 @@ const evalInsideBrowser = async () => {
         ?.setAttribute('style', 'overflow: hidden;');
       document
         .querySelector('.mantine-Container-root')
-        ?.setAttribute('style', 'margin: 0;');
+        ?.setAttribute('style', 'margin: 0; max-width: 100% !important;');
     }
   };
 
