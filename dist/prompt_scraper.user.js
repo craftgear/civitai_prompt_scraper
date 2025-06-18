@@ -13423,7 +13423,7 @@ const $06cbd27ebbbf5f2a$export$92ecf871022de94d = (button, text, style)=>{
     button.parentNode?.replaceChild(disabledButton, button);
 };
 const $06cbd27ebbbf5f2a$var$BUTTON_CONTAINER_ID = "civitai_prompt_scraper";
-const $06cbd27ebbbf5f2a$var$downloadButtonSelector = 'a[data-tour="model:download"][href^="/api"]';
+const $06cbd27ebbbf5f2a$var$downloadButtonSelector = 'a[href^="/api/download/models"]';
 const $06cbd27ebbbf5f2a$var$SHARE_BUTTON_SVG_SELECTOR = 'main svg[class*="tabler-icon tabler-icon-share-3"]';
 const $06cbd27ebbbf5f2a$export$82e56ed69919a9ea = async ()=>{
     await $06cbd27ebbbf5f2a$export$1a1c301579a08d1e($06cbd27ebbbf5f2a$var$downloadButtonSelector);

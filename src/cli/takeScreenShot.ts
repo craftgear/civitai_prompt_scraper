@@ -91,7 +91,7 @@ export const takeScreenShot = async (
     // Evaluate JavaScript
     await page.evaluate(evalInsideBrowser);
     const modelDownloadHref = await page.$$eval(
-      'a[data-tour="model:download"][href^="/api"]',
+      'a[href^="/api/download/models"]',
       (el) => el[0].getAttribute('href')
     );
     if (!modelDownloadHref) {

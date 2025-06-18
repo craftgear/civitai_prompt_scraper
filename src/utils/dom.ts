@@ -67,7 +67,7 @@ export const replaceWithDisabledButton = (
 };
 
 const BUTTON_CONTAINER_ID = 'civitai_prompt_scraper';
-const downloadButtonSelector = 'a[data-tour="model:download"][href^="/api"]';
+const downloadButtonSelector = 'a[href^="/api/download/models"]';
 const SHARE_BUTTON_SVG_SELECTOR =
   'main svg[class*="tabler-icon tabler-icon-share-3"]';
 
