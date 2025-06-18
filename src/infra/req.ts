@@ -66,8 +66,21 @@ export const fetchModelInfoByModleIdOrModelVersionId = async (
     throw new Error(getI18nLabel('modelIdNotFoundError'));
   }
 
-  const modelInfo = await fetchModelData(id);
-  return modelInfo;
+  try {
+    const modelInfo = await fetchModelData(id);
+    return modelInfo;
+  } catch (e) {
+    if (!modelVersionId) {
+      throw e;
+    }
+    const modelVersionInfo = await fetchModelVersionData(modelVersionId);
+    return {
+      id: modelVersionInfo.modelId.toString(),
+      name: modelVersionInfo.model.name,
+      modelVersions: [modelVersionInfo],
+      modelVersionInfo,
+    };
+  }
 };
 
 const RETRY_LIMIT = 100;

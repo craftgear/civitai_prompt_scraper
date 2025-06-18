@@ -58,6 +58,19 @@ export const takeScreenShot = async (
     ) {
       throw new Error('404: The model was not found.');
     }
+    // check if early access
+    const isEarlyAccess = await page.$$eval(
+      'span.mantine-Badge-inner',
+      (elements) => {
+        return elements.some((el) => {
+          return el.textContent?.includes('Early Access');
+        });
+      }
+    );
+    console.log(isEarlyAccess);
+    if (isEarlyAccess) {
+      throw new Error('Early Access.');
+    }
 
     // NOTE:ライトモードに切り替え
     // await page.$eval('button[aria-haspopup="dialog"] svg.tabler-icon-bolt', (el) => el.click());

@@ -25,6 +25,7 @@ const main = async () => {
     .filter((x) => !!x && x.startsWith('https'))
     .reduce((acc: string[], x: string) => {
       if (acc.includes(x)) {
+        console.log('----- duplicate entry', x);
         return acc;
       }
       return [...acc, x];

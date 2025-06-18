@@ -12995,8 +12995,21 @@ const $c3454b9ab01d445e$export$426617fe0a326605 = async (modelVersionId)=>{
 const $c3454b9ab01d445e$export$769102d94f147e19 = async (modelId, modelVersionId)=>{
     const id = modelId ? modelId : modelVersionId ? (await $c3454b9ab01d445e$export$426617fe0a326605(modelVersionId)).modelId.toString() : "";
     if (!id) throw new Error((0, $3a42d740ecc81982$export$731a191155ffa90a)("modelIdNotFoundError"));
-    const modelInfo = await $c3454b9ab01d445e$export$998f418383804028(id);
-    return modelInfo;
+    try {
+        const modelInfo = await $c3454b9ab01d445e$export$998f418383804028(id);
+        return modelInfo;
+    } catch (e) {
+        if (!modelVersionId) throw e;
+        const modelVersionInfo = await $c3454b9ab01d445e$export$426617fe0a326605(modelVersionId);
+        return {
+            id: modelVersionInfo.modelId.toString(),
+            name: modelVersionInfo.model.name,
+            modelVersions: [
+                modelVersionInfo
+            ],
+            modelVersionInfo: modelVersionInfo
+        };
+    }
 };
 const $c3454b9ab01d445e$var$RETRY_LIMIT = 100;
 const $c3454b9ab01d445e$export$c6ace8a485846f08 = (onProgressFn)=>async (modelId, postId, modelVersionId, limit = 200, nextCursor, retry = 0)=>{

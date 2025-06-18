@@ -1,6 +1,6 @@
 import { BlobReader, TextReader, ZipWriter } from '@zip.js/zip.js';
 import fs from 'node:fs';
-import { WritableStream } from 'stream/web'; // Node.js 18+ のWeb Streams API対応が必要
+import { WritableStream } from 'stream/web';
 
 import { styleText } from 'node:util';
 import { optimizeUrl, unoptimizeUrl } from '../domain/logic';
@@ -234,8 +234,21 @@ const fetchModelInfoByModleIdOrModelVersionId = async (
     );
   }
 
-  const modelInfo = await fetchModelData(id);
-  return modelInfo;
+  try {
+    const modelInfo = await fetchModelData(id);
+    return modelInfo;
+  } catch (e) {
+    if (!modelVersionId) {
+      throw e;
+    }
+    const modelVersionInfo = await fetchModelVersionData(modelVersionId);
+    return {
+      id: modelVersionInfo.modelId.toString(),
+      name: modelVersionInfo.model.name,
+      modelVersions: [modelVersionInfo],
+      modelVersionInfo,
+    };
+  }
 };
 
 const fetchModelData = async (
